@@ -9,7 +9,7 @@ COURSE="DEFAULT_COURSE"
 #
 # Do not change below unless you are really sure on the effects
 #
-VERSION_CONFIG="1.0.4"
+VERSION_CONFIG="1.0.5"
 
 MSG_OK="\033[0;30;42mOK\033[0m"
 MSG_WARNING="\033[43mWARNING.\033[0m"
@@ -44,7 +44,15 @@ case "`uname`" in
    CYGWIN*) IS_CYGWIN="yes" ;;
    *)       IS_CYGWIN="no" ;;
 esac
-CYGWIN_DEFAULT_GROUP="Users"
+
+if [ $IS_CYGWIN = "yes" ]
+then
+    CYGWIN_DEFAULT_GROUP="Users"
+    if [ $( grep "^Användare:" /etc/group ) ]
+    then
+        CYGWIN_DEFAULT_GROUP="Användare"
+    fi
+fi
 
 
 
@@ -64,10 +72,10 @@ BUILD="$BUILD2/$PROJECT"
 WGET="wget -qO"
 CURL="curl -so"
 
-if hash "$WGET" 2> /dev/null 
+if hash wget 2> /dev/null 
 then
     WGET="$WGET"
-elif hash "$WGET" 2> /dev/null
+elif hash curl 2> /dev/null
 then 
     WGET="$CURL"
 fi
