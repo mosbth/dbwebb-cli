@@ -1,0 +1,221 @@
+#!/bin/sh
+
+#SCRIPT=$(readlink -f "$0")
+#SCRIPTPATH=$(dirname "$SCRIPT")
+#. "$SCRIPTPATH/.dbwebb.version"
+. "bin/.dbwebb.version"
+
+TESTS=0
+ASSERTS=0
+FAULTS=0
+
+ECHO="printf"
+TMPFILE="/tmp/dbwebb-error$$"
+
+
+
+#
+# Print usage of script
+#
+printUsage()
+{
+    $ECHO "\nUtility dbwebb-inspect $VERSION by Mikael Roos, to inspect course results as a teacher."
+    $ECHO "\n"
+    $ECHO "\nUsage: dbwebb-inspect [options] <item> <user>"
+    $ECHO "\n"
+    $ECHO "Options:"
+    $ECHO "\n"
+    $ECHO "\n  -h         Print this message and exit."
+    $ECHO "\n  -v         Print version and exit."
+    $ECHO "\n"
+    $ECHO "\nItem:"
+    $ECHO "\n"
+    $ECHO "\n  kmom01    Inspect selected kmom."
+    $ECHO "\n  kmom02    Inspect selected kmom."
+    $ECHO "\n  kmom03    Inspect selected kmom."
+    $ECHO "\n  kmom04    Inspect selected kmom."
+    $ECHO "\n  kmom05    Inspect selected kmom."
+    $ECHO "\n  kmom06    Inspect selected kmom."
+    $ECHO "\n  kmom10    Inspect selected kmom."
+    $ECHO "\n"
+    $ECHO "\nExample:"
+    $ECHO "\n"
+    $ECHO "\n  $ dbwebb-inspect kmom01"
+    $ECHO "\n  $ dbwebb-inspect kmom01 mosstud"
+    $ECHO "\n"
+    $ECHO "\n"
+}
+
+
+
+#
+# Check the environment
+#
+checkEnvironment()
+{
+    $ECHO "\n-----------------------------------------"
+    $ECHO "\n----------- dbwebb inspect --------------"
+    $ECHO "\n-----------------------------------------"
+
+    # Check who you are
+    if [ "$USER" = "$THEUSER" ]
+    then
+        $ECHO "\nChecking your own $KMOM, ok."
+    else
+        $ECHO "\nChecking $KMOM for $THEUSER as `whoami`."
+    fi
+
+    dirname="$THEDIR"
+    assert 0 "test -r $dirname -a -d $dirname" "Directory $dirname not readable."
+}
+
+
+
+#
+# Test a kmom
+#
+pythonkmom01()
+{
+    $ECHO "\n\n-----------------------------------------"
+    $ECHO "\n----------- python kmom01 ---------------"
+    $ECHO "\n-----------------------------------------"
+
+    THETARGET="me/kmom01"
+
+    dirname="$THEDIR/$THETARGET"
+    assert 0 "test -r $dirname -a -d $dirname" "Directory $dirname not readable."
+}
+
+#        javascript1) 
+#            FILES="me.html redovisning.html" 
+#            KMOM01="kmom01 kmom01/sandbox"
+#            KMOM02="kmom02 kmom02/flag1 kmom02/lab1 kmom02/baddie1"
+#            KMOM03="kmom03 kmom03/flag2 kmom03/lab2 kmom03/baddie2"
+#            KMOM04="kmom04 kmom04/flag3 kmom04/lab3 kmom04/lab4 kmom04/baddie3"
+#            KMOM05="kmom05 kmom05/flag4 kmom05/lab5 kmom05/baddie4"
+#            KMOM06="kmom06 kmom06/flag5 kmom06/baddie5"
+#            KMOM10="kmom10"            
+#
+#        python)      
+#            FILES="me.cgi me.py redovisning.cgi redovisning.py" 
+#            KMOM01="kmom01 kmom01/hello kmom01/plane"
+#            KMOM02="kmom02 kmom02/marvin1 kmom02/lab1"
+#            KMOM03="kmom03 kmom03/marvin2 kmom03/lab2"
+#            KMOM04="kmom04 kmom04/marvin3 kmom04/lab3 kmom04/game1"
+#            KMOM05="kmom05 kmom05/marvin4 kmom05/lab4 kmom05/game2"
+#            KMOM06="kmom06 kmom06/marvin5 kmom06/lab5 kmom06/game3"
+#            KMOM10="kmom10"
+
+
+
+#
+# Perform an assert
+#
+assert()
+{
+    EXPECTED=$1
+    TEST=$2
+    MESSAGE=$3
+    ASSERTS=$(( $ASSERTS + 1 ))
+
+    sh -c "$TEST" > "$TMPFILE" 2>&1
+    STATUS=$?
+    ERROR=$(cat $TMPFILE)
+
+    if [ \( ! $STATUS -eq $EXPECTED \) -o \( ! -z "$ERROR" \) ]; then
+        FAULTS=$(( $FAULTS + 1 ))
+
+        MSG="\n\n$MSG_FAILED $MESSAGE\n"
+
+        $ECHO "$MSG" 
+        [ -z "$ERROR" ] || $ECHO "$ERROR\n\n"
+    fi
+
+    return $STATUS
+}
+
+
+
+
+#
+# Main
+#
+if [ $# != 3 ]
+then
+    :
+    #$ECHO
+    #printUsage
+fi
+
+# Get settings from config-file
+. "./.dbwebb.config"
+
+
+# Get options
+while getopts ":hinrv" opt
+do
+    case $opt in
+        (h) 
+            printUsage
+            exit 0
+            ;;
+
+        (v) 
+            $ECHO "$VERSION\n"
+            exit 0
+            ;;
+
+        \?)
+            $ECHO "\nInvalid option: -$OPTARG" >&2
+            $ECHO "\n"
+            $ECHO "\nUse the following to get help."
+            $ECHO "\ndbwebb-validate -h"
+            $ECHO "\n"
+            $ECHO "\n"
+            exit 1
+            ;;
+    esac
+done
+shift $((OPTIND - 1))
+
+
+# Get path to dir to check
+FAULTS=0
+KMOM=$1
+THEUSER=${2:=$USER}
+THEDIR=`eval echo "~$THEUSER/$BASEDIR/$PROJECT"`
+
+checkEnvironment
+
+
+# Execute command
+case "$KMOM" in
+    kmom01)     "${COURSE}${KMOM}" ;;
+    kmom02)     "${COURSE}${KMOM}" ;;
+    kmom03)     "${COURSE}${KMOM}" ;;
+    kmom04)     "${COURSE}${KMOM}" ;;
+    kmom05)     "${COURSE}${KMOM}" ;;
+    kmom06)     "${COURSE}${KMOM}" ;;
+    kmom10)     "${COURSE}${KMOM}" ;;
+    *)          
+        $ECHO "\n$MSG_FAILED Invalid kmom: $KMOM"
+        printUsage
+        exit 1 
+        ;;
+esac
+
+
+
+# Clean up and output results
+if [ $FAULTS -gt 0 ]
+then
+        $ECHO "\n\n$MSG_FAILED"
+        STATUS=1
+
+        $ECHO " Tests: $TESTS Asserts: $ASSERTS Faults: $FAULTS\n"
+        exit $STATUS
+fi
+
+$ECHO "\n\n$MSG_OK"
+$ECHO " Tests: $TESTS Asserts: $ASSERTS Faults: $FAULTS\n"
+exit 0
