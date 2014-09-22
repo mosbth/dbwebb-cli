@@ -72,7 +72,174 @@ checkEnvironment()
 
 
 #
-# Test a kmom
+# Test python me
+#
+pythonme()
+{
+    $ECHO "\n\n-----------------------------------------"
+    $ECHO "\n----------- me-page ---------------------"
+    $ECHO "\n-----------------------------------------"
+
+    filename="$THEDIR/me/me.cgi"
+    assert 0 "test -r $filename -a -f $filename" "CGI-script for me-page is not readable. $filename"
+
+    url="$SERVERURL/~$THEUSER/$BASEDIR/$PROJECT"
+    $ECHO "\nLink to me-page: $url/me/me.cgi"
+
+    filename="$THEDIR/me/redovisning.cgi"
+    assert 0 "test -r $filename -a -f $filename" "CGI-script for redovisning-page is not readable. $filename"
+
+    url="$SERVERURL/~$THEUSER/$BASEDIR/$PROJECT"
+    $ECHO "\nLink to redovisning-page: $url/me/redovisning.cgi"
+
+    $ECHO "\nPress enter to continue..."
+    read void
+}
+
+
+
+#
+# Test python kmom01
+#
+checkKmomDir()
+{
+    dirname="$1"
+    assert 0 "test -r $dirname -a -d $dirname" "Directory $dirname not readable."
+}
+
+
+
+#
+# Test python kmom01
+#
+validateKmom()
+{
+    THEKMOM="$1"
+
+    $ECHO "\nPress enter to validate $THEKMOM..."
+    read void
+    bin/dbwebb-validate -i -n -m -e -t $THEKMOM $THEUSER
+}
+
+
+
+#
+# Test python plane
+#
+pythonplane()
+{
+    $ECHO "\n\n-----------------------------------------"
+    $ECHO "\n----------- plane        ----------------"
+    $ECHO "\n-----------------------------------------"
+
+    target="$1"
+
+    dirname="$THEDIR/$target"
+    assert 0 "test -r $dirname -a -d $dirname" "Directory $dirname not readable."
+
+    filename="$THEDIR/$target/plane1.py"
+    assert 0 "test -r $filename -a -f $filename" "The file plane.py is missing."
+
+    filename="$THEDIR/$target/plane1.cgi"
+    assert 0 "test -r $filename -a -f $filename" "The file plane.cgi is missing."
+
+    url="$SERVERURL/~$THEUSER/$BASEDIR/$PROJECT"
+    $ECHO "\nLink to plane-page: $url/me/kmom01/plane/plane1.cgi"
+
+    $ECHO "\nPress enter to continue to execute the program plane.py..."
+    read void
+
+    "$THEDIR/$target/plane.py"
+}
+
+
+
+#
+# Test python marvin1
+#
+pythonmarvin1()
+{
+    $ECHO "\n\n-----------------------------------------"
+    $ECHO "\n----------- marvin1       ----------------"
+    $ECHO "\n-----------------------------------------"
+
+    target="$1"
+
+    dirname="$THEDIR/$target"
+    assert 0 "test -r $dirname -a -d $dirname" "Directory $dirname not readable."
+
+    filename="$THEDIR/$target/marvin.py"
+    assert 0 "test -r $filename -a -f $filename" "The file marvin.py is missing."
+
+    $ECHO "\nPress enter to continue to execute the program marvin.py..."
+    read void
+
+    cd "$THEDIR/$target"
+    python3 marvin.py
+    cd "$TARGET"
+}
+
+
+
+#
+# Test python marvin2
+#
+pythonmarvin2()
+{
+    $ECHO "\n\n-----------------------------------------"
+    $ECHO "\n----------- marvin2       ----------------"
+    $ECHO "\n-----------------------------------------"
+
+    target="$1"
+
+    dirname="$THEDIR/$target"
+    assert 0 "test -r $dirname -a -d $dirname" "Directory $dirname not readable."
+
+    filename="$THEDIR/$target/marvin.py"
+    assert 0 "test -r $filename -a -f $filename" "The file marvin.py is missing."
+
+    filename="$THEDIR/$target/main.py"
+    assert 0 "test -r $filename -a -f $filename" "The file main.py is missing."
+
+    $ECHO "\nPress enter to continue to execute the program main.py..."
+    read void
+
+    cd "$THEDIR/$target"
+    python3 main.py
+    cd "$TARGET"
+}
+
+
+
+#
+# Test python lab
+#
+pythonlab()
+{
+    $ECHO "\n\n-----------------------------------------"
+    $ECHO "\n----------- lab         ----------------"
+    $ECHO "\n-----------------------------------------"
+
+    target="$1"
+
+    dirname="$THEDIR/$target"
+    assert 0 "test -r $dirname -a -d $dirname" "Directory $dirname not readable."
+
+    filename="$THEDIR/$target/answer.py"
+    assert 0 "test -r $filename -a -f $filename" "The file answer.py is missing."
+
+    $ECHO "\nPress enter to continue to execute the program answer.py..."
+    read void
+
+    cd "$THEDIR/$target"
+    python3 answer.py
+    cd "$TARGET"
+}
+
+
+
+#
+# Test python kmom01
 #
 pythonkmom01()
 {
@@ -80,11 +247,79 @@ pythonkmom01()
     $ECHO "\n----------- python kmom01 ---------------"
     $ECHO "\n-----------------------------------------"
 
-    THETARGET="me/kmom01"
+    THEKMOM="kmom01"
+    THETARGET="me/$THEKMOM"
 
-    dirname="$THEDIR/$THETARGET"
-    assert 0 "test -r $dirname -a -d $dirname" "Directory $dirname not readable."
+    checkKmomDir "$THETARGET"
+    validateKmom "$THEKMOM"
+    pythonme
+    pythonplane "$THETARGET/plane"
 }
+
+
+
+#
+# Test python kmom02
+#
+pythonkmom02()
+{
+    $ECHO "\n\n-----------------------------------------"
+    $ECHO "\n----------- python kmom02 ---------------"
+    $ECHO "\n-----------------------------------------"
+
+    THEKMOM="kmom02"
+    THETARGET="me/$THEKMOM"
+
+    checkKmomDir "$THETARGET"
+    validateKmom "$THEKMOM"
+    pythonme
+    pythonlab "$THETARGET/lab1"
+    pythonmarvin1 "$THETARGET/marvin1"
+}
+
+
+
+#
+# Test python kmom03
+#
+pythonkmom03()
+{
+    $ECHO "\n\n-----------------------------------------"
+    $ECHO "\n----------- python kmom03 ---------------"
+    $ECHO "\n-----------------------------------------"
+
+    THEKMOM="kmom03"
+    THETARGET="me/$THEKMOM"
+
+    checkKmomDir "$THETARGET"
+    validateKmom "$THEKMOM"
+    pythonme
+    pythonlab "$THETARGET/lab2"
+    pythonmarvin2 "$THETARGET/marvin2"
+}
+
+
+
+#
+# Test python kmom04
+#
+pythonkmom04()
+{
+    $ECHO "\n\n-----------------------------------------"
+    $ECHO "\n----------- python kmom04 ---------------"
+    $ECHO "\n-----------------------------------------"
+
+    THEKMOM="kmom04"
+    THETARGET="me/$THEKMOM"
+
+    checkKmomDir "$THETARGET"
+    validateKmom "$THEKMOM"
+    pythonme
+    pythonlab "$THETARGET/lab3"
+    pythonmarvin2 "$THETARGET/marvin3"
+}
+
+
 
 #        javascript1) 
 #            FILES="me.html redovisning.html" 
