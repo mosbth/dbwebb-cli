@@ -41,7 +41,7 @@ elif [ -d "$DBWEBB_HOME" ]; then
 elif [ -d "$HOME/dbwebb-kurser/dbwebb-cli" ]; then
     DBW_INSTALL_DIR="$HOME/dbwebb-kurser/dbwebb-cli"
 else 
-    $ECHO "$MSG_FAILED Could not determine the installation directory.\n"
+    $ECHO "$MSG_FAILED Could not determine the installation directory. I looked in \$HOME/dbwebb-kurser/dbwebb-cli and tried the environment variable \$DBWEBB_HOME.\n"
     exit 1
 fi
 
@@ -120,17 +120,36 @@ if [ $# -lt 1 ]
 then
     dbwebb2PrintShortUsage
     exit 0
-elif [ "$1" == "help" ]; then
-    dbwebb2PrintUsage
-    exit 0
-elif [ "$1" == "create-config" ]; then
-    createConfig
-    exit 0
 fi
 
 
-# Check if config file is up to date
-updateConfigIfNeeded "update"
+
+# 
+# Try for commands that does not use or update the config file.
+#
+CMD=$1
+case $CMD in
+
+    help)
+        dbwebb2PrintUsage
+        exit 0
+        ;;
+
+    create-config)
+        createConfig
+        exit 0
+        ;;
+
+    env|environment)
+        environment
+        exit 0
+        ;;
+
+    version)
+        $ECHO "$VERSION\n"
+        exit 0
+        ;;
+esac
 
 
 
@@ -180,6 +199,8 @@ done
 shift $((OPTIND - 1))
 
 
+# Check if config file is up to date
+updateConfigIfNeeded "update"
 
 
 
@@ -208,20 +229,12 @@ case $CMD in
         initServer
         ;;
 
-    env|environment)
-        environment
-        ;;
-
     config)
         createConfig "create"
         ;;
 
     test)
         testConnection
-        ;;
-
-    status)
-        status
         ;;
 
     login)

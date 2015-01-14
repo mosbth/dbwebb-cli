@@ -33,18 +33,18 @@ dbwebb2PrintUsage()
     $ECHO "\n"
     $ECHO "\nCommand:"
     $ECHO "\n"
-    $ECHO "\n  help           Print this message."
-    $ECHO "\n  create-config  Print this message."
+    $ECHO "\n  help                  Print this message."
+    $ECHO "\n  version               Print the version of this program and exit."
+    $ECHO "\n  env, environment      Check and print out details on the environment."
+    $ECHO "\n  config, create-config Create, or re-create the config file."
+
     $ECHO "\n  init-repo      Init the repo for the first time and create a config-file."
     $ECHO "\n  init-me        Init the directory me/ by copying files and directories from me-default/."
     $ECHO "\n  init-server    Init the server by creating a directory structure on it."
     $ECHO "\n"
-    $ECHO "\n  eenv, environment  Check and print out details on the environment."
-    $ECHO "\n  config             Create, or re-create the config file."
-    $ECHO "\n  status             Display status and version information on this repo."
-    $ECHO "\n  test               Test the connection by loggin in."
-    $ECHO "\n  login              Login to the server using ssh."
-    $ECHO "\n  update             Update the courserepo with latest updates from the master repo."
+    $ECHO "\n  test             Test the connection by loggin in."
+    $ECHO "\n  login            Login to the server using ssh."
+    $ECHO "\n  update           Update the courserepo with latest updates from the master repo."
     $ECHO "\n"
     $ECHO "\n  ~upload        Upload current directory to the the server."
     $ECHO "\n  ~download      Download current directory from the server."
@@ -183,6 +183,7 @@ updateConfigIfNeeded()
 environment()
 {
     $ECHO "\nDetails on the dbwebb-environment."
+    $ECHO "\n------------------------------------"
     $ECHO "\n"
     $ECHO "\nOperatingsystem:       $DBW_OS"
     $ECHO "\nCommand issued:        $DBW_EXECUTABLE"
@@ -193,18 +194,23 @@ environment()
     $ECHO "\nWorking directory:     $DBW_CURRENT_DIR"
     $ECHO "\n"
 
+    $ECHO "\nDetails on the course-repo."
+    $ECHO "\n------------------------------------"
+    $ECHO "\n"
+
     if [ "$DBW_COURSE_REPO_VALID" == "yes" ]; then
-        $ECHO "\nDetails on the course-repo."
-        $ECHO "\n"
         $ECHO "\nCurrent course-repo:   $DBW_COURSE"
-        $ECHO "\nCourse-repo version:   $( $GIT describe )"
         $ECHO "\nCourse directory:      $DBW_COURSE_DIR"
+        $ECHO "\nCourse-repo version:   $( $GIT describe )"
+        $ECHO "\n\nLatest update to course repo was:\n"
+        $GIT log -1
     else 
         $ECHO "\nThis is not a valid course repo."
     fi
     $ECHO "\n"
 
     $ECHO "\nDetails on installed utilities."
+    $ECHO "\n------------------------------------"
     $ECHO "\n"
     $ECHO "\nbash:                  %s" "$( checkCommand $BASH )"
     $ECHO "\ngit:                   %s" "$( checkCommand $GIT )"
@@ -230,21 +236,6 @@ checkCommand()
     else 
         $ECHO $( which $COMMAND )
     fi
-}
-
-
-
-#
-# Display status and version information
-#
-status()
-{
-    $ECHO "This is a valid course repo - $DBW_COURSE_REPO_VALID."
-    $ECHO "\nCourse repo name is '$DBW_COURSE'"
-    $ECHO "\n\nVersion of dbwebb-cli is $DBW_VERSION"
-    $ECHO "\n\nLatest update to course repo was:\n"
-    $GIT log -1
-    $ECHO "\n"
 }
 
 
