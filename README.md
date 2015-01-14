@@ -1,4 +1,4 @@
-Utility `bin/dbwebb` to work with course repositories
+Command-line utility `dbwebb` to work with course repositories
 ============================================================
 
 Part of course repos as a admin utility.
@@ -27,8 +27,9 @@ History
 -------------------
 
 
-v1.0.x (latest)
+v1.1.0 (2015-01-14)
 
+* Support kmom10 in python & javascript1.
 * Adding javascript kmom05 lab5 and removing baddie4 and baddie5.
 * Enhanced debugging in dbwebb-inspect.
 * Fixed issue #8, #9, #10, #11.

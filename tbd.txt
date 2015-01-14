@@ -32,3 +32,13 @@ make dbwebb2 work outside of course repo.
 howto validate whole course?
 
 dbwebb-inspect exit status provide WARNING if something failed.
+
+loggfile - path is incorrect.
+
+Can not run Marvin, exit code success? 03, 04.
+
+grni14, inspect extrauppgift modul img
+
+Skrivrättigheter...
+
+mos säger bin/dbwebb inspect kmom06 grni14 (error on --version) 
