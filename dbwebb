@@ -176,13 +176,13 @@ installSshKeys()
 {
     SSH_KEY="$HOME/.ssh/dbwebb"
 
-    if [ ! -d $HOME/.ssh ]
+    if [ ! -d "$HOME/.ssh" ]
     then
-        mkdir $HOME/.ssh
+        mkdir "$HOME/.ssh"
     fi
 
     INTRO="First we need to create a ssh key and store it locally."
-    COMMAND="ssh-keygen -t dsa -f $SSH_KEY -N ''"
+    COMMAND="ssh-keygen -t dsa -f \"$SSH_KEY\" -N ''"
     MESSAGE="to create the ssh key."
     executeCommand "$INTRO" "$COMMAND" "$MESSAGE"
 
@@ -190,14 +190,14 @@ installSshKeys()
     #echo $IS_CYGWIN
     if [ $IS_CYGWIN = "yes" ]
     then
-        chgrp -vR $CYGWIN_DEFAULT_GROUP $HOME/.ssh
+        chgrp -vR $CYGWIN_DEFAULT_GROUP "$HOME/.ssh"
     fi
 
-    chmod 700 $HOME/.ssh
-    chmod 600 $SSH_KEY $SSH_KEY.pub
+    chmod 700 "$HOME/.ssh"
+    chmod 600 "$SSH_KEY" "$SSH_KEY.pub"
 
     INTRO="I will now install the ssh-key at the remote server."
-    COMMAND="cat $SSH_KEY.pub | ssh $USER@$HOST 'sh -c \"if [ ! -d .ssh ]; then mkdir .ssh; fi; chmod 700 .ssh; touch .ssh/authorized_keys; cat >> .ssh/authorized_keys\"'"
+    COMMAND="cat \"$SSH_KEY.pub\" | ssh $USER@$HOST 'sh -c \"if [ ! -d .ssh ]; then mkdir .ssh; fi; chmod 700 .ssh; touch .ssh/authorized_keys; cat >> .ssh/authorized_keys\"'"
     MESSAGE="to install the ssh-keys."
     executeCommand "$INTRO" "$COMMAND" "$MESSAGE"
 }
@@ -247,7 +247,7 @@ createConfig()
     if [ -z "$NO_INPUT" ]
     then
 
-        $ECHO "\nWhat is your student acronym? [$USER] "    
+        $ECHO "\nWhat is your student acronym? [$USER] "
         read ACRONYM
 
     fi
@@ -317,7 +317,7 @@ setChmod()
         chmod 755 "$filename"
     done
 
-    chmod -R u+rw "$SOURCE" 
+    chmod -R u+rw "$SOURCE"
     chmod -R go+r "$SOURCE"
 }
 
@@ -570,5 +570,3 @@ case $CMD in
         printUsage
         ;;
 esac
-
-
