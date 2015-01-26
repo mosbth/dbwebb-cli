@@ -9,7 +9,7 @@ DBW_USER="DEFAULT_USER"
 #
 # Do not change below unless you are really sure on the effects
 #
-DBW_VERSION_CONFIG="1.1.0"
+DBW_VERSION_CONFIG="1.1.1"
 
 MSG_OK="\033[0;30;42mOK\033[0m"
 MSG_WARNING="\033[43mWARNING.\033[0m"
@@ -33,11 +33,11 @@ DESTINATION="${USER}@${HOST}:$BASEDIR/$PROJECT/"
 
 # Detect if ssh-key is available
 DBW_SSH_KEY=""
-DBW_SSH_KEY_OPTIONS=""
+DBW_SSH_KEY_OPTION=""
 if [ -f "$HOME/.ssh/dbwebb" ]
 then
     DBW_SSH_KEY="$HOME/.ssh/dbwebb"
-    DBW_SSH_KEY_OPTION="-i $DBW_SSH_KEY"
+    DBW_SSH_KEY_OPTION="-i '$DBW_SSH_KEY'"
 fi
 
 
@@ -85,11 +85,11 @@ EDITOR=${EDITOR:-$EDITOR_DEFAULT}
 WGET="wget -qO"
 CURL="curl -so"
 
-if hash wget 2> /dev/null 
+if hash wget 2> /dev/null
 then
     WGET="$WGET"
 elif hash curl 2> /dev/null
-then 
+then
     WGET="$CURL"
 fi
 
@@ -103,4 +103,3 @@ GET_ANSWER_JSON="lab.php?answer-json"
 GET_ANSWER_PY="lab.php?answer-py"
 GET_ANSWER_PYDBWEBB="lab.php?answer-py-assert"
 GET_ANSWER_EXTRA="lab.php?answer-extra"
-

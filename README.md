@@ -15,16 +15,21 @@ This work is licensed under the Creative Commons Attribution-NonCommercial-Share
 Validate using external cli-programs
 -------------------
 
-lrwxrwxrwx 1 mosstud 500   38 jun 12 16:07 cleancss -> ../node_modules/clean-css/bin/cleancss*   
--rwxr-xr-x 1 mosstud 500 1231 jun 12 17:59 htmlhint*                                             
+lrwxrwxrwx 1 mosstud 500   38 jun 12 16:07 cleancss -> ../node_modules/clean-css/bin/cleancss*
+-rwxr-xr-x 1 mosstud 500 1231 jun 12 17:59 htmlhint*
 lrwxrwxrwx 1 mosstud 500   36 jun 12 16:06 html-minifier -> ../node_modules/html-minifier/cli.js*
-lrwxrwxrwx 1 mosstud 500   33 jun 12 15:50 jshint -> ../node_modules/jshint/bin/jshint*          
-lrwxrwxrwx 1 mosstud 500   38 jun 12 16:30 uglifyjs -> ../node_modules/uglify-js/bin/uglifyjs*   
+lrwxrwxrwx 1 mosstud 500   33 jun 12 15:50 jshint -> ../node_modules/jshint/bin/jshint*
+lrwxrwxrwx 1 mosstud 500   38 jun 12 16:30 uglifyjs -> ../node_modules/uglify-js/bin/uglifyjs*
 
 
 
 History
 -------------------
+
+
+v1.1.1 (2015-01-26)
+
+* Support space in username for sshkeys.
 
 
 v1.1.0 (2015-01-14)
@@ -113,7 +118,7 @@ v1.0.2 (2014-09-05)
 
 v1.0.1 (2014-09-03)
 
-* Require change of configuration file. 
+* Require change of configuration file.
 * Gets extra information when creating labs as a tar archive.
 * `bin/dbwebb init` does not upload to server.
 * Avoid python labs to overwrite an existing lab.
@@ -126,7 +131,7 @@ v1.0.0 (2014-08-30)
 
 
 
-```                                                            
- .                                                             
-..:  Copyright (c) 2014 Mikael Roos, me@mikaelroos.se   
-```                                                            
+```
+ .
+..:  Copyright (c) 2014 Mikael Roos, me@mikaelroos.se
+```
