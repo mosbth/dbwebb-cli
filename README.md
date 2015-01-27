@@ -29,6 +29,7 @@ History
 
 v1.1.1 (2015-01-26)
 
+* Updated inspect for python.
 * Support space in username for sshkeys.
 
 
