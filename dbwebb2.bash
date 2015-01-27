@@ -15,8 +15,8 @@ FIND="find"
 
 
 # Revise these
-UPLOAD="$RSYNC -av --delete --exclude literature --exclude .git -e \"ssh $SSH_KEY_OPTION\" \"$SOURCE\" \"$DESTINATION\""
-UPLOAD_MINIMAL="$RSYNC -av --delete --exclude me --exclude tutorial --exclude example --exclude literature --exclude .git -e \"ssh $SSH_KEY_OPTION\" \"$SOURCE\" \"$DESTINATION\""
+UPLOAD="$RSYNC -av --delete --exclude literature --exclude .git -e \"ssh $DBW_SSH_KEY_OPTION\" \"$SOURCE\" \"$DESTINATION\""
+UPLOAD_MINIMAL="$RSYNC -av --delete --exclude me --exclude tutorial --exclude example --exclude literature --exclude .git -e \"ssh $DBW_SSH_KEY_OPTION\" \"$SOURCE\" \"$DESTINATION\""
 
 
 
@@ -34,31 +34,45 @@ DBW_EXECUTABLE="$( basename "$0" )"
 DBW_EXECUTABLE_DIR="$( dirname "$0" )"
 
 # Where is the installation directory
-if [ -f "$DBW_EXECUTABLE_DIR/.dbwebb.version" ]; then
+DBW_BASEDIR="dbwebb-kurser"
+DBW_CLIDIR="dbwebb-cli"
+DBW_VERSION_FILE_NAME=".dbwebb.version"
+
+if [ -f "$DBW_EXECUTABLE_DIR/$DBW_VERSION_FILE_NAME" ]; then
     DBW_INSTALL_DIR="$DBW_EXECUTABLE_DIR"
-elif [ -d "$DBWEBB_HOME" ]; then
-    DBW_INSTALL_DIR="$DBWEBB_HOME"
-elif [ -d "$HOME/dbwebb-kurser/dbwebb-cli" ]; then
-    DBW_INSTALL_DIR="$HOME/dbwebb-kurser/dbwebb-cli"
+elif [ -d "$DBWEBB_HOME" -a -d "$DBWEBB_HOME/$DBW_CLIDIR" ]; then
+    DBW_INSTALL_DIR="$DBWEBB_HOME/$DBW_CLIDIR"
+elif [ -d "$DBWEBB_CLI_HOME" ]; then
+    DBW_INSTALL_DIR="$DBWEBB_CLI_HOME"
+elif [ -d "$HOME/$DBW_BASEDIR/$DBW_CLIDIR" ]; then
+    DBW_INSTALL_DIR="$HOME/$DBW_BASEDIR/$DBW_CLIDIR"
 else 
-    $ECHO "$MSG_FAILED Could not determine the installation directory. I looked in \$HOME/dbwebb-kurser/dbwebb-cli and tried the environment variable \$DBWEBB_HOME.\n"
+    $ECHO "$MSG_FAILED Could not determine the installation directory. I tried tried the environment variables \$DBWEBB_HOME and \$DBWEBB_CLI_HOME and looked in \$HOME/$DBW_BASEDIR/$DBW_CLIDIR.\n"
     exit 1
 fi
 
+
+
 # Get the current version installed as $DBW_VERSION
-DBW_VERSION_FILE="$DBW_INSTALL_DIR/.dbwebb.version"
+DBW_VERSION_FILE="$DBW_INSTALL_DIR/$DBW_VERSION_FILE_NAME"
 if [ ! -f "$DBW_VERSION_FILE" ]; then
-    $ECHO "$MSG_FAILED Missing file .dbwebb.version. The installation directory does not contain a valid installation.\n"
+    $ECHO "$MSG_FAILED Missing file $DBW_VERSION_FILE_NAME. The installation directory does not contain a valid installation.\n"
     exit 1
 fi
 source "$DBW_VERSION_FILE"
 
+
+
 # Include the functions needed
-DBW_FUNCTIONS_FILE="$DBW_INSTALL_DIR/dbwebb2-functions"
+DBW_FUNCTIONS_FILE="$DBW_INSTALL_DIR/dbwebb2-functions.bash"
 source "$DBW_FUNCTIONS_FILE"
+
+
 
 # What is the current directory
 DBW_CURRENT_DIR="$( pwd )"
+
+
 
 # What is the directory of the current course repo, find recursivly up the tree
 DBW_COURSE_FILE_NAME=".dbwebb.course"
@@ -75,6 +89,15 @@ done
 
 
 
+# Where is the directory for the course repos
+if [ -d "$DBWEBB_HOME" ]; then
+    : # Ok
+elif [ -d "$HOME/$DBW_BASEDIR" ]; then
+    DBW_HOME="$HOME/$DBW_BASEDIR"
+fi
+
+
+
 # Get the name of the course as $DBW_COURSE
 DBW_COURSE_FILE="$DBW_COURSE_DIR/$DBW_COURSE_FILE_NAME"
 DBW_COURSE_REPO_VALID="no"
@@ -87,7 +110,7 @@ fi
 
 # Where is the .dbwebb.config-file
 DBW_CONFIG_DEFAULT_FILE="$DBW_INSTALL_DIR/dbwebb2-config-sample"
-DBW_CONFIG_FILE_NAME=".dbwebb2.config"
+DBW_CONFIG_FILE_NAME=".dbwebb.config"
 DBW_CONFIG_FILE="$HOME/$DBW_CONFIG_FILE_NAME"
 if [ ! -f "$DBW_CONFIG_FILE" ]; then
 
@@ -140,8 +163,8 @@ case $CMD in
         exit 0
         ;;
 
-    env|environment)
-        environment
+    env|environment|status)
+        environment # Partly needs config
         exit 0
         ;;
 
@@ -173,16 +196,7 @@ do
             exit 0
             ;;
 
-#        i)
-#            IGNORE_FAULTS="-i"
-#            ;;
-
         v)
-            $ECHO "$VERSION\n"
-            exit 0
-            ;;
-
-        w)
             VERY_VERBOSE="yes"
             ;;
 
@@ -191,7 +205,7 @@ do
             ;;
 
         \?)
-            dbwebb2Usage
+            dbwebb2PrintShortUsage
             exit 1
             ;;
     esac
@@ -204,8 +218,42 @@ updateConfigIfNeeded "update"
 
 
 
-#$ECHO "$MSG_FAILED Could not find file $DBW_COURSE_FILE_NAME, this is not a valid course repo.\n"
-#exit 1
+# 
+# Try for commands that does not need to be executed within a valid course repo.
+#
+CMD=$1
+case $CMD in
+
+    config)
+        createConfig "create"
+        exit 0
+        ;;
+
+    login)
+        loginToServer
+        exit 0
+        ;;
+
+    selfupdate|self-update)
+        selfUpdate
+        exit 0
+        ;;
+
+    sshkey)
+        installSshKeys
+        exit 0
+        ;;
+esac
+
+
+
+#if [ "$DBW_COURSE_REPO_VALID" != "yes" ]; then
+
+#    $ECHO "$MSG_FAILED Could not find file $DBW_COURSE_FILE_NAME, this is not a valid course repo."
+#    $ECHO "\nThis command must be executed within a course repo."
+#    $ECHO "\n"
+#    exit 1
+#fi
 
 #$ECHO "$MSG_FAILED Missing the file $DBW_CONFIG_FILE_NAME. This does NOT appear to be a valid course repo.\nHave you initiated this as a course repo? Run the following command in the root of the course repo:\n$DBW_EXECUTABLE init-repo\n\n"
 #exit 1
@@ -229,28 +277,12 @@ case $CMD in
         initServer
         ;;
 
-    config)
-        createConfig "create"
-        ;;
-
-    test)
-        testConnection
-        ;;
-
-    login)
-        loginToServer
-        ;;
-
     push)
         pushToServer "$DBW_COURSE_DIR" "$DBW_REMOTE_DESTINATION" "$2"
         ;;
 
     pull)
         pullFromServer
-        ;;
-
-    sshkey)
-        installSshKeys
         ;;
 
     init)

@@ -21,7 +21,6 @@ MSG_FAILED="\033[0;37;41mFAILED.\033[0m"
 # all
 #
 DBW_HOST="ssh.student.bth.se"
-DBW_BASEDIR="dbwebb-kurser"
 
 DBW_REMOTE_DESTINATION="${DBW_USER}@${DBW_HOST}:$DBW_BASEDIR/$DBW_COURSE"
 

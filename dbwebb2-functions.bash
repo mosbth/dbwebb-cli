@@ -3,7 +3,7 @@
 #
 dbwebb2PrintShortUsage()
 {
-    $ECHO "\nUtility $DBW_EXECUTABLE $DBW_VERSION by Mikael Roos, to work with dbwebb course repositories."
+    $ECHO "\nUtility $DBW_EXECUTABLE $DBW_VERSION by Mikael Roos (mos@dbwebb.se), to work with dbwebb course repositories."
     $ECHO "\n"
     $ECHO "\nFor overview of the command, execute:"
     $ECHO "\n$DBW_EXECUTABLE help"
@@ -18,7 +18,7 @@ dbwebb2PrintShortUsage()
 #
 dbwebb2PrintUsage()
 {
-    $ECHO "\nUtility $DBW_EXECUTABLE $DBW_VERSION by Mikael Roos, to work with dbwebb course repositories."
+    $ECHO "\nUtility $DBW_EXECUTABLE $DBW_VERSION by Mikael Roos (mos@dbwebb.se), to work with dbwebb course repositories."
     $ECHO "\n"
     $ECHO "\nUsage: $DBW_EXECUTABLE [options] <command> [arguments]"
     $ECHO "\n"
@@ -26,25 +26,27 @@ dbwebb2PrintUsage()
     $ECHO "\n"
     $ECHO "\n  -h         Print this message and exit."
     $ECHO "\n  -i         Prints help with commands for inspect."
-    #$ECHO "\n  -i         Ignore validation faults and proceed anyway."
-    $ECHO "\n  -v         Print the version of this program and exit."
-    $ECHO "\n  -w         Very verbose, print out whats happening."
+    $ECHO "\n  -v         Very verbose, print out whats happening."
     $ECHO "\n  -y         Do not wait for my input, just proceed."
     $ECHO "\n"
     $ECHO "\nCommand:"
     $ECHO "\n"
-    $ECHO "\n  help                  Print this message."
-    $ECHO "\n  version               Print the version of this program and exit."
-    $ECHO "\n  env, environment      Check and print out details on the environment."
+    $ECHO "\n  help           Print this message."
+    $ECHO "\n  version        Print the version of this program and exit."
+    $ECHO "\n  env            Check and print out details on the environment."
     $ECHO "\n  config, create-config Create, or re-create the config file."
-
-    $ECHO "\n  init-repo      Init the repo for the first time and create a config-file."
-    $ECHO "\n  init-me        Init the directory me/ by copying files and directories from me-default/."
+    $ECHO "\n  selfupdate     Update dbwebb-cli installation."
+    $ECHO "\n  sshkey         Create and install ssh-keys to avoid using password."
+    $ECHO "\n  login          Login to the remote server using ssh and sshkeys if available."
     $ECHO "\n  init-server    Init the server by creating a directory structure on it."
     $ECHO "\n"
-    $ECHO "\n  test             Test the connection by loggin in."
-    $ECHO "\n  login            Login to the server using ssh."
-    $ECHO "\n  update           Update the courserepo with latest updates from the master repo."
+    $ECHO "\nCommands for a valid course repo:"
+    $ECHO "\n"
+    #$ECHO "\n  init-repo      Init the repo for the first time and create a config-file."
+    $ECHO "\n  init-me        Init the directory me/ by copying files and directories from default/."
+    $ECHO "\n  update         Update the courserepo with latest updates from the master repo."
+    $ECHO "\n"
+    $ECHO "\n  validate [part] Validate (and upload) your files using the remote server."
     $ECHO "\n"
     $ECHO "\n  ~upload        Upload current directory to the the server."
     $ECHO "\n  ~download      Download current directory from the server."
@@ -56,33 +58,13 @@ dbwebb2PrintUsage()
     $ECHO "\n                 to check another students kmom."
     $ECHO "\n"
     $ECHO "\n  TBD"
-    $ECHO "\n  sshkey       Create and install ssh-keys to avoid using password."
     $ECHO "\n  create       Create a laboration, use additional argument for naming what lab to create."
-    $ECHO "\n  validate     Upload your files and validate that your results passes automatic tests."
-    $ECHO "\n               Send in kmom01, kmom02, etc to validate only one kmom."
-    $ECHO "\n               Default is to validate all."
     $ECHO "\n  publish      Upload, Validate and Publish your course results to the web."
     $ECHO "\n               Send in kmom01, kmom02, etc to publish only one kmom."
     $ECHO "\n               Default is to publish all."
     $ECHO "\n"
     $ECHO "\n  Obsolete?"
     $ECHO "\n  init         Init the remote server and create a destination directory."
-    $ECHO "\n"
-    $ECHO "\nExample:"
-    $ECHO "\n"
-    $ECHO "\n  $ dbwebb init-repo"
-    $ECHO "\n  $ dbwebb config"
-    $ECHO "\n  $ dbwebb test"
-    $ECHO "\n  $ dbwebb sshkey"
-    $ECHO "\n  $ dbwebb login"
-    $ECHO "\n  $ dbwebb init"
-    $ECHO "\n  $ dbwebb -y upload"
-    $ECHO "\n  $ dbwebb download"
-    $ECHO "\n  $ dbwebb create lab1"
-    $ECHO "\n  $ dbwebb -y validate kmom01"
-    $ECHO "\n  $ dbwebb -y publish lab1"
-    $ECHO "\n  $ dbwebb inspect kmom01"
-    $ECHO "\n  $ dbwebb inspect kmom01 mosstud"
     $ECHO "\n"
     $ECHO "\n"
 }
@@ -122,7 +104,7 @@ createConfig()
     if [ -z $FIRST ]
     then
 
-        $ECHO "The config-file '$DBW_CONFIG_FILE_NAME' will now be created in your home directory: $HOME"
+        $ECHO "The config-file '$DBW_CONFIG_FILE_NAME' will now be created in your home directory: '$HOME'"
 
     elif [ $FIRST = "update" ]
     then
@@ -137,7 +119,7 @@ createConfig()
     elif [ $FIRST = "create" ]
     then
 
-        $ECHO "I will now re-create the configuration file' $DBW_CONFIG_FILE_NAME'."
+        $ECHO "I will now re-create the configuration file '$DBW_CONFIG_FILE_NAME' in your home directory: '$HOME'."
 
     fi
 
@@ -182,33 +164,6 @@ updateConfigIfNeeded()
 #
 environment()
 {
-    $ECHO "\nDetails on the dbwebb-environment."
-    $ECHO "\n------------------------------------"
-    $ECHO "\n"
-    $ECHO "\nOperatingsystem:       $DBW_OS"
-    $ECHO "\nCommand issued:        $DBW_EXECUTABLE"
-    $ECHO "\nVersion of dbwebb is:  $DBW_VERSION"
-    $ECHO "\nPath to executable:    $DBW_EXECUTABLE_DIR"
-    $ECHO "\nInstall dir:           $DBW_INSTALL_DIR"
-    $ECHO "\nConfig-file:           $DBW_CONFIG_FILE"
-    $ECHO "\nWorking directory:     $DBW_CURRENT_DIR"
-    $ECHO "\n"
-
-    $ECHO "\nDetails on the course-repo."
-    $ECHO "\n------------------------------------"
-    $ECHO "\n"
-
-    if [ "$DBW_COURSE_REPO_VALID" == "yes" ]; then
-        $ECHO "\nCurrent course-repo:   $DBW_COURSE"
-        $ECHO "\nCourse directory:      $DBW_COURSE_DIR"
-        $ECHO "\nCourse-repo version:   $( $GIT describe )"
-        $ECHO "\n\nLatest update to course repo was:\n"
-        $GIT log -1
-    else 
-        $ECHO "\nThis is not a valid course repo."
-    fi
-    $ECHO "\n"
-
     $ECHO "\nDetails on installed utilities."
     $ECHO "\n------------------------------------"
     $ECHO "\n"
@@ -218,7 +173,61 @@ environment()
     $ECHO "\nrsync:                 %s" "$( checkCommand $RSYNC )"
     $ECHO "\nwget:                  %s" "$( checkCommand $WGET )"
     $ECHO "\ncurl:                  %s" "$( checkCommand $CURL )"
-    $ECHO "\n\n"
+    $ECHO "\n"
+    $ECHO "\n"
+
+    $ECHO "\nDetails on the dbwebb-environment."
+    $ECHO "\n------------------------------------"
+    $ECHO "\n"
+    $ECHO "\nOperatingsystem:       $DBW_OS"
+    $ECHO "\nCommand issued:        $DBW_EXECUTABLE"
+    $ECHO "\nVersion of dbwebb is:  $DBW_VERSION"
+    $ECHO "\nLatest commit:         $( cd $DBW_INSTALL_DIR; $GIT describe --always )"
+    $ECHO "\nPath to executable:    '$DBW_EXECUTABLE_DIR'"
+    $ECHO "\nInstall dir:           '$DBW_INSTALL_DIR'"
+    $ECHO "\nConfig-file:           '$DBW_CONFIG_FILE'"
+    $ECHO "\nWorking directory:     '$DBW_CURRENT_DIR'"
+    $ECHO "\nLocal user:            '$USER'"
+    $ECHO "\nLocal homedir:         '$HOME'"
+    $ECHO "\nRemote user:           '$DBW_USER'"
+    $ECHO "\nRemote host:           '$DBW_HOST'"
+    $ECHO "\n"
+    $ECHO "\n"
+
+    $ECHO "\nDetails on home for course-repos."
+    $ECHO "\n------------------------------------"
+    $ECHO "\n"
+
+    if [ -d "$DBW_HOME" ]; then
+        $ECHO "\nHome of course repos:  '$DBW_HOME'"
+        $ECHO "\n"
+        $ECHO "\nContent of directory is:"
+        $ECHO "\n"
+        ls -lF "$DBW_HOME"
+    else 
+        $ECHO "\nThere is no specific home defined for the course repos."
+    fi
+
+    $ECHO "\n"
+    $ECHO "\n"
+
+    $ECHO "\nDetails on current course-repo."
+    $ECHO "\n------------------------------------"
+    $ECHO "\n"
+
+    if [ "$DBW_COURSE_REPO_VALID" = "yes" ]; then
+        $ECHO "\nCurrent course-repo:   '$DBW_COURSE'"
+        $ECHO "\nCourse directory:      '$DBW_COURSE_DIR'"
+        $ECHO "\nCourse-repo version:   $( $GIT describe --always )"
+        $ECHO "\n\nLatest update to course repo was:"
+        $ECHO "\n"
+        $GIT log -1
+    else 
+        $ECHO "\nThis is not a valid course repo."
+    fi
+    $ECHO "\n"
+    $ECHO "\n"
+
 }
 
 
@@ -236,6 +245,19 @@ checkCommand()
     else 
         $ECHO $( which $COMMAND )
     fi
+}
+
+
+
+#
+# Selfupdate
+#
+selfUpdate()
+{
+    INTRO="Selfupdating dbwebb-cli from https://github.com/mosbth/dbwebb-cli.\nInstallation directory is: '$DBW_INSTALL_DIR'."
+    COMMAND="cd '$DBW_INSTALL_DIR'; $GIT pull"
+    MESSAGE="to update dbwebb-cli installation directory."
+    executeCommand "$INTRO" "$COMMAND" "$MESSAGE"
 }
 
 
@@ -307,12 +329,12 @@ executeCommand()
 #
 createDefaultFiles()
 {
-    ME_DEFAULT="$DBW_COURSE_DIR/me-default/"
+    ME_DEFAULT="$DBW_COURSE_DIR/default/"
     ME="$DBW_COURSE_DIR/me/"
 
-    INTRO="Initiating the directory me/ by copying directory structure and files from the directory me-default/ to me/ (will not overwrite existing files)."
+    INTRO="Initiating the directory 'me/' by copying directory structure and files from the directory 'default/' (will not overwrite existing files)."
     COMMAND="$RSYNC -av --exclude README.md --ignore-existing \"$ME_DEFAULT\" \"$ME\""
-    MESSAGE="to init the directory me/."
+    MESSAGE="to init the directory 'me/'."
     executeCommand "$INTRO" "$COMMAND" "$MESSAGE"
 }
 
@@ -323,7 +345,8 @@ createDefaultFiles()
 #
 initServer()
 {
-    INTRO="Intiating the remote server '$DBW_HOST' by connecting to it and creating directories (if needed) where all uploaded files will reside."
+    INTRO="Intiating the remote server '$DBW_HOST' by connecting as '$DBW_USER' and creating directories (if needed) where all uploaded files will reside."
+    # TBD Should use DBW_BASEDIR 
     COMMAND="$SSH_CMD 'sh -c \"if [ ! -d dbwebb-kurser ]; then mkdir dbwebb-kurser; fi; chmod 700 dbwebb-kurser; echo; echo \"dbwebb-kurser:\"; ls -l dbwebb-kurser; if [ ! -d www/dbwebb-kurser ]; then mkdir www/dbwebb-kurser; fi; chmod 755 www/dbwebb-kurser; echo; echo \"www/dbwebb-kurser:\"; ls -l www/dbwebb-kurser\"'"
     MESSAGE="to init the server."
     executeCommand "$INTRO" "$COMMAND" "$MESSAGE"
@@ -334,13 +357,13 @@ initServer()
 #
 # Test the connection to the server
 #
-testConnection()
-{
-    INTRO="I will now try to establish a connection with the server '$DBW_HOST' by connecting to it and logging in as user '$DBW_USER'. I will use ssh-keys if available."
-    COMMAND="$SSH_CMD cat /etc/motd"
-    MESSAGE="to establish the connection."
-    executeCommand "$INTRO" "$COMMAND" "$MESSAGE"
-}
+#testConnection()
+#{
+#    INTRO="I will now try to establish a connection with the server '$DBW_HOST' by connecting to it and logging in as user '$DBW_USER'. I will use ssh-keys if available."
+#    COMMAND="$SSH_CMD cat /etc/motd"
+#    MESSAGE="to establish the connection."
+#    executeCommand "$INTRO" "$COMMAND" "$MESSAGE"
+#}
 
 
 
@@ -403,6 +426,21 @@ updateFromMaster()
 
 
 #
+# Set proper rights for files and directories
+#
+setChmod()
+{
+    if [ $VERY_VERBOSE = "yes" ]; then
+        $ECHO "\nEnsuring that all files and directories are readable for all, below $DBW_COURSE_DIR."
+    fi
+
+    $FIND "$DBW_COURSE_DIR" -type d -exec chmod u+rwx,go+rx {} \;  
+    $FIND "$DBW_COURSE_DIR" -type f -exec chmod u+rw,go+r {} \;   
+}
+
+
+
+#
 # Push/upload results to the server
 #
 pushToServer()
@@ -441,21 +479,6 @@ pullFromServer()
 
 
 #
-# Set proper rights for files and directories
-#
-setChmod()
-{
-    if [ $VERY_VERBOSE = "yes" ]; then
-        $ECHO "\nEnsuring that all files and directories are readable for all, below $DBW_COURSE_DIR."
-    fi
-
-    $FIND "$DBW_COURSE_DIR" -type d -exec chmod u+rwx,go+rx {} \;  
-    $FIND "$DBW_COURSE_DIR" -type f -exec chmod u+rw,go+r {} \;   
-}
-
-
-
-#
 # Upload results to the server
 #
 uploadToServer()
@@ -485,11 +508,6 @@ downloadFromServer()
 
 
 
-
-
-# --------------------- To be validated -------------------------------
-
-
 #
 # Create and use ssh-keys to login.
 #
@@ -497,13 +515,13 @@ installSshKeys()
 {
     SSH_KEY="$HOME/.ssh/dbwebb"
 
-    if [ ! -d $HOME/.ssh ]
+    if [ ! -d "$HOME/.ssh" ]
     then
-        mkdir $HOME/.ssh
+        mkdir "$HOME/.ssh"
     fi
 
     INTRO="First we need to create a ssh key and store it locally."
-    COMMAND="ssh-keygen -t dsa -f $SSH_KEY -N ''"
+    COMMAND="ssh-keygen -t dsa -f '$SSH_KEY' -N ''"
     MESSAGE="to create the ssh key."
     executeCommand "$INTRO" "$COMMAND" "$MESSAGE"
 
@@ -511,18 +529,21 @@ installSshKeys()
     #echo $IS_CYGWIN
     if [ $IS_CYGWIN = "yes" ]
     then
-        chgrp -vR $CYGWIN_DEFAULT_GROUP $HOME/.ssh
+        chgrp -vR "$CYGWIN_DEFAULT_GROUP" "$HOME/.ssh"
     fi
 
-    chmod 700 $HOME/.ssh
-    chmod 600 $SSH_KEY $SSH_KEY.pub
+    chmod 700 "$HOME/.ssh"
+    chmod 600 "$SSH_KEY" "$SSH_KEY.pub"
 
     INTRO="I will now install the ssh-key at the remote server."
-    COMMAND="cat $SSH_KEY.pub | ssh $USER@$HOST 'sh -c \"if [ ! -d .ssh ]; then mkdir .ssh; fi; chmod 700 .ssh; touch .ssh/authorized_keys; cat >> .ssh/authorized_keys\"'"
+    COMMAND="cat '$SSH_KEY.pub' | ssh $DBW_USER@$DBW_HOST 'sh -c \"if [ ! -d .ssh ]; then mkdir .ssh; fi; chmod 700 .ssh; touch .ssh/authorized_keys; cat >> .ssh/authorized_keys\"'"
     MESSAGE="to install the ssh-keys."
     executeCommand "$INTRO" "$COMMAND" "$MESSAGE"
 }
 
+
+
+# --------------------- To be validated -------------------------------
 
 
 #
