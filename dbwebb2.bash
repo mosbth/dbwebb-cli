@@ -89,11 +89,11 @@ done
 
 
 
-# Where is the directory for the course repos
+# Where is the directory for the course repos, if any
 if [ -d "$DBWEBB_HOME" ]; then
     : # Ok
 elif [ -d "$HOME/$DBW_BASEDIR" ]; then
-    DBW_HOME="$HOME/$DBW_BASEDIR"
+    DBWEBB_HOME="$HOME/$DBW_BASEDIR"
 fi
 
 
@@ -172,7 +172,29 @@ case $CMD in
         $ECHO "$VERSION\n"
         exit 0
         ;;
+
+    ls)
+        lsHome
+        exit 0
+        ;;
+
+    repo|repos)
+        reposList
+        exit 0
+        ;;
+
+    clone)
+        if [ -z "$2" ]; then
+            $ECHO "\n$MSG_FAILED missing argument for repo name."
+            $ECHO "\n"
+            dbwebb2PrintShortUsage
+            exit 1
+        fi
+        reposClone "$2"
+        exit 0
+        ;;
 esac
+    elif [ -z "$repo" ]; then
 
 
 

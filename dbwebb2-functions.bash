@@ -40,6 +40,12 @@ dbwebb2PrintUsage()
     $ECHO "\n  login          Login to the remote server using ssh and sshkeys if available."
     $ECHO "\n  init-server    Init the server by creating a directory structure on it."
     $ECHO "\n"
+    $ECHO "\nCommands to manage course repos:"
+    $ECHO "\n"
+    $ECHO "\n  ls             List all locally installed course repos within \$DBWEBB_HOME."
+    $ECHO "\n  repo           List all supported remote course repos."
+    $ECHO "\n  clone repo     Clone and locally install a remote course repo."
+    $ECHO "\n"
     $ECHO "\nCommands for a valid course repo:"
     $ECHO "\n"
     #$ECHO "\n  init-repo      Init the repo for the first time and create a config-file."
@@ -250,6 +256,81 @@ checkCommand()
 
 
 #
+# ls $DBWEBB_HOME
+#
+lsHome()
+{
+    if [ -d "$DBWEBB_HOME" ]; then
+        cd "$DBWEBB_HOME"
+        $ECHO $( pwd )
+        $ECHO "\n"
+        ls -lF
+    else 
+        $ECHO "\nYou have not set \$DBWEBB_HOME nor do you have a directory \$HOME/$DBW_BASEDIR."
+    fi
+}
+
+
+
+#
+# List all available remote repos
+#
+reposList()
+{
+    $ECHO "\nThe following remote course repos are supported."
+    $ECHO "\n"
+    $ECHO "\n python       https://github.com/mosbth/python"
+    $ECHO "\n javascript1  https://github.com/mosbth/javascript1"
+    $ECHO "\n linux        https://github.com/mosbth/linux"
+    $ECHO "\n webapp       https://github.com/mosbth/webapp"
+    $ECHO "\n htmlphp      https://github.com/mosbth/htmlphp"
+    $ECHO "\n"
+    $ECHO "\n"
+}
+
+
+
+#
+# Clone a remote repos
+#
+reposClone()
+{
+    local repo="$1"
+    local repos=(python javascript1 linux webapp htmlphp)
+
+    if [ ! -d "$DBWEBB_HOME" ]; then
+        $ECHO "\nYou have not set \$DBWEBB_HOME nor do you have a directory \$HOME/$DBW_BASEDIR."
+    else
+        ok=0
+        for i in ${repos[@]}; do
+            if [ "$repo" == "${i}" ]; then
+                
+                ok=1
+                if [ -d "$DBWEBB_HOME/$repo" ]; then
+                    $ECHO "\n$MSG_FAILED to clone. There seem to exist a directory with this name already."
+                    $ECHO "\n"
+                else
+                    cmd="$GIT clone https://github.com/mosbth/$repo"
+                    $ECHO "\nCloning remote course repo and making a local installation."
+                    $ECHO "\nMoving to '$DBWEBB_HOME'"
+                    $ECHO "\n$cmd"
+                    cd "$DBWEBB_HOME"
+                    $cmd
+                fi
+            fi
+        done
+
+        if [ $ok -eq 0 ]; then
+            $ECHO "\n$MSG_FAILED to clone remote repo, unknown repo '$repo'. Use '$DBW_EXECUTABLE repos' to get a list of supported repos."
+            $ECHO "\n"
+            dbwebb2PrintShortUsage
+        fi
+    fi
+}
+
+
+
+#
 # Selfupdate
 #
 selfUpdate()
@@ -329,10 +410,10 @@ executeCommand()
 #
 createDefaultFiles()
 {
-    ME_DEFAULT="$DBW_COURSE_DIR/default/"
+    ME_DEFAULT="$DBW_COURSE_DIR/.default/"
     ME="$DBW_COURSE_DIR/me/"
 
-    INTRO="Initiating the directory 'me/' by copying directory structure and files from the directory 'default/' (will not overwrite existing files)."
+    INTRO="Initiating the directory 'me/' by copying directory structure and files from the directory '.default/' (will not overwrite existing files)."
     COMMAND="$RSYNC -av --exclude README.md --ignore-existing \"$ME_DEFAULT\" \"$ME\""
     MESSAGE="to init the directory 'me/'."
     executeCommand "$INTRO" "$COMMAND" "$MESSAGE"
