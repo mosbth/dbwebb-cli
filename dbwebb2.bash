@@ -19,13 +19,17 @@ UPLOAD="$RSYNC -av --delete --exclude literature --exclude .git -e \"ssh $DBW_SS
 UPLOAD_MINIMAL="$RSYNC -av --delete --exclude me --exclude tutorial --exclude example --exclude literature --exclude .git -e \"ssh $DBW_SSH_KEY_OPTION\" \"$SOURCE\" \"$DESTINATION\""
 
 
+# Settins
+MSG_OK="\033[0;30;42mOK\033[0m"
+MSG_WARNING="\033[43mWARNING\033[0m"
+MSG_FAILED="\033[0;37;41mFAILED\033[0m"
+
+
 
 #
 # Find my environment, before any work can be done
 #
 
-# For early error messages, also exists in .dbwebb.config
-MSG_FAILED="\033[0;37;41mFAILED.\033[0m"
 
 # What was the command issued?
 DBW_EXECUTABLE="$( basename "$0" )"
@@ -91,9 +95,9 @@ done
 
 # Where is the directory for the course repos, if any
 if [ -d "$DBWEBB_HOME" ]; then
-    : # Ok
+    DBW_HOME="$DBW_BASEDIR"
 elif [ -d "$HOME/$DBW_BASEDIR" ]; then
-    DBWEBB_HOME="$HOME/$DBW_BASEDIR"
+    DBW_HOME="$HOME/$DBW_BASEDIR"
 fi
 
 
@@ -133,6 +137,7 @@ SSH_CMD="$SSH ${DBW_USER}@${DBW_HOST} $DBW_SSH_KEY_OPTION"
 
 # Create the basis for the upload command
 RSYNC_CMD="$RSYNC -av --delete --exclude .git --exclude .gitignore -e \"ssh $DBW_SSH_KEY_OPTION\""
+RSYNC_DOWNLOAD_CMD="$RSYNC -avu -e \"ssh $DBW_SSH_KEY_OPTION\""
 
 
 
@@ -194,7 +199,6 @@ case $CMD in
         exit 0
         ;;
 esac
-    elif [ -z "$repo" ]; then
 
 
 
@@ -299,32 +303,33 @@ case $CMD in
         initServer
         ;;
 
-    push)
-        pushToServer "$DBW_COURSE_DIR" "$DBW_REMOTE_DESTINATION" "$2"
-        ;;
-
-    pull)
-        pullFromServer
-        ;;
-
-    init)
-        initServer
-        createDefaultFiles
-        #uploadToServer
-        ;;
-
     update)
         updateFromMaster
         ;;
 
-    upload)
+    upload|push)
         setChmod
-        uploadToServer
+        pushToServer "$DBW_COURSE_DIR" "$DBW_REMOTE_DESTINATION" "$2"
         ;;
 
-    download)
-        downloadFromServer
+    download|pull)
+        pullFromServer "$DBW_COURSE_DIR" "$DBW_REMOTE_DESTINATION" "$2"
         ;;
+
+#    upload)
+#        setChmod
+#        uploadToServer
+#        ;;
+
+#    download)
+#        downloadFromServer
+#        ;;
+
+#    init)
+#        initServer
+#        createDefaultFiles
+#        #uploadToServer
+#        ;;
 
     create)
         LAB="$2"
@@ -337,8 +342,11 @@ case $CMD in
         ;;
 
     validate)
-        WHICH=$2
-        validateUploadedResults ${WHICH:=all}
+        #WHICH=$2
+        #validateUploadedResults ${WHICH:=all}
+
+        setChmod
+        validateUploadedResults "$DBW_COURSE_DIR" "$DBW_REMOTE_DESTINATION" "$2"
         ;;
 
     publish)

@@ -26,14 +26,14 @@ dbwebb2PrintUsage()
     $ECHO "\n"
     $ECHO "\n  -h         Print this message and exit."
     $ECHO "\n  -i         Prints help with commands for inspect."
-    $ECHO "\n  -v         Very verbose, print out whats happening."
+    $ECHO "\n  -v         Verbose, print out what's happening."
     $ECHO "\n  -y         Do not wait for my input, just proceed."
     $ECHO "\n"
     $ECHO "\nCommand:"
     $ECHO "\n"
     $ECHO "\n  help           Print this message."
     $ECHO "\n  version        Print the version of this program and exit."
-    $ECHO "\n  env            Check and print out details on the environment."
+    $ECHO "\n  env, status    Check and print out details on the environment."
     $ECHO "\n  config, create-config Create, or re-create the config file."
     $ECHO "\n  selfupdate     Update dbwebb-cli installation."
     $ECHO "\n  sshkey         Create and install ssh-keys to avoid using password."
@@ -42,35 +42,22 @@ dbwebb2PrintUsage()
     $ECHO "\n"
     $ECHO "\nCommands to manage course repos:"
     $ECHO "\n"
-    $ECHO "\n  ls             List all locally installed course repos within \$DBWEBB_HOME."
+    $ECHO "\n  ls             List all locally installed course repos within \$DBW_HOME."
     $ECHO "\n  repo           List all supported remote course repos."
     $ECHO "\n  clone repo     Clone and locally install a remote course repo."
     $ECHO "\n"
     $ECHO "\nCommands for a valid course repo:"
     $ECHO "\n"
-    #$ECHO "\n  init-repo      Init the repo for the first time and create a config-file."
-    $ECHO "\n  init-me        Init the directory me/ by copying files and directories from default/."
-    $ECHO "\n  update         Update the courserepo with latest updates from the master repo."
+    $ECHO "\n  init-me          Init the directory me/ by copying files and directories from default/."
+    $ECHO "\n  update           Update the courserepo with latest updates from the master repo."
+    $ECHO "\n  upload [part]    Upload current directory to the the server."
+    $ECHO "\n  download [part]  Download current directory from the server (overwrite all files, be careful)."
     $ECHO "\n"
-    $ECHO "\n  validate [part] Validate (and upload) your files using the remote server."
-    $ECHO "\n"
-    $ECHO "\n  ~upload        Upload current directory to the the server."
-    $ECHO "\n  ~download      Download current directory from the server."
-    $ECHO "\n"
-    $ECHO "\n  ~push [part]   Upload all or a specific part of the course repo to the server."
-    $ECHO "\n  ~pull [part]   Download all or a specific part of the course repo from the server."
-    $ECHO "\n"
-    $ECHO "\n  inspect        Inspect a kmom for yourself or a specific user, needs teacher privilegies"
-    $ECHO "\n                 to check another students kmom."
-    $ECHO "\n"
-    $ECHO "\n  TBD"
-    $ECHO "\n  create       Create a laboration, use additional argument for naming what lab to create."
-    $ECHO "\n  publish      Upload, Validate and Publish your course results to the web."
-    $ECHO "\n               Send in kmom01, kmom02, etc to publish only one kmom."
-    $ECHO "\n               Default is to publish all."
-    $ECHO "\n"
-    $ECHO "\n  Obsolete?"
-    $ECHO "\n  init         Init the remote server and create a destination directory."
+    $ECHO "\n  create labid     Create a laboration, use additional argument for naming what lab to create."
+    $ECHO "\n  validate [part]  Validate (and upload) your files using the remote server."
+    $ECHO "\n  publish [part]   Upload, Validate and Publish your course results to the web."
+    $ECHO "\n  inspect kmom [user]  Inspect a kmom for yourself or a specific user, needs teacher privilegies"
+    $ECHO "\n                        to check another students kmom."
     $ECHO "\n"
     $ECHO "\n"
 }
@@ -212,6 +199,7 @@ environment()
         ls -lF "$DBW_HOME"
     else 
         $ECHO "\nThere is no specific home defined for the course repos."
+        $ECHO "\nYou have not set \$DBWEBB_HOME nor do you have a directory \$HOME/$DBW_BASEDIR."
     fi
 
     $ECHO "\n"
@@ -260,8 +248,8 @@ checkCommand()
 #
 lsHome()
 {
-    if [ -d "$DBWEBB_HOME" ]; then
-        cd "$DBWEBB_HOME"
+    if [ -d "$DBW_HOME" ]; then
+        cd "$DBW_HOME"
         $ECHO $( pwd )
         $ECHO "\n"
         ls -lF
@@ -298,23 +286,23 @@ reposClone()
     local repo="$1"
     local repos=(python javascript1 linux webapp htmlphp)
 
-    if [ ! -d "$DBWEBB_HOME" ]; then
-        $ECHO "\nYou have not set \$DBWEBB_HOME nor do you have a directory \$HOME/$DBW_BASEDIR."
+    if [ ! -d "$DBW_HOME" ]; then
+        $ECHO "\nYou have not set \$DBW_HOME nor do you have a directory \$HOME/$DBW_BASEDIR."
     else
         ok=0
         for i in ${repos[@]}; do
             if [ "$repo" == "${i}" ]; then
                 
                 ok=1
-                if [ -d "$DBWEBB_HOME/$repo" ]; then
+                if [ -d "$DBW_HOME/$repo" ]; then
                     $ECHO "\n$MSG_FAILED to clone. There seem to exist a directory with this name already."
                     $ECHO "\n"
                 else
                     cmd="$GIT clone https://github.com/mosbth/$repo"
                     $ECHO "\nCloning remote course repo and making a local installation."
-                    $ECHO "\nMoving to '$DBWEBB_HOME'"
+                    $ECHO "\nMoving to '$DBW_HOME'"
                     $ECHO "\n$cmd"
-                    cd "$DBWEBB_HOME"
+                    cd "$DBW_HOME"
                     $cmd
                 fi
             fi
@@ -348,7 +336,7 @@ selfUpdate()
 #
 executeCommand()
 {
-    INTRO=$1
+    INTRO="$1"
 
     if [ $SKIP_READLINE = "no" ]
     then
@@ -357,7 +345,7 @@ executeCommand()
         read void
     fi
 
-    REALLY=$4
+    REALLY="$4"
     if [ ! -z $REALLY ]
     then
         $ECHO "\nAre you really sure? [yN] "
@@ -365,7 +353,7 @@ executeCommand()
         default="n"
         answer=${answer:-$default}
 
-        if [ ! "$answer" = "y" -o "$answer" = "Y" ]
+        if [ ! \( "$answer" = "y" -o "$answer" = "Y" \) ]
         then
             $ECHO "Exiting...\n"
             exit 0
@@ -436,19 +424,6 @@ initServer()
 
 
 #
-# Test the connection to the server
-#
-#testConnection()
-#{
-#    INTRO="I will now try to establish a connection with the server '$DBW_HOST' by connecting to it and logging in as user '$DBW_USER'. I will use ssh-keys if available."
-#    COMMAND="$SSH_CMD cat /etc/motd"
-#    MESSAGE="to establish the connection."
-#    executeCommand "$INTRO" "$COMMAND" "$MESSAGE"
-#}
-
-
-
-#
 # Login to the server
 #
 loginToServer()
@@ -459,133 +434,6 @@ loginToServer()
     executeCommand "$INTRO" "$COMMAND" "$MESSAGE"
 }
 
-
-
-#
-# Inspect uploaded files
-#
-inspectResults()
-{
-    WHAT=$1
-    WHO=$2
-    INTRO="I will now inspect the choosen kmom for the choosen user, if you have privilegies to do that."
-    LOG="$HOME/$BASEDIR/.dbwebb-inspect.log"
-    COMMAND="$SSH_CMD 'cd $DBW_BASEDIR/$DBW_COURSE; bin/dbwebb-inspect $WHAT $WHO' | tee $LOG; "
-    MESSAGE="to inspect the course results. Saved a log of the output, review it as:\nless -R $LOG"
-
-    #COMMAND="$SSH_CMD 'cd $DBW_BASEDIR/$DBW_COURSE; bin/dbwebb-inspect $WHAT $WHO'"
-    #MESSAGE="to inspect the course results."
-
-    #if [ "$USER" = "$WHO" ]
-    #then
-        #upload="$UPLOAD"
-    #else
-        #upload="$UPLOAD_MINIMAL"
-    #fi
-
-    #executeCommand "$INTRO" "$upload; $COMMAND" "$MESSAGE"
-    executeCommand "$INTRO" "$COMMAND" "$MESSAGE"
-}
-
-
-
-#
-# Upload results to the server
-#
-updateFromMaster()
-{
-    INTRO="Update course-repo with latest changes from its master at GitHub."
-    COMMAND="$GIT pull"
-    MESSAGE="to update course repo."
-    executeCommand "$INTRO" "$COMMAND" "$MESSAGE"
-
-    # ? really needed
-    source "$DBW_VERSION_FILE"
-    updateConfigIfNeeded "upgrade"
-}
-
-
-
-#
-# Set proper rights for files and directories
-#
-setChmod()
-{
-    if [ $VERY_VERBOSE = "yes" ]; then
-        $ECHO "\nEnsuring that all files and directories are readable for all, below $DBW_COURSE_DIR."
-    fi
-
-    $FIND "$DBW_COURSE_DIR" -type d -exec chmod u+rwx,go+rx {} \;  
-    $FIND "$DBW_COURSE_DIR" -type f -exec chmod u+rw,go+r {} \;   
-}
-
-
-
-#
-# Push/upload results to the server
-#
-pushToServer()
-{
-    WHAT="$1"
-    WHERE="$2"
-    ITEM="$3"
-
-    if [ -z "$WHAT" -o -z "$WHERE" ]; then
-        $ECHO "$MSG_FAILED Missing argument for source or destination. Perhaps re-create the config-file?"
-        $ECHO "\n\n"
-        exit 1
-    fi
-
-    echo "Item: $ITEM"
-
-    INTRO="Pushing (uploading) the directory '$WHAT/' to '$WHERE/'."
-    COMMAND="$RSYNC_CMD $WHAT/ $WHERE/"
-    MESSAGE="to upload data."
-    executeCommand "$INTRO" "$COMMAND" "$MESSAGE"
-}
-
-
-
-#
-# Pull/download from the server
-#
-pullFromServer()
-{
-    INTRO="You will now download the content of youre me-directory FROM the server. Existing local files that are newer will not be overwritten."
-    COMMAND="rsync -avu --exclude default -e \"ssh $SSH_KEY_OPTION\" \"$DESTINATION/me/\" \"$SOURCE/me/\""
-    MESSAGE="to download the me-directory from the server."
-    echo executeCommand "$INTRO" "$COMMAND" "$MESSAGE"
-}
-
-
-
-#
-# Upload results to the server
-#
-uploadToServer()
-{
-    subdir=${DBW_CURRENT_DIR#"$DBW_COURSE_DIR/"}
-
-    INTRO="Your current working directory '$DBW_CURRENT_DIR' will now be uploaded to remote server."
-    COMMAND="$RSYNC_CMD $DBW_CURRENT_DIR/ $DBW_REMOTE_DESTINATION/$subdir/"
-    MESSAGE="to upload files."
-    executeCommand "$INTRO" "$COMMAND" "$MESSAGE"
-}
-
-
-
-#
-# Download from the server
-#
-downloadFromServer()
-{
-    subdir=${DBW_CURRENT_DIR#"$DBW_COURSE_DIR/"}
-
-    INTRO="WARNING: Downloading remote '$DBW_REMOTE_DESTINATION/$subdir/\n         to the current working directory '$DBW_CURRENT_DIR/'.\nWARNING: Local files MAY BE overwritten."
-    COMMAND="$RSYNC_CMD $DBW_REMOTE_DESTINATION/$subdir/ $DBW_CURRENT_DIR/"
-    MESSAGE="to download files."
-    executeCommand "$INTRO" "$COMMAND" "$MESSAGE" "REALLY?"
-}
 
 
 
@@ -624,6 +472,295 @@ installSshKeys()
 
 
 
+#
+# Upload results to the server
+#
+updateFromMaster()
+{
+    INTRO="Update course-repo with latest changes from its master at GitHub."
+    COMMAND="$GIT pull"
+    MESSAGE="to update course repo."
+    executeCommand "$INTRO" "$COMMAND" "$MESSAGE"
+
+    # ? really needed
+    source "$DBW_VERSION_FILE"
+    updateConfigIfNeeded "upgrade"
+}
+
+
+
+#
+# Set proper rights for files and directories
+#
+setChmod()
+{
+    if [ $VERY_VERBOSE = "yes" ]; then
+        $ECHO "\nEnsuring that all files and directories are readable for all, below $DBW_COURSE_DIR."
+    fi
+
+    $FIND "$DBW_COURSE_DIR" -type d -exec chmod u+rwx,go+rx {} \;  
+    $FIND "$DBW_COURSE_DIR" -type f -exec chmod u+rw,go+r {} \;   
+}
+
+
+
+#
+# Convert course specific module to path on disk
+#
+mapCmdToDir()
+{
+    local CMD="$1"
+    local RES=""
+
+    if [ -z "$CMD" ]; then 
+        return
+    fi 
+
+    case "$CMD" in
+        example)    RES="example" ;;
+        tutorial)   RES="tutorial" ;;
+        me)         RES="me" ;;
+        #all)        RES="all" ;;
+        kmom01)     RES="me/kmom01" ;;
+        kmom02)     RES="me/kmom02" ;;
+        kmom03)     RES="me/kmom03" ;;
+        kmom04)     RES="me/kmom04" ;;
+        kmom05)     RES="me/kmom05" ;;
+        kmom06)     RES="me/kmom06" ;;
+        kmom10)     RES="me/kmom10" ;;
+    esac
+
+    if [ ! -z $RES ]; then 
+        $ECHO "$RES"
+        return
+    fi 
+
+    case "$DBW_COURSE" in
+        htmlphp)
+            case "$CMD" in
+                lab1)       RES="me/kmom02/lab1" ;;
+                lab2)       RES="me/kmom03/lab2" ;;
+                lab3)       RES="me/kmom04/lab3" ;;
+                lab4)       RES="me/kmom05/lab4" ;;
+                lab5)       RES="me/kmom06/lab5" ;;
+            esac
+            ;;
+
+        python)
+            case "$CMD" in
+                hello)      RES="me/kmom01/hello" ;;
+                plane)      RES="me/kmom01/plane" ;;
+
+                lab1)       RES="me/kmom02/lab1" ;;
+                lab2)       RES="me/kmom03/lab2" ;;
+                lab3)       RES="me/kmom04/lab3" ;;
+                lab4)       RES="me/kmom05/lab4" ;;
+                lab5)       RES="me/kmom06/lab5" ;;
+                lab6)       RES="me/kmom06/lab6" ;;
+
+                marvin1)    RES="me/kmom02/marvin1" ;;
+                marvin2)    RES="me/kmom03/marvin2" ;;
+                marvin3)    RES="me/kmom04/marvin3" ;;
+                marvin4)    RES="me/kmom05/marvin4" ;;
+                marvin5)    RES="me/kmom06/marvin5" ;;
+
+                game1)      RES="me/kmom04/game1" ;;
+                game2)      RES="me/kmom05/game2" ;;
+                game3)      RES="me/kmom06/game3" ;;
+
+                adventure)  RES="me/kmom10/adventure" ;;
+            esac
+            ;;
+
+        javascript1)
+            case "$CMD" in
+                sandbox)      RES="me/kmom01/sandbox" ;;
+                hangman)      RES="me/kmom06/hangman" ;;
+                intelligence) RES="me/kmom10/intelligence" ;;
+
+                lab1)       RES="me/kmom02/lab1" ;;
+                lab2)       RES="me/kmom03/lab2" ;;
+                lab3)       RES="me/kmom04/lab3" ;;
+                lab4)       RES="me/kmom04/lab4" ;;
+                lab5)       RES="me/kmom05/lab5" ;;
+
+                flag1)      RES="me/kmom02/flag1" ;;
+                flag2)      RES="me/kmom03/flag2" ;;
+                flag3)      RES="me/kmom04/flag3" ;;
+                flag4)      RES="me/kmom05/flag4" ;;
+                flag5)      RES="me/kmom06/flag5" ;;
+
+                baddie1)    RES="me/kmom02/baddie1" ;;
+                baddie2)    RES="me/kmom03/baddie2" ;;
+                baddie3)    RES="me/kmom04/baddie3" ;;
+                #baddie4)    RES="me/kmom05/baddie4" ;;
+                #baddie5)    RES="me/kmom06/baddie5" ;;
+            esac
+            ;;
+
+        linux)
+            case "$CMD" in
+                lab1)       RES="me/kmom02/lab1" ;;
+                lab2)       RES="me/kmom03/lab2" ;;
+                lab3)       RES="me/kmom04/lab3" ;;
+                lab4)       RES="me/kmom05/lab4" ;;
+                lab5)       RES="me/kmom06/lab5" ;;
+            esac
+            ;;
+
+        webapp)
+            case "$CMD" in
+                lab1)       RES="me/kmom02/lab1" ;;
+                lab2)       RES="me/kmom03/lab2" ;;
+                lab3)       RES="me/kmom04/lab3" ;;
+                lab4)       RES="me/kmom05/lab4" ;;
+                lab5)       RES="me/kmom06/lab5" ;;
+            esac
+            ;;
+
+        #*)
+        #    $ECHO "\n$MSG_FAILED Unknown course '$DBW_COURSE'. Error in config file.\n"
+        #    exit 1
+        #    ;;
+    esac
+
+    #if [ ! -z "$RES" ]; then 
+        $ECHO "$RES"
+        return
+    #fi 
+
+    #$ECHO "\n$MSG_FAILED Unknown combination of course item: $DBW_COURSE $CMD.\n"
+    #exit 1
+}
+
+
+
+#
+# Validate the uploaded files
+#
+createUploadDownloadPaths()
+{
+    SUBDIR="$( mapCmdToDir $ITEM )"
+
+    if [ -z "$WHAT" -o -z "$WHERE" ]; then
+        $ECHO "$MSG_FAILED Missing argument for source or destination. Perhaps re-create the config-file?"
+        $ECHO "\n\n"
+        exit 1
+    fi
+
+    if [ ! -z "$ITEM" -a -z "$SUBDIR" ]; then
+        $ECHO "\n$MSG_FAILED Not a valid combination  course: '$DBW_COURSE' and item: '$ITEM'."
+        $ECHO "\n\n"
+        exit 1
+    fi
+
+    if [ ! -z "$SUBDIR" ]; then
+        WHAT="$WHAT/$SUBDIR/"
+        WHERE="$WHERE/$SUBDIR/"
+    else
+        WHAT="$WHAT/"
+        WHERE="$WHERE/"
+    fi
+
+    if [ ! -d "$WHAT" ]; then
+        $ECHO "\n$MSG_FAILED Target directory is not a valid directory: '$WHAT'"
+        $ECHO "\n\n"
+        exit 1
+    fi
+}
+
+
+
+#
+# Push/upload results to the server
+#
+pushToServer()
+{
+    WHAT="$1"
+    WHERE="$2"
+    ITEM="$3"
+    SUBDIR=""
+
+    createUploadDownloadPaths
+
+    local INTRO="Uploading the directory '$WHAT' to '$WHERE'."
+    local COMMAND="$RSYNC_CMD '$WHAT' '$WHERE'"
+    local MESSAGE="to upload data."
+    executeCommand "$INTRO" "$COMMAND" "$MESSAGE"
+}
+
+
+
+#
+# Pull/download from the server
+#
+pullFromServer()
+{
+    WHAT="$1"
+    WHERE="$2"
+    ITEM="$3"
+    SUBDIR=""
+
+    createUploadDownloadPaths
+
+    local INTRO="Downloading the directory '$WHERE' to '$WHAT'.\nExisting local files that are newer will not be overwritten."
+    local COMMAND="$RSYNC_DOWNLOAD_CMD '$WHERE' '$WHAT'"
+    local MESSAGE="to download data."
+    executeCommand "$INTRO" "$COMMAND" "$MESSAGE" "really?"
+}
+
+
+
+#
+# Validate the uploaded files
+#
+validateUploadedResults()
+{
+    WHAT="$1"
+    WHERE="$2"
+    ITEM="$3"
+    SUBDIR=""
+
+    createUploadDownloadPaths
+
+    local LOG="$HOME/.dbwebb-validate.log"
+    local INTRO="I will now upload files to the remote server and validate them."
+    local COMMAND1="$RSYNC_CMD '$WHAT' '$WHERE'"
+    local COMMAND2="$SSH_CMD 'cd $DBW_BASEDIR/$DBW_COURSE; bin/dbwebb-validate -n $IGNORE_FAULTS $WHAT' | tee '$LOG';"
+    local MESSAGE="to validate course results. Saved a log of the output, review it as:\nless -R '$LOG'"
+    executeCommand "$INTRO" "$COMMAND1; $COMMAND2" "$MESSAGE"
+}
+
+
+
+#
+# Inspect uploaded files
+#
+inspectResults()
+{
+    WHAT=$1
+    WHO=$2
+    INTRO="I will now inspect the choosen kmom for the choosen user, if you have privilegies to do that."
+    LOG="$HOME/.dbwebb-inspect.log"
+    COMMAND="$SSH_CMD 'cd $DBW_BASEDIR/$DBW_COURSE; bin/dbwebb-inspect $WHAT $WHO' | tee '$LOG'; "
+    MESSAGE="to inspect the course results. Saved a log of the output, review it as:\nless -R '$LOG'"
+
+    #COMMAND="$SSH_CMD 'cd $DBW_BASEDIR/$DBW_COURSE; bin/dbwebb-inspect $WHAT $WHO'"
+    #MESSAGE="to inspect the course results."
+
+    #if [ "$USER" = "$WHO" ]
+    #then
+        #upload="$UPLOAD"
+    #else
+        #upload="$UPLOAD_MINIMAL"
+    #fi
+
+    #executeCommand "$INTRO" "$upload; $COMMAND" "$MESSAGE"
+    executeCommand "$INTRO" "$COMMAND" "$MESSAGE"
+}
+
+
+
 # --------------------- To be validated -------------------------------
 
 
@@ -637,21 +774,6 @@ createLab()
     COMMAND="bin/dbwebb-create \"$LAB\""
     MESSAGE="to create the lab."
     executeCommand "$INTRO" "$COMMAND" "$MESSAGE"
-}
-
-
-
-#
-# Validate the uploaded files
-#
-validateUploadedResults()
-{
-    WHAT=$1
-    LOG="$HOME/$BASEDIR/.dbwebb-validate.log"
-    INTRO="I will now upload files to the remote server and validate them."
-    COMMAND="$SSH 'cd $BASEDIR/$PROJECT; bin/dbwebb-validate -n $IGNORE_FAULTS $WHAT' | tee $LOG;"
-    MESSAGE="to validate course results. Saved a log of the output, review it as:\nless -R $LOG"
-    executeCommand "$INTRO" "$UPLOAD; $COMMAND" "$MESSAGE"
 }
 
 
@@ -676,6 +798,38 @@ publishResults()
     fi
     $ECHO " published on $BASEURL"
     $ECHO "\n"
+}
+
+
+
+# -----------------------PERHAPS USE THES LATER ON BUT NOT FOR NOW -----------------------
+
+#
+# Upload results to the server
+#
+uploadToServer()
+{
+    subdir=${DBW_CURRENT_DIR#"$DBW_COURSE_DIR/"}
+
+    INTRO="Your current working directory '$DBW_CURRENT_DIR' will now be uploaded to remote server."
+    COMMAND="$RSYNC_CMD '$DBW_CURRENT_DIR/' '$DBW_REMOTE_DESTINATION/$subdir/'"
+    MESSAGE="to upload files."
+    executeCommand "$INTRO" "$COMMAND" "$MESSAGE"
+}
+
+
+
+#
+# Download from the server
+#
+downloadFromServer()
+{
+    subdir=${DBW_CURRENT_DIR#"$DBW_COURSE_DIR/"}
+
+    INTRO="WARNING: Downloading remote '$DBW_REMOTE_DESTINATION/$subdir/\n         to the current working directory '$DBW_CURRENT_DIR/'.\nWARNING: Local files MAY BE overwritten."
+    COMMAND="$RSYNC_CMD '$DBW_REMOTE_DESTINATION/$subdir/' '$DBW_CURRENT_DIR/'"
+    MESSAGE="to download files."
+    executeCommand "$INTRO" "$COMMAND" "$MESSAGE" "REALLY?"
 }
 
 
