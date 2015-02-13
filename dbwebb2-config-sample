@@ -58,8 +58,8 @@ fi
 #
 # dbwebb-validate, dbwebb-inspect
 #
-SERVERURL="http://www.student.bth.se"
-BASEURL="$SERVERURL/~$USER/$BASEDIR/$PROJECT"
+DBW_SERVERURL="http://www.student.bth.se"
+DBW_BASEURL="$DBW_SERVERURL/~$DBW_USER/$DBW_BASEDIR/$DBW_COURSE"
 
 TARGET="$PWD"
 BUILD1="$HOME/www"
