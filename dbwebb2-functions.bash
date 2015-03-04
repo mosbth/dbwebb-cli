@@ -510,17 +510,16 @@ function dbwebb-sshkey()
         mkdir "$HOME/.ssh"
     fi
 
-    local intro="First we need to create a ssh key and store it locally."
-    local command="ssh-keygen -t dsa -f '$sshkey' -N ''"
-    local message="to create the ssh key."
-    executeCommand "$intro" "$command" "$message"
-
+    printf "First we need to create a ssh key and store it locally."
+    printf "\nPress enter/return to continue..."
+    read void
+    ssh-keygen -t dsa -f "$sshkey" -N ''
+    
     # Bug (?) om Cygwin & win 8
     # TODO refactor 
-    if [ $IS_CYGWIN = "yes" ]
-    then
-        chgrp -vR "$CYGWIN_DEFAULT_GROUP" "$HOME/.ssh"
-    fi
+    #if [ $IS_CYGWIN = "yes" ]; then
+    #    chgrp -vR "$CYGWIN_DEFAULT_GROUP" "$HOME/.ssh"
+    #fi
 
     chmod 700 "$HOME/.ssh"
     chmod 600 "$sshkey" "$sshkey.pub"
