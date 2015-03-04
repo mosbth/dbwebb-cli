@@ -774,10 +774,9 @@ dbwebb-selfupdate()
     local MESSAGE="to update dbwebb installation."
     executeCommand "$INTRO" "$COMMAND" "$MESSAGE"
         
-    printf "\nSelfupdating config file.\n"
     dbwebb updateconfig
     
-    printf "\nCurrent version is:\n"
+    printf "Current version is: "
     dbwebb --version
 }
 
