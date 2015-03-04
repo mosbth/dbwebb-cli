@@ -700,7 +700,7 @@ dbwebb-selfupdate()
     local MESSAGE="to update dbwebb installation."
     executeCommand "$INTRO" "$COMMAND" "$MESSAGE"
     
-    printf "Nuvarande version är:\n"
+    printf "\nCurrent version is:\n"
     dbwebb --version
 }
 
