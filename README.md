@@ -26,9 +26,9 @@ lrwxrwxrwx 1 mosstud 500   38 jun 12 16:30 uglifyjs -> ../node_modules/uglify-js
 History
 -------------------
 
-v1.1.x (latest)
+v1.9.0 (2015-03-04)
 
-* Updating dbwebb version 2.
+* Updating dbwebb version 2, enabling for tests.
 
 
 v1.1.1 (2015-01-26)
