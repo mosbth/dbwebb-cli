@@ -706,4 +706,14 @@ dbwebb-selfupdate()
 
 
 
+#
+# Update config during selfupdate
+#
+dbwebb-updateconfig()
+{
+    createConfig "selfupdate" "no"
+}
+
+
+
 # --------------- DBWEBB FUNCTIONS PHASE END ---------------

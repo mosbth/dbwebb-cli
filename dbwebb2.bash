@@ -85,16 +85,17 @@ do
             exit 0
         ;;
 
-        update        \
-        | check       \
-        | config      \
-        | selfupdate  \
-        | sshkey      \
-        | login       \
-        | upload      \
-        | download    \
-        | validate    \
-        | init-server \
+        update         \
+        | check        \
+        | config       \
+        | updateconfig \
+        | selfupdate   \
+        | sshkey       \
+        | login        \
+        | upload       \
+        | download     \
+        | validate     \
+        | init-server  \
         | init-me)
             command=$1
             shift
