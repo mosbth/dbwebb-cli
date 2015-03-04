@@ -770,8 +770,8 @@ function dbwebb-validate()
 #
 dbwebb-selfupdate()
 {
-    local INTRO="Selfupdating dbwebb-cli from https://github.com/mosbth/dbwebb-cli.\nInstallation directory is: '$DBW_INSTALL_DIR'."
-    local COMMAND="wget https://raw.githubusercontent.com/mosbth/dbwebb-cli/master/dbwebb2 -O /tmp/$$; install $$ /usr/local/bin/dbwebb"
+    local INTRO="Selfupdating dbwebb-cli from https://github.com/mosbth/dbwebb-cli."
+    local COMMAND="wget https://raw.githubusercontent.com/mosbth/dbwebb-cli/master/dbwebb2 -O /tmp/$$; install /tmp/$$ /usr/local/bin/dbwebb; rm /tmp/$$"
     local MESSAGE="to update dbwebb installation."
     executeCommand "$INTRO" "$COMMAND" "$MESSAGE"
 }
