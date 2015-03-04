@@ -699,6 +699,9 @@ dbwebb-selfupdate()
     local COMMAND="wget https://raw.githubusercontent.com/mosbth/dbwebb-cli/master/dbwebb2 -O /tmp/$$; install /tmp/$$ /usr/local/bin/dbwebb; rm /tmp/$$"
     local MESSAGE="to update dbwebb installation."
     executeCommand "$INTRO" "$COMMAND" "$MESSAGE"
+        
+    printf "\nSelfupdating config file.\n"
+    dbwebb updateconfig
     
     printf "\nCurrent version is:\n"
     dbwebb --version
