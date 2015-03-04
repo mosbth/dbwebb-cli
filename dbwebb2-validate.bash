@@ -2,31 +2,34 @@
 #
 # External tools
 #
-JSHINT="jshint"
 HTMLHINT="dbwebb-htmlhint"
 CSSHINT="htmlhint"
+JSHINT="jshint"
+JSCS="jscs"
 
 HTML_MINIFIER="html-minifier"
-# TODO use DBW_COURSE_DIR
-HTML_MINIFIER_OPTIONS="--config-file ./.html-minifier.conf"
-
-UGLIFYJS="uglifyjs"
-UGLIFYJS_OPTIONS="--mangle --compress --screw-ie8 --comments"
 
 CLEANCSS="cleancss"
 CLEANCSS_OPTIONS="--s1 --skip-import"
 
+UGLIFYJS="uglifyjs"
+UGLIFYJS_OPTIONS="--mangle --compress --screw-ie8 --comments"
+
 PYLINT="pylint"
-# TODO use DBW_COURSE_DIR
-PYLINT_OPTIONS="-r n --rcfile ./.pylintrc"
+PYLINT_OPTIONS="-r n"
 
+PHP="php"
+PHPMD="phpmd"
+PHPCS="phpcs"
+PHPUGLIFY=""
 
+CHECKBASH="shellcheck --shell=bash"
+CHECKSH="shellcheck --shell=sh"
 
-#
-# Settings for this script
-#
-#umask 022
-export NODE_PATH=/usr/local/lib/node_modules
+if [[ $DBW_COURSE_DIR ]]; then
+    HTML_MINIFIER_CONFIG="--config-file '$DBW_COURSE_DIR/.html-minifier.conf'"
+    PYLINT_CONFIG="--rcfile $DBW_COURSE_DIR/.pylintrc"
+fi
 
 
 
@@ -35,21 +38,23 @@ export NODE_PATH=/usr/local/lib/node_modules
 #
 function checkInstalledValidateTools
 {
-    printf "\nCheck for installed validation tools."
-    printf "\n"
-    printf " pylint:        %s\n" "$( checkCommand $PYLINT )"
+    printf "Check for installed validation tools.\n"
     printf " htmlhint:      %s\n" "$( checkCommand $HTMLHINT )"
     printf " csshint:       %s\n" "$( checkCommand $CSSHINT )"
     printf " jshint:        %s\n" "$( checkCommand $JSHINT )"
+    printf " jscs:          %s\n" "$( checkCommand $JSCS )"
+    printf " pylint:        %s\n" "$( checkCommand $PYLINT )"
+    printf " php:           %s\n" "$( checkCommand $PHP )"
+    printf " phpmd:         %s\n" "$( checkCommand $PHPMD )"
+    printf " phpcs:         %s\n" "$( checkCommand $PHPCS )"
+    printf " bash:          %s\n" "$( checkCommand $CHECKBASH )"
+    printf " sh:            %s\n" "$( checkCommand $CHECKSH )"
 
-    if [[ $doPublish ]]; then 
-
-        printf " html-minifier: %s\n" "$( checkCommand $HTML_MINIFIER )"
-        printf " uglifyjs:      %s\n" "$( checkCommand $UGLIFYJS )"
-        printf " cleancss:      %s\n" "$( checkCommand $CLEANCSS )"
-    fi
-
-    printf "\n"
+    printf "Check for installed publishing tools.\n"
+    printf " html-minifier: %s\n" "$( checkCommand $HTML_MINIFIER )"
+    printf " cleancss:      %s\n" "$( checkCommand $CLEANCSS )"
+    printf " uglifyjs:      %s\n" "$( checkCommand $UGLIFYJS )"
+    printf " phpuglify:     %s\n" "$( checkCommand $PHPUGLIFY )"
 }
 
 
@@ -94,8 +99,8 @@ function assertResults()
         exit 1
     fi
     
-    printf "\n\n$MSG_OK"
-    printf " Asserts: $ASSERTS Faults: $FAULTS\n\n"
+    printf "\n$MSG_OK"
+    printf " Asserts: $ASSERTS Faults: $FAULTS\n"
     exit 0
 }
 
@@ -113,9 +118,71 @@ function validateHtmlCssJs()
         assert 0 "$HTMLHINT $filename" "HTMLHINT failed: $filename"
     done
 
+    printf "\n *.css using CSSHint."
+    for filename in $(find "$dir/" -type f -name '*.css'); do
+        printf ""
+        #assert 0 "$CSSHINT $filename" "CSSHint failed: $filename"
+    done
+
     printf "\n *.js using JSHint."
     for filename in $(find "$dir/" -type f -name '*.js'); do
         assert 0 "$JSHINT $filename" "JSHint failed: $filename"
+    done
+
+    printf "\n *.js using JSCS."
+    for filename in $(find "$dir/" -type f -name '*.js'); do
+        printf ""
+        #assert 0 "$JSCS $filename" "JSCS failed: $filename"
+    done
+}
+
+
+
+#
+# Perform validation tests
+#
+function validatePHP()
+{
+    local dir="$1"
+
+    printf "\n *.php using PHP."
+    for filename in $(find "$dir/" -type f -name '*.html'); do
+        printf ""
+        #assert 0 "$PHP $filename" "PHP failed: $filename"
+    done
+
+    printf "\n *.php using PHPMD."
+    for filename in $(find "$dir/" -type f -name '*.css'); do
+        printf ""
+        #assert 0 "$PHPMD $filename" "PHPMD failed: $filename"
+    done
+
+    printf "\n *.php using PHPCS."
+    for filename in $(find "$dir/" -type f -name '*.css'); do
+        printf ""
+        #assert 0 "$PHPCS $filename" "PHPCS failed: $filename"
+    done
+}
+
+
+
+#
+# Perform validation tests
+#
+function validateShell()
+{
+    local dir="$1"
+
+    printf "\n *.bash using ShellCheck."
+    for filename in $(find "$dir/" -type f -name '*.bash'); do
+        printf ""
+        #assert 0 "$SHELLCHECK $filename" "ShellCheck failed: $filename"
+    done
+
+    printf "\n *.sh using ShellCheck."
+    for filename in $(find "$dir/" -type f -name '*.sh'); do
+        printf ""
+        #assert 0 "$SHELLCHECK $filename" "ShellCheck failed: $filename"
     done
 }
 
@@ -130,13 +197,29 @@ function validatePython()
 
     printf "\n *.py using Pylint."
     for filename in $(find "$dir/" -type f -name '*.py'); do
-        assert 0 "$PYLINT $PYLINT_OPTIONS $filename" "pylint failed: $filename"
+        assert 0 "$PYLINT $PYLINT_OPTIONS $PYLINT_CONFIG $filename" "pylint failed: $filename"
     done
 
     printf "\n *.cgi using Pylint."
     for filename in $(find "$dir/" -type f -name '*.cgi'); do
-        assert 0 "$PYLINT $PYLINT_OPTIONS $filename" "pylint failed: $filename"
+        assert 0 "$PYLINT $PYLINT_OPTIONS $PYLINT_CONFIG $filename" "pylint failed: $filename"
     done
+}
+
+
+
+#
+# Set correct mode on published file and dirs
+#
+publishChmod()
+{
+    local dir="$1"
+
+    if [ -d "$dir" ]; then
+        find "$dir" -type d -exec chmod a+rx {} \;  
+        find "$dir" -type f -exec chmod a+r {} \;   
+        find "$dir" -type f -name '*.py' -exec chmod go-r {} \;
+    fi
 }
 
 
@@ -145,120 +228,48 @@ function validatePython()
 
 
 #
-# Init the build directory
-#
-initBuildDir()
-{
-    ME="$BUILD/me"
-    for dir in $BUILD1 $BUILD2 $BUILD3 $BUILD $ME $ME/kmom01 $ME/kmom02 $ME/kmom03 $ME/kmom04 $ME/kmom05 $ME/kmom06 $ME/kmom10; do
-        if [ ! -d $dir ]; then mkdir $dir; fi
-    done
-}
-
-
-
-#
-# Publish all
-#
-publishChmod()
-{
-    DIR="$1"
-
-    #find $BUILD/$dir/ -type d -print0 | xargs -0 chmod 755 
-    #find $BUILD/$dir/ -type f -print0 | xargs -0 chmod 644
-    #find $BUILD/$dir/ -type f -name '*.cgi' -print0 | xargs -0 chmod 755
-    #find $BUILD/$dir/ -type f -name '*.py'  -print0 | xargs -0 chmod 600
-
-    for filename in $(find "$DIR" -type d); do
-        chmod 755 "$filename"
-    done
-
-    for filename in $(find "$DIR" -type f); do
-        chmod 644 "$filename"
-    done
-
-    for filename in $(find "$DIR" -type f -name '*.cgi'); do
-        chmod 755 "$filename"
-    done
-
-    for filename in $(find "$DIR" -type f -name '*.py'); do
-        chmod 600 "$filename"
-    done
-}
-
-
-
-#
 # Publish all
 #
 publish()
 {
-    DIR="$1"
-    SILENT="$2"
-
-    if [ -z "$SILENT" ]; then
-        printf "\n\nPublishing $DIR to www/$BASEDIR/$PROJECT."
+    local from="$1"
+    local to="$2"
+ 
+    if [ ! -d "$from" ]; then
+        printf "$MSG_FAILED Publish without valid from directory: '$from'\n"
+        exit 2
+    elif [ -z "$to" ]; then
+        printf "$MSG_FAILED Publish with empty target directory: '$to'\n"
+        exit 2
     fi
-   
-    case "$DIR" in
-        example)    DIRS="example" ;;
-        tutorial)   DIRS="tutorial" ;;
-        me)         DIRS="me" ;;
-        all)        DIRS="example tutorial me" ;;
-        kmom*)      DIRS="me/js me/style $DIR" ;;
-        *)          DIRS="$DIR" ;;
-    esac
-
-    rsync -a --delete --exclude 'me/default' -f '- /*/' $TARGET/me/ $BUILD/me/
+ 
+    printf "rsync -a --delete %s %s" "$from/" "$to/"
+    return
     
-    publishChmod "$BUILD/me/"
-
-    for filename in $(find $BUILD/me/ -maxdepth 1 -type f -name '*.html'); do
+    printf " minify *.html"
+    for filename in $(find "$to/" -type f -name '*.html'); do
         assert 0 "$HTML_MINIFIER $HTML_MINIFIER_OPTIONS $filename --output $filename" "HTMLMinifier failed: $filename"
     done
 
-    for filename in $(find $BUILD/me/ -maxdepth 1 -type f -name '*.js'); do
-        assert 0 "$UGLIFYJS $filename -o $filename $UGLIFYJS_OPTIONS" "UglifyJS failed: $filename"
-    done
-
-    for filename in $(find $BUILD/me/ -maxdepth 1 -type f -name '*.css'); do
+    printf ", minify *.css"
+    for filename in $(find "$to/" -type f -name '*.css'); do
         assert 0 "$CLEANCSS $filename -o $filename" "CleanCSS failed: $filename"
     done
 
-    #find "$BUILD/me/" -maxdepth 1 -type f -name '*.html' | while read filename; do $HTML_MINIFIER $HTML_MINIFIER_OPTIONS $filename --output $filename; exit; done
-    #find "$BUILD/me/" -maxdepth 1 -type f -name '*.js'   | while read filename; do $UGLIFYJS $filename -o $filename $UGLIFYJS_OPTIONS; done
-    #find "$BUILD/me/" -maxdepth 1 -type f -name '*.css'  | while read filename; do $CLEANCSS $filename -o $filename; done
-
-    for dir in $DIRS; do
-        if [ ! -d "$TARGET/$dir" ]; then continue; fi
-
-        printf "\n $dir:"
-        rsync -a --delete $TARGET/$dir/ $BUILD/$dir/ 
-        
-        publishChmod "$BUILD/$dir/"
-
-        if [ -z "$SILENT" ]; then printf " minify *.html"; fi
-        #find "$BUILD/$dir/" -type f -name '*.html' | while read filename; do assert "0" "$HTML_MINIFIER $HTML_MINIFIER_OPTIONS $filename --output $filename" "HTMLMinifier failed: $filename"; done
-        for filename in $(find "$BUILD/$dir/" -type f -name '*.html'); do
-            assert 0 "$HTML_MINIFIER $HTML_MINIFIER_OPTIONS $filename --output $filename" "HTMLMinifier failed: $filename"
-        done
-
-        if [ -z "$SILENT" ]; then printf " uglify *.js"; fi
-        #$UGLIFYJS $BUILD/$KMOM/$DIR/js/main.js -o $BUILD/$KMOM/$DIR/js/main.js $UGLIFYJS_OPTIONS
-        #find "$BUILD/$dir/" -type f -name '*.js' | while read filename; do assert "0" "$UGLIFYJS $filename -o $filename $UGLIFYJS_OPTIONS" "UglifyJS failed: $filename"; done
-        for filename in $(find "$BUILD/$dir/" -type f -name '*.js'); do
-            assert 0 "$UGLIFYJS $filename -o $filename $UGLIFYJS_OPTIONS" "UglifyJS failed: $filename"
-        done
-
-        
-        if [ -z "$SILENT" ]; then printf " minify *.css"; fi
-        #$CLEANCSS $BUILD/$KMOM/$DIR/style/style.css -o $BUILD/$KMOM/$DIR/style/style.css
-        #find "$BUILD/$dir/" -type f -name '*.css' | while read filename; do assert "0" "$CLEANCSS $filename -o $filename" "CleanCSS failed: $filename"; done
-        for filename in $(find "$BUILD/$dir/" -type f -name '*.css'); do
-            assert 0 "$CLEANCSS $filename -o $filename" "CleanCSS failed: $filename"
-        done
-
+    printf ", uglify *.js"
+    for filename in $(find "$to/" -type f -name '*.js'); do
+        assert 0 "$UGLIFYJS $filename -o $filename $UGLIFYJS_OPTIONS" "UglifyJS failed: $filename"
     done
+    
+    printf ", uglify *.php"
+    for filename in $(find "$to/" -type f -name '*.js'); do
+        printf ""
+        #assert 0 "$UGLIFYJS $filename -o $filename $UGLIFYJS_OPTIONS" "UglifyJS failed: $filename"
+    done
+    
+    printf ", chmod"
+    publishChmod "$dir/"
+    printf ". Done"
 }
 
 
@@ -271,8 +282,8 @@ do
     case "$1" in
         
         --check | -c)
-            optCheck="yes"
-            shift
+            checkInstalledValidateTools
+            exit 0
             ;;
 
         --publish | -p)
@@ -281,20 +292,19 @@ do
             ;;
 
         --help | -h)
-            printf %s "${usage[@]}"
+            usage
             exit 0
         ;;
         
         --version | -v)
-            printf %s "${version[@]}"
+            version
             exit 0
         ;;
                 
         *)
             if [[ $command ]]; then
-                printf "$MSG_FAILED Too many options/items and/or option not recognized.\n\n"
-                printf %s "${badUsage[@]}"
-                exit 1
+                badUsage "$MSG_FAILED Too many options/items and/or option not recognized."
+                exit 2
             else
                 command=$1
             fi
@@ -307,27 +317,52 @@ done
 
 
 #
-# Get the path to check
+# Validate (and publish) the path choosen
 #
-dir="$( getPathToDirectoryFor $command )"
+dir="$( getPathToDirectoryFor "$command" )"
+if [ ! -d "$dir" ]; then
+    badUsage "$MSG_FAILED Directory '$command' is not a valid directory."
+    exit 2
+fi
 
+if [ -f "$HOME/.dbwebb-validate.config" ]; then . "$HOME/.dbwebb-validate.config"; fi
+if [ -f "$DBWEBB_VALIDATE_CONFIG" ]; then . "$DBWEBB_VALIDATE_CONFIG"; fi
 
-
-#
-# Do check for installed tools
-#
-if [[ $optCheck ]]; then checkInstalledValidateTools; fi
-    
-    
-    
-#
-# Validate
-#
-printf "\nValidate directory '$dir'"
-assert 0 "[ -d \"$dir\" ]" "Missing directory to validate: '$dir'"
+printf "Validating directory '%s'." "$dir"
 validateHtmlCssJs "$dir" 
 validatePython "$dir"
+validateShell "$dir"
+validatePHP "$dir"
 
+if [[ $optPublish ]]; then
+    if [ -z "$DBW_PUBLISH_BASEDIR" ]; then
+        printf "\n$MSG_FAILED Missing basedir for publish, not supported.\n"
+        exit 2
+    fi
+    
+    if [ ! -d "$DBW_PUBLISH_BASEDIR" ]; then
+        printf "\n$MSG_FAILED Basedir for publish is not a valid directory '%s'.\n" "$DBW_PUBLISH_BASEDIR"
+        exit 2
+    fi
+    
+    if [ -f "$DBW_COURSE_FILE" ]; then
+        printf "\nTake subdir with coursedir.\n"
+        printf $( dirname "$DBW_COURSE_DIR" )        
+        printf "\n"
+        a=$( dirname "$DBW_COURSE_DIR" )
+        b=$( dirname "$DBW_COURSE_DIR" )
+        target=${a#dir}
+        printf "\n$target\n"
+        target="$DBW_PUBLISH_BASEDIR"
+    else
+        target="$DBW_PUBLISH_BASEDIR/$( basename "$dir" )"
+    fi
+    
+    # printf "\nPublishing to '%s'.\n" "$target"
+    publish "$dir" "$target"
+fi
+
+assertResults
 
 
 # TODO Validate for another user?
@@ -336,20 +371,3 @@ validatePython "$dir"
 #then
 #    THETARGET=`eval echo "~$THEUSER/dbwebb-kurser/$COURSE"`
 #fi
-
-
-
-#
-# Publish
-#
-if [[ $optPublish ]]; then
-    initBuildDir
-    publish "$dir"
-fi
-
-
-
-#
-# Wrap it up
-#
-assertResults

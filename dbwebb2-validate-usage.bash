@@ -1,37 +1,49 @@
-mapfile usage <<EOD
-Utility dbwebb-validate version $DBW_VERSION by Mikael Roos (mos@dbwebb.se), to work with dbwebb course repositories.
-
-Usage: dbwebb-validate [options] [item]
-
-Item:
-
-  Any of the supporter exercises for each course, for example:
-  - kmom01, kmom02, kmom03, kmom04, kmom05, kmom06, kmom10
-  - me, tutorial, example
-  or a relative path,
-  or a absolute path
-
-Options:
-
-  -c, --check    Check environment for installed tools.
-  -p, --publish  Publish, otherwise only validate.
-  -s, --silent   Silent, limited output.
-  -h, --help     Print this message and exit.
-  -v, --version  Print version and exit.
-  
-EOD
-
-
-
-mapfile version <<EOD
-dbwebb-validate version $DBW_VERSION
-
-EOD
+function usage ()
+{
+    local txt=(
+"Usage: dbwebb-validate [options] [item]"
+""
+"Item:"
+"  Any of the exercises for a course, example:"
+"  - kmom01, kmom02, ..., kmom10"
+"  - me, tutorial, example"
+"  or relative path,"
+"  or absolute path"
+""
+"Options:"
+"  -c, --check    Check installed tools."
+"  -p, --publish  Publish it."
+"  -h, --help     Print help."
+"  -v, --version  Print version."
+""
+"Manual at: http://dbwebb.se/dbwebb-cli"
+    )
+    printf "%s\n" "${txt[@]}"
+}
 
 
 
-mapfile badUsage <<EOD
-For an overview of the command, execute:
-dbwebb-validate --help
+function version ()
+{
+    local txt=(
+"dbwebb-validate version $DBW_VERSION"
+    )
+    printf "%s\n" "${txt[@]}"
+}
 
-EOD
+
+
+function badUsage ()
+{
+    local message="$1"
+    local txt=(
+"For an overview of the command, execute:"
+"dbwebb-validate --help"
+    )
+    
+    if [ ! -z "$message" ]; then
+        printf "$message\n"
+    fi
+    
+    printf "%s\n" "${txt[@]}"
+}

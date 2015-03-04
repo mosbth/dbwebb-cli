@@ -1,73 +1,79 @@
-mapfile usage <<EOD
-Utility dbwebb version $DBW_VERSION by Mikael Roos (mos@dbwebb.se), to work with dbwebb course repositories.
-
-Usage: dbwebb [options] <command> [arguments]
-
-Command:
-
-  check             Check and print out details on the environment.
-  config            Create, or re-create the config file.
-  selfupdate        Update dbwebb-cli installation.
-  sshkey            Create and install ssh-keys to avoid using password.
-  login             Login to the remote server using ssh and sshkeys if available.
-  init-server       Init the server by creating a directory structure on it.
-
-Command (to manage course repos):
-
-  ls                List all locally installed course repos within \$DBW_HOME.
-  repo              List all supporoted remote course repos.
-  clone repo-name   Clone and locally install a remote course repo.
-
-Command (for a valid course repo):
-
-  init-me           Init the directory me/ by copying files and directories from default/.
-  update            Update the courserepo with latest updates from the master repo.
-  upload [part]     Upload current directory to the the server.
-  download [part]   Download current directory from the server (overwrite all files, be careful).
-  create labid      Create a laboration, use additional argument for naming what lab to create.
-  validate [part]   Validate (and upload) your files using the remote server.
-  publish [part]    Upload, Validate and Publish your course results to the web.
-  inspect kmom [user]   Inspect a kmom for yourself or a specific user, needs teacher privilegies
-                        to check another students kmom.
-
-Options:
-
-  -i, --inspect  Prints help with commands for inspect.
-  -v, --verbose  Verbose, print out what's happening.
-  -y, --yes      Do not wait for my input, just proceed.
-  -h, --help     Print this message and exit.
-  --version      Print version and exit.
-  
-EOD
+function usage ()
+{
+    local txt=(
+"Usage: dbwebb [options] <command> [arguments]"
+""
+"Command:"
+"  check        Check the environment."
+"  config       (Re-)Create config file."
+"  selfupdate   Update to latest version."
+"  sshkey       Create and install ssh-keys."
+"  login        Login to the remote server."
+"  init-server  Init the remote server."
+"  init-me           Init me/ directory."
+"  update            Update course repo."
+"  upload [part]     Upload to server."
+"  download [part]   Download from server."
+"  create labid      Create a lab."
+"  validate [part]   Validate it."
+"  publish [part]    Publish it."
+"  inspect [kmom] [user]   Inspect a kmom."
+""
+"Options:"
+"  -i, --inspect  Help for inspect."
+"  -v, --verbose  More verbose."
+"  -y, --yes      Do not wait for my input."
+"  -h, --help     Print help."
+"  --version      Print version."
+""
+"Manual at: http://dbwebb.se/dbwebb-cli"
+    )
+    printf "%s\n" "${txt[@]}"
+}
 
 
 
-mapfile version <<EOD
-dbwebb version $DBW_VERSION
-
-EOD
-
-
-
-mapfile badUsage <<EOD
-For an overview of the command, execute:
-dbwebb --help
-
-EOD
+function version ()
+{
+    local txt=(
+"dbwebb version $DBW_VERSION"
+    )
+    printf "%s\n" "${txt[@]}"
+}
 
 
 
-mapfile inspectUsage <<EOD
-Commands useful at the server with respect to dbwebb inspect, needs extra privilegies.
+function badUsage ()
+{
+    local message="$1"
+    local txt=(
+"For an overview of the command, execute:"
+"dbwebb --help"
+    )
+    
+    if [ ! -z "$message" ]; then
+        printf "$message\n"
+    fi
+    
+    printf "%s\n" "${txt[@]}"
+}
 
-Open up for inspect by setting group and chmod for directories and files.
-sudo /usr/local/sbin/setpre-dbwebb-kurser.bash acronym
 
-Add or delete as member of the dbwebb-group (execute on all servers)
-sudo update-dbwebb-kurser.bash -a acronym
-sudo update-dbwebb-kurser.bash -d acronym
 
-Execute command as the user dbwebb.
-sudo -u dbwebb script
-
-EOD
+function inspectUsage ()
+{
+    local txt=(
+"Using dbwebb inspect, needs extra privilegies."
+""
+"Add acronym for inspect"
+"sudo /usr/local/sbin/setpre-dbwebb-kurser.bash acronym"
+""
+"Add or delete teacher (on each server)"
+"sudo update-dbwebb-kurser.bash -a acronym"
+"sudo update-dbwebb-kurser.bash -d acronym"
+""
+"Execute command as the user dbwebb."
+"sudo -u dbwebb script"
+    )
+    printf "%s\n" "${txt[@]}"
+}

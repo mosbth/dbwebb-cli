@@ -1,19 +1,10 @@
 # --------------- DBWEBB MAIN START HERE ---------------
 
 #
-# TODO Check how config-file is initiated
-# Check if config file is up to date
-#
-updateConfigIfNeeded "update"
-
-
-
-#
 # TODO CLEAN UP THESE
 # Get options
 #
 SKIP_READLINE="no"
-IGNORE_FAULTS="-i"
 VERY_VERBOSE="no"
 
 
@@ -26,7 +17,7 @@ do
     case "$1" in
         
         --inspect | -i)
-            printf %s "${inspectUsage[@]}"
+            inspectUsage
             exit 0
         ;;
 
@@ -39,30 +30,30 @@ do
         ;;
 
         --help | -h)
-            printf %s "${usage[@]}"
+            usage
             exit 0
         ;;
         
         --version)
-            printf %s "${version[@]}"
+            version
             exit 0
         ;;
                 
-        clone)
-            if [ -z "$2" ]; then
-                $ECHO "\n$MSG_FAILED missing argument for repo name."
-                $ECHO "\n"
-                dbwebb2PrintShortUsage
-                exit 1
-            fi
-            reposClone "$2"
-            exit 0
-        ;;
+#        clone)
+#            if [ -z "$2" ]; then
+#                $ECHO "\n$MSG_FAILED missing argument for repo name."
+#                $ECHO "\n"
+#                dbwebb2PrintShortUsage
+#                exit 1
+#            fi
+#            reposClone "$2"
+#            exit 0
+#        ;;
 
-        selfupdate|self-update)
-            selfUpdate
-            exit 0
-        ;;
+#        selfupdate|self-update)
+#            selfUpdate
+#            exit 0
+#        ;;
 
 #    init)
 #        initServer
@@ -97,8 +88,7 @@ do
         update        \
         | check       \
         | config      \
-        | ls          \
-        | repo        \
+        | selfupdate  \
         | sshkey      \
         | login       \
         | upload      \
@@ -113,13 +103,12 @@ do
         ;;
         
         *)
-            printf "$MSG_FAILED Option/command not recognized.\n\n"
-            printf %s "${badUsage[@]}"
-            exit 1
+            badUsage "$MSG_FAILED Option/command not recognized."
+            exit 2
         ;;
         
     esac
 done
 
-printf %s "${badUsage[@]}"
+badUsage
 exit 1

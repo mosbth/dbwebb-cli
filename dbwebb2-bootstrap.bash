@@ -85,7 +85,7 @@ while [ "$dir" != "/" ]; do
     dir=$( dirname "$dir" )
     found="$( find "$dir" -maxdepth 1 -name $DBW_COURSE_FILE_NAME )"
     if [ "$found" ]; then 
-        DBW_COURSE_DIR="$( dirname $found )"
+        DBW_COURSE_DIR="$( dirname "$found" )"
         break
     fi
 done
@@ -93,12 +93,12 @@ done
 
 
 # Where is the directory for the course repos, if any
-DBW_BASEDIR="dbwebb-kurser"
-if [ -d "$DBWEBB_HOME" ]; then
-    DBW_HOME="$DBW_BASEDIR"
-elif [ -d "$HOME/$DBW_BASEDIR" ]; then
-    DBW_HOME="$HOME/$DBW_BASEDIR"
-fi
+#DBW_BASEDIR="dbwebb-kurser"
+#if [ -d "$DBWEBB_HOME" ]; then
+#    DBW_HOME="$DBW_BASEDIR"
+#elif [ -d "$HOME/$DBW_BASEDIR" ]; then
+#    DBW_HOME="$HOME/$DBW_BASEDIR"
+#fi
 
 
 
@@ -126,9 +126,6 @@ if [ ! -f "$DBW_CONFIG_FILE" ]; then
 else
     source "$DBW_CONFIG_FILE"
 fi
-
-# Name the remote server
-DBW_HOST="ssh.student.bth.se"
 
 # Check OS
 DBW_OS="$( uname -a )"

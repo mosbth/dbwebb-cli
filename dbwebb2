@@ -3,7 +3,7 @@
 #
 # The MIT License (MIT)
 #
-# Copyright (c) 2014-2015 Mikael Roos (me@mikaelroos.se)
+# Copyright (c) 2014-2015 Mikael Roos (mos@dbwebb.se)
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -23,79 +23,85 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 DBW_VERSION="1.1.1"
-mapfile usage <<EOD
-Utility dbwebb version $DBW_VERSION by Mikael Roos (mos@dbwebb.se), to work with dbwebb course repositories.
-
-Usage: dbwebb [options] <command> [arguments]
-
-Command:
-
-  check             Check and print out details on the environment.
-  config            Create, or re-create the config file.
-  selfupdate        Update dbwebb-cli installation.
-  sshkey            Create and install ssh-keys to avoid using password.
-  login             Login to the remote server using ssh and sshkeys if available.
-  init-server       Init the server by creating a directory structure on it.
-
-Command (to manage course repos):
-
-  ls                List all locally installed course repos within \$DBW_HOME.
-  repo              List all supporoted remote course repos.
-  clone repo-name   Clone and locally install a remote course repo.
-
-Command (for a valid course repo):
-
-  init-me           Init the directory me/ by copying files and directories from default/.
-  update            Update the courserepo with latest updates from the master repo.
-  upload [part]     Upload current directory to the the server.
-  download [part]   Download current directory from the server (overwrite all files, be careful).
-  create labid      Create a laboration, use additional argument for naming what lab to create.
-  validate [part]   Validate (and upload) your files using the remote server.
-  publish [part]    Upload, Validate and Publish your course results to the web.
-  inspect kmom [user]   Inspect a kmom for yourself or a specific user, needs teacher privilegies
-                        to check another students kmom.
-
-Options:
-
-  -i, --inspect  Prints help with commands for inspect.
-  -v, --verbose  Verbose, print out what's happening.
-  -y, --yes      Do not wait for my input, just proceed.
-  -h, --help     Print this message and exit.
-  --version      Print version and exit.
-  
-EOD
+function usage ()
+{
+    local txt=(
+"Usage: dbwebb [options] <command> [arguments]"
+""
+"Command:"
+"  check        Check the environment."
+"  config       (Re-)Create config file."
+"  selfupdate   Update to latest version."
+"  sshkey       Create and install ssh-keys."
+"  login        Login to the remote server."
+"  init-server  Init the remote server."
+"  init-me           Init me/ directory."
+"  update            Update course repo."
+"  upload [part]     Upload to server."
+"  download [part]   Download from server."
+"  create labid      Create a lab."
+"  validate [part]   Validate it."
+"  publish [part]    Publish it."
+"  inspect [kmom] [user]   Inspect a kmom."
+""
+"Options:"
+"  -i, --inspect  Help for inspect."
+"  -v, --verbose  More verbose."
+"  -y, --yes      Do not wait for my input."
+"  -h, --help     Print help."
+"  --version      Print version."
+""
+"Manual at: http://dbwebb.se/dbwebb-cli"
+    )
+    printf "%s\n" "${txt[@]}"
+}
 
 
 
-mapfile version <<EOD
-dbwebb version $DBW_VERSION
-
-EOD
-
-
-
-mapfile badUsage <<EOD
-For an overview of the command, execute:
-dbwebb --help
-
-EOD
+function version ()
+{
+    local txt=(
+"dbwebb version $DBW_VERSION"
+    )
+    printf "%s\n" "${txt[@]}"
+}
 
 
 
-mapfile inspectUsage <<EOD
-Commands useful at the server with respect to dbwebb inspect, needs extra privilegies.
+function badUsage ()
+{
+    local message="$1"
+    local txt=(
+"For an overview of the command, execute:"
+"dbwebb --help"
+    )
+    
+    if [ ! -z "$message" ]; then
+        printf "$message\n"
+    fi
+    
+    printf "%s\n" "${txt[@]}"
+}
 
-Open up for inspect by setting group and chmod for directories and files.
-sudo /usr/local/sbin/setpre-dbwebb-kurser.bash acronym
 
-Add or delete as member of the dbwebb-group (execute on all servers)
-sudo update-dbwebb-kurser.bash -a acronym
-sudo update-dbwebb-kurser.bash -d acronym
 
-Execute command as the user dbwebb.
-sudo -u dbwebb script
-
-EOD
+function inspectUsage ()
+{
+    local txt=(
+"Using dbwebb inspect, needs extra privilegies."
+""
+"Add acronym for inspect"
+"sudo /usr/local/sbin/setpre-dbwebb-kurser.bash acronym"
+""
+"Add or delete teacher (on each server)"
+"sudo update-dbwebb-kurser.bash -a acronym"
+"sudo update-dbwebb-kurser.bash -d acronym"
+""
+"Execute command as the user dbwebb."
+"sudo -u dbwebb script"
+    )
+    printf "%s\n" "${txt[@]}"
+}
 # --------------- DBWEBB FUNCTIONS PHASE START ---------------
 
 #
@@ -106,6 +112,7 @@ function createConfig()
     local first=$1
     local noInput=$2
     local acronym
+    local remoteHost
 
     if [ -z $first ]
     then
@@ -137,28 +144,12 @@ function createConfig()
     fi
 
     acronym=${acronym:-$DBW_USER}
+    remoteHost=${remoteHost:-ssh.student.bth.se}
 
-    echo "DBW_USER='$acronym'"                > "$DBW_CONFIG_FILE"
-    echo "DBW_VERSION_CONFIG='$DBW_VERSION'" >> "$DBW_CONFIG_FILE"
+    echo "DBW_USER='$acronym'"         > "$DBW_CONFIG_FILE"
+    echo "DBW_HOST='$remoteHost'"     >> "$DBW_CONFIG_FILE"
 
-    printf "\n$MSG_OK The config file '$DBW_CONFIG_FILE' is now up-to-date."
-    printf "\n\n"
-}
-
-
-
-#
-# Update the config-file if needed
-#
-function updateConfigIfNeeded()
-{
-    local what=$1
-
-    if [ -z "$DBW_VERSION_CONFIG" -o ! "$DBW_VERSION" = "$DBW_VERSION_CONFIG" ]
-    then
-        createConfig "$what" "no-user-input"
-        exit 2
-    fi
+    printf "$MSG_OK The config file '$DBW_CONFIG_FILE' is now up-to-date.\n"
 }
 
 
@@ -180,59 +171,6 @@ function checkCommand()
 
 
 #
-# Clone a remote repos
-#
-reposClone()
-{
-    local repo="$1"
-    local repos=(python javascript1 linux webapp htmlphp)
-
-    if [ ! -d "$DBW_HOME" ]; then
-        printf "\nYou have not set \$DBW_HOME nor do you have a directory \$HOME/$DBW_BASEDIR."
-    else
-        ok=0
-        for i in ${repos[@]}; do
-            if [ "$repo" == "${i}" ]; then
-                
-                ok=1
-                if [ -d "$DBW_HOME/$repo" ]; then
-                    printf "\n$MSG_FAILED to clone. There seem to exist a directory with this name already."
-                    printf "\n"
-                else
-                    cmd="$GIT clone https://github.com/mosbth/$repo"
-                    printf "\nCloning remote course repo and making a local installation."
-                    printf "\nMoving to '$DBW_HOME'"
-                    printf "\n$cmd"
-                    cd "$DBW_HOME"
-                    $cmd
-                fi
-            fi
-        done
-
-        if [ $ok -eq 0 ]; then
-            printf "\n$MSG_FAILED to clone remote repo, unknown repo '$repo'. Use '$DBW_EXECUTABLE repos' to get a list of supported repos."
-            printf "\n"
-            dbwebb2PrintShortUsage
-        fi
-    fi
-}
-
-
-
-#
-# Selfupdate
-#
-selfUpdate()
-{
-    INTRO="Selfupdating dbwebb-cli from https://github.com/mosbth/dbwebb-cli.\nInstallation directory is: '$DBW_INSTALL_DIR'."
-    COMMAND="cd '$DBW_INSTALL_DIR'; $GIT pull"
-    MESSAGE="to update dbwebb-cli installation directory."
-    executeCommand "$INTRO" "$COMMAND" "$MESSAGE"
-}
-
-
-
-#
 # Execute a command in a controlled manner
 #
 executeCommand()
@@ -241,8 +179,8 @@ executeCommand()
 
     if [ $SKIP_READLINE = "no" ]
     then
-        printf "\n$INTRO"
-        printf "\nPress a key to continue..."
+        printf "$INTRO"
+        printf "\nPress enter/return to continue..."
         read void
     fi
 
@@ -506,28 +444,6 @@ createUploadDownloadPaths()
 
 
 #
-# Validate the uploaded files
-#
-validateUploadedResults()
-{
-    WHAT="$1"
-    WHERE="$2"
-    ITEM="$3"
-    SUBDIR=""
-
-    createUploadDownloadPaths
-
-    local LOG="$HOME/.dbwebb-validate.log"
-    local INTRO="I will now upload files to the remote server and validate them."
-    local COMMAND1="$RSYNC_CMD '$WHAT' '$WHERE'"
-    local COMMAND2="$SSH_CMD 'cd $DBW_BASEDIR/$DBW_COURSE; dbwebb-validate -n $IGNORE_FAULTS $WHAT' | tee '$LOG';"
-    local MESSAGE="to validate course results. Saved a log of the output, review it as:\nless -R '$LOG'"
-    executeCommand "$INTRO" "$COMMAND1; $COMMAND2" "$MESSAGE"
-}
-
-
-
-#
 # Validate and Publish the uploaded files
 #
 publishResults()
@@ -741,9 +657,8 @@ function dbwebb-update()
 #
 function dbwebb-check()
 {
-    printf "\nDetails on installed utilities."
+    printf "Details on installed utilities."
     printf "\n------------------------------------"
-    printf "\n"
     printf "\nbash:                  %s" "$( checkCommand $BASH )"
     printf "\ngit:                   %s" "$( checkCommand $GIT )"
     printf "\nssh:                   %s" "$( checkCommand $SSH )"
@@ -751,11 +666,9 @@ function dbwebb-check()
     printf "\nwget:                  %s" "$( checkCommand $WGET )"
     printf "\ncurl:                  %s" "$( checkCommand $CURL )"
     printf "\n"
-    printf "\n"
 
     printf "\nDetails on the dbwebb-environment."
     printf "\n------------------------------------"
-    printf "\n"
     printf "\nOperatingsystem:       $DBW_OS"
     printf "\nCommand issued:        $DBW_EXECUTABLE"
     printf "\nVersion of dbwebb is:  $DBW_VERSION"
@@ -767,29 +680,9 @@ function dbwebb-check()
     printf "\nRemote user:           '$DBW_USER'"
     printf "\nRemote host:           '$DBW_HOST'"
     printf "\n"
-    printf "\n"
-
-    printf "\nDetails on home for course-repos."
-    printf "\n------------------------------------"
-    printf "\n"
-
-    if [ -d "$DBW_HOME" ]; then
-        printf "\nHome of course repos:  '$DBW_HOME'"
-        printf "\n"
-        printf "\nContent of directory is:"
-        printf "\n"
-        ls -lF "$DBW_HOME"
-    else 
-        printf "\nThere is no specific home defined for the course repos."
-        printf "\nYou have not set \$DBWEBB_HOME nor do you have a directory \$HOME/$DBW_BASEDIR."
-    fi
-
-    printf "\n"
-    printf "\n"
 
     printf "\nDetails on current course-repo."
     printf "\n------------------------------------"
-    printf "\n"
 
     if [ "$DBW_COURSE_REPO_VALID" = "yes" ]; then
         printf "\nCurrent course-repo:   '$DBW_COURSE'"
@@ -801,42 +694,6 @@ function dbwebb-check()
     else 
         printf "\nThis is not a valid course repo."
     fi
-    printf "\n"
-    printf "\n"
-}
-
-
-
-#
-# ls $DBWEBB_HOME
-#
-function dbwebb-ls()
-{
-    if [ -d "$DBW_HOME" ]; then
-        cd "$DBW_HOME"
-        printf $( pwd )
-        printf "\n"
-        ls -lF
-    else 
-        printf "\nYou have not set \$DBWEBB_HOME nor do you have a directory \$HOME/$DBW_BASEDIR."
-    fi
-    printf "\n"
-}
-
-
-
-#
-# List all available remote repos
-#
-function dbwebb-repo()
-{
-    printf "\nThe following remote course repos are supported."
-    printf "\n"
-    printf "\n python       https://github.com/mosbth/python"
-    printf "\n javascript1  https://github.com/mosbth/javascript1"
-    printf "\n linux        https://github.com/mosbth/linux"
-    printf "\n webapp       https://github.com/mosbth/webapp"
-    printf "\n htmlphp      https://github.com/mosbth/htmlphp"
     printf "\n"
     printf "\n"
 }
@@ -896,6 +753,45 @@ function dbwebb-download()
     local command="$RSYNC_DOWNLOAD_CMD '$WHERE' '$WHAT'"
     local message="to download data."
     executeCommand "$intro" "$command" "$message" "really?"
+}
+
+
+
+#
+# Validate the uploaded files
+#
+function dbwebb-validate()
+{
+    WHAT="$1"
+    WHERE="$2"
+    ITEM="$3"
+    SUBDIR=""
+
+    createUploadDownloadPaths
+    setChmod
+
+    local LOG="$HOME/.dbwebb-validate.log"
+    local INTRO="I will now upload files to the remote server and validate them."
+    local COMMAND1="$RSYNC_CMD '$WHAT' '$WHERE'"
+    local COMMAND2="$SSH_CMD 'cd $DBW_BASEDIR/$DBW_COURSE; dbwebb-validate -n $IGNORE_FAULTS $WHAT' | tee '$LOG';"
+    local MESSAGE="to validate course results. Saved a log of the output, review it as:\nless -R '$LOG'"
+    executeCommand "$INTRO" "$COMMAND1; $COMMAND2" "$MESSAGE"
+}
+
+
+
+#
+# Selfupdate
+#
+dbwebb-selfupdate()
+{
+    printf "Selfupdate not yet implemented.\n"
+    exit 2
+    
+    INTRO="Selfupdating dbwebb-cli from https://github.com/mosbth/dbwebb-cli.\nInstallation directory is: '$DBW_INSTALL_DIR'."
+    COMMAND="cd '$DBW_INSTALL_DIR'; $GIT pull"
+    MESSAGE="to update dbwebb-cli installation directory."
+    executeCommand "$INTRO" "$COMMAND" "$MESSAGE"
 }
 
 
@@ -988,7 +884,7 @@ while [ "$dir" != "/" ]; do
     dir=$( dirname "$dir" )
     found="$( find "$dir" -maxdepth 1 -name $DBW_COURSE_FILE_NAME )"
     if [ "$found" ]; then 
-        DBW_COURSE_DIR="$( dirname $found )"
+        DBW_COURSE_DIR="$( dirname "$found" )"
         break
     fi
 done
@@ -996,12 +892,12 @@ done
 
 
 # Where is the directory for the course repos, if any
-DBW_BASEDIR="dbwebb-kurser"
-if [ -d "$DBWEBB_HOME" ]; then
-    DBW_HOME="$DBW_BASEDIR"
-elif [ -d "$HOME/$DBW_BASEDIR" ]; then
-    DBW_HOME="$HOME/$DBW_BASEDIR"
-fi
+#DBW_BASEDIR="dbwebb-kurser"
+#if [ -d "$DBWEBB_HOME" ]; then
+#    DBW_HOME="$DBW_BASEDIR"
+#elif [ -d "$HOME/$DBW_BASEDIR" ]; then
+#    DBW_HOME="$HOME/$DBW_BASEDIR"
+#fi
 
 
 
@@ -1030,9 +926,6 @@ else
     source "$DBW_CONFIG_FILE"
 fi
 
-# Name the remote server
-DBW_HOST="ssh.student.bth.se"
-
 # Check OS
 DBW_OS="$( uname -a )"
 
@@ -1051,19 +944,10 @@ DBW_REMOTE_DESTINATION="${DBW_USER}@${DBW_HOST}:$DBW_BASEDIR/$DBW_COURSE"
 # --------------- DBWEBB MAIN START HERE ---------------
 
 #
-# TODO Check how config-file is initiated
-# Check if config file is up to date
-#
-updateConfigIfNeeded "update"
-
-
-
-#
 # TODO CLEAN UP THESE
 # Get options
 #
 SKIP_READLINE="no"
-IGNORE_FAULTS="-i"
 VERY_VERBOSE="no"
 
 
@@ -1076,7 +960,7 @@ do
     case "$1" in
         
         --inspect | -i)
-            printf %s "${inspectUsage[@]}"
+            inspectUsage
             exit 0
         ;;
 
@@ -1089,30 +973,30 @@ do
         ;;
 
         --help | -h)
-            printf %s "${usage[@]}"
+            usage
             exit 0
         ;;
         
         --version)
-            printf %s "${version[@]}"
+            version
             exit 0
         ;;
                 
-        clone)
-            if [ -z "$2" ]; then
-                $ECHO "\n$MSG_FAILED missing argument for repo name."
-                $ECHO "\n"
-                dbwebb2PrintShortUsage
-                exit 1
-            fi
-            reposClone "$2"
-            exit 0
-        ;;
+#        clone)
+#            if [ -z "$2" ]; then
+#                $ECHO "\n$MSG_FAILED missing argument for repo name."
+#                $ECHO "\n"
+#                dbwebb2PrintShortUsage
+#                exit 1
+#            fi
+#            reposClone "$2"
+#            exit 0
+#        ;;
 
-        selfupdate|self-update)
-            selfUpdate
-            exit 0
-        ;;
+#        selfupdate|self-update)
+#            selfUpdate
+#            exit 0
+#        ;;
 
 #    init)
 #        initServer
@@ -1128,12 +1012,6 @@ do
                 exit 1
             fi
             createLab "$LAB"
-            exit 0
-        ;;
-
-        validate)
-            setChmod
-            validateUploadedResults "$DBW_COURSE_DIR" "$DBW_REMOTE_DESTINATION" "$2"
             exit 0
         ;;
 
@@ -1153,12 +1031,12 @@ do
         update        \
         | check       \
         | config      \
-        | ls          \
-        | repo        \
+        | selfupdate  \
         | sshkey      \
         | login       \
         | upload      \
         | download    \
+        | validate    \
         | init-server \
         | init-me)
             command=$1
@@ -1168,13 +1046,12 @@ do
         ;;
         
         *)
-            printf "$MSG_FAILED Option/command not recognized.\n\n"
-            printf %s "${badUsage[@]}"
-            exit 1
+            badUsage "$MSG_FAILED Option/command not recognized."
+            exit 2
         ;;
         
     esac
 done
 
-printf %s "${badUsage[@]}"
+badUsage
 exit 1

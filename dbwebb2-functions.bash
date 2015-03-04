@@ -8,6 +8,7 @@ function createConfig()
     local first=$1
     local noInput=$2
     local acronym
+    local remoteHost
 
     if [ -z $first ]
     then
@@ -39,28 +40,12 @@ function createConfig()
     fi
 
     acronym=${acronym:-$DBW_USER}
+    remoteHost=${remoteHost:-ssh.student.bth.se}
 
-    echo "DBW_USER='$acronym'"                > "$DBW_CONFIG_FILE"
-    echo "DBW_VERSION_CONFIG='$DBW_VERSION'" >> "$DBW_CONFIG_FILE"
+    echo "DBW_USER='$acronym'"         > "$DBW_CONFIG_FILE"
+    echo "DBW_HOST='$remoteHost'"     >> "$DBW_CONFIG_FILE"
 
-    printf "\n$MSG_OK The config file '$DBW_CONFIG_FILE' is now up-to-date."
-    printf "\n\n"
-}
-
-
-
-#
-# Update the config-file if needed
-#
-function updateConfigIfNeeded()
-{
-    local what=$1
-
-    if [ -z "$DBW_VERSION_CONFIG" -o ! "$DBW_VERSION" = "$DBW_VERSION_CONFIG" ]
-    then
-        createConfig "$what" "no-user-input"
-        exit 2
-    fi
+    printf "$MSG_OK The config file '$DBW_CONFIG_FILE' is now up-to-date.\n"
 }
 
 
@@ -82,59 +67,6 @@ function checkCommand()
 
 
 #
-# Clone a remote repos
-#
-reposClone()
-{
-    local repo="$1"
-    local repos=(python javascript1 linux webapp htmlphp)
-
-    if [ ! -d "$DBW_HOME" ]; then
-        printf "\nYou have not set \$DBW_HOME nor do you have a directory \$HOME/$DBW_BASEDIR."
-    else
-        ok=0
-        for i in ${repos[@]}; do
-            if [ "$repo" == "${i}" ]; then
-                
-                ok=1
-                if [ -d "$DBW_HOME/$repo" ]; then
-                    printf "\n$MSG_FAILED to clone. There seem to exist a directory with this name already."
-                    printf "\n"
-                else
-                    cmd="$GIT clone https://github.com/mosbth/$repo"
-                    printf "\nCloning remote course repo and making a local installation."
-                    printf "\nMoving to '$DBW_HOME'"
-                    printf "\n$cmd"
-                    cd "$DBW_HOME"
-                    $cmd
-                fi
-            fi
-        done
-
-        if [ $ok -eq 0 ]; then
-            printf "\n$MSG_FAILED to clone remote repo, unknown repo '$repo'. Use '$DBW_EXECUTABLE repos' to get a list of supported repos."
-            printf "\n"
-            dbwebb2PrintShortUsage
-        fi
-    fi
-}
-
-
-
-#
-# Selfupdate
-#
-selfUpdate()
-{
-    INTRO="Selfupdating dbwebb-cli from https://github.com/mosbth/dbwebb-cli.\nInstallation directory is: '$DBW_INSTALL_DIR'."
-    COMMAND="cd '$DBW_INSTALL_DIR'; $GIT pull"
-    MESSAGE="to update dbwebb-cli installation directory."
-    executeCommand "$INTRO" "$COMMAND" "$MESSAGE"
-}
-
-
-
-#
 # Execute a command in a controlled manner
 #
 executeCommand()
@@ -143,8 +75,8 @@ executeCommand()
 
     if [ $SKIP_READLINE = "no" ]
     then
-        printf "\n$INTRO"
-        printf "\nPress a key to continue..."
+        printf "$INTRO"
+        printf "\nPress enter/return to continue..."
         read void
     fi
 
@@ -621,9 +553,8 @@ function dbwebb-update()
 #
 function dbwebb-check()
 {
-    printf "\nDetails on installed utilities."
+    printf "Details on installed utilities."
     printf "\n------------------------------------"
-    printf "\n"
     printf "\nbash:                  %s" "$( checkCommand $BASH )"
     printf "\ngit:                   %s" "$( checkCommand $GIT )"
     printf "\nssh:                   %s" "$( checkCommand $SSH )"
@@ -631,11 +562,9 @@ function dbwebb-check()
     printf "\nwget:                  %s" "$( checkCommand $WGET )"
     printf "\ncurl:                  %s" "$( checkCommand $CURL )"
     printf "\n"
-    printf "\n"
 
     printf "\nDetails on the dbwebb-environment."
     printf "\n------------------------------------"
-    printf "\n"
     printf "\nOperatingsystem:       $DBW_OS"
     printf "\nCommand issued:        $DBW_EXECUTABLE"
     printf "\nVersion of dbwebb is:  $DBW_VERSION"
@@ -647,29 +576,9 @@ function dbwebb-check()
     printf "\nRemote user:           '$DBW_USER'"
     printf "\nRemote host:           '$DBW_HOST'"
     printf "\n"
-    printf "\n"
-
-    printf "\nDetails on home for course-repos."
-    printf "\n------------------------------------"
-    printf "\n"
-
-    if [ -d "$DBW_HOME" ]; then
-        printf "\nHome of course repos:  '$DBW_HOME'"
-        printf "\n"
-        printf "\nContent of directory is:"
-        printf "\n"
-        ls -lF "$DBW_HOME"
-    else 
-        printf "\nThere is no specific home defined for the course repos."
-        printf "\nYou have not set \$DBWEBB_HOME nor do you have a directory \$HOME/$DBW_BASEDIR."
-    fi
-
-    printf "\n"
-    printf "\n"
 
     printf "\nDetails on current course-repo."
     printf "\n------------------------------------"
-    printf "\n"
 
     if [ "$DBW_COURSE_REPO_VALID" = "yes" ]; then
         printf "\nCurrent course-repo:   '$DBW_COURSE'"
@@ -681,42 +590,6 @@ function dbwebb-check()
     else 
         printf "\nThis is not a valid course repo."
     fi
-    printf "\n"
-    printf "\n"
-}
-
-
-
-#
-# ls $DBWEBB_HOME
-#
-function dbwebb-ls()
-{
-    if [ -d "$DBW_HOME" ]; then
-        cd "$DBW_HOME"
-        printf $( pwd )
-        printf "\n"
-        ls -lF
-    else 
-        printf "\nYou have not set \$DBWEBB_HOME nor do you have a directory \$HOME/$DBW_BASEDIR."
-    fi
-    printf "\n"
-}
-
-
-
-#
-# List all available remote repos
-#
-function dbwebb-repo()
-{
-    printf "\nThe following remote course repos are supported."
-    printf "\n"
-    printf "\n python       https://github.com/mosbth/python"
-    printf "\n javascript1  https://github.com/mosbth/javascript1"
-    printf "\n linux        https://github.com/mosbth/linux"
-    printf "\n webapp       https://github.com/mosbth/webapp"
-    printf "\n htmlphp      https://github.com/mosbth/htmlphp"
     printf "\n"
     printf "\n"
 }
@@ -799,6 +672,22 @@ function dbwebb-validate()
     local COMMAND2="$SSH_CMD 'cd $DBW_BASEDIR/$DBW_COURSE; dbwebb-validate -n $IGNORE_FAULTS $WHAT' | tee '$LOG';"
     local MESSAGE="to validate course results. Saved a log of the output, review it as:\nless -R '$LOG'"
     executeCommand "$INTRO" "$COMMAND1; $COMMAND2" "$MESSAGE"
+}
+
+
+
+#
+# Selfupdate
+#
+dbwebb-selfupdate()
+{
+    printf "Selfupdate not yet implemented.\n"
+    exit 2
+    
+    INTRO="Selfupdating dbwebb-cli from https://github.com/mosbth/dbwebb-cli.\nInstallation directory is: '$DBW_INSTALL_DIR'."
+    COMMAND="cd '$DBW_INSTALL_DIR'; $GIT pull"
+    MESSAGE="to update dbwebb-cli installation directory."
+    executeCommand "$INTRO" "$COMMAND" "$MESSAGE"
 }
 
 
