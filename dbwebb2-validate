@@ -693,8 +693,8 @@ function dbwebb-upload()
     SUBDIR=""
 
     checkIfValidCourseRepoOrExit
-    setChmod
     createUploadDownloadPaths
+    setChmod
 
     local intro="Uploading the directory '$WHAT' to '$WHERE'."
     local command="$RSYNC_CMD '$WHAT' '$WHERE'"

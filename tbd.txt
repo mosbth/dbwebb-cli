@@ -1,43 +1,21 @@
 
-21:39 <@Bobbzorzen> mos: han hette mifb12 inte 
-
 execute sudo change settings
 suod to execute
 
-download 
 lookup user
-testa py kmom06
 lab display info from section-text
-
-download students kmom to local
-
-Lägga till så att saker som måste publiseras för att köras automatiskt publiceras och den publicerade koden körs.
-
-publish and run.
-
-usage without being in repo
-- and other commands that can be executed without being in a repo.
-
-tee: /home/Robban/dbwebb-kurser/.dbwebb-validate.log: No such file or directory
 
 detect running inside ssh.stude
 
 publish part as not minified. as inspect & publish.
 
-inspect js1/py projektet.
-
-
-make dbwebb2 work outside of course repo.
-
 howto validate whole course?
 
 dbwebb-inspect exit status provide WARNING if something failed.
 
-loggfile - path is incorrect.
 
 Can not run Marvin, exit code success? 03, 04.
 
-grni14, inspect extrauppgift modul img
 
 Skrivrättigheter...
 

@@ -374,6 +374,7 @@ validateHtmlCssJs()
 
     $ECHO "\n *.html using HTMLHint."
     #find $TARGET/$DIR -type f -name '*.html' | while read filename; do assert 0 "$HTMLHINT $filename" "HTMLHINT failed: $filename"; done
+
     for filename in $(find "$THETARGET/$DIR/" -type f -name '*.html'); do
         assert 0 "$HTMLHINT $filename" "HTMLHINT failed: $filename"
     done
