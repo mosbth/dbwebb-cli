@@ -173,6 +173,21 @@ function checkCommand()
 #
 # Execute a command in a controlled manner
 #
+function wget {
+  if command wget -h &>/dev/null
+  then
+    command wget "$@"
+  else
+    set "${*: -1}"
+    lynx -source "$1" > "${1##*/}"
+  fi
+}
+
+
+
+#
+# Execute a command in a controlled manner
+#
 executeCommand()
 {
     INTRO="$1"
@@ -785,12 +800,9 @@ function dbwebb-validate()
 #
 dbwebb-selfupdate()
 {
-    printf "Selfupdate not yet implemented.\n"
-    exit 2
-    
-    INTRO="Selfupdating dbwebb-cli from https://github.com/mosbth/dbwebb-cli.\nInstallation directory is: '$DBW_INSTALL_DIR'."
-    COMMAND="cd '$DBW_INSTALL_DIR'; $GIT pull"
-    MESSAGE="to update dbwebb-cli installation directory."
+    local INTRO="Selfupdating dbwebb-cli from https://github.com/mosbth/dbwebb-cli.\nInstallation directory is: '$DBW_INSTALL_DIR'."
+    local COMMAND="wget https://raw.githubusercontent.com/mosbth/dbwebb-cli/master/dbwebb2 -O /tmp/$$; install $$ /usr/local/bin/dbwebb"
+    local MESSAGE="to update dbwebb installation."
     executeCommand "$INTRO" "$COMMAND" "$MESSAGE"
 }
 
