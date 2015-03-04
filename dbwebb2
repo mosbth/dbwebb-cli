@@ -230,14 +230,15 @@ executeCommand()
     if [ $VERY_VERBOSE = "yes" ]
     then
         printf "\n-----------------------------------------"
+        printf "\n"
     fi
 
     MESSAGE=$3
     if [ $STATUS = 0 ]
     then
-        printf "\n$MSG_OK $MESSAGE"
+        printf "$MSG_OK $MESSAGE"
     else
-        printf "\n$MSG_FAILED $MESSAGE"
+        printf "$MSG_FAILED $MESSAGE"
     fi
     printf "\n"
 
