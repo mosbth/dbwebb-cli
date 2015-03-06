@@ -2,7 +2,7 @@
 #
 # External tools
 #
-HTMLHINT="dbwebb-htmlhint"
+HTMLHINT="htmlhint"
 CSSHINT="csslint"
 JSHINT="jshint"
 JSCS="jscs"
