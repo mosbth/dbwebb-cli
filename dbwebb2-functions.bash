@@ -609,8 +609,6 @@ function dbwebb-config()
 #
 function dbwebb-upload()
 {
-    #pushToServer "" "$" "$2"
-    
     WHAT="$DBW_COURSE_DIR"
     WHERE="$DBW_REMOTE_DESTINATION"
     ITEM="$1"
@@ -633,8 +631,6 @@ function dbwebb-upload()
 #
 function dbwebb-download()
 {
-    #pullFromServer "$DBW_COURSE_DIR" "$DBW_REMOTE_DESTINATION" "$2"
-    
     WHAT="$DBW_COURSE_DIR"
     WHERE="$DBW_REMOTE_DESTINATION"
     ITEM="$1"
@@ -656,20 +652,21 @@ function dbwebb-download()
 #
 function dbwebb-validate()
 {
-    WHAT="$1"
-    WHERE="$2"
-    ITEM="$3"
+    WHAT="$DBW_COURSE_DIR"
+    WHERE="$DBW_REMOTE_DESTINATION"
+    ITEM="$1"
     SUBDIR=""
 
+    checkIfValidCourseRepoOrExit
     createUploadDownloadPaths
     setChmod
 
-    local LOG="$HOME/.dbwebb-validate.log"
-    local INTRO="I will now upload files to the remote server and validate them."
-    local COMMAND1="$RSYNC_CMD '$WHAT' '$WHERE'"
-    local COMMAND2="$SSH_CMD 'cd $DBW_BASEDIR/$DBW_COURSE; dbwebb-validate -n $IGNORE_FAULTS $WHAT' | tee '$LOG';"
-    local MESSAGE="to validate course results. Saved a log of the output, review it as:\nless -R '$LOG'"
-    executeCommand "$INTRO" "$COMMAND1; $COMMAND2" "$MESSAGE"
+    local log="$HOME/.dbwebb-validate.log"
+    local intro="Uploading the directory '$WHAT' to '$WHERE' for validation."
+    local command1="$RSYNC_CMD '$WHAT' '$WHERE'"
+    local command1="$SSH_CMD 'cd $DBW_BASEDIR/$DBW_COURSE; dbwebb-validate -n $IGNORE_FAULTS $WHAT' | tee '$LOG';"
+    local message="to validate course results. Saved a log of the output, review it as:\nless -R '$LOG'"
+    executeCommand "$intro" "$command1; $command2" "$message"
 }
 
 
