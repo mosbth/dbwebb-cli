@@ -1138,7 +1138,6 @@ selfupdate()
         
     printf "Current version is: "
     dbwebb-validate --version
-    echo "MOPED"
 }
 
 
