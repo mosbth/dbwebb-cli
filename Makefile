@@ -9,6 +9,7 @@ main:
 		dbwebb2-bootstrap.bash \
 		dbwebb2.bash \
 		> dbwebb2
+	chmod 755 dbwebb2
 
 validate:
 	cat dbwebb2-validate-header.bash \
@@ -18,6 +19,7 @@ validate:
 		dbwebb2-bootstrap.bash \
 		dbwebb2-validate.bash \
 		> dbwebb2-validate
+	chmod 755 dbwebb2-validate
 
 install: validate main
 	install -g 0 -o 0 -m 0755 dbwebb2 /usr/local/bin/dbwebb
