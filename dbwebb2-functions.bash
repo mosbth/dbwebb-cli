@@ -41,9 +41,13 @@ function createConfig()
 
     acronym=${acronym:-$DBW_USER}
     remoteHost=${remoteHost:-ssh.student.bth.se}
+    remoteDir=${remoteDir:-dbwebb-kurser}
+    remoteWww=${remoteWww:-www/dbwebb-kurser}
 
-    echo "DBW_USER='$acronym'"         > "$DBW_CONFIG_FILE"
-    echo "DBW_HOST='$remoteHost'"     >> "$DBW_CONFIG_FILE"
+    echo "DBW_USER='$acronym'"               > "$DBW_CONFIG_FILE"
+    echo "DBW_HOST='$remoteHost'"           >> "$DBW_CONFIG_FILE"
+    echo "DBW_REMOTE_BASEDIR='$remoteDir'"  >> "$DBW_CONFIG_FILE"
+    echo "DBW_REMOTE_WWWDIR='$remoteWww'"   >> "$DBW_CONFIG_FILE"
 
     printf "$MSG_OK The config file '$DBW_CONFIG_FILE' is now up-to-date.\n"
 }
@@ -323,7 +327,7 @@ function getPathToDirectoryFor()
 #
 createUploadDownloadPaths()
 {
-    SUBDIR="$( mapCmdToDir $ITEM )"
+    local subdir="$( mapCmdToDir $ITEM )"
 
     if [ -z "$WHAT" -o -z "$WHERE" ]; then
         printf "$MSG_FAILED Missing argument for source or destination. Perhaps re-create the config-file?"
@@ -331,15 +335,17 @@ createUploadDownloadPaths()
         exit 1
     fi
 
-    if [ ! -z "$ITEM" -a -z "$SUBDIR" ]; then
-        printf "\n$MSG_FAILED Not a valid combination  course: '$DBW_COURSE' and item: '$ITEM'."
+    if [ -d "$DBW_CURRENT_DIR/$ITEM" ]; then
+        subdir="${ITEM%/}"
+    elif [ ! -z "$ITEM" -a -z "$subdir" ]; then
+        printf "\n$MSG_FAILED Not a valid combination course: '$DBW_COURSE' and item: '$ITEM'."
         printf "\n\n"
         exit 1
     fi
 
-    if [ ! -z "$SUBDIR" ]; then
-        WHAT="$WHAT/$SUBDIR/"
-        WHERE="$WHERE/$SUBDIR/"
+    if [ ! -z "$subdir" ]; then
+        WHAT="$WHAT/$subdir/"
+        WHERE="$WHERE/$subdir/"
     else
         WHAT="$WHAT/"
         WHERE="$WHERE/"
@@ -430,38 +436,6 @@ createLab()
 
 
 
-
-# -----------------------PERHAPS USE THES LATER ON BUT NOT FOR NOW -----------------------
-
-#
-# Upload results to the server
-#
-uploadToServer()
-{
-    subdir=${DBW_CURRENT_DIR#"$DBW_COURSE_DIR/"}
-
-    INTRO="Your current working directory '$DBW_CURRENT_DIR' will now be uploaded to remote server."
-    COMMAND="$RSYNC_CMD '$DBW_CURRENT_DIR/' '$DBW_REMOTE_DESTINATION/$subdir/'"
-    MESSAGE="to upload files."
-    executeCommand "$INTRO" "$COMMAND" "$MESSAGE"
-}
-
-
-
-#
-# Download from the server
-#
-downloadFromServer()
-{
-    subdir=${DBW_CURRENT_DIR#"$DBW_COURSE_DIR/"}
-
-    INTRO="WARNING: Downloading remote '$DBW_REMOTE_DESTINATION/$subdir/\n         to the current working directory '$DBW_CURRENT_DIR/'.\nWARNING: Local files MAY BE overwritten."
-    COMMAND="$RSYNC_CMD '$DBW_REMOTE_DESTINATION/$subdir/' '$DBW_CURRENT_DIR/'"
-    MESSAGE="to download files."
-    executeCommand "$INTRO" "$COMMAND" "$MESSAGE" "REALLY?"
-}
-
-
 #------------------------- HERE ARE THE MAIN COMMANDS -------------------------------
 
 
@@ -473,7 +447,7 @@ function dbwebb-init-me()
     local meDefault="$DBW_COURSE_DIR/.default/"
     local me="$DBW_COURSE_DIR/me/"
 
-    local intro="Initiating the directory 'me/' by copying directory structure and files from the directory '.default/' (will not overwrite existing files)."
+    local intro="Creating and initiating the directory 'me/' by copying directory structure and files from the directory '.default/' (will not overwrite existing files)."
     local command="$RSYNC -av --exclude README.md --ignore-existing \"$meDefault\" \"$me\""
     local message="to init the directory 'me/'."
 
@@ -490,11 +464,21 @@ function dbwebb-init-server()
 {    
     local intro="Intiating the remote server '$DBW_HOST' by connecting as '$DBW_USER' and creating directories (if needed) where all uploaded files will reside."
     # TODO Should use DBW_BASEDIR 
-    local command="$SSH_CMD 'sh -c \"if [ ! -d dbwebb-kurser ]; then mkdir dbwebb-kurser; fi; chmod 700 dbwebb-kurser; echo; echo \"dbwebb-kurser:\"; ls -l dbwebb-kurser; if [ ! -d www/dbwebb-kurser ]; then mkdir www/dbwebb-kurser; fi; chmod 755 www/dbwebb-kurser; echo; echo \"www/dbwebb-kurser:\"; ls -l www/dbwebb-kurser\"'"
+    local command="$SSH_CMD 'sh -c \"if [ ! -d \"$DBW_REMOTE_BASEDIR\" ]; then mkdir \"$DBW_REMOTE_BASEDIR\"; fi; chmod 700 \"$DBW_REMOTE_BASEDIR\"; echo; echo \"$DBW_REMOTE_BASEDIR:\"; ls -lF \"$DBW_REMOTE_BASEDIR\"; if [ ! -d \"$DBW_REMOTE_WWWDIR\" ]; then mkdir \"$DBW_REMOTE_WWWDIR\"; fi; chmod 755 \"$DBW_REMOTE_WWWDIR\"; echo; echo \"$DBW_REMOTE_WWWDIR:\"; ls -lF \"$DBW_REMOTE_WWWDIR\"\"'"
     local message="to init the server."
 
-    checkIfValidCourseRepoOrExit
     executeCommand "$intro" "$command" "$message"
+}
+
+
+
+#
+# Init course repo and directory structure at the server.
+#
+function dbwebb-init()
+{    
+    dbwebb-init-me
+    dbwebb-init-server
 }
 
 

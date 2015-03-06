@@ -9,9 +9,8 @@ function usage ()
 "  selfupdate   Update to latest version."
 "  sshkey       Create and install ssh-keys."
 "  login        Login to the remote server."
-"  init-server  Init the remote server."
-"  init-me           Init me/ directory."
-"  update            Update course repo."
+"  init         Init course repo and remote server."
+"  update       Update course repo."
 "  upload [part]     Upload to server."
 "  download [part]   Download from server."
 "  create labid      Create a lab."
@@ -63,17 +62,18 @@ function badUsage ()
 function inspectUsage ()
 {
     local txt=(
-"Using dbwebb inspect, needs extra privilegies."
+"Using dbwebb inspect, for another student than youreself,"
+"needs extra privilegies."
 ""
 "Add acronym for inspect"
-"sudo /usr/local/sbin/setpre-dbwebb-kurser.bash acronym"
+" sudo /usr/local/sbin/setpre-dbwebb-kurser.bash acronym"
 ""
 "Add or delete teacher (on each server)"
-"sudo update-dbwebb-kurser.bash -a acronym"
-"sudo update-dbwebb-kurser.bash -d acronym"
+" sudo update-dbwebb-kurser.bash -a acronym"
+" sudo update-dbwebb-kurser.bash -d acronym"
 ""
 "Execute command as the user dbwebb."
-"sudo -u dbwebb script"
+" sudo -u dbwebb script"
     )
     printf "%s\n" "${txt[@]}"
 }

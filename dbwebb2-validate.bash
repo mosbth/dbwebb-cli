@@ -3,7 +3,7 @@
 # External tools
 #
 HTMLHINT="dbwebb-htmlhint"
-CSSHINT="htmlhint"
+CSSHINT="csslint"
 JSHINT="jshint"
 JSCS="jscs"
 
@@ -23,8 +23,11 @@ PHPMD="phpmd"
 PHPCS="phpcs"
 PHPUGLIFY=""
 
-CHECKBASH="shellcheck --shell=bash"
-CHECKSH="shellcheck --shell=sh"
+CHECKBASH="shellcheck"
+CHECKBASH_OPTIONS="--shell=bash"
+
+CHECKSH="shellcheck"
+CHECKSH_OPTIONS="--shell=sh"
 
 if [[ $DBW_COURSE_DIR ]]; then
     HTML_MINIFIER_CONFIG="--config-file '$DBW_COURSE_DIR/.html-minifier.conf'"
@@ -109,31 +112,37 @@ function assertResults()
 #
 # Perform validation tests
 #
+function validateCommand()
+{
+    local dir="$1"
+    local cmd="$2"
+    local extension="$3"
+    local options="$4"
+
+    if hash "$cmd" 2>/dev/null; then
+        printf "\n *.$extension using $cmd."
+        
+        for filename in $(find "$dir/" -type f -name \*.$extension); do
+            assert 0 "$cmd $options $filename" "$cmd failed: $filename"
+        done
+    else
+        printf "\n *.$extension (skipping - $cmd not installed)."
+    fi
+}
+
+
+
+#
+# Perform validation tests
+#
 function validateHtmlCssJs()
 {
     local dir="$1"
 
-    printf "\n *.html using HTMLHint."
-    for filename in $(find "$dir/" -type f -name '*.html'); do
-        assert 0 "$HTMLHINT $filename" "HTMLHINT failed: $filename"
-    done
-
-    printf "\n *.css using CSSHint."
-    for filename in $(find "$dir/" -type f -name '*.css'); do
-        printf ""
-        #assert 0 "$CSSHINT $filename" "CSSHint failed: $filename"
-    done
-
-    printf "\n *.js using JSHint."
-    for filename in $(find "$dir/" -type f -name '*.js'); do
-        assert 0 "$JSHINT $filename" "JSHint failed: $filename"
-    done
-
-    printf "\n *.js using JSCS."
-    for filename in $(find "$dir/" -type f -name '*.js'); do
-        printf ""
-        #assert 0 "$JSCS $filename" "JSCS failed: $filename"
-    done
+    validateCommand "$dir" "$HTMLHINT" "html" 
+    validateCommand "$dir" "$CSSHINT" "css"
+    validateCommand "$dir" "$JSHINT" "js"
+    validateCommand "$dir" "$JSCS" "js"
 }
 
 
@@ -145,23 +154,9 @@ function validatePHP()
 {
     local dir="$1"
 
-    printf "\n *.php using PHP."
-    for filename in $(find "$dir/" -type f -name '*.html'); do
-        printf ""
-        #assert 0 "$PHP $filename" "PHP failed: $filename"
-    done
-
-    printf "\n *.php using PHPMD."
-    for filename in $(find "$dir/" -type f -name '*.css'); do
-        printf ""
-        #assert 0 "$PHPMD $filename" "PHPMD failed: $filename"
-    done
-
-    printf "\n *.php using PHPCS."
-    for filename in $(find "$dir/" -type f -name '*.css'); do
-        printf ""
-        #assert 0 "$PHPCS $filename" "PHPCS failed: $filename"
-    done
+    validateCommand "$dir" "$PHP" "php" 
+    validateCommand "$dir" "$PHPMD" "php" 
+    validateCommand "$dir" "$PHPCS" "php" 
 }
 
 
@@ -173,17 +168,8 @@ function validateShell()
 {
     local dir="$1"
 
-    printf "\n *.bash using ShellCheck."
-    for filename in $(find "$dir/" -type f -name '*.bash'); do
-        printf ""
-        #assert 0 "$SHELLCHECK $filename" "ShellCheck failed: $filename"
-    done
-
-    printf "\n *.sh using ShellCheck."
-    for filename in $(find "$dir/" -type f -name '*.sh'); do
-        printf ""
-        #assert 0 "$SHELLCHECK $filename" "ShellCheck failed: $filename"
-    done
+    validateCommand "$dir" "$CHECKBASH" "bash" "$CHECKBASH_OPTIONS" 
+    validateCommand "$dir" "$CHECKSH" "sh" "$CHECKSH_OPTIONS"
 }
 
 
@@ -195,15 +181,8 @@ function validatePython()
 {
     local dir="$1"
 
-    printf "\n *.py using Pylint."
-    for filename in $(find "$dir/" -type f -name '*.py'); do
-        assert 0 "$PYLINT $PYLINT_OPTIONS $PYLINT_CONFIG $filename" "pylint failed: $filename"
-    done
-
-    printf "\n *.cgi using Pylint."
-    for filename in $(find "$dir/" -type f -name '*.cgi'); do
-        assert 0 "$PYLINT $PYLINT_OPTIONS $PYLINT_CONFIG $filename" "pylint failed: $filename"
-    done
+    validateCommand "$dir" "$PYLINT" "py" "$PYLINT_OPTIONS $PYLINT_CONFIG" 
+    validateCommand "$dir" "$PYLINT" "cgi" "$PYLINT_OPTIONS $PYLINT_CONFIG" 
 }
 
 
@@ -222,6 +201,20 @@ publishChmod()
     fi
 }
 
+
+#
+# Selfupdate
+#
+selfupdate()
+{
+    local INTRO="Selfupdating dbwebb-validate-cli from https://github.com/mosbth/dbwebb-cli."
+    local COMMAND="wget https://raw.githubusercontent.com/mosbth/dbwebb-cli/master/dbwebb2-validate -O /tmp/$$; install /tmp/$$ /usr/local/bin/dbwebb-validate; rm /tmp/$$"
+    local MESSAGE="to update dbwebb-validate installation."
+    executeCommand "$INTRO" "$COMMAND" "$MESSAGE"
+        
+    printf "Current version is: "
+    dbwebb-validate --version
+}
 
 
 # ----------------------------------------- TO BE VALIDATED --------------------
@@ -298,6 +291,11 @@ do
         
         --version | -v)
             version
+            exit 0
+        ;;
+                
+        --selfupdate)
+            selfupdate
             exit 0
         ;;
                 

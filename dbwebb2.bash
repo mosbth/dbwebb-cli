@@ -23,10 +23,12 @@ do
 
         --verbose | -v)
             VERY_VERBOSE="yes"
+            shift
         ;;
 
         --yes | -y)
             SKIP_READLINE="yes"
+            shift
         ;;
 
         --help | -h)
@@ -95,6 +97,7 @@ do
         | upload       \
         | download     \
         | validate     \
+        | init         \
         | init-server  \
         | init-me)
             command=$1
