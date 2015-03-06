@@ -5,7 +5,6 @@
 # Get options
 #
 SKIP_READLINE="no"
-VERY_VERBOSE="no"
 
 
 

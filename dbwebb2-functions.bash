@@ -116,7 +116,7 @@ executeCommand()
 
     COMMAND=$2
 
-    if [ $VERY_VERBOSE = "yes" ]
+    if [[ $VERY_VERBOSE ]]
     then
         printf "\nExecuting command:"
         printf "\n$COMMAND"
@@ -127,7 +127,7 @@ executeCommand()
     bash -c "$COMMAND"
     STATUS=$?
 
-    if [ $VERY_VERBOSE = "yes" ]
+    if [[ $VERY_VERBOSE ]]
     then
         printf "\n-----------------------------------------"
         printf "\n"

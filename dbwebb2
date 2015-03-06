@@ -220,7 +220,7 @@ executeCommand()
 
     COMMAND=$2
 
-    if [ $VERY_VERBOSE = "yes" ]
+    if [[ $VERY_VERBOSE ]]
     then
         printf "\nExecuting command:"
         printf "\n$COMMAND"
@@ -231,7 +231,7 @@ executeCommand()
     bash -c "$COMMAND"
     STATUS=$?
 
-    if [ $VERY_VERBOSE = "yes" ]
+    if [[ $VERY_VERBOSE ]]
     then
         printf "\n-----------------------------------------"
         printf "\n"
@@ -958,7 +958,6 @@ DBW_REMOTE_DESTINATION="${DBW_USER}@${DBW_HOST}:$DBW_REMOTE_BASEDIR/$DBW_COURSE"
 # Get options
 #
 SKIP_READLINE="no"
-VERY_VERBOSE="no"
 
 
 
