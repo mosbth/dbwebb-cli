@@ -110,6 +110,37 @@ function assertResults()
 
 
 #
+# Set correct mode on published file and dirs
+#
+publishChmod()
+{
+    local dir="$1"
+
+    if [ -d "$dir" ]; then
+        find "$dir" -type d -exec chmod a+rx {} \;  
+        find "$dir" -type f -exec chmod a+r {} \;   
+        find "$dir" -type f -name '*.py' -exec chmod go-r {} \;
+    fi
+}
+
+
+#
+# Selfupdate
+#
+selfupdate()
+{
+    local INTRO="Selfupdating dbwebb-validate-cli from https://github.com/mosbth/dbwebb-cli."
+    local COMMAND="wget https://raw.githubusercontent.com/mosbth/dbwebb-cli/master/dbwebb2-validate -O /tmp/$$; install /tmp/$$ /usr/local/bin/dbwebb-validate; rm /tmp/$$"
+    local MESSAGE="to update dbwebb-validate installation."
+    executeCommand "$INTRO" "$COMMAND" "$MESSAGE"
+        
+    printf "Current version is: "
+    dbwebb-validate --version
+}
+
+
+
+#
 # Perform validation tests
 #
 function validateCommand()
@@ -123,10 +154,14 @@ function validateCommand()
     if hash "$cmd" 2>/dev/null; then
         printf "\n *.$extension using $cmd"
         for filename in $(find "$dir/" -type f -name \*.$extension); do
-            assert 0 "$cmd $options $filename" "$cmd failed: $filename"
+            if [[ $optDryRun ]]; then
+                printf "\n%s" "$cmd $options $filename"
+            else
+                assert 0 "$cmd $options $filename" "$cmd failed: $filename"
+            fi
             counter=$(( counter + 1 )) 
         done
-        printf " checked $counter files"
+        printf " ($counter)"
     else
         printf "\n *.$extension (skipping - $cmd not installed)"
     fi
@@ -157,36 +192,33 @@ function validate()
 
 
 #
-# Set correct mode on published file and dirs
+# Perform publish 
 #
-publishChmod()
+function publishCommand()
 {
     local dir="$1"
+    local cmd="$2"
+    local extension="$3"
+    local options="$4"
+    local output="$5"
+    local counter=0
 
-    if [ -d "$dir" ]; then
-        find "$dir" -type d -exec chmod a+rx {} \;  
-        find "$dir" -type f -exec chmod a+r {} \;   
-        find "$dir" -type f -name '*.py' -exec chmod go-r {} \;
+    if hash "$cmd" 2>/dev/null; then
+        printf "\n *.$extension using $cmd"
+        for filename in $(find "$dir/" -type f -name \*.$extension); do
+            if [[ $optDryRun ]]; then
+                printf "\n%s" "$cmd $options $filename"
+            else
+                assert 0 "$cmd $options $filename $output $filename" "$cmd failed: $filename"
+            fi
+            counter=$(( counter + 1 )) 
+        done
+        printf " ($counter)"
+    else
+        printf "\n *.$extension (skipping - $cmd not installed)"
     fi
 }
 
-
-#
-# Selfupdate
-#
-selfupdate()
-{
-    local INTRO="Selfupdating dbwebb-validate-cli from https://github.com/mosbth/dbwebb-cli."
-    local COMMAND="wget https://raw.githubusercontent.com/mosbth/dbwebb-cli/master/dbwebb2-validate -O /tmp/$$; install /tmp/$$ /usr/local/bin/dbwebb-validate; rm /tmp/$$"
-    local MESSAGE="to update dbwebb-validate installation."
-    executeCommand "$INTRO" "$COMMAND" "$MESSAGE"
-        
-    printf "Current version is: "
-    dbwebb-validate --version
-}
-
-
-# ----------------------------------------- TO BE VALIDATED --------------------
 
 
 #
@@ -197,41 +229,34 @@ publish()
     local from="$1"
     local to="$2"
  
-    if [ ! -d "$from" ]; then
-        printf "$MSG_FAILED Publish without valid from directory: '$from'\n"
+    cd "$HOME"
+
+    if [ -z "$from" ]; then
+        printf "\n$MSG_FAILED Publish with empty source directory: '$from'\n"
+        exit 2
+    elif [ ! -d "$from" ]; then
+        printf "\n$MSG_FAILED Publish without valid from directory: '$from'\n"
         exit 2
     elif [ -z "$to" ]; then
-        printf "$MSG_FAILED Publish with empty target directory: '$to'\n"
+        printf "\n$MSG_FAILED Publish with empty target directory: '$to'\n"
+        exit 2
+    elif [ ! -d $( dirname "$to" ) ]; then
+        printf "\n$MSG_FAILED Publish to nonexisting directory: '$to'\n"
         exit 2
     fi
  
-    printf "rsync -a --delete %s %s" "$from/" "$to/"
-    return
+    if [[ $optDryRun ]]; then
+        printf "\nrsync -a --delete %s %s" "$from/" "$to/"
+    else
+        rsync -a --delete "$from/" "$to/"
+    fi
     
-    printf " minify *.html"
-    for filename in $(find "$to/" -type f -name '*.html'); do
-        assert 0 "$HTML_MINIFIER $HTML_MINIFIER_OPTIONS $filename --output $filename" "HTMLMinifier failed: $filename"
-    done
+    publishCommand "$to" "$HTML_MINIFIER" "html" "$HTML_MINIFIER_OPTIONS" "--output" 
+    publishCommand "$to" "$CLEANCSS" "css" "" "-o" 
+    publishCommand "$to" "$UGLIFYJS" "js" "$UGLIFYJS_OPTIONS" "-o" 
+    #publishCommand "$to" "$UGLIFYPHP" "php" "" "--output" 
 
-    printf ", minify *.css"
-    for filename in $(find "$to/" -type f -name '*.css'); do
-        assert 0 "$CLEANCSS $filename -o $filename" "CleanCSS failed: $filename"
-    done
-
-    printf ", uglify *.js"
-    for filename in $(find "$to/" -type f -name '*.js'); do
-        assert 0 "$UGLIFYJS $filename -o $filename $UGLIFYJS_OPTIONS" "UglifyJS failed: $filename"
-    done
-    
-    printf ", uglify *.php"
-    for filename in $(find "$to/" -type f -name '*.js'); do
-        printf ""
-        #assert 0 "$UGLIFYJS $filename -o $filename $UGLIFYJS_OPTIONS" "UglifyJS failed: $filename"
-    done
-    
-    printf ", chmod"
-    publishChmod "$dir/"
-    printf ". Done"
+    publishChmod "$to"
 }
 
 
@@ -250,6 +275,22 @@ do
 
         --publish | -p)
             optPublish="yes"
+            shift
+            ;;
+
+        --publish-to)
+            DBW_PUBLISH_TO="$2"
+            if [ ! -d $( dirname "$DBW_PUBLISH_TO" ) ]; then
+                badUsage "$MSG_FAILED --publish-to '$DBW_PUBLISH_TO' is not a valid directory."
+                exit 2
+            fi
+                
+            shift
+            shift
+            ;;
+
+        --dry | -d)
+            optDryRun="yes"
             shift
             ;;
 
@@ -295,35 +336,35 @@ fi
 if [ -f "$HOME/.dbwebb-validate.config" ]; then . "$HOME/.dbwebb-validate.config"; fi
 if [ -f "$DBWEBB_VALIDATE_CONFIG" ]; then . "$DBWEBB_VALIDATE_CONFIG"; fi
 
-printf "Validating directory '%s'." "$dir"
+printf "Validating '%s'." "$dir"
 validate "$dir" 
 
 if [[ $optPublish ]]; then
-    if [ -z "$DBW_PUBLISH_BASEDIR" ]; then
-        printf "\n$MSG_FAILED Missing basedir for publish, not supported.\n"
+    if [ -z "$DBW_PUBLISH_TO" ]; then
+        printf "\n$MSG_FAILED Missing target dir for publish, not supported.\n"
         exit 2
     fi
     
-    if [ ! -d "$DBW_PUBLISH_BASEDIR" ]; then
-        printf "\n$MSG_FAILED Basedir for publish is not a valid directory '%s'.\n" "$DBW_PUBLISH_BASEDIR"
+    if [ ! -d $( dirname "$DBW_PUBLISH_TO" ) ]; then
+        printf "\n$MSG_FAILED Target dir for publish is not a valid directory '%s'.\n" "$DBW_PUBLISH_TO"
         exit 2
     fi
     
-    if [ -f "$DBW_COURSE_FILE" ]; then
-        printf "\nTake subdir with coursedir.\n"
-        printf $( dirname "$DBW_COURSE_DIR" )        
-        printf "\n"
-        a=$( dirname "$DBW_COURSE_DIR" )
-        b=$( dirname "$DBW_COURSE_DIR" )
-        target=${a#dir}
-        printf "\n$target\n"
-        target="$DBW_PUBLISH_BASEDIR"
-    else
-        target="$DBW_PUBLISH_BASEDIR/$( basename "$dir" )"
-    fi
+#    if [ -f "$DBW_COURSE_FILE" ]; then
+#        printf "\nTake subdir with coursedir.\n"
+#        printf $( dirname "$DBW_COURSE_DIR" )        
+#        printf "\n"
+#        a=$( dirname "$DBW_COURSE_DIR" )
+#        b=$( dirname "$DBW_COURSE_DIR" )
+#        target=${a#dir}
+#        printf "\n$target\n"
+#        target="$DBW_REMOTE_WWWDIR"
+#    else
+#        target="$DBW_REMOTE_WWWDIR/$( basename "$dir" )"
+#    fi
     
-    # printf "\nPublishing to '%s'.\n" "$target"
-    publish "$dir" "$target"
+    printf "\nPublishing to '%s'." "$DBW_PUBLISH_TO"
+    publish "$dir" "$DBW_PUBLISH_TO"
 fi
 
 assertResults

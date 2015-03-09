@@ -13,6 +13,7 @@ function usage ()
 "Options:"
 "  -c, --check    Check installed tools."
 "  --selfupdate   Update to latest version."
+"  -d, --dry      Dry run, only display."
 "  -p, --publish  Publish it."
 "  -h, --help     Print help."
 "  -v, --version  Print version."

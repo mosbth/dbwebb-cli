@@ -361,37 +361,6 @@ createUploadDownloadPaths()
 
 
 #
-# Validate and Publish the uploaded files
-#
-publishResults()
-{
-    WHAT="$1"
-    WHERE="$2"
-    ITEM="$3"
-    SUBDIR=""
-
-    createUploadDownloadPaths
-
-    local LOG="$HOME/.dbwebb-publish.log"
-    local INTRO="I will now try to init the remote server and create a directory where all uploaded files will reside."
-    local COMMAND1="$RSYNC_CMD '$WHAT' '$WHERE'"
-    local COMMAND2="$SSH_CMD 'cd $DBW_BASEDIR/$DBW_COURSE; dbwebb-validate $IGNORE_FAULTS $WHAT' | tee '$LOG';"
-    local MESSAGE="to validate and publish all course results. Saved a log of the output, review it as:\nless -R $LOG"
-    executeCommand "$INTRO" "$COMMAND1; $COMMAND2" "$MESSAGE"
-
-    if [ $? -eq 0 ]
-    then
-        printf "Your files are now"
-    else
-        printf "Some of your files might be"
-    fi
-    printf " published on $DBW_BASEURL"
-    printf "\n"
-}
-
-
-
-#
 # Inspect uploaded files
 #
 inspectResults()
@@ -667,6 +636,37 @@ function dbwebb-validate()
     local command2="$SSH_CMD 'dbwebb-validate \"$DBW_REMOTE_BASEDIR/$DBW_COURSE/$SUBDIR\"' | tee '$log';"
     local message="to validate course results. Saved a log of the output, review it as:\nless -R '$log'"
     executeCommand "$intro" "$command1; $command2" "$message"
+}
+
+
+
+#
+# Publish the uploaded files
+#
+function dbwebb-publish()
+{
+    WHAT="$DBW_COURSE_DIR"
+    WHERE="$DBW_REMOTE_DESTINATION"
+    ITEM="$1"
+    SUBDIR=""
+
+    checkIfValidCourseRepoOrExit
+    createUploadDownloadPaths
+    setChmod
+
+    local log="$HOME/.dbwebb-publish.log"
+    local intro="Uploading the directory '$WHAT' to '$WHERE' to validate and publish."
+    local command1="$RSYNC_CMD '$WHAT' '$WHERE'"
+    local command2="$SSH_CMD 'dbwebb-validate -d --publish --publish-to \"$DBW_REMOTE_WWWDIR/$DBW_COURSE/$SUBDIR\" \"$DBW_REMOTE_BASEDIR/$DBW_COURSE/$SUBDIR\"' | tee '$log';"
+    local message="to validate course results. Saved a log of the output, review it as:\nless -R '$log'"
+    executeCommand "$intro" "$command1; $command2" "$message"
+
+    if [ $? -eq 0 ]; then
+        printf "Your files are now"
+    else
+        printf "Some of your files might be"
+    fi
+    printf " published on $DBW_BASEURL\n"
 }
 
 

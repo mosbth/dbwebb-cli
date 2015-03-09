@@ -96,6 +96,7 @@ do
         | upload       \
         | download     \
         | validate     \
+        | publish      \
         | init         \
         | init-server  \
         | init-me)
