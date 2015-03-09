@@ -44,12 +44,14 @@ function createConfig()
     remoteDir=${remoteDir:-dbwebb-kurser}
     remoteWww=${remoteWww:-www/dbwebb-kurser}
     baseurl=${baseurl:-http://www.student.bth.se/~$acronym/$remoteDir}
+    laburl=${laburl:-http://www.student.bth.se/~mosstud/kod-exempel/lab}
 
     echo "DBW_USER='$acronym'"               > "$DBW_CONFIG_FILE"
     echo "DBW_HOST='$remoteHost'"           >> "$DBW_CONFIG_FILE"
     echo "DBW_REMOTE_BASEDIR='$remoteDir'"  >> "$DBW_CONFIG_FILE"
     echo "DBW_REMOTE_WWWDIR='$remoteWww'"   >> "$DBW_CONFIG_FILE"
     echo "DBW_BASEURL='$baseurl'"           >> "$DBW_CONFIG_FILE"
+    echo "DBW_LABURL='$laburl'"             >> "$DBW_CONFIG_FILE"
 
     printf "$MSG_OK The config file '$DBW_CONFIG_FILE' is now up-to-date.\n"
 }
@@ -390,23 +392,6 @@ inspectResults()
 
 
 
-# --------------------- To be validated -------------------------------
-
-
-#
-# Create a lab
-#
-createLab()
-{
-    LAB="$1"
-    INTRO="Create laboration $LAB."
-    COMMAND="bin/dbwebb-create \"$LAB\""
-    MESSAGE="to create the lab."
-    executeCommand "$INTRO" "$COMMAND" "$MESSAGE"
-}
-
-
-
 #------------------------- HERE ARE THE MAIN COMMANDS -------------------------------
 
 
@@ -669,6 +654,97 @@ function dbwebb-publish()
         printf "Some of your files might be"
     fi
     printf " published on $DBW_BASEURL/$DBW_COURSE/$SUBDIR\n"
+}
+
+
+
+#
+# Create a lab
+#
+dbwebb-create()
+{
+    local lab="$1"
+    local subdir="$( mapCmdToDir $lab )"
+    local where="$DBW_COURSE_DIR/$subdir"
+    
+    checkIfValidCourseRepoOrExit
+
+    printf "Creating $DBW_COURSE $lab in '$where'.\n"
+
+    # Check if init was run?
+    if [ ! -d "$where" ]; then
+        printf "$MSG_FAILED The directory '$where' is missing.\nDid you run the command 'dbwebb init'?\n"
+        exit 2
+    fi
+
+    # Check if lab is already there
+    if [ -f "$where/answer.php" -o -f "$where/answer.js" -o -f "$where/answer.py" ]; then
+        printf "$MSG_FAILED You have already created lab-files at: '$where'\nRemove the files in the directory, then you can generate new files.\n"
+        exit 2
+    fi
+
+    # Check for wget
+    local myWget
+
+    if hash wget 2> /dev/null; then
+        myWget="wget -qO"
+    elif hash curl 2> /dev/null; then
+        myWget="curl -so"
+    else
+        printf "$MSG_FAILED Missing wget and curl, can not create a lab without both.\n"
+        exit 2
+    fi
+
+    # Create the key
+    local getKey="action=only-key&acronym=$DBW_USER&course=$DBW_COURSE&doGenerate=Submit"
+    local key="$( ${myWget}- "$DBW_LABURL/?$getKey&lab=$lab" )"
+
+    # The lab description
+    local getLab="lab.php?lab"
+    printf " instruction.html"
+    $myWget "$where/instruction.html" "$DBW_LABURL/$getLab&key=$key"
+
+    # The lab documents
+    case "$DBW_COURSE" in
+        
+        htmlphp)
+            printf "\n answer.php"
+            $myWget "$where/answer.php" "$DBW_LABURL/lab.php?answer-php&key=$key"
+
+            printf "\n answer.json"
+            $myWget "$where/answer.json" "$DBW_LABURL/lab.php?answer-json&key=$key"
+        ;;
+        
+        javascript1)
+            printf "\n answer.html"
+            $myWget "$where/answer.html" "$DBW_LABURL/lab.php?answer-html&key=$key"
+
+            printf "\n answer.js"
+            $myWget "$where/answer.js" "$DBW_LABURL/lab.php?answer-js&key=$key"
+        ;;
+
+        python)
+            printf "\n answer.json"
+            $myWget "$where/answer.json" "$DBW_LABURL/lab.php?answer-json&key=$key"
+
+            printf "\n answer.py"
+            $myWget "$where/answer.py" "$DBW_LABURL/lab.php?answer-py&key=$key"
+            chmod 755 "$where/answer.py"
+
+            printf "\n Dbwebb.py"
+            $myWget "$where/Dbwebb.py" "$DBW_LABURL/lab.php?answer-py-assert&key=$key"
+        ;;
+
+    esac
+
+    # Extras
+    local getAnswerExtra="lab.php?answer-extra"
+    printf "\n (extras)"
+    $myWget "$where/extra.tar" "$DBW_LABURL/$getAnswerExtra&key=$key"
+    tar -xvf "$where/extra.tar" -C "$where"
+    rm -f "$where/extra.tar"
+
+    printf "\n$MSG_DONE You can find the lab and all files here: '$where'\n"
 }
 
 

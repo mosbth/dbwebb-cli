@@ -40,17 +40,6 @@ do
             exit 0
         ;;
                 
-        create)
-            LAB="$2"
-            if [ -z "$LAB" ]
-            then
-                echo "Missing name for lab, perhaps use lab1, lab2 or lab3?"
-                exit 1
-            fi
-            createLab "$LAB"
-            exit 0
-        ;;
-
         inspect)
             WHICH=$2
             WHO=$3
@@ -69,6 +58,7 @@ do
         | download     \
         | validate     \
         | publish      \
+        | create       \
         | init         \
         | init-server  \
         | init-me)

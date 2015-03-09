@@ -29,7 +29,10 @@ CHECKBASH_OPTIONS="--shell=bash"
 CHECKSH="shellcheck"
 CHECKSH_OPTIONS="--shell=sh"
 
-YAML="dbwebb-js-yaml"
+#YAML="dbwebb-js-yaml"
+#YAML_OPTIONS="--silent"
+YAML="js-yaml"
+YAML_OPTIONS=""
 
 if [[ $DBW_COURSE_DIR ]]; then
     HTML_MINIFIER_CONFIG="--config-file '$DBW_COURSE_DIR/.html-minifier.conf'"
@@ -152,6 +155,7 @@ function validateCommand()
     local cmd="$2"
     local extension="$3"
     local options="$4"
+    local output="$5"
     local counter=0
 
     if hash "$cmd" 2>/dev/null; then
@@ -160,7 +164,9 @@ function validateCommand()
             if [[ $optDryRun ]]; then
                 printf "\n%s" "$cmd $options $filename"
             else
-                assert 0 "$cmd $options $filename" "$cmd failed: $filename"
+                if [ -z $optOnly -o $optOnly == $extension ]; then
+                    assert 0 "$cmd $options $filename $output" "$cmd failed: $filename"
+                fi
             fi
             counter=$(( counter + 1 )) 
         done
@@ -190,7 +196,7 @@ function validate()
     validateCommand "$dir" "$PHPCS" "php" 
     validateCommand "$dir" "$CHECKBASH" "bash" "$CHECKBASH_OPTIONS" 
     validateCommand "$dir" "$CHECKSH" "sh" "$CHECKSH_OPTIONS"
-    validateCommand "$dir" "$YAML" "yml"
+    validateCommand "$dir" "$YAML" "yml" "$YAML_OPTIONS" " > /dev/null"
 }
 
 
@@ -289,6 +295,12 @@ do
                 exit 2
             fi
                 
+            shift
+            shift
+            ;;
+
+        --only)
+            optOnly="$2"
             shift
             shift
             ;;
