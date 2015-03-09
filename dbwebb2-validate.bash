@@ -2,7 +2,7 @@
 #
 # External tools
 #
-HTMLHINT="htmlhint"
+HTMLHINT="dbwebb-htmlhint"
 CSSHINT="csslint"
 JSHINT="jshint"
 JSCS="jscs"
@@ -29,6 +29,8 @@ CHECKBASH_OPTIONS="--shell=bash"
 CHECKSH="shellcheck"
 CHECKSH_OPTIONS="--shell=sh"
 
+YAML="js-yaml"
+
 if [[ $DBW_COURSE_DIR ]]; then
     HTML_MINIFIER_CONFIG="--config-file '$DBW_COURSE_DIR/.html-minifier.conf'"
     PYLINT_CONFIG="--rcfile $DBW_COURSE_DIR/.pylintrc"
@@ -52,6 +54,7 @@ function checkInstalledValidateTools
     printf " phpcs:         %s\n" "$( checkCommand $PHPCS )"
     printf " bash:          %s\n" "$( checkCommand $CHECKBASH )"
     printf " sh:            %s\n" "$( checkCommand $CHECKSH )"
+    printf " yaml:          %s\n" "$( checkCommand $YAML )"
 
     printf "Check for installed publishing tools.\n"
     printf " html-minifier: %s\n" "$( checkCommand $HTML_MINIFIER )"
@@ -187,6 +190,7 @@ function validate()
     validateCommand "$dir" "$PHPCS" "php" 
     validateCommand "$dir" "$CHECKBASH" "bash" "$CHECKBASH_OPTIONS" 
     validateCommand "$dir" "$CHECKSH" "sh" "$CHECKSH_OPTIONS"
+    validateCommand "$dir" "$YAML" "yml" "$YAML"
 }
 
 
