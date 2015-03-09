@@ -211,7 +211,7 @@ executeCommand()
     MESSAGE=$3
     if [ $STATUS = 0 ]
     then
-        printf "$MSG_OK $MESSAGE"
+        printf "$MSG_DONE $MESSAGE"
     else
         printf "$MSG_FAILED $MESSAGE"
     fi
@@ -242,8 +242,8 @@ function checkIfValidCourseRepoOrExit()
 #
 setChmod()
 {
-    if [ $VERY_VERBOSE = "yes" ]; then
-        printf "\nEnsuring that all files and directories are readable for all, below $DBW_COURSE_DIR."
+    if [[ $VERY_VERBOSE ]]; then
+        printf "Ensuring that all files and directories are readable for all, below $DBW_COURSE_DIR.\n"
     fi
 
     $FIND "$DBW_COURSE_DIR" -type d -exec chmod u+rwx,go+rx {} \;  
@@ -402,7 +402,7 @@ function getPathToDirectoryFor()
 #
 createUploadDownloadPaths()
 {
-    local subdir="$( mapCmdToDir $ITEM )"
+    SUBDIR="$( mapCmdToDir $ITEM )"
 
     if [ -z "$WHAT" -o -z "$WHERE" ]; then
         printf "$MSG_FAILED Missing argument for source or destination. Perhaps re-create the config-file?"
@@ -411,16 +411,16 @@ createUploadDownloadPaths()
     fi
 
     if [ -d "$DBW_CURRENT_DIR/$ITEM" ]; then
-        subdir="${ITEM%/}"
-    elif [ ! -z "$ITEM" -a -z "$subdir" ]; then
+        SUBDIR="${ITEM%/}"
+    elif [ ! -z "$ITEM" -a -z "$SUBDIR" ]; then
         printf "\n$MSG_FAILED Not a valid combination course: '$DBW_COURSE' and item: '$ITEM'."
         printf "\n\n"
         exit 1
     fi
 
-    if [ ! -z "$subdir" ]; then
-        WHAT="$WHAT/$subdir/"
-        WHERE="$WHERE/$subdir/"
+    if [ ! -z "$SUBDIR" ]; then
+        WHAT="$WHAT/$SUBDIR/"
+        WHERE="$WHERE/$SUBDIR/"
     else
         WHAT="$WHAT/"
         WHERE="$WHERE/"
@@ -739,8 +739,8 @@ function dbwebb-validate()
     local log="$HOME/.dbwebb-validate.log"
     local intro="Uploading the directory '$WHAT' to '$WHERE' for validation."
     local command1="$RSYNC_CMD '$WHAT' '$WHERE'"
-    local command1="$SSH_CMD 'cd $DBW_BASEDIR/$DBW_COURSE; dbwebb-validate -n $IGNORE_FAULTS $WHAT' | tee '$LOG';"
-    local message="to validate course results. Saved a log of the output, review it as:\nless -R '$LOG'"
+    local command2="$SSH_CMD 'dbwebb-validate \"$DBW_REMOTE_BASEDIR/$DBW_COURSE/$SUBDIR\"' | tee '$log';"
+    local message="to validate course results. Saved a log of the output, review it as:\nless -R '$log'"
     executeCommand "$intro" "$command1; $command2" "$message"
 }
 
@@ -751,10 +751,10 @@ function dbwebb-validate()
 #
 dbwebb-selfupdate()
 {
-    local INTRO="Selfupdating dbwebb-cli from https://github.com/mosbth/dbwebb-cli."
-    local COMMAND="wget https://raw.githubusercontent.com/mosbth/dbwebb-cli/master/dbwebb2 -O /tmp/$$; install /tmp/$$ /usr/local/bin/dbwebb; rm /tmp/$$"
-    local MESSAGE="to update dbwebb installation."
-    executeCommand "$INTRO" "$COMMAND" "$MESSAGE"
+    local intro="Selfupdating dbwebb-cli from https://github.com/mosbth/dbwebb-cli."
+    local cmd="wget https://raw.githubusercontent.com/mosbth/dbwebb-cli/master/dbwebb2 -O /tmp/$$; install /tmp/$$ /usr/local/bin/dbwebb; rm /tmp/$$"
+    local message="to update dbwebb installation."
+    executeCommand "$intro" "$cmd" "$message"
         
     dbwebb updateconfig
     
@@ -798,6 +798,7 @@ UPLOAD_MINIMAL="$RSYNC -av --delete --exclude me --exclude tutorial --exclude ex
 
 # Settins
 MSG_OK="\033[0;30;42mOK\033[0m"
+MSG_DONE="\033[1;37;40mDONE\033[0m"
 MSG_WARNING="\033[43mWARNING\033[0m"
 MSG_FAILED="\033[0;37;41mFAILED\033[0m"
 
@@ -1039,15 +1040,17 @@ function validateCommand()
     local cmd="$2"
     local extension="$3"
     local options="$4"
+    local counter=0
 
     if hash "$cmd" 2>/dev/null; then
-        printf "\n *.$extension using $cmd."
-        
+        printf "\n *.$extension using $cmd"
         for filename in $(find "$dir/" -type f -name \*.$extension); do
             assert 0 "$cmd $options $filename" "$cmd failed: $filename"
+            counter=$(( counter + 1 )) 
         done
+        printf " checked $counter files"
     else
-        printf "\n *.$extension (skipping - $cmd not installed)."
+        printf "\n *.$extension (skipping - $cmd not installed)"
     fi
 }
 
@@ -1056,7 +1059,7 @@ function validateCommand()
 #
 # Perform validation tests
 #
-function validateHtmlCssJs()
+function validate()
 {
     local dir="$1"
 
@@ -1064,46 +1067,13 @@ function validateHtmlCssJs()
     validateCommand "$dir" "$CSSHINT" "css"
     validateCommand "$dir" "$JSHINT" "js"
     validateCommand "$dir" "$JSCS" "js"
-}
-
-
-
-#
-# Perform validation tests
-#
-function validatePHP()
-{
-    local dir="$1"
-
+    validateCommand "$dir" "$PYLINT" "py" "$PYLINT_OPTIONS $PYLINT_CONFIG" 
+    validateCommand "$dir" "$PYLINT" "cgi" "$PYLINT_OPTIONS $PYLINT_CONFIG" 
     validateCommand "$dir" "$PHP" "php" 
     validateCommand "$dir" "$PHPMD" "php" 
     validateCommand "$dir" "$PHPCS" "php" 
-}
-
-
-
-#
-# Perform validation tests
-#
-function validateShell()
-{
-    local dir="$1"
-
     validateCommand "$dir" "$CHECKBASH" "bash" "$CHECKBASH_OPTIONS" 
     validateCommand "$dir" "$CHECKSH" "sh" "$CHECKSH_OPTIONS"
-}
-
-
-
-#
-# Perform validation tests
-#
-function validatePython()
-{
-    local dir="$1"
-
-    validateCommand "$dir" "$PYLINT" "py" "$PYLINT_OPTIONS $PYLINT_CONFIG" 
-    validateCommand "$dir" "$PYLINT" "cgi" "$PYLINT_OPTIONS $PYLINT_CONFIG" 
 }
 
 
@@ -1248,10 +1218,7 @@ if [ -f "$HOME/.dbwebb-validate.config" ]; then . "$HOME/.dbwebb-validate.config
 if [ -f "$DBWEBB_VALIDATE_CONFIG" ]; then . "$DBWEBB_VALIDATE_CONFIG"; fi
 
 printf "Validating directory '%s'." "$dir"
-validateHtmlCssJs "$dir" 
-validatePython "$dir"
-validateShell "$dir"
-validatePHP "$dir"
+validate "$dir" 
 
 if [[ $optPublish ]]; then
     if [ -z "$DBW_PUBLISH_BASEDIR" ]; then

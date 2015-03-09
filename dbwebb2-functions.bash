@@ -136,7 +136,7 @@ executeCommand()
     MESSAGE=$3
     if [ $STATUS = 0 ]
     then
-        printf "$MSG_OK $MESSAGE"
+        printf "$MSG_DONE $MESSAGE"
     else
         printf "$MSG_FAILED $MESSAGE"
     fi
@@ -167,8 +167,8 @@ function checkIfValidCourseRepoOrExit()
 #
 setChmod()
 {
-    if [ $VERY_VERBOSE = "yes" ]; then
-        printf "\nEnsuring that all files and directories are readable for all, below $DBW_COURSE_DIR."
+    if [[ $VERY_VERBOSE ]]; then
+        printf "Ensuring that all files and directories are readable for all, below $DBW_COURSE_DIR.\n"
     fi
 
     $FIND "$DBW_COURSE_DIR" -type d -exec chmod u+rwx,go+rx {} \;  
@@ -327,7 +327,7 @@ function getPathToDirectoryFor()
 #
 createUploadDownloadPaths()
 {
-    local subdir="$( mapCmdToDir $ITEM )"
+    SUBDIR="$( mapCmdToDir $ITEM )"
 
     if [ -z "$WHAT" -o -z "$WHERE" ]; then
         printf "$MSG_FAILED Missing argument for source or destination. Perhaps re-create the config-file?"
@@ -336,16 +336,16 @@ createUploadDownloadPaths()
     fi
 
     if [ -d "$DBW_CURRENT_DIR/$ITEM" ]; then
-        subdir="${ITEM%/}"
-    elif [ ! -z "$ITEM" -a -z "$subdir" ]; then
+        SUBDIR="${ITEM%/}"
+    elif [ ! -z "$ITEM" -a -z "$SUBDIR" ]; then
         printf "\n$MSG_FAILED Not a valid combination course: '$DBW_COURSE' and item: '$ITEM'."
         printf "\n\n"
         exit 1
     fi
 
-    if [ ! -z "$subdir" ]; then
-        WHAT="$WHAT/$subdir/"
-        WHERE="$WHERE/$subdir/"
+    if [ ! -z "$SUBDIR" ]; then
+        WHAT="$WHAT/$SUBDIR/"
+        WHERE="$WHERE/$SUBDIR/"
     else
         WHAT="$WHAT/"
         WHERE="$WHERE/"
@@ -664,8 +664,8 @@ function dbwebb-validate()
     local log="$HOME/.dbwebb-validate.log"
     local intro="Uploading the directory '$WHAT' to '$WHERE' for validation."
     local command1="$RSYNC_CMD '$WHAT' '$WHERE'"
-    local command1="$SSH_CMD 'cd $DBW_BASEDIR/$DBW_COURSE; dbwebb-validate -n $IGNORE_FAULTS $WHAT' | tee '$LOG';"
-    local message="to validate course results. Saved a log of the output, review it as:\nless -R '$LOG'"
+    local command2="$SSH_CMD 'dbwebb-validate \"$DBW_REMOTE_BASEDIR/$DBW_COURSE/$SUBDIR\"' | tee '$log';"
+    local message="to validate course results. Saved a log of the output, review it as:\nless -R '$log'"
     executeCommand "$intro" "$command1; $command2" "$message"
 }
 
@@ -676,10 +676,10 @@ function dbwebb-validate()
 #
 dbwebb-selfupdate()
 {
-    local INTRO="Selfupdating dbwebb-cli from https://github.com/mosbth/dbwebb-cli."
-    local COMMAND="wget https://raw.githubusercontent.com/mosbth/dbwebb-cli/master/dbwebb2 -O /tmp/$$; install /tmp/$$ /usr/local/bin/dbwebb; rm /tmp/$$"
-    local MESSAGE="to update dbwebb installation."
-    executeCommand "$INTRO" "$COMMAND" "$MESSAGE"
+    local intro="Selfupdating dbwebb-cli from https://github.com/mosbth/dbwebb-cli."
+    local cmd="wget https://raw.githubusercontent.com/mosbth/dbwebb-cli/master/dbwebb2 -O /tmp/$$; install /tmp/$$ /usr/local/bin/dbwebb; rm /tmp/$$"
+    local message="to update dbwebb installation."
+    executeCommand "$intro" "$cmd" "$message"
         
     dbwebb updateconfig
     

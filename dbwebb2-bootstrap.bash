@@ -21,6 +21,7 @@ UPLOAD_MINIMAL="$RSYNC -av --delete --exclude me --exclude tutorial --exclude ex
 
 # Settins
 MSG_OK="\033[0;30;42mOK\033[0m"
+MSG_DONE="\033[1;37;40mDONE\033[0m"
 MSG_WARNING="\033[43mWARNING\033[0m"
 MSG_FAILED="\033[0;37;41mFAILED\033[0m"
 

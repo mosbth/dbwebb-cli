@@ -118,15 +118,17 @@ function validateCommand()
     local cmd="$2"
     local extension="$3"
     local options="$4"
+    local counter=0
 
     if hash "$cmd" 2>/dev/null; then
-        printf "\n *.$extension using $cmd."
-        
+        printf "\n *.$extension using $cmd"
         for filename in $(find "$dir/" -type f -name \*.$extension); do
             assert 0 "$cmd $options $filename" "$cmd failed: $filename"
+            counter=$(( counter + 1 )) 
         done
+        printf " checked $counter files"
     else
-        printf "\n *.$extension (skipping - $cmd not installed)."
+        printf "\n *.$extension (skipping - $cmd not installed)"
     fi
 }
 
@@ -135,7 +137,7 @@ function validateCommand()
 #
 # Perform validation tests
 #
-function validateHtmlCssJs()
+function validate()
 {
     local dir="$1"
 
@@ -143,46 +145,13 @@ function validateHtmlCssJs()
     validateCommand "$dir" "$CSSHINT" "css"
     validateCommand "$dir" "$JSHINT" "js"
     validateCommand "$dir" "$JSCS" "js"
-}
-
-
-
-#
-# Perform validation tests
-#
-function validatePHP()
-{
-    local dir="$1"
-
+    validateCommand "$dir" "$PYLINT" "py" "$PYLINT_OPTIONS $PYLINT_CONFIG" 
+    validateCommand "$dir" "$PYLINT" "cgi" "$PYLINT_OPTIONS $PYLINT_CONFIG" 
     validateCommand "$dir" "$PHP" "php" 
     validateCommand "$dir" "$PHPMD" "php" 
     validateCommand "$dir" "$PHPCS" "php" 
-}
-
-
-
-#
-# Perform validation tests
-#
-function validateShell()
-{
-    local dir="$1"
-
     validateCommand "$dir" "$CHECKBASH" "bash" "$CHECKBASH_OPTIONS" 
     validateCommand "$dir" "$CHECKSH" "sh" "$CHECKSH_OPTIONS"
-}
-
-
-
-#
-# Perform validation tests
-#
-function validatePython()
-{
-    local dir="$1"
-
-    validateCommand "$dir" "$PYLINT" "py" "$PYLINT_OPTIONS $PYLINT_CONFIG" 
-    validateCommand "$dir" "$PYLINT" "cgi" "$PYLINT_OPTIONS $PYLINT_CONFIG" 
 }
 
 
@@ -327,10 +296,7 @@ if [ -f "$HOME/.dbwebb-validate.config" ]; then . "$HOME/.dbwebb-validate.config
 if [ -f "$DBWEBB_VALIDATE_CONFIG" ]; then . "$DBWEBB_VALIDATE_CONFIG"; fi
 
 printf "Validating directory '%s'." "$dir"
-validateHtmlCssJs "$dir" 
-validatePython "$dir"
-validateShell "$dir"
-validatePHP "$dir"
+validate "$dir" 
 
 if [[ $optPublish ]]; then
     if [ -z "$DBW_PUBLISH_BASEDIR" ]; then
