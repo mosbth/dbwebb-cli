@@ -1115,7 +1115,7 @@ function validate()
     validateCommand "$dir" "$PHPCS" "php" 
     validateCommand "$dir" "$CHECKBASH" "bash" "$CHECKBASH_OPTIONS" 
     validateCommand "$dir" "$CHECKSH" "sh" "$CHECKSH_OPTIONS"
-    validateCommand "$dir" "$YAML" "yml" "$YAML"
+    validateCommand "$dir" "$YAML" "yml"
 }
 
 

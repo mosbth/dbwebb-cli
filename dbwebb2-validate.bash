@@ -29,7 +29,7 @@ CHECKBASH_OPTIONS="--shell=bash"
 CHECKSH="shellcheck"
 CHECKSH_OPTIONS="--shell=sh"
 
-YAML="js-yaml"
+YAML="dbwebb-js-yaml"
 
 if [[ $DBW_COURSE_DIR ]]; then
     HTML_MINIFIER_CONFIG="--config-file '$DBW_COURSE_DIR/.html-minifier.conf'"
@@ -190,7 +190,7 @@ function validate()
     validateCommand "$dir" "$PHPCS" "php" 
     validateCommand "$dir" "$CHECKBASH" "bash" "$CHECKBASH_OPTIONS" 
     validateCommand "$dir" "$CHECKSH" "sh" "$CHECKSH_OPTIONS"
-    validateCommand "$dir" "$YAML" "yml" "$YAML"
+    validateCommand "$dir" "$YAML" "yml"
 }
 
 
