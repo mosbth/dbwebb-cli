@@ -43,11 +43,13 @@ function createConfig()
     remoteHost=${remoteHost:-ssh.student.bth.se}
     remoteDir=${remoteDir:-dbwebb-kurser}
     remoteWww=${remoteWww:-www/dbwebb-kurser}
+    baseurl=${baseurl:-http://www.student.bth.se/~$acronym/$remoteDir}
 
     echo "DBW_USER='$acronym'"               > "$DBW_CONFIG_FILE"
     echo "DBW_HOST='$remoteHost'"           >> "$DBW_CONFIG_FILE"
     echo "DBW_REMOTE_BASEDIR='$remoteDir'"  >> "$DBW_CONFIG_FILE"
     echo "DBW_REMOTE_WWWDIR='$remoteWww'"   >> "$DBW_CONFIG_FILE"
+    echo "DBW_BASEURL='$baseurl'"           >> "$DBW_CONFIG_FILE"
 
     printf "$MSG_OK The config file '$DBW_CONFIG_FILE' is now up-to-date.\n"
 }
@@ -634,7 +636,7 @@ function dbwebb-validate()
     local intro="Uploading the directory '$WHAT' to '$WHERE' for validation."
     local command1="$RSYNC_CMD '$WHAT' '$WHERE'"
     local command2="$SSH_CMD 'dbwebb-validate \"$DBW_REMOTE_BASEDIR/$DBW_COURSE/$SUBDIR\"' | tee '$log';"
-    local message="to validate course results. Saved a log of the output, review it as:\nless -R '$log'"
+    local message="to validate course results.\nSaved a log of the output: less -R '$log'"
     executeCommand "$intro" "$command1; $command2" "$message"
 }
 
@@ -657,8 +659,8 @@ function dbwebb-publish()
     local log="$HOME/.dbwebb-publish.log"
     local intro="Uploading the directory '$WHAT' to '$WHERE' to validate and publish."
     local command1="$RSYNC_CMD '$WHAT' '$WHERE'"
-    local command2="$SSH_CMD 'dbwebb-validate -d --publish --publish-to \"$DBW_REMOTE_WWWDIR/$DBW_COURSE/$SUBDIR\" \"$DBW_REMOTE_BASEDIR/$DBW_COURSE/$SUBDIR\"' | tee '$log';"
-    local message="to validate course results. Saved a log of the output, review it as:\nless -R '$log'"
+    local command2="$SSH_CMD 'dbwebb-validate --publish --publish-to \"$DBW_REMOTE_WWWDIR/$DBW_COURSE/$SUBDIR\" \"$DBW_REMOTE_BASEDIR/$DBW_COURSE/$SUBDIR\"' | tee '$log';"
+    local message="to validate and publish course results.\nSaved a log of the output: less -R '$log'"
     executeCommand "$intro" "$command1; $command2" "$message"
 
     if [ $? -eq 0 ]; then
@@ -666,7 +668,7 @@ function dbwebb-publish()
     else
         printf "Some of your files might be"
     fi
-    printf " published on $DBW_BASEURL\n"
+    printf " published on $DBW_BASEURL/$DBW_COURSE/$SUBDIR\n"
 }
 
 

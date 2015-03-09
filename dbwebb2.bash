@@ -40,28 +40,6 @@ do
             exit 0
         ;;
                 
-#        clone)
-#            if [ -z "$2" ]; then
-#                $ECHO "\n$MSG_FAILED missing argument for repo name."
-#                $ECHO "\n"
-#                dbwebb2PrintShortUsage
-#                exit 1
-#            fi
-#            reposClone "$2"
-#            exit 0
-#        ;;
-
-#        selfupdate|self-update)
-#            selfUpdate
-#            exit 0
-#        ;;
-
-#    init)
-#        initServer
-#        createDefaultFiles
-#        #uploadToServer
-#        ;;
-
         create)
             LAB="$2"
             if [ -z "$LAB" ]
@@ -70,12 +48,6 @@ do
                 exit 1
             fi
             createLab "$LAB"
-            exit 0
-        ;;
-
-        publish)
-            setChmod
-            publishResults "$DBW_COURSE_DIR" "$DBW_REMOTE_DESTINATION" "$2"
             exit 0
         ;;
 
