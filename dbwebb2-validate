@@ -927,7 +927,7 @@ DBW_REMOTE_DESTINATION="${DBW_USER}@${DBW_HOST}:$DBW_REMOTE_BASEDIR/$DBW_COURSE"
 #
 # External tools
 #
-HTMLHINT="htmlhint"
+HTMLHINT="dbwebb-htmlhint"
 CSSHINT="csslint"
 JSHINT="jshint"
 JSCS="jscs"
