@@ -19,9 +19,18 @@ PYLINT="pylint"
 PYLINT_OPTIONS="-r n"
 
 PHP="php"
+PHP_OPTIONS="--syntax-check"
+
 PHPMD="phpmd"
+PHPMD_OPTIONS="text"
+
 PHPCS="phpcs"
+PHPCS_OPTIONS=""
+
 PHPUGLIFY=""
+
+PHPMINIFY="php"
+PHPMINIFY_OPTIONS="--strip"
 
 CHECKBASH="shellcheck"
 CHECKBASH_OPTIONS="--shell=bash"
@@ -36,7 +45,11 @@ YAML_OPTIONS=""
 
 if [[ $DBW_COURSE_DIR ]]; then
     HTML_MINIFIER_CONFIG="--config-file '$DBW_COURSE_DIR/.html-minifier.conf'"
-    PYLINT_CONFIG="--rcfile $DBW_COURSE_DIR/.pylintrc"
+    PYLINT_CONFIG="--rcfile '$DBW_COURSE_DIR/.pylintrc'"
+    PHPMD_CONFIG="'$DBW_COURSE_DIR/.phpmd.xml'"
+    PHPCS_CONFIG="--standard='$DBW_COURSE_DIR/.phpcs.xml'"
+else
+    PHPMD_CONFIG="cleancode,codesize,controversial,design,naming,unusedcode"
 fi
 
 
@@ -63,6 +76,7 @@ function checkInstalledValidateTools
     printf " html-minifier: %s\n" "$( checkCommand $HTML_MINIFIER )"
     printf " cleancss:      %s\n" "$( checkCommand $CLEANCSS )"
     printf " uglifyjs:      %s\n" "$( checkCommand $UGLIFYJS )"
+    printf " phpuglify:     %s\n" "$( checkCommand $PHPMINIFY )"
     printf " phpuglify:     %s\n" "$( checkCommand $PHPUGLIFY )"
 }
 
@@ -162,9 +176,11 @@ function validateCommand()
         printf "\n *.$extension using $cmd"
         for filename in $(find "$dir/" -type f -name \*.$extension); do
             if [[ $optDryRun ]]; then
-                printf "\n%s" "$cmd $options $filename"
+                printf "\n%s" "$cmd $options $filename $output"
             else
-                if [ -z $optOnly -o $optOnly == $extension ]; then
+                if [ -z $optOnly  ]; then
+                    assert 0 "$cmd $options $filename $output" "$cmd failed: $filename"
+                elif [ "$extension" == "$optOnly" ]; then
                     assert 0 "$cmd $options $filename $output" "$cmd failed: $filename"
                 fi
             fi
@@ -191,12 +207,12 @@ function validate()
     validateCommand "$dir" "$JSCS" "js"
     validateCommand "$dir" "$PYLINT" "py" "$PYLINT_OPTIONS $PYLINT_CONFIG" 
     validateCommand "$dir" "$PYLINT" "cgi" "$PYLINT_OPTIONS $PYLINT_CONFIG" 
-    validateCommand "$dir" "$PHP" "php" 
-    validateCommand "$dir" "$PHPMD" "php" 
-    validateCommand "$dir" "$PHPCS" "php" 
+    validateCommand "$dir" "$PHP" "php" "$PHP_OPTIONS" "> /dev/null"
+    validateCommand "$dir" "$PHPMD" "php" "" "$PHPMD_OPTIONS $PHPMD_CONFIG"
+    validateCommand "$dir" "$PHPCS" "php" "$PHPCS_OPTIONS $PHPCS_CONFIG"
     validateCommand "$dir" "$CHECKBASH" "bash" "$CHECKBASH_OPTIONS" 
     validateCommand "$dir" "$CHECKSH" "sh" "$CHECKSH_OPTIONS"
-    validateCommand "$dir" "$YAML" "yml" "$YAML_OPTIONS" " > /dev/null"
+    validateCommand "$dir" "$YAML" "yml" "$YAML_OPTIONS" "> /dev/null"
 }
 
 
@@ -264,6 +280,7 @@ publish()
     publishCommand "$to" "$HTML_MINIFIER" "html" "$HTML_MINIFIER_OPTIONS" "--output" 
     publishCommand "$to" "$CLEANCSS" "css" "" "-o" 
     publishCommand "$to" "$UGLIFYJS" "js" "$UGLIFYJS_OPTIONS" "-o" 
+    publishCommand "$to" "$MINIFYPHP" "php" "$MINIFYPHP_OPTIONS" ">" 
     #publishCommand "$to" "$UGLIFYPHP" "php" "" "--output" 
 
     publishChmod "$to"

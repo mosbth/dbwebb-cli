@@ -667,6 +667,11 @@ dbwebb-create()
     local subdir="$( mapCmdToDir $lab )"
     local where="$DBW_COURSE_DIR/$subdir"
     
+    if [ -z "$subdir" ]; then
+        printf "$MSG_FAILED Not a valid combination of '$DBW_COURSE' and '$lab'.\n"
+        exit 2
+    fi
+
     checkIfValidCourseRepoOrExit
 
     printf "Creating $DBW_COURSE $lab in '$where'.\n"
@@ -711,6 +716,9 @@ dbwebb-create()
             printf "\n answer.php"
             $myWget "$where/answer.php" "$DBW_LABURL/lab.php?answer-php&key=$key"
 
+            printf "\n CDbwebb.php"
+            $myWget "$where/CDbwebb.php" "$DBW_LABURL/lab.php?answer-php-assert&key=$key"
+
             printf "\n answer.json"
             $myWget "$where/answer.json" "$DBW_LABURL/lab.php?answer-json&key=$key"
         ;;
@@ -724,15 +732,15 @@ dbwebb-create()
         ;;
 
         python)
-            printf "\n answer.json"
-            $myWget "$where/answer.json" "$DBW_LABURL/lab.php?answer-json&key=$key"
-
             printf "\n answer.py"
             $myWget "$where/answer.py" "$DBW_LABURL/lab.php?answer-py&key=$key"
             chmod 755 "$where/answer.py"
 
             printf "\n Dbwebb.py"
             $myWget "$where/Dbwebb.py" "$DBW_LABURL/lab.php?answer-py-assert&key=$key"
+
+            printf "\n answer.json"
+            $myWget "$where/answer.json" "$DBW_LABURL/lab.php?answer-json&key=$key"
         ;;
 
     esac

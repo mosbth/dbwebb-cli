@@ -2,6 +2,7 @@
 
 #
 # Specify the utilities used
+# TODO Remove these, not really needed.
 #
 ECHO="printf"
 GIT="git"
