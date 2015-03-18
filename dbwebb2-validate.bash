@@ -318,7 +318,7 @@ do
 
         --course-repo)
             DBW_COURSE_DIR="$2"
-            if [ ! -d "$DBW_COURSE_DIR" ) ]; then
+            if [ ! -d "$DBW_COURSE_DIR" ]; then
                 badUsage "$MSG_FAILED --course-repo '$DBW_COURSE_DIR' is not a valid directory."
                 exit 2
             fi
