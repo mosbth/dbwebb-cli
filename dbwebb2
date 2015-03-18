@@ -201,7 +201,7 @@ executeCommand()
 {
     INTRO="$1"
 
-    if [ $SKIP_READLINE = "no" ]
+    if [[ ! $SKIP_READLINE ]]
     then
         printf "$INTRO"
         printf "\nPress enter/return to continue..."
@@ -223,7 +223,7 @@ executeCommand()
         fi
     fi
 
-    COMMAND=$2
+    COMMAND="$2"
 
     if [[ $VERY_VERBOSE ]]
     then
@@ -1071,14 +1071,6 @@ DBW_REMOTE_DESTINATION="${DBW_USER}@${DBW_HOST}:$DBW_REMOTE_BASEDIR/$DBW_COURSE"
 
 # --------------- DBWEBB BOOTSTRAP PHASE END ---------------
 # --------------- DBWEBB MAIN START HERE ---------------
-
-#
-# TODO CLEAN UP THESE
-# Get options
-#
-SKIP_READLINE="no"
-
-
 
 #
 # Process options

@@ -96,7 +96,7 @@ executeCommand()
 {
     INTRO="$1"
 
-    if [ $SKIP_READLINE = "no" ]
+    if [[ ! $SKIP_READLINE ]]
     then
         printf "$INTRO"
         printf "\nPress enter/return to continue..."
@@ -118,7 +118,7 @@ executeCommand()
         fi
     fi
 
-    COMMAND=$2
+    COMMAND="$2"
 
     if [[ $VERY_VERBOSE ]]
     then

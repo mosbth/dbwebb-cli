@@ -174,7 +174,7 @@ executeCommand()
 {
     INTRO="$1"
 
-    if [ $SKIP_READLINE = "no" ]
+    if [[ ! $SKIP_READLINE ]]
     then
         printf "$INTRO"
         printf "\nPress enter/return to continue..."
@@ -196,7 +196,7 @@ executeCommand()
         fi
     fi
 
-    COMMAND=$2
+    COMMAND="$2"
 
     if [[ $VERY_VERBOSE ]]
     then
@@ -1197,10 +1197,11 @@ selfupdate()
     local INTRO="Selfupdating dbwebb-validate-cli from https://github.com/mosbth/dbwebb-cli."
     local COMMAND="wget https://raw.githubusercontent.com/mosbth/dbwebb-cli/master/dbwebb2-validate -O /tmp/$$; install /tmp/$$ /usr/local/bin/dbwebb-validate; rm /tmp/$$"
     local MESSAGE="to update dbwebb-validate installation."
-    executeCommand "$INTRO" "$COMMAND" "$MESSAGE"
-        
+    #executeCommand "$INTRO" "$COMMAND" "$MESSAGE"
+    echo "MASK"
     printf "Current version is: "
-    dbwebb-validate --version
+    command dbwebb-validate --version
+    echo "MASK"
 }
 
 
@@ -1399,7 +1400,6 @@ do
         
     esac
 done
-
 
 
 #

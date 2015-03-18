@@ -153,9 +153,9 @@ selfupdate()
     local COMMAND="wget https://raw.githubusercontent.com/mosbth/dbwebb-cli/master/dbwebb2-validate -O /tmp/$$; install /tmp/$$ /usr/local/bin/dbwebb-validate; rm /tmp/$$"
     local MESSAGE="to update dbwebb-validate installation."
     executeCommand "$INTRO" "$COMMAND" "$MESSAGE"
-        
+
     printf "Current version is: "
-    dbwebb-validate --version
+    command dbwebb-validate --version
 }
 
 
@@ -354,7 +354,6 @@ do
         
     esac
 done
-
 
 
 #

@@ -1,14 +1,6 @@
 # --------------- DBWEBB MAIN START HERE ---------------
 
 #
-# TODO CLEAN UP THESE
-# Get options
-#
-SKIP_READLINE="no"
-
-
-
-#
 # Process options
 #
 while (( $# ))
