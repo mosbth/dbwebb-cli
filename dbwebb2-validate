@@ -1133,7 +1133,7 @@ function assert()
     TEST=$2
     MESSAGE=$3
     ASSERTS=$(( $ASSERTS + 1 ))
-
+    printf "\n$TEST"
     sh -c "$TEST" > "$TMPFILE" 2>&1
     STATUS=$?
     ERROR=$(cat $TMPFILE)
@@ -1269,15 +1269,16 @@ function publishCommand()
     local extension="$3"
     local options="$4"
     local output="$5"
+    local wrapup="$6"
     local counter=0
 
     if hash "$cmd" 2>/dev/null; then
         printf "\n *.$extension using $cmd"
-        for filename in $(find "$dir/" -type f -name \*.$extension); do
+        for filename in $( find "$dir/" -type f -name \*.$extension ); do
             if [[ $optDryRun ]]; then
-                printf "\n%s" "$cmd $options $filename"
+                printf "\n%s" "$cmd $options $filename $output $filename $wrapup"
             else
-                assert 0 "$cmd $options $filename $output $filename" "$cmd failed: $filename"
+                assert 0 "$cmd $options $filename $output $filename $wrapup" "$cmd failed: $filename"
             fi
             counter=$(( counter + 1 )) 
         done
@@ -1297,8 +1298,6 @@ publish()
     local from="$1"
     local to="$2"
  
-    cd "$HOME"
-
     if [ -z "$from" ]; then
         printf "\n$MSG_FAILED Publish with empty source directory: '$from'\n"
         exit 2
@@ -1312,17 +1311,17 @@ publish()
         printf "\n$MSG_FAILED Publish to nonexisting directory: '$to'\n"
         exit 2
     fi
- 
+
     if [[ $optDryRun ]]; then
         printf "\nrsync -a --delete %s %s" "$from/" "$to/"
     else
         rsync -a --delete "$from/" "$to/"
     fi
     
-    publishCommand "$to" "$HTML_MINIFIER" "html" "$HTML_MINIFIER_OPTIONS" "--output" 
+    publishCommand "$to" "$HTML_MINIFIER" "html" "$HTML_MINIFIER_CONFIG $HTML_MINIFIER_OPTIONS" "--output" 
     publishCommand "$to" "$CLEANCSS" "css" "" "-o" 
     publishCommand "$to" "$UGLIFYJS" "js" "$UGLIFYJS_OPTIONS" "-o" 
-    publishCommand "$to" "$PHPMINIFY" "php" "$PHPMINIFY_OPTIONS" ">" 
+    publishCommand "$to" "$PHPMINIFY" "php" "$PHPMINIFY_OPTIONS" "> /tmp/$$; mv /tmp/$$ " 
     #publishCommand "$to" "$UGLIFYPHP" "php" "" "--output" 
 
     publishChmod "$to"
