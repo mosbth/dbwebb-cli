@@ -1077,14 +1077,22 @@ CHECKSH_OPTIONS="--shell=sh"
 YAML="js-yaml"
 YAML_OPTIONS=""
 
-if [[ $DBW_COURSE_DIR ]]; then
-    HTML_MINIFIER_CONFIG="--config-file '$DBW_COURSE_DIR/.html-minifier.conf'"
-    PYLINT_CONFIG="--rcfile '$DBW_COURSE_DIR/.pylintrc'"
-    PHPMD_CONFIG="'$DBW_COURSE_DIR/.phpmd.xml'"
-    PHPCS_CONFIG="--standard='$DBW_COURSE_DIR/.phpcs.xml'"
-else
-    PHPMD_CONFIG="cleancode,codesize,controversial,design,naming,unusedcode"
-fi
+
+
+#
+# Set default configurations
+#
+function setDefaultConfigFiles()
+{
+    if [[ $DBW_COURSE_DIR ]]; then
+        HTML_MINIFIER_CONFIG="--config-file '$DBW_COURSE_DIR/.html-minifier.conf'"
+        PYLINT_CONFIG="--rcfile '$DBW_COURSE_DIR/.pylintrc'"
+        PHPMD_CONFIG="'$DBW_COURSE_DIR/.phpmd.xml'"
+        PHPCS_CONFIG="--standard='$DBW_COURSE_DIR/.phpcs.xml'"
+    else
+        PHPMD_CONFIG="cleancode,codesize,controversial,design,naming,unusedcode"
+    fi    
+}
 
 
 
@@ -1417,6 +1425,7 @@ if [ -f "$HOME/.dbwebb-validate.config" ]; then . "$HOME/.dbwebb-validate.config
 if [ -f "$DBWEBB_VALIDATE_CONFIG" ]; then . "$DBWEBB_VALIDATE_CONFIG"; fi
 
 printf "Validating '%s'." "$dir"
+setDefaultConfigFiles
 validate "$dir" 
 
 if [[ $optPublish ]]; then
