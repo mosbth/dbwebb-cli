@@ -169,6 +169,20 @@ function checkIfValidCourseRepoOrExit()
 
 
 #
+# Check if config file or exit
+#
+function checkIfValidConfigOrExit()
+{
+    if [ ! -f "$DBW_CONFIG_FILE" ]; then
+        printf "$MSG_FAILED Could not find the configuration file '$DBW_CONFIG_FILE', this is needed for this operation."
+        printf "\n"
+        exit 1
+    fi
+}
+
+
+
+#
 # Set proper rights for files and directories
 #
 setChmod()
@@ -425,6 +439,7 @@ function dbwebb-init-server()
     local command="$SSH_CMD 'sh -c \"if [ ! -d \"$DBW_REMOTE_BASEDIR\" ]; then mkdir \"$DBW_REMOTE_BASEDIR\"; fi; chmod 700 \"$DBW_REMOTE_BASEDIR\"; echo; echo \"$DBW_REMOTE_BASEDIR:\"; ls -lF \"$DBW_REMOTE_BASEDIR\"; if [ ! -d \"$DBW_REMOTE_WWWDIR\" ]; then mkdir \"$DBW_REMOTE_WWWDIR\"; fi; chmod 755 \"$DBW_REMOTE_WWWDIR\"; echo; echo \"$DBW_REMOTE_WWWDIR:\"; ls -lF \"$DBW_REMOTE_WWWDIR\"\"'"
     local message="to init the server."
 
+    checkIfValidConfigOrExit
     executeCommand "$intro" "$command" "$message"
 }
 
@@ -484,6 +499,7 @@ function dbwebb-login()
     local command="$SSH_CMD"
     local message="to establish the connection."
     
+    checkIfValidConfigOrExit
     executeCommand "$intro" "$command" "$message"
 }
 
@@ -572,6 +588,7 @@ function dbwebb-upload()
     ITEM="$1"
     SUBDIR=""
 
+    checkIfValidConfigOrExit
     checkIfValidCourseRepoOrExit
     createUploadDownloadPaths
     setChmod
@@ -594,6 +611,7 @@ function dbwebb-download()
     ITEM="$1"
     SUBDIR=""
 
+    checkIfValidConfigOrExit
     checkIfValidCourseRepoOrExit
     createUploadDownloadPaths
 
@@ -615,6 +633,7 @@ function dbwebb-validate()
     ITEM="$1"
     SUBDIR=""
 
+    checkIfValidConfigOrExit
     checkIfValidCourseRepoOrExit
     createUploadDownloadPaths
     setChmod
@@ -622,7 +641,8 @@ function dbwebb-validate()
     local log="$HOME/.dbwebb-validate.log"
     local intro="Uploading the directory '$WHAT' to '$WHERE' for validation."
     local command1="$RSYNC_CMD '$WHAT' '$WHERE'"
-    local command2="$SSH_CMD 'cd \"$DBW_REMOTE_BASEDIR/$DBW_COURSE\"; dbwebb-validate \"$DBW_REMOTE_BASEDIR/$DBW_COURSE/$SUBDIR\"' | tee '$log';"
+    #local command2="$SSH_CMD 'cd \"$DBW_REMOTE_BASEDIR/$DBW_COURSE\"; dbwebb-validate \"$SUBDIR\"' | tee '$log';"
+    local command2="$SSH_CMD 'dbwebb-validate --course-repo \"$DBW_REMOTE_BASEDIR/$DBW_COURSE\" \"$DBW_REMOTE_BASEDIR/$DBW_COURSE/$SUBDIR\"' | tee '$log';"
     local message="to validate course results.\nSaved a log of the output: less -R '$log'"
     executeCommand "$intro" "$command1; $command2" "$message"
 }
@@ -639,6 +659,7 @@ function dbwebb-publish()
     ITEM="$1"
     SUBDIR=""
 
+    checkIfValidConfigOrExit
     checkIfValidCourseRepoOrExit
     createUploadDownloadPaths
     setChmod
@@ -646,7 +667,7 @@ function dbwebb-publish()
     local log="$HOME/.dbwebb-publish.log"
     local intro="Uploading the directory '$WHAT' to '$WHERE' to validate and publish."
     local command1="$RSYNC_CMD '$WHAT' '$WHERE'"
-    local command2="$SSH_CMD 'dbwebb-validate --publish --publish-to \"$DBW_REMOTE_WWWDIR/$DBW_COURSE/$SUBDIR\" \"$DBW_REMOTE_BASEDIR/$DBW_COURSE/$SUBDIR\"' | tee '$log';"
+    local command2="$SSH_CMD 'dbwebb-validate --publish --course-repo \"$DBW_REMOTE_BASEDIR/$DBW_COURSE\" --publish-to \"$DBW_REMOTE_WWWDIR/$DBW_COURSE/$SUBDIR\" \"$DBW_REMOTE_BASEDIR/$DBW_COURSE/$SUBDIR\"' | tee '$log';"
     local message="to validate and publish course results.\nSaved a log of the output: less -R '$log'"
     executeCommand "$intro" "$command1; $command2" "$message"
 
@@ -674,6 +695,7 @@ dbwebb-create()
         exit 2
     fi
 
+    checkIfValidConfigOrExit
     checkIfValidCourseRepoOrExit
 
     printf "Creating $DBW_COURSE $lab in '$where'.\n"

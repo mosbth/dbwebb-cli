@@ -316,6 +316,20 @@ do
             shift
             ;;
 
+        --course-repo)
+            DBW_COURSE_DIR="$2"
+            if [ ! -d "$DBW_COURSE_DIR" ) ]; then
+                badUsage "$MSG_FAILED --course-repo '$DBW_COURSE_DIR' is not a valid directory."
+                exit 2
+            fi
+
+            # Get the name of the course as $DBW_COURSE
+            sourceCourseRepoFile
+                
+            shift
+            shift
+            ;;
+
         --only)
             optOnly="$2"
             shift

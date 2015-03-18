@@ -58,28 +58,28 @@ done
 
 
 
+#
 # Get the name of the course as $DBW_COURSE
-DBW_COURSE_FILE="$DBW_COURSE_DIR/$DBW_COURSE_FILE_NAME"
-DBW_COURSE_REPO_VALID=""
-if [ -f "$DBW_COURSE_FILE" ]; then
-    DBW_COURSE_REPO_VALID="yes"
-    source "$DBW_COURSE_FILE"
-fi
+#
+function sourceCourseRepoFile()
+{
+    DBW_COURSE_FILE="$DBW_COURSE_DIR/$DBW_COURSE_FILE_NAME"
+    DBW_COURSE_REPO_VALID=""
+    if [ -f "$DBW_COURSE_FILE" ]; then
+        DBW_COURSE_REPO_VALID="yes"
+        source "$DBW_COURSE_FILE"
+    fi    
+}
+
+# Get the name of the course as $DBW_COURSE
+sourceCourseRepoFile
 
 
 
 # Where is the .dbwebb.config-file
-DBW_CONFIG_DEFAULT_FILE="$DBW_INSTALL_DIR/dbwebb2-config-sample"
 DBW_CONFIG_FILE_NAME=".dbwebb.config"
 DBW_CONFIG_FILE="$HOME/$DBW_CONFIG_FILE_NAME"
-if [ ! -f "$DBW_CONFIG_FILE" ]; then
-
-    # If the command is to init-repo, then execute that and create a config-file
-    if [ "$1" = "init-repo" ]; then
-        createConfig
-        exit 0
-    fi
-else
+if [ -f "$DBW_CONFIG_FILE" ]; then
     source "$DBW_CONFIG_FILE"
 fi
 
