@@ -84,7 +84,7 @@ function checkInstalledValidateTools
     printf " html-minifier: %s\n" "$( checkCommand $HTML_MINIFIER )"
     printf " cleancss:      %s\n" "$( checkCommand $CLEANCSS )"
     printf " uglifyjs:      %s\n" "$( checkCommand $UGLIFYJS )"
-    printf " phpuglify:     %s\n" "$( checkCommand $PHPMINIFY )"
+    printf " phpminify:     %s\n" "$( checkCommand $PHPMINIFY )"
     printf " phpuglify:     %s\n" "$( checkCommand $PHPUGLIFY )"
 }
 
@@ -288,7 +288,7 @@ publish()
     publishCommand "$to" "$HTML_MINIFIER" "html" "$HTML_MINIFIER_OPTIONS" "--output" 
     publishCommand "$to" "$CLEANCSS" "css" "" "-o" 
     publishCommand "$to" "$UGLIFYJS" "js" "$UGLIFYJS_OPTIONS" "-o" 
-    publishCommand "$to" "$MINIFYPHP" "php" "$MINIFYPHP_OPTIONS" ">" 
+    publishCommand "$to" "$PHPMINIFY" "php" "$PHPMINIFY_OPTIONS" ">" 
     #publishCommand "$to" "$UGLIFYPHP" "php" "" "--output" 
 
     publishChmod "$to"
