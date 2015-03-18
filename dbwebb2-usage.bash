@@ -9,6 +9,7 @@ function usage ()
 "  selfupdate   Update to latest version."
 "  sshkey       Create and install ssh-keys."
 "  login        Login to the remote server."
+"  clone        Clone a course repo."
 "  init         Init course repo and remote server."
 "  update       Update course repo."
 "  upload [part]     Upload to server."

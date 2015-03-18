@@ -49,6 +49,7 @@ do
 
         update         \
         | check        \
+        | clone        \
         | config       \
         | updateconfig \
         | selfupdate   \
