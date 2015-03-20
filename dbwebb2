@@ -1,6 +1,10 @@
 #!/bin/bash
 # dbwebb: tool to manage course repos
 #
+# See more: http://dbwebb.se/dbwebb-cli
+#
+# Author: Mikael Roos, mos@dbwebb.se
+#
 # The MIT License (MIT)
 #
 # Copyright (c) 2014-2015 Mikael Roos (mos@dbwebb.se)
@@ -22,130 +26,11 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
-DBW_VERSION="v1.9.0 (2015-03-04)"
-function usage ()
-{
-    local txt=(
-"Utility dbwebb for working with course repos: http://dbwebb.se/dbwebb-cli"
-"Usage: dbwebb [options] <command> [arguments]"
-""
-"Command:"
-"  check             Check the environment."
-"  config            (Re-)Create config file."
-"  selfupdate        Update to latest version."
-"  sshkey            Create and install ssh-keys."
-"  login             Login to the remote server."
-"  clone             Clone a course repo."
-"  init              Init course repo and remote server."
-"  update            Update course repo."
-"  upload [part]     Upload to server."
-"  download [part]   Download from server."
-"  create labid      Create a lab."
-"  validate [part]   Validate it."
-"  publish [part]    Publish it."
-"  inspect [course] [kmom] [user]  Inspect a kmom."
-""
-"Options:"
-"  --inspect, -i  Help for inspect."
-"  --verbose, -v  More verbose."
-"  --yes, -y      Do not wait for my input."
-"  --help, -h     Print help."
-"  --version      Print version."
-    )
-    printf "%s\n" "${txt[@]}"
-}
-
-
-
-function badUsage ()
-{
-    local message="$1"
-    local txt=(
-"For an overview of the command, execute:"
-"dbwebb --help"
-    )
-    
-    if [[ "$message" ]]; then
-        printf "$message\n"
-    fi
-    
-    printf "%s\n" "${txt[@]}"
-}
-
-
-
-function usageClone ()
-{
-    local txt=(
-"Available course repos are python, javascript1, linux, webapp, htmlphp."
-"Usage: dbwebb clone [course repo]"
-)
-    printf "%s\n" "${txt[@]}"
-}
-
-
-
-function badUsageClone ()
-{
-    local message="$1"
-
-    if [[ "$message" ]]; then
-        printf "$message\n"
-    fi
-    
-    usageClone
-}
-
-
-
-function usageInspect ()
-{
-    local txt=(
-"dbwebb inspect:"
-"Use to inspect a kmom, as the teachers does, self inspect your own kmom before handing it in."
-""
-"Usage: dbwebb inspect <kmom>"
-"Use to self inspect a kmom in current course repo. This will also upload all your files to the remote server to ensure you are checking the latest code."
-""
-"Usage: dbwebb inspect <course> <kmom>"
-"Use to inspect a kmom in any course repo that is uploaded to the remote server. No need of being in a valid course repo. No upload of files."
-""
-"Usage: dbwebb inspect <course> <kmom> <user>"
-"Use to inspect a kmom in any course for any user, without the need of being in a valid course repo. No upload of files."
-)
-    printf "%s\n" "${txt[@]}"
-}
-
-
-
-function version ()
-{
-    local txt=(
-"dbwebb version $DBW_VERSION"
-    )
-    printf "%s\n" "${txt[@]}"
-}
-
-
-
-function inspectUsage ()
-{
-    local txt=(
-"Using dbwebb inspect, for another student than youreself,"
-"needs extra privilegies."
-""
-"Add acronym for inspect"
-" sudo /usr/local/sbin/setpre-dbwebb-kurser.bash acronym"
-""
-"Add or delete teacher (on each server)"
-" sudo update-dbwebb-kurser.bash -a acronym"
-" sudo update-dbwebb-kurser.bash -d acronym"
-""
-"Execute command as the user dbwebb."
-" sudo -u dbwebb script"
-    )
-    printf "%s\n" "${txt[@]}"
-}
+#
+#
+# Current version
+#
+DBW_VERSION="v1.9.x (latest)"
 # --------------- DBWEBB FUNCTIONS PHASE START ---------------
 
 #
@@ -191,12 +76,14 @@ function createConfig()
     remoteHost=${remoteHost:-ssh.student.bth.se}
     sshKey=${sshKey:-\$HOME/.ssh/dbwebb}
     remoteDir=${remoteDir:-dbwebb-kurser}
+    remoteWwwHost=${remoteWwwHost:-http://www.student.bth.se/}
     remoteWww=${remoteWww:-www/dbwebb-kurser}
     baseurl=${baseurl:-http://www.student.bth.se/~$acronym/$remoteDir}
     laburl=${laburl:-http://www.student.bth.se/~mosstud/kod-exempel/lab}
 
     echo "DBW_USER='$acronym'"               > "$DBW_CONFIG_FILE"
     echo "DBW_HOST='$remoteHost'"           >> "$DBW_CONFIG_FILE"
+    echo "DBW_WWW_HOST='$remoteWwwHost'"    >> "$DBW_CONFIG_FILE"
     echo "DBW_SSH_KEY=\"$sshKey\""          >> "$DBW_CONFIG_FILE"
     echo "DBW_REMOTE_BASEDIR='$remoteDir'"  >> "$DBW_CONFIG_FILE"
     echo "DBW_REMOTE_WWWDIR='$remoteWww'"   >> "$DBW_CONFIG_FILE"
@@ -240,6 +127,17 @@ function wget {
 
 
 #
+# Press enter to continue
+#
+pressEnterToContinue()
+{
+    printf "\nPress enter to continue..."
+    read void
+}
+
+
+
+#
 # Execute a command in a controlled manner
 #
 executeCommand()
@@ -249,8 +147,7 @@ executeCommand()
     if [[ ! $SKIP_READLINE ]]
     then
         printf "$INTRO"
-        printf "\nPress enter/return to continue..."
-        read void
+        pressEnterToContinue
     fi
 
     REALLY="$4"
@@ -339,8 +236,8 @@ setChmod()
         printf "Ensuring that all files and directories are readable for all, below $DBW_COURSE_DIR.\n"
     fi
 
-    $FIND "$DBW_COURSE_DIR" -type d -exec chmod u+rwx,go+rx {} \;  
-    $FIND "$DBW_COURSE_DIR" -type f -exec chmod u+rw,go+r {} \;   
+    find "$DBW_COURSE_DIR" -type d -exec chmod u+rwx,go+rx {} \;  
+    find "$DBW_COURSE_DIR" -type f -exec chmod u+rw,go+r {} \;   
 }
 
 
@@ -527,8 +424,365 @@ createUploadDownloadPaths()
 }
 
 
+#
+# Selfupdate
+#
+selfupdate()
+{
+    local what="$1"
+    local target="$DBW_EXECUTABLE_PATH"
+    local remote=
+    local silent="--quiet"
+    local repo="https://raw.githubusercontent.com/mosbth/dbwebb-cli"
+    
+    if [[ $VERY_VERBOSE ]]; then
+        silent=""
+    fi
+    
+    case $what in
+        dbwebb)
+            remote="$repo/master/dbwebb2"
+        ;;
+        
+        dbwebb-validate)
+            remote="$repo/master/dbwebb2-validate"
+        ;;
+        
+        dbwebb-inspect)
+            remote="$repo/master/dbwebb2-inspect"
+        ;;
+    esac
+    
+    printf "Your current version is: "
+    $what --version
 
-#------------------------- HERE ARE THE MAIN COMMANDS -------------------------------
+    local intro="Selfupdating '$what' from $repo"
+    local cmd="printf 'Downloading...'; wget $silent $remote -O /tmp/$$; printf ' installing...'; install /tmp/$$ $target; printf ' cleaning up...'; rm /tmp/$$; printf ' done.\n'"
+    local message="to update '$what'."
+    executeCommand "$intro" "$cmd" "$message"
+        
+    printf "The updated version is now: "
+    $what --version
+}
+
+
+
+#
+# Perform an assert
+#
+function assert()
+{
+    local failed=0  # Needed?
+    EXPECTED=$1
+    TEST=$2
+    MESSAGE=$3
+    ASSERTS=$(( $ASSERTS + 1 ))
+
+    sh -c "$TEST" > "$TMPFILE" 2>&1
+    STATUS=$?
+    ERROR=$(cat $TMPFILE)
+    rm -f "$TMPFILE"
+
+    if [ \( ! $STATUS -eq $EXPECTED \) -o \( ! -z "$ERROR" \) ]; then
+        FAULTS=$(( $FAULTS + 1 ))
+        failed=1 # Needed?
+
+        printf "\n\n$MSG_WARNING $MESSAGE\n" 
+        [ -z "$ERROR" ] || printf "$ERROR\n\n"
+    fi
+
+    return $STATUS
+    #return $failed # from inspect, really needed?
+}
+
+
+
+#
+# Perform an assert on exit value returned
+# TODO Check if this is really needed by python inspect
+#
+assertExit()
+{
+    EXPECTED=$1
+    TEST=$2
+    MESSAGE=$3
+    ASSERTS=$(( $ASSERTS + 1 ))
+    FAILED=0
+
+    sh -c "$TEST" > "/dev/null" 2>&1
+    STATUS=$?
+
+    if [ $STATUS -ne $EXPECTED ]; then
+        FAULTS=$(( $FAULTS + 1 ))
+
+        printf "\n$TEST"
+        printf "\n$MSG_FAILED $MESSAGE\n"
+
+        FAILED=1
+    fi
+
+    return $FAILED
+}
+
+
+
+
+#
+# Clean up and output results from asserts
+#
+function assertResults()
+{
+    if [ $FAULTS -gt 0 ]
+        then
+        printf "\n\n$MSG_FAILED"
+        printf " Asserts: $ASSERTS Faults: $FAULTS\n\n"
+        exit 1
+    fi
+    
+    printf "\n$MSG_OK"
+    printf " Asserts: $ASSERTS Faults: $FAULTS\n"
+    exit 0
+}
+
+
+
+# --------------- DBWEBB FUNCTIONS PHASE END ---------------
+# --------------- DBWEBB BOOTSTRAP PHASE START ---------------
+
+#
+# Specify the utilities used
+# TODO Remove these, not really needed.
+#
+ECHO="printf"
+GIT="git"
+RSYNC="rsync"
+SSH="ssh"
+SED="sed"
+WGET="wget"
+CURL="curl"
+BASH="bash"
+FIND="find"
+
+# Settins
+MSG_OK="\033[0;30;42mOK\033[0m"
+MSG_DONE="\033[1;37;40mDONE\033[0m"
+MSG_WARNING="\033[43mWARNING\033[0m"
+MSG_FAILED="\033[0;37;41mFAILED\033[0m"
+
+# For asserts
+ASSERTS=0
+FAULTS=0
+TMPFILE="/tmp/dbwebb-error-{$USER}-$$"
+
+
+
+#
+# Find my environment, before any work can be done
+#
+
+
+# What was the command issued?
+DBW_EXECUTABLE_PATH="$0"
+DBW_EXECUTABLE="$( basename "$0" )"
+
+# Where is the executable
+DBW_EXECUTABLE_DIR="$( dirname "$0" )"
+
+# What is the current directory
+DBW_CURRENT_DIR="$( pwd )"
+
+
+
+# What is the directory of the current course repo, find recursivly up the tree
+DBW_COURSE_FILE_NAME=".dbwebb.course"
+
+dir="$DBW_CURRENT_DIR/."
+while [ "$dir" != "/" ]; do 
+    dir=$( dirname "$dir" )
+    found="$( find "$dir" -maxdepth 1 -name $DBW_COURSE_FILE_NAME )"
+    if [ "$found" ]; then 
+        DBW_COURSE_DIR="$( dirname "$found" )"
+        break
+    fi
+done
+
+
+
+#
+# Get the name of the course as $DBW_COURSE
+#
+function sourceCourseRepoFile()
+{
+    DBW_COURSE_FILE="$DBW_COURSE_DIR/$DBW_COURSE_FILE_NAME"
+    DBW_COURSE_REPO_VALID=""
+    if [ -f "$DBW_COURSE_FILE" ]; then
+        DBW_COURSE_REPO_VALID="yes"
+        source "$DBW_COURSE_FILE"
+    fi    
+}
+
+# Get the name of the course as $DBW_COURSE
+sourceCourseRepoFile
+
+
+
+# Where is the .dbwebb.config-file
+DBW_CONFIG_FILE_NAME=".dbwebb.config"
+DBW_CONFIG_FILE="$HOME/$DBW_CONFIG_FILE_NAME"
+if [ -f "$DBW_CONFIG_FILE" ]; then
+    source "$DBW_CONFIG_FILE"
+fi
+
+
+
+# Detect if ssh-key is available
+DBW_SSH_KEY_OPTION=""
+if [ -f "$DBW_SSH_KEY" ]
+then
+    DBW_SSH_KEY_OPTION="-i '$DBW_SSH_KEY'"
+fi
+
+
+
+# Check OS
+DBW_OS="$( uname -a )"
+
+# Create the ssh-command with details from the config-file
+SSH_CMD="$SSH ${DBW_USER}@${DBW_HOST} $DBW_SSH_KEY_OPTION"
+
+# Create the basis for the upload command
+RSYNC_CMD="$RSYNC -av --delete --exclude .git --exclude .gitignore -e \"ssh $DBW_SSH_KEY_OPTION\""
+RSYNC_DOWNLOAD_CMD="$RSYNC -avu -e \"ssh $DBW_SSH_KEY_OPTION\""
+
+DBW_REMOTE_DESTINATION="${DBW_USER}@${DBW_HOST}:$DBW_REMOTE_BASEDIR/$DBW_COURSE"
+
+
+
+# --------------- DBWEBB BOOTSTRAP PHASE END ---------------
+function usage ()
+{
+    local txt=(
+"Utility dbwebb for working with course repos: http://dbwebb.se/dbwebb-cli"
+"Usage: dbwebb [options] <command> [arguments]"
+""
+"Command:"
+"  check             Check the environment."
+"  config            (Re-)Create config file."
+"  selfupdate        Update to latest version."
+"  sshkey            Create and install ssh-keys."
+"  login             Login to the remote server."
+"  clone             Clone a course repo."
+"  init              Init course repo and remote server."
+"  update            Update course repo."
+"  upload [part]     Upload to server."
+"  download [part]   Download from server."
+"  create labid      Create a lab."
+"  validate [part]   Validate it."
+"  publish [part]    Publish it."
+"  inspect [course] [kmom] [user]  Inspect a kmom."
+""
+"Options:"
+"  --inspect, -i  Help for inspect."
+"  --verbose, -v  More verbose."
+"  --yes, -y      Do not wait for my input."
+"  --help, -h     Print help."
+"  --version      Print version."
+    )
+    printf "%s\n" "${txt[@]}"
+}
+
+
+
+function badUsage ()
+{
+    local message="$1"
+    local txt=(
+"For an overview of the command, execute:"
+"dbwebb --help"
+    )
+    
+    if [[ "$message" ]]; then
+        printf "$message\n"
+    fi
+    
+    printf "%s\n" "${txt[@]}"
+}
+
+
+
+function usageClone ()
+{
+    local txt=(
+"Available course repos are python, javascript1, linux, webapp, htmlphp."
+"Usage: dbwebb clone [course repo]"
+)
+    printf "%s\n" "${txt[@]}"
+}
+
+
+
+function badUsageClone ()
+{
+    local message="$1"
+
+    if [[ "$message" ]]; then
+        printf "$message\n"
+    fi
+    
+    usageClone
+}
+
+
+
+function usageInspect ()
+{
+    local txt=(
+"dbwebb inspect:"
+"Use to inspect a kmom, as the teachers does, self inspect your own kmom before handing it in."
+""
+"Usage: dbwebb inspect <kmom>"
+"Use to self inspect a kmom in current course repo. This will also upload all your files to the remote server to ensure you are checking the latest code."
+""
+"Usage: dbwebb inspect <course> <kmom>"
+"Use to inspect a kmom in any course repo that is uploaded to the remote server. No need of being in a valid course repo. No upload of files."
+""
+"Usage: dbwebb inspect <course> <kmom> <user>"
+"Use to inspect a kmom in any course for any user, without the need of being in a valid course repo. No upload of files."
+)
+    printf "%s\n" "${txt[@]}"
+}
+
+
+
+function version ()
+{
+    local txt=(
+"dbwebb version $DBW_VERSION"
+    )
+    printf "%s\n" "${txt[@]}"
+}
+
+
+
+function inspectUsage ()
+{
+    local txt=(
+"Using dbwebb inspect, for another student than youreself,"
+"needs extra privilegies."
+""
+"Add acronym for inspect"
+" sudo /usr/local/sbin/setpre-dbwebb-kurser.bash acronym"
+""
+"Add or delete teacher (on each server)"
+" sudo update-dbwebb-kurser.bash -a acronym"
+" sudo update-dbwebb-kurser.bash -d acronym"
+""
+"Execute command as the user dbwebb."
+" sudo -u dbwebb script"
+    )
+    printf "%s\n" "${txt[@]}"
+}
+#------------------------- HERE ARE THE MAIN COMMANDS -----------------------
 
 
 #
@@ -836,7 +1090,7 @@ function dbwebb-inspect()
     local intro="I will now inspect '$kmom'${forCourse}${forWho}.$willUpload"
     local log="$HOME/.dbwebb-inspect.log"
     local command1=
-    local command2="$SSH_CMD 'dbwebb-inspect --course-repo \"$DBW_REMOTE_BASEDIR/$DBW_COURSE\" $kmom $who' | tee '$log';"
+    local command2="$SSH_CMD 'dbwebb-inspect \"$DBW_REMOTE_BASEDIR/$DBW_COURSE\" $kmom $who' | tee '$log';"
     local message="to inspect the course results.\nSaved a log of the output, review it as:\nless -R '$log'"
 
     # Upload only if
@@ -956,24 +1210,8 @@ dbwebb-create()
 #
 dbwebb-selfupdate()
 {
-    local silent="--quiet"
-    
-    if [[ $VERY_VERBOSE ]]; then
-        silent=""
-    fi
-    
-    printf "Your version is: "
-    dbwebb --version
-
-    local intro="Selfupdating dbwebb-cli from https://github.com/mosbth/dbwebb-cli."
-    local cmd="printf 'Downloading...'; wget $silent https://raw.githubusercontent.com/mosbth/dbwebb-cli/master/dbwebb2 -O /tmp/$$; printf ' installing...'; install /tmp/$$ /usr/local/bin/dbwebb; printf ' cleaning up...'; rm /tmp/$$; printf ' done.\n'"
-    local message="to update dbwebb installation."
-    executeCommand "$intro" "$cmd" "$message"
-        
+    selfupdate dbwebb
     dbwebb updateconfig
-    
-    printf "The updated version is: "
-    dbwebb --version
 }
 
 
@@ -1022,120 +1260,7 @@ dbwebb-updateconfig()
 
 
 
-# --------------- DBWEBB FUNCTIONS PHASE END ---------------
-# --------------- DBWEBB BOOTSTRAP PHASE START ---------------
-
-#
-# Specify the utilities used
-# TODO Remove these, not really needed.
-#
-ECHO="printf"
-GIT="git"
-RSYNC="rsync"
-SSH="ssh"
-SED="sed"
-WGET="wget"
-CURL="curl"
-BASH="bash"
-FIND="find"
-
-# Settins
-MSG_OK="\033[0;30;42mOK\033[0m"
-MSG_DONE="\033[1;37;40mDONE\033[0m"
-MSG_WARNING="\033[43mWARNING\033[0m"
-MSG_FAILED="\033[0;37;41mFAILED\033[0m"
-
-# For asserts
-ASSERTS=0
-FAULTS=0
-TMPFILE="/tmp/dbwebb-error-{$USER}-$$"
-
-
-
-#
-# Find my environment, before any work can be done
-#
-
-
-# What was the command issued?
-DBW_EXECUTABLE="$( basename "$0" )"
-
-# Where is the executable
-DBW_EXECUTABLE_DIR="$( dirname "$0" )"
-
-# What is the current directory
-DBW_CURRENT_DIR="$( pwd )"
-
-
-
-# What is the directory of the current course repo, find recursivly up the tree
-DBW_COURSE_FILE_NAME=".dbwebb.course"
-
-dir="$DBW_CURRENT_DIR/."
-while [ "$dir" != "/" ]; do 
-    dir=$( dirname "$dir" )
-    found="$( find "$dir" -maxdepth 1 -name $DBW_COURSE_FILE_NAME )"
-    if [ "$found" ]; then 
-        DBW_COURSE_DIR="$( dirname "$found" )"
-        break
-    fi
-done
-
-
-
-#
-# Get the name of the course as $DBW_COURSE
-#
-function sourceCourseRepoFile()
-{
-    DBW_COURSE_FILE="$DBW_COURSE_DIR/$DBW_COURSE_FILE_NAME"
-    DBW_COURSE_REPO_VALID=""
-    if [ -f "$DBW_COURSE_FILE" ]; then
-        DBW_COURSE_REPO_VALID="yes"
-        source "$DBW_COURSE_FILE"
-    fi    
-}
-
-# Get the name of the course as $DBW_COURSE
-sourceCourseRepoFile
-
-
-
-# Where is the .dbwebb.config-file
-DBW_CONFIG_FILE_NAME=".dbwebb.config"
-DBW_CONFIG_FILE="$HOME/$DBW_CONFIG_FILE_NAME"
-if [ -f "$DBW_CONFIG_FILE" ]; then
-    source "$DBW_CONFIG_FILE"
-fi
-
-
-
-# Detect if ssh-key is available
-DBW_SSH_KEY_OPTION=""
-if [ -f "$DBW_SSH_KEY" ]
-then
-    DBW_SSH_KEY_OPTION="-i '$DBW_SSH_KEY'"
-fi
-
-
-
-# Check OS
-DBW_OS="$( uname -a )"
-
-# Create the ssh-command with details from the config-file
-SSH_CMD="$SSH ${DBW_USER}@${DBW_HOST} $DBW_SSH_KEY_OPTION"
-
-# Create the basis for the upload command
-RSYNC_CMD="$RSYNC -av --delete --exclude .git --exclude .gitignore -e \"ssh $DBW_SSH_KEY_OPTION\""
-RSYNC_DOWNLOAD_CMD="$RSYNC -avu -e \"ssh $DBW_SSH_KEY_OPTION\""
-
-DBW_REMOTE_DESTINATION="${DBW_USER}@${DBW_HOST}:$DBW_REMOTE_BASEDIR/$DBW_COURSE"
-
-
-
-# --------------- DBWEBB BOOTSTRAP PHASE END ---------------
-# --------------- DBWEBB MAIN START HERE ---------------
-
+# --------------- DBWEBB MAIN START HERE ------------------------------
 #
 # Process options
 #

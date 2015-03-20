@@ -91,53 +91,6 @@ function checkInstalledValidateTools
 
 
 #
-# Perform an assert
-#
-function assert()
-{
-    EXPECTED=$1
-    TEST=$2
-    MESSAGE=$3
-    ASSERTS=$(( $ASSERTS + 1 ))
-
-    sh -c "$TEST" > "$TMPFILE" 2>&1
-    STATUS=$?
-    ERROR=$(cat $TMPFILE)
-
-    if [ \( ! $STATUS -eq $EXPECTED \) -o \( ! -z "$ERROR" \) ]; then
-        FAULTS=$(( $FAULTS + 1 ))
-
-        printf "\n\n$MSG_WARNING $MESSAGE\n" 
-        [ -z "$ERROR" ] || printf "$ERROR\n\n"
-    fi
-
-    return $STATUS
-}
-
-
-
-#
-# Clean up and output results from asserts
-#
-function assertResults()
-{
-    rm -f "$TMPFILE"
-    
-    if [ $FAULTS -gt 0 ]
-        then
-        printf "\n\n$MSG_FAILED"
-        printf " Asserts: $ASSERTS Faults: $FAULTS\n\n"
-        exit 1
-    fi
-    
-    printf "\n$MSG_OK"
-    printf " Asserts: $ASSERTS Faults: $FAULTS\n"
-    exit 0
-}
-
-
-
-#
 # Set correct mode on published file and dirs
 #
 publishChmod()
@@ -149,21 +102,6 @@ publishChmod()
         find "$dir" -type f -exec chmod a+r {} \;   
         find "$dir" -type f -name '*.py' -exec chmod go-r {} \;
     fi
-}
-
-
-#
-# Selfupdate
-#
-selfupdate()
-{
-    local INTRO="Selfupdating dbwebb-validate-cli from https://github.com/mosbth/dbwebb-cli."
-    local COMMAND="wget https://raw.githubusercontent.com/mosbth/dbwebb-cli/master/dbwebb2-validate -O /tmp/$$; install /tmp/$$ /usr/local/bin/dbwebb-validate; rm /tmp/$$"
-    local MESSAGE="to update dbwebb-validate installation."
-    executeCommand "$INTRO" "$COMMAND" "$MESSAGE"
-
-    printf "Current version is: "
-    command dbwebb-validate --version
 }
 
 
@@ -210,7 +148,7 @@ function validate()
     local dir="$1"
 
     validateCommand "$dir" "$HTMLHINT" "html" 
-    validateCommand "$dir" "$CSSHINT" "css"
+    validateCommand "$dir" "$CSSHINT" "css" "$CLEANCSS_OPTIONS"
     validateCommand "$dir" "$JSHINT" "js"
     validateCommand "$dir" "$JSCS" "js"
     validateCommand "$dir" "$PYLINT" "py" "$PYLINT_OPTIONS $PYLINT_CONFIG" 
@@ -358,7 +296,7 @@ do
         ;;
                 
         --selfupdate)
-            selfupdate
+            selfupdate dbwebb-validate
             exit 0
         ;;
                 

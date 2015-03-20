@@ -3,27 +3,44 @@
 #
 main:
 	cat dbwebb2-header.bash \
+		LICENSE \
 		dbwebb2-version.bash \
-		dbwebb2-usage.bash \
 		dbwebb2-functions.bash \
 		dbwebb2-bootstrap.bash \
+		dbwebb2-usage.bash \
 		dbwebb2.bash \
 		> dbwebb2
 	chmod 755 dbwebb2
 
 validate:
 	cat dbwebb2-validate-header.bash \
+		LICENSE \
 		dbwebb2-version.bash \
-		dbwebb2-validate-usage.bash \
 		dbwebb2-functions.bash \
 		dbwebb2-bootstrap.bash \
+		dbwebb2-validate-usage.bash \
 		dbwebb2-validate.bash \
 		> dbwebb2-validate
 	chmod 755 dbwebb2-validate
 
-install: validate main
+inspect:
+	cat dbwebb2-inspect-header.bash \
+		LICENSE \
+		dbwebb2-version.bash \
+		dbwebb2-functions.bash \
+		dbwebb2-bootstrap.bash \
+		dbwebb2-inspect-usage.bash \
+		dbwebb2-inspect-python.bash \
+		dbwebb2-inspect-javascript1.bash \
+		dbwebb2-inspect-htmlphp.bash \
+		dbwebb2-inspect.bash \
+		> dbwebb2-inspect
+	chmod 755 dbwebb2-inspect
+
+install: inspect validate main
 	install -g 0 -o 0 -m 0755 dbwebb2 /usr/local/bin/dbwebb
 	install -g 0 -o 0 -m 0755 dbwebb2-validate /usr/local/bin/dbwebb-validate
+	install -g 0 -o 0 -m 0755 dbwebb2-inspect /usr/local/bin/dbwebb-inspect
 	install -g 0 -o 0 -m 0755 htmlhint /usr/local/bin/dbwebb-htmlhint
 
 	#if [ ! -d /usr/local/man/man1 ]; then mkdir /usr/local/man/man1; fi
@@ -33,6 +50,7 @@ install: validate main
 deinstall:
 	rm -f /usr/local/bin/dbwebb
 	rm -f /usr/local/bin/dbwebb-validate
+	rm -f /usr/local/bin/dbwebb-inspect
 	rm -f /usr/local/bin/dbwebb-htmlhint
 	rm -f /usr/local/bin/dbwebb2
 	rm -f /usr/local/man/man1/dbwebb.1.gzip

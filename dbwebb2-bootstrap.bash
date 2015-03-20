@@ -33,6 +33,7 @@ TMPFILE="/tmp/dbwebb-error-{$USER}-$$"
 
 
 # What was the command issued?
+DBW_EXECUTABLE_PATH="$0"
 DBW_EXECUTABLE="$( basename "$0" )"
 
 # Where is the executable
