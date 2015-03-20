@@ -439,27 +439,24 @@ selfupdate()
 #
 function assert()
 {
-    local failed=0  # Needed?
     EXPECTED=$1
     TEST=$2
     MESSAGE=$3
     ASSERTS=$(( $ASSERTS + 1 ))
 
-    sh -c "$TEST" > "$TMPFILE" 2>&1
+    bash -c "$TEST" &> "$TMPFILE"
     STATUS=$?
-    ERROR=$(cat $TMPFILE)
+    ERROR=$( cat "$TMPFILE" )
     rm -f "$TMPFILE"
 
     if [ \( ! $STATUS -eq $EXPECTED \) -o \( ! -z "$ERROR" \) ]; then
         FAULTS=$(( $FAULTS + 1 ))
-        failed=1 # Needed?
 
         printf "\n\n$MSG_WARNING $MESSAGE\n" 
         [ -z "$ERROR" ] || printf "$ERROR\n\n"
     fi
 
     return $STATUS
-    #return $failed # from inspect, really needed?
 }
 
 
@@ -476,7 +473,7 @@ assertExit()
     ASSERTS=$(( $ASSERTS + 1 ))
     FAILED=0
 
-    sh -c "$TEST" > "/dev/null" 2>&1
+    bash -c "$TEST" 2> "/dev/null"
     STATUS=$?
 
     if [ $STATUS -ne $EXPECTED ]; then

@@ -3,9 +3,14 @@
 # External tools
 #
 HTMLHINT="dbwebb-htmlhint"
-CSSHINT="csslint"
+
+CSSLINT="csslint"
+CSSLINT_OPTIONS="--quiet"
+
 JSHINT="jshint"
+
 JSCS="jscs"
+JSCS_OPTIONS="--verbose"
 
 HTML_MINIFIER="html-minifier"
 
@@ -55,6 +60,8 @@ function setDefaultConfigFiles()
         PYLINT_CONFIG="--rcfile '$DBW_COURSE_DIR/.pylintrc'"
         PHPMD_CONFIG="'$DBW_COURSE_DIR/.phpmd.xml'"
         PHPCS_CONFIG="--standard='$DBW_COURSE_DIR/.phpcs.xml'"
+        CSSLINT_CONFIG="$DBW_COURSE_DIR/.csslintrc"
+        JSCS_CONFIG="--config=$DBW_COURSE_DIR/.jscsrc"
     else
         PHPMD_CONFIG="cleancode,codesize,controversial,design,naming,unusedcode"
     fi    
@@ -69,7 +76,7 @@ function checkInstalledValidateTools
 {
     printf "Check for installed validation tools.\n"
     printf " htmlhint:      %s\n" "$( checkCommand $HTMLHINT )"
-    printf " csshint:       %s\n" "$( checkCommand $CSSHINT )"
+    printf " csslint:       %s\n" "$( checkCommand $CSSLINT )"
     printf " jshint:        %s\n" "$( checkCommand $JSHINT )"
     printf " jscs:          %s\n" "$( checkCommand $JSCS )"
     printf " pylint:        %s\n" "$( checkCommand $PYLINT )"
@@ -148,9 +155,10 @@ function validate()
     local dir="$1"
 
     validateCommand "$dir" "$HTMLHINT" "html" 
-    validateCommand "$dir" "$CSSHINT" "css" "$CLEANCSS_OPTIONS"
+    validateCommand "$dir" "$CSSLINT" "css" "$CSSLINT_OPTIONS $( cat "$CSSLINT_CONFIG" )"
     validateCommand "$dir" "$JSHINT" "js"
-    validateCommand "$dir" "$JSCS" "js"
+    #validateCommand "$dir" "$JSCS" "js" "$JSCS_OPTIONS $JSCS_CONFIG" "| grep -v 'No code style errors found.'; exit ${PIPESTATUS[0]}"
+    #validateCommand "$dir" "$JSCS" "js" "$JSCS_OPTIONS $JSCS_CONFIG" ""
     validateCommand "$dir" "$PYLINT" "py" "$PYLINT_OPTIONS $PYLINT_CONFIG" 
     validateCommand "$dir" "$PYLINT" "cgi" "$PYLINT_OPTIONS $PYLINT_CONFIG" 
     validateCommand "$dir" "$PHP" "php" "$PHP_OPTIONS" "> /dev/null"
@@ -222,7 +230,7 @@ publish()
     fi
     
     publishCommand "$to" "$HTML_MINIFIER" "html" "$HTML_MINIFIER_CONFIG $HTML_MINIFIER_OPTIONS" "--output" 
-    publishCommand "$to" "$CLEANCSS" "css" "" "-o" 
+    publishCommand "$to" "$CLEANCSS" "css" "$CLEANCSS_OPTIONS" "-o" 
     publishCommand "$to" "$UGLIFYJS" "js" "$UGLIFYJS_OPTIONS" "-o"
     publishCommand "$to" "$PHPMINIFY" "php" "$PHPMINIFY_OPTIONS" "> /tmp/$$; mv /tmp/$$ "
     #publishCommand "$to" "$UGLIFYPHP" "php" "" "--output" 

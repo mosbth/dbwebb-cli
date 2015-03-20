@@ -107,6 +107,6 @@ RSYNC_DOWNLOAD_CMD="$RSYNC -avu -e \"ssh $DBW_SSH_KEY_OPTION\""
 
 DBW_REMOTE_DESTINATION="${DBW_USER}@${DBW_HOST}:$DBW_REMOTE_BASEDIR/$DBW_COURSE"
 
-
+DBW_WWW="http://dbwebb.se/"
 
 # --------------- DBWEBB BOOTSTRAP PHASE END ---------------
