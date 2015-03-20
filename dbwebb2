@@ -26,42 +26,31 @@ DBW_VERSION="v1.9.0 (2015-03-04)"
 function usage ()
 {
     local txt=(
+"Utility dbwebb for working with course repos: http://dbwebb.se/dbwebb-cli"
 "Usage: dbwebb [options] <command> [arguments]"
 ""
 "Command:"
-"  check        Check the environment."
-"  config       (Re-)Create config file."
-"  selfupdate   Update to latest version."
-"  sshkey       Create and install ssh-keys."
-"  login        Login to the remote server."
-"  clone        Clone a course repo."
-"  init         Init course repo and remote server."
-"  update       Update course repo."
+"  check             Check the environment."
+"  config            (Re-)Create config file."
+"  selfupdate        Update to latest version."
+"  sshkey            Create and install ssh-keys."
+"  login             Login to the remote server."
+"  clone             Clone a course repo."
+"  init              Init course repo and remote server."
+"  update            Update course repo."
 "  upload [part]     Upload to server."
 "  download [part]   Download from server."
 "  create labid      Create a lab."
 "  validate [part]   Validate it."
 "  publish [part]    Publish it."
-"  inspect [kmom] [user]   Inspect a kmom."
+"  inspect [course] [kmom] [user]  Inspect a kmom."
 ""
 "Options:"
-"  -i, --inspect  Help for inspect."
-"  -v, --verbose  More verbose."
-"  -y, --yes      Do not wait for my input."
-"  -h, --help     Print help."
+"  --inspect, -i  Help for inspect."
+"  --verbose, -v  More verbose."
+"  --yes, -y      Do not wait for my input."
+"  --help, -h     Print help."
 "  --version      Print version."
-""
-"Manual at: http://dbwebb.se/dbwebb-cli"
-    )
-    printf "%s\n" "${txt[@]}"
-}
-
-
-
-function version ()
-{
-    local txt=(
-"dbwebb version $DBW_VERSION"
     )
     printf "%s\n" "${txt[@]}"
 }
@@ -76,10 +65,64 @@ function badUsage ()
 "dbwebb --help"
     )
     
-    if [ ! -z "$message" ]; then
+    if [[ "$message" ]]; then
         printf "$message\n"
     fi
     
+    printf "%s\n" "${txt[@]}"
+}
+
+
+
+function usageClone ()
+{
+    local txt=(
+"Available course repos are python, javascript1, linux, webapp, htmlphp."
+"Usage: dbwebb clone [course repo]"
+)
+    printf "%s\n" "${txt[@]}"
+}
+
+
+
+function badUsageClone ()
+{
+    local message="$1"
+
+    if [[ "$message" ]]; then
+        printf "$message\n"
+    fi
+    
+    usageClone
+}
+
+
+
+function usageInspect ()
+{
+    local txt=(
+"dbwebb inspect:"
+"Use to inspect a kmom, as the teachers does, self inspect your own kmom before handing it in."
+""
+"Usage: dbwebb inspect <kmom>"
+"Use to self inspect a kmom in current course repo. This will also upload all your files to the remote server to ensure you are checking the latest code."
+""
+"Usage: dbwebb inspect <course> <kmom>"
+"Use to inspect a kmom in any course repo that is uploaded to the remote server. No need of being in a valid course repo. No upload of files."
+""
+"Usage: dbwebb inspect <course> <kmom> <user>"
+"Use to inspect a kmom in any course for any user, without the need of being in a valid course repo. No upload of files."
+)
+    printf "%s\n" "${txt[@]}"
+}
+
+
+
+function version ()
+{
+    local txt=(
+"dbwebb version $DBW_VERSION"
+    )
     printf "%s\n" "${txt[@]}"
 }
 
@@ -160,7 +203,7 @@ function createConfig()
     echo "DBW_BASEURL='$baseurl'"           >> "$DBW_CONFIG_FILE"
     echo "DBW_LABURL='$laburl'"             >> "$DBW_CONFIG_FILE"
 
-    printf "$MSG_OK The config file '$DBW_CONFIG_FILE' is now up-to-date.\n"
+    printf "$MSG_DONE The config file '$DBW_CONFIG_FILE' is now up-to-date.\n"
 }
 
 
@@ -485,34 +528,6 @@ createUploadDownloadPaths()
 
 
 
-#
-# Inspect uploaded files
-#
-inspectResults()
-{
-    WHAT=$1
-    WHO=$2
-    INTRO="I will now inspect the choosen kmom for the choosen user, if you have privilegies to do that."
-    LOG="$HOME/.dbwebb-inspect.log"
-    COMMAND="$SSH_CMD 'cd $DBW_BASEDIR/$DBW_COURSE; bin/dbwebb-inspect $WHAT $WHO' | tee '$LOG'; "
-    MESSAGE="to inspect the course results. Saved a log of the output, review it as:\nless -R '$LOG'"
-
-    #COMMAND="$SSH_CMD 'cd $DBW_BASEDIR/$DBW_COURSE; bin/dbwebb-inspect $WHAT $WHO'"
-    #MESSAGE="to inspect the course results."
-
-    #if [ "$USER" = "$WHO" ]
-    #then
-        #upload="$UPLOAD"
-    #else
-        #upload="$UPLOAD_MINIMAL"
-    #fi
-
-    #executeCommand "$INTRO" "$upload; $COMMAND" "$MESSAGE"
-    executeCommand "$INTRO" "$COMMAND" "$MESSAGE"
-}
-
-
-
 #------------------------- HERE ARE THE MAIN COMMANDS -------------------------------
 
 
@@ -746,7 +761,6 @@ function dbwebb-validate()
     local log="$HOME/.dbwebb-validate.log"
     local intro="Uploading the directory '$WHAT' to '$WHERE' for validation."
     local command1="$RSYNC_CMD '$WHAT' '$WHERE'"
-    #local command2="$SSH_CMD 'cd \"$DBW_REMOTE_BASEDIR/$DBW_COURSE\"; dbwebb-validate \"$SUBDIR\"' | tee '$log';"
     local command2="$SSH_CMD 'dbwebb-validate --course-repo \"$DBW_REMOTE_BASEDIR/$DBW_COURSE\" \"$DBW_REMOTE_BASEDIR/$DBW_COURSE/$SUBDIR\"' | tee '$log';"
     local message="to validate course results.\nSaved a log of the output: less -R '$log'"
     executeCommand "$intro" "$command1; $command2" "$message"
@@ -782,6 +796,57 @@ function dbwebb-publish()
         printf "Some of your files might be"
     fi
     printf " published on $DBW_BASEURL/$DBW_COURSE/$SUBDIR\n"
+}
+
+
+
+#
+# Inspect uploaded files
+#
+function dbwebb-inspect()
+{
+    local course=
+    local kmom=
+    local who=
+    local forWho=" for user '$DBW_USER'"
+    local forCourse=
+    local willUpload=
+
+    checkIfValidConfigOrExit
+
+    if [[ $3 ]]; then
+        course="$1"
+        forCourse=" in course '$course'"
+        kmom="$2"
+        who="$3"
+        forWho=" for user '$who'"
+    elif [[ $2 ]]; then
+        course="$1"
+        forCourse=" in course '$course'"
+        kmom="$2"
+    elif [[ $1 ]]; then
+        kmom="$1"
+        forCourse=" in course repo '$DBW_COURSE'"
+        willUpload="\nI will start by uploading the course repo to the remote server."
+    else
+        usageInspect
+        exit 0
+    fi    
+
+    local intro="I will now inspect '$kmom'${forCourse}${forWho}.$willUpload"
+    local log="$HOME/.dbwebb-inspect.log"
+    local command1=
+    local command2="$SSH_CMD 'dbwebb-inspect --course-repo \"$DBW_REMOTE_BASEDIR/$DBW_COURSE\" $kmom $who' | tee '$log';"
+    local message="to inspect the course results.\nSaved a log of the output, review it as:\nless -R '$log'"
+
+    # Upload only if
+    if [[ $willUpload ]]; then
+        checkIfValidCourseRepoOrExit
+        setChmod
+        command1="$RSYNC_CMD '$DBW_COURSE_DIR' '$DBW_REMOTE_DESTINATION';"
+    fi
+
+    executeCommand "$intro" "$command1 $command2" "$message"
 }
 
 
@@ -891,14 +956,23 @@ dbwebb-create()
 #
 dbwebb-selfupdate()
 {
+    local silent="--quiet"
+    
+    if [[ $VERY_VERBOSE ]]; then
+        silent=""
+    fi
+    
+    printf "Your version is: "
+    dbwebb --version
+
     local intro="Selfupdating dbwebb-cli from https://github.com/mosbth/dbwebb-cli."
-    local cmd="wget https://raw.githubusercontent.com/mosbth/dbwebb-cli/master/dbwebb2 -O /tmp/$$; install /tmp/$$ /usr/local/bin/dbwebb; rm /tmp/$$"
+    local cmd="printf 'Downloading...'; wget $silent https://raw.githubusercontent.com/mosbth/dbwebb-cli/master/dbwebb2 -O /tmp/$$; printf ' installing...'; install /tmp/$$ /usr/local/bin/dbwebb; printf ' cleaning up...'; rm /tmp/$$; printf ' done.\n'"
     local message="to update dbwebb installation."
     executeCommand "$intro" "$cmd" "$message"
         
     dbwebb updateconfig
     
-    printf "Current version is: "
+    printf "The updated version is: "
     dbwebb --version
 }
 
@@ -912,20 +986,21 @@ dbwebb-clone()
     local repo="$1"
     local github=
     
-    if [[ $repo ]]; then
-        case "$repo" in
-            python)      github="https://github.com/mosbth/python.git";;
-            javascript1) github="https://github.com/mosbth/javascript1.git";;
-            linux)       github="https://github.com/mosbth/linux.git";;
-            webapp)      github="https://github.com/mosbth/webapp.git";;
-            htmlphp)     github="https://github.com/mosbth/htmlphp.git";;
-            *)           printf "$MSG_FAILED Not a valid course rep: '$repo'\n"
-        esac
+    if [[ ! $repo ]]; then
+        usageClone
+        exit 0
     fi
     
+    case "$repo" in
+        python)      github="https://github.com/mosbth/python.git";;
+        javascript1) github="https://github.com/mosbth/javascript1.git";;
+        linux)       github="https://github.com/mosbth/linux.git";;
+        webapp)      github="https://github.com/mosbth/webapp.git";;
+        htmlphp)     github="https://github.com/mosbth/htmlphp.git";;
+    esac
+    
     if [[ ! $github ]]; then
-        printf "Available course repos are: python, javascript1, linux, webapp or htmlphp.\n"
-        printf "Usage: dbwebb clone python\n"
+        badUsageClone "$MSG_FAILED Not a valid course repo: '$repo'"
         exit 1
     fi
     
@@ -1093,13 +1168,12 @@ do
             exit 0
         ;;
                 
-        inspect)
-            WHICH=$2
-            WHO=$3
-            inspectResults ${WHICH:=all} ${WHO:=$USER}
-            exit 0
-        ;;
-
+        #--course)
+        #    DBW_COURSE=$2
+        #    shift
+        #    shift
+        #;;
+                
         update         \
         | check        \
         | clone        \
@@ -1112,6 +1186,7 @@ do
         | download     \
         | validate     \
         | publish      \
+        | inspect      \
         | create       \
         | init         \
         | init-server  \

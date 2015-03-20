@@ -32,13 +32,12 @@ do
             exit 0
         ;;
                 
-        inspect)
-            WHICH=$2
-            WHO=$3
-            inspectResults ${WHICH:=all} ${WHO:=$USER}
-            exit 0
-        ;;
-
+        #--course)
+        #    DBW_COURSE=$2
+        #    shift
+        #    shift
+        #;;
+                
         update         \
         | check        \
         | clone        \
@@ -51,6 +50,7 @@ do
         | download     \
         | validate     \
         | publish      \
+        | inspect      \
         | create       \
         | init         \
         | init-server  \

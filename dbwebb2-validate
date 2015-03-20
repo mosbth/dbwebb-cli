@@ -133,7 +133,7 @@ function createConfig()
     echo "DBW_BASEURL='$baseurl'"           >> "$DBW_CONFIG_FILE"
     echo "DBW_LABURL='$laburl'"             >> "$DBW_CONFIG_FILE"
 
-    printf "$MSG_OK The config file '$DBW_CONFIG_FILE' is now up-to-date.\n"
+    printf "$MSG_DONE The config file '$DBW_CONFIG_FILE' is now up-to-date.\n"
 }
 
 
@@ -458,34 +458,6 @@ createUploadDownloadPaths()
 
 
 
-#
-# Inspect uploaded files
-#
-inspectResults()
-{
-    WHAT=$1
-    WHO=$2
-    INTRO="I will now inspect the choosen kmom for the choosen user, if you have privilegies to do that."
-    LOG="$HOME/.dbwebb-inspect.log"
-    COMMAND="$SSH_CMD 'cd $DBW_BASEDIR/$DBW_COURSE; bin/dbwebb-inspect $WHAT $WHO' | tee '$LOG'; "
-    MESSAGE="to inspect the course results. Saved a log of the output, review it as:\nless -R '$LOG'"
-
-    #COMMAND="$SSH_CMD 'cd $DBW_BASEDIR/$DBW_COURSE; bin/dbwebb-inspect $WHAT $WHO'"
-    #MESSAGE="to inspect the course results."
-
-    #if [ "$USER" = "$WHO" ]
-    #then
-        #upload="$UPLOAD"
-    #else
-        #upload="$UPLOAD_MINIMAL"
-    #fi
-
-    #executeCommand "$INTRO" "$upload; $COMMAND" "$MESSAGE"
-    executeCommand "$INTRO" "$COMMAND" "$MESSAGE"
-}
-
-
-
 #------------------------- HERE ARE THE MAIN COMMANDS -------------------------------
 
 
@@ -719,7 +691,6 @@ function dbwebb-validate()
     local log="$HOME/.dbwebb-validate.log"
     local intro="Uploading the directory '$WHAT' to '$WHERE' for validation."
     local command1="$RSYNC_CMD '$WHAT' '$WHERE'"
-    #local command2="$SSH_CMD 'cd \"$DBW_REMOTE_BASEDIR/$DBW_COURSE\"; dbwebb-validate \"$SUBDIR\"' | tee '$log';"
     local command2="$SSH_CMD 'dbwebb-validate --course-repo \"$DBW_REMOTE_BASEDIR/$DBW_COURSE\" \"$DBW_REMOTE_BASEDIR/$DBW_COURSE/$SUBDIR\"' | tee '$log';"
     local message="to validate course results.\nSaved a log of the output: less -R '$log'"
     executeCommand "$intro" "$command1; $command2" "$message"
@@ -755,6 +726,57 @@ function dbwebb-publish()
         printf "Some of your files might be"
     fi
     printf " published on $DBW_BASEURL/$DBW_COURSE/$SUBDIR\n"
+}
+
+
+
+#
+# Inspect uploaded files
+#
+function dbwebb-inspect()
+{
+    local course=
+    local kmom=
+    local who=
+    local forWho=" for user '$DBW_USER'"
+    local forCourse=
+    local willUpload=
+
+    checkIfValidConfigOrExit
+
+    if [[ $3 ]]; then
+        course="$1"
+        forCourse=" in course '$course'"
+        kmom="$2"
+        who="$3"
+        forWho=" for user '$who'"
+    elif [[ $2 ]]; then
+        course="$1"
+        forCourse=" in course '$course'"
+        kmom="$2"
+    elif [[ $1 ]]; then
+        kmom="$1"
+        forCourse=" in course repo '$DBW_COURSE'"
+        willUpload="\nI will start by uploading the course repo to the remote server."
+    else
+        usageInspect
+        exit 0
+    fi    
+
+    local intro="I will now inspect '$kmom'${forCourse}${forWho}.$willUpload"
+    local log="$HOME/.dbwebb-inspect.log"
+    local command1=
+    local command2="$SSH_CMD 'dbwebb-inspect --course-repo \"$DBW_REMOTE_BASEDIR/$DBW_COURSE\" $kmom $who' | tee '$log';"
+    local message="to inspect the course results.\nSaved a log of the output, review it as:\nless -R '$log'"
+
+    # Upload only if
+    if [[ $willUpload ]]; then
+        checkIfValidCourseRepoOrExit
+        setChmod
+        command1="$RSYNC_CMD '$DBW_COURSE_DIR' '$DBW_REMOTE_DESTINATION';"
+    fi
+
+    executeCommand "$intro" "$command1 $command2" "$message"
 }
 
 
@@ -864,14 +886,23 @@ dbwebb-create()
 #
 dbwebb-selfupdate()
 {
+    local silent="--quiet"
+    
+    if [[ $VERY_VERBOSE ]]; then
+        silent=""
+    fi
+    
+    printf "Your version is: "
+    dbwebb --version
+
     local intro="Selfupdating dbwebb-cli from https://github.com/mosbth/dbwebb-cli."
-    local cmd="wget https://raw.githubusercontent.com/mosbth/dbwebb-cli/master/dbwebb2 -O /tmp/$$; install /tmp/$$ /usr/local/bin/dbwebb; rm /tmp/$$"
+    local cmd="printf 'Downloading...'; wget $silent https://raw.githubusercontent.com/mosbth/dbwebb-cli/master/dbwebb2 -O /tmp/$$; printf ' installing...'; install /tmp/$$ /usr/local/bin/dbwebb; printf ' cleaning up...'; rm /tmp/$$; printf ' done.\n'"
     local message="to update dbwebb installation."
     executeCommand "$intro" "$cmd" "$message"
         
     dbwebb updateconfig
     
-    printf "Current version is: "
+    printf "The updated version is: "
     dbwebb --version
 }
 
@@ -885,20 +916,21 @@ dbwebb-clone()
     local repo="$1"
     local github=
     
-    if [[ $repo ]]; then
-        case "$repo" in
-            python)      github="https://github.com/mosbth/python.git";;
-            javascript1) github="https://github.com/mosbth/javascript1.git";;
-            linux)       github="https://github.com/mosbth/linux.git";;
-            webapp)      github="https://github.com/mosbth/webapp.git";;
-            htmlphp)     github="https://github.com/mosbth/htmlphp.git";;
-            *)           printf "$MSG_FAILED Not a valid course rep: '$repo'\n"
-        esac
+    if [[ ! $repo ]]; then
+        usageClone
+        exit 0
     fi
     
+    case "$repo" in
+        python)      github="https://github.com/mosbth/python.git";;
+        javascript1) github="https://github.com/mosbth/javascript1.git";;
+        linux)       github="https://github.com/mosbth/linux.git";;
+        webapp)      github="https://github.com/mosbth/webapp.git";;
+        htmlphp)     github="https://github.com/mosbth/htmlphp.git";;
+    esac
+    
     if [[ ! $github ]]; then
-        printf "Available course repos are: python, javascript1, linux, webapp or htmlphp.\n"
-        printf "Usage: dbwebb clone python\n"
+        badUsageClone "$MSG_FAILED Not a valid course repo: '$repo'"
         exit 1
     fi
     
@@ -1436,19 +1468,6 @@ if [[ $optPublish ]]; then
         printf "\n$MSG_FAILED Target dir for publish is not a valid directory '%s'.\n" "$DBW_PUBLISH_TO"
         exit 2
     fi
-    
-#    if [ -f "$DBW_COURSE_FILE" ]; then
-#        printf "\nTake subdir with coursedir.\n"
-#        printf $( dirname "$DBW_COURSE_DIR" )        
-#        printf "\n"
-#        a=$( dirname "$DBW_COURSE_DIR" )
-#        b=$( dirname "$DBW_COURSE_DIR" )
-#        target=${a#dir}
-#        printf "\n$target\n"
-#        target="$DBW_REMOTE_WWWDIR"
-#    else
-#        target="$DBW_REMOTE_WWWDIR/$( basename "$dir" )"
-#    fi
     
     printf "\nPublishing to '%s'." "$DBW_PUBLISH_TO"
     publish "$dir" "$DBW_PUBLISH_TO"

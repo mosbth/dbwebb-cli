@@ -403,19 +403,6 @@ if [[ $optPublish ]]; then
         exit 2
     fi
     
-#    if [ -f "$DBW_COURSE_FILE" ]; then
-#        printf "\nTake subdir with coursedir.\n"
-#        printf $( dirname "$DBW_COURSE_DIR" )        
-#        printf "\n"
-#        a=$( dirname "$DBW_COURSE_DIR" )
-#        b=$( dirname "$DBW_COURSE_DIR" )
-#        target=${a#dir}
-#        printf "\n$target\n"
-#        target="$DBW_REMOTE_WWWDIR"
-#    else
-#        target="$DBW_REMOTE_WWWDIR/$( basename "$dir" )"
-#    fi
-    
     printf "\nPublishing to '%s'." "$DBW_PUBLISH_TO"
     publish "$dir" "$DBW_PUBLISH_TO"
 fi

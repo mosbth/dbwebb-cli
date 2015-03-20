@@ -1,42 +1,31 @@
 function usage ()
 {
     local txt=(
+"Utility dbwebb for working with course repos: http://dbwebb.se/dbwebb-cli"
 "Usage: dbwebb [options] <command> [arguments]"
 ""
 "Command:"
-"  check        Check the environment."
-"  config       (Re-)Create config file."
-"  selfupdate   Update to latest version."
-"  sshkey       Create and install ssh-keys."
-"  login        Login to the remote server."
-"  clone        Clone a course repo."
-"  init         Init course repo and remote server."
-"  update       Update course repo."
+"  check             Check the environment."
+"  config            (Re-)Create config file."
+"  selfupdate        Update to latest version."
+"  sshkey            Create and install ssh-keys."
+"  login             Login to the remote server."
+"  clone             Clone a course repo."
+"  init              Init course repo and remote server."
+"  update            Update course repo."
 "  upload [part]     Upload to server."
 "  download [part]   Download from server."
 "  create labid      Create a lab."
 "  validate [part]   Validate it."
 "  publish [part]    Publish it."
-"  inspect [kmom] [user]   Inspect a kmom."
+"  inspect [course] [kmom] [user]  Inspect a kmom."
 ""
 "Options:"
-"  -i, --inspect  Help for inspect."
-"  -v, --verbose  More verbose."
-"  -y, --yes      Do not wait for my input."
-"  -h, --help     Print help."
+"  --inspect, -i  Help for inspect."
+"  --verbose, -v  More verbose."
+"  --yes, -y      Do not wait for my input."
+"  --help, -h     Print help."
 "  --version      Print version."
-""
-"Manual at: http://dbwebb.se/dbwebb-cli"
-    )
-    printf "%s\n" "${txt[@]}"
-}
-
-
-
-function version ()
-{
-    local txt=(
-"dbwebb version $DBW_VERSION"
     )
     printf "%s\n" "${txt[@]}"
 }
@@ -51,10 +40,64 @@ function badUsage ()
 "dbwebb --help"
     )
     
-    if [ ! -z "$message" ]; then
+    if [[ "$message" ]]; then
         printf "$message\n"
     fi
     
+    printf "%s\n" "${txt[@]}"
+}
+
+
+
+function usageClone ()
+{
+    local txt=(
+"Available course repos are python, javascript1, linux, webapp, htmlphp."
+"Usage: dbwebb clone [course repo]"
+)
+    printf "%s\n" "${txt[@]}"
+}
+
+
+
+function badUsageClone ()
+{
+    local message="$1"
+
+    if [[ "$message" ]]; then
+        printf "$message\n"
+    fi
+    
+    usageClone
+}
+
+
+
+function usageInspect ()
+{
+    local txt=(
+"dbwebb inspect:"
+"Use to inspect a kmom, as the teachers does, self inspect your own kmom before handing it in."
+""
+"Usage: dbwebb inspect <kmom>"
+"Use to self inspect a kmom in current course repo. This will also upload all your files to the remote server to ensure you are checking the latest code."
+""
+"Usage: dbwebb inspect <course> <kmom>"
+"Use to inspect a kmom in any course repo that is uploaded to the remote server. No need of being in a valid course repo. No upload of files."
+""
+"Usage: dbwebb inspect <course> <kmom> <user>"
+"Use to inspect a kmom in any course for any user, without the need of being in a valid course repo. No upload of files."
+)
+    printf "%s\n" "${txt[@]}"
+}
+
+
+
+function version ()
+{
+    local txt=(
+"dbwebb version $DBW_VERSION"
+    )
     printf "%s\n" "${txt[@]}"
 }
 

@@ -48,9 +48,12 @@ esac
 if [ $IS_CYGWIN = "yes" ]
 then
     CYGWIN_DEFAULT_GROUP="Users"
-    if [ $( grep "^Användare:" /etc/group ) ]
-    then
-        CYGWIN_DEFAULT_GROUP="Användare"
+    if [ -f /etc/hosts ]; then
+        if [ $( grep "^Användare:" /etc/group ) ]
+        then
+            CYGWIN_DEFAULT_GROUP="Användare"
+
+        fi
     fi
 fi
 
