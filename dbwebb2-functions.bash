@@ -1,68 +1,6 @@
 # --------------- DBWEBB FUNCTIONS PHASE START ---------------
 
 #
-# Create the config file .dbwebb.config.
-#
-function createConfig()
-{
-    local first=$1
-    local noInput=$2
-    local acronym
-    local remoteHost
-
-    if [ -z $first ]
-    then
-
-        printf "The config-file '$DBW_CONFIG_FILE_NAME' will now be created in your home directory: '$HOME'"
-
-    elif [ $first = "update" ]
-    then
-
-        printf "Your config file will be automatically updated. Then re-run your command.\n"
-
-    elif [ $first = "upgrade" ]
-    then
-
-        printf "Your config file will be automatically updated."
-
-    elif [ $first = "create" ]
-    then
-
-        printf "I will now re-create the configuration file '$DBW_CONFIG_FILE_NAME' in your home directory: '$HOME'."
-
-    fi
-
-
-    if [[ ! $noInput ]]; then
-        DBW_USER=${DBW_USER:-$USER}
-        printf "\nWhat is your student acronym? [$DBW_USER] "
-        read acronym
-    fi
-
-    acronym=${acronym:-$DBW_USER}
-    remoteHost=${remoteHost:-ssh.student.bth.se}
-    sshKey=${sshKey:-\$HOME/.ssh/dbwebb}
-    remoteDir=${remoteDir:-dbwebb-kurser}
-    remoteWwwHost=${remoteWwwHost:-http://www.student.bth.se/}
-    remoteWww=${remoteWww:-www/dbwebb-kurser}
-    baseurl=${baseurl:-http://www.student.bth.se/~$acronym/$remoteDir}
-    laburl=${laburl:-http://www.student.bth.se/~mosstud/kod-exempel/lab}
-
-    echo "DBW_USER='$acronym'"               > "$DBW_CONFIG_FILE"
-    echo "DBW_HOST='$remoteHost'"           >> "$DBW_CONFIG_FILE"
-    echo "DBW_WWW_HOST='$remoteWwwHost'"    >> "$DBW_CONFIG_FILE"
-    echo "DBW_SSH_KEY=\"$sshKey\""          >> "$DBW_CONFIG_FILE"
-    echo "DBW_REMOTE_BASEDIR='$remoteDir'"  >> "$DBW_CONFIG_FILE"
-    echo "DBW_REMOTE_WWWDIR='$remoteWww'"   >> "$DBW_CONFIG_FILE"
-    echo "DBW_BASEURL='$baseurl'"           >> "$DBW_CONFIG_FILE"
-    echo "DBW_LABURL='$laburl'"             >> "$DBW_CONFIG_FILE"
-
-    printf "$MSG_DONE The config file '$DBW_CONFIG_FILE' is now up-to-date.\n"
-}
-
-
-
-#
 # Check for installed commands
 #
 function checkCommand()

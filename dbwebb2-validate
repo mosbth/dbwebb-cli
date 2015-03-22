@@ -34,68 +34,6 @@ DBW_VERSION="v1.9.x (latest)"
 # --------------- DBWEBB FUNCTIONS PHASE START ---------------
 
 #
-# Create the config file .dbwebb.config.
-#
-function createConfig()
-{
-    local first=$1
-    local noInput=$2
-    local acronym
-    local remoteHost
-
-    if [ -z $first ]
-    then
-
-        printf "The config-file '$DBW_CONFIG_FILE_NAME' will now be created in your home directory: '$HOME'"
-
-    elif [ $first = "update" ]
-    then
-
-        printf "Your config file will be automatically updated. Then re-run your command.\n"
-
-    elif [ $first = "upgrade" ]
-    then
-
-        printf "Your config file will be automatically updated."
-
-    elif [ $first = "create" ]
-    then
-
-        printf "I will now re-create the configuration file '$DBW_CONFIG_FILE_NAME' in your home directory: '$HOME'."
-
-    fi
-
-
-    if [[ ! $noInput ]]; then
-        DBW_USER=${DBW_USER:-$USER}
-        printf "\nWhat is your student acronym? [$DBW_USER] "
-        read acronym
-    fi
-
-    acronym=${acronym:-$DBW_USER}
-    remoteHost=${remoteHost:-ssh.student.bth.se}
-    sshKey=${sshKey:-\$HOME/.ssh/dbwebb}
-    remoteDir=${remoteDir:-dbwebb-kurser}
-    remoteWwwHost=${remoteWwwHost:-http://www.student.bth.se/}
-    remoteWww=${remoteWww:-www/dbwebb-kurser}
-    baseurl=${baseurl:-http://www.student.bth.se/~$acronym/$remoteDir}
-    laburl=${laburl:-http://www.student.bth.se/~mosstud/kod-exempel/lab}
-
-    echo "DBW_USER='$acronym'"               > "$DBW_CONFIG_FILE"
-    echo "DBW_HOST='$remoteHost'"           >> "$DBW_CONFIG_FILE"
-    echo "DBW_WWW_HOST='$remoteWwwHost'"    >> "$DBW_CONFIG_FILE"
-    echo "DBW_SSH_KEY=\"$sshKey\""          >> "$DBW_CONFIG_FILE"
-    echo "DBW_REMOTE_BASEDIR='$remoteDir'"  >> "$DBW_CONFIG_FILE"
-    echo "DBW_REMOTE_WWWDIR='$remoteWww'"   >> "$DBW_CONFIG_FILE"
-    echo "DBW_BASEURL='$baseurl'"           >> "$DBW_CONFIG_FILE"
-    echo "DBW_LABURL='$laburl'"             >> "$DBW_CONFIG_FILE"
-
-    printf "$MSG_DONE The config file '$DBW_CONFIG_FILE' is now up-to-date.\n"
-}
-
-
-
-#
 # Check for installed commands
 #
 function checkCommand()
@@ -865,19 +803,19 @@ function validate()
 {
     local dir="$1"
 
-    validateCommand "$dir" "$HTMLHINT" "html" 
-    validateCommand "$dir" "$CSSLINT" "css" "$CSSLINT_OPTIONS $( cat "$CSSLINT_CONFIG" )"
-    validateCommand "$dir" "$JSHINT" "js"
-    #validateCommand "$dir" "$JSCS" "js" "$JSCS_OPTIONS $JSCS_CONFIG" "| grep -v 'No code style errors found.'; exit ${PIPESTATUS[0]}"
+    [[ $DISABLE_HTMLHINT ]]  || validateCommand "$dir" "$HTMLHINT" "html" 
+    [[ $DISABLE_CSSLINT ]]   || validateCommand "$dir" "$CSSLINT" "css" "$CSSLINT_OPTIONS $( cat "$CSSLINT_CONFIG" )"
+    [[ $DISABLE_JSHINT ]]    || validateCommand "$dir" "$JSHINT" "js"
+    [[ $DISABLE_JSCS ]]      || validateCommand "$dir" "$JSCS" "js" "$JSCS_OPTIONS $JSCS_CONFIG" "| grep -v 'No code style errors found.'; exit ${PIPESTATUS[0]}"
     #validateCommand "$dir" "$JSCS" "js" "$JSCS_OPTIONS $JSCS_CONFIG" ""
-    validateCommand "$dir" "$PYLINT" "py" "$PYLINT_OPTIONS $PYLINT_CONFIG" 
-    validateCommand "$dir" "$PYLINT" "cgi" "$PYLINT_OPTIONS $PYLINT_CONFIG" 
-    validateCommand "$dir" "$PHP" "php" "$PHP_OPTIONS" "> /dev/null"
-    validateCommand "$dir" "$PHPMD" "php" "" "$PHPMD_OPTIONS $PHPMD_CONFIG"
-    validateCommand "$dir" "$PHPCS" "php" "$PHPCS_OPTIONS $PHPCS_CONFIG"
-    validateCommand "$dir" "$CHECKBASH" "bash" "$CHECKBASH_OPTIONS" 
-    validateCommand "$dir" "$CHECKSH" "sh" "$CHECKSH_OPTIONS"
-    validateCommand "$dir" "$YAML" "yml" "$YAML_OPTIONS" "> /dev/null"
+    [[ $DISABLE_PYLINT ]]    || validateCommand "$dir" "$PYLINT" "py" "$PYLINT_OPTIONS $PYLINT_CONFIG" 
+    [[ $DISABLE_PYLINT ]]    || validateCommand "$dir" "$PYLINT" "cgi" "$PYLINT_OPTIONS $PYLINT_CONFIG" 
+    [[ $DISABLE_PHP ]]       || validateCommand "$dir" "$PHP" "php" "$PHP_OPTIONS" "> /dev/null"
+    [[ $DISABLE_PHPMD ]]     || validateCommand "$dir" "$PHPMD" "php" "" "$PHPMD_OPTIONS $PHPMD_CONFIG"
+    [[ $DISABLE_PHPCS ]]     || validateCommand "$dir" "$PHPCS" "php" "$PHPCS_OPTIONS $PHPCS_CONFIG"
+    [[ $DISABLE_CHECKBASH ]] || validateCommand "$dir" "$CHECKBASH" "bash" "$CHECKBASH_OPTIONS" 
+    [[ $DISABLE_CHECKSH ]]   || validateCommand "$dir" "$CHECKSH" "sh" "$CHECKSH_OPTIONS"
+    [[ $DISABLE_YAML ]]      || validateCommand "$dir" "$YAML" "yml" "$YAML_OPTIONS" "> /dev/null"
 }
 
 

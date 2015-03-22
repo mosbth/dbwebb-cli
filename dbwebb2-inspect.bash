@@ -54,9 +54,8 @@ printUrl()
 {
     local what="$1"
     local where="$2"
-    local url="${DBW_WWW_HOST}~${THEUSER}/$DBW_REMOTE_BASEDIR/$DBW_COURSE"
     
-    printf "\nURL: $url/$where/$what"
+    printf "\nURL: $BASE_URL/$DBW_COURSE/$where/$what"
 
     if [ -z "$what" ]; then
         assert 0 "test -d \"$THEDIR/$where\"" "The directory '$where' is missing or not readable."
@@ -98,16 +97,6 @@ dbwebbInspectCheckEnvironment()
 {
     headerForTest "-- dbwebb inspect"
 
-    # Check who you are
-    if [ "$USER" = "$THEUSER" ]
-    then
-        printf "\nChecking your own $DBW_COURSE/$KMOM, ok."
-    else
-        printf "\nChecking $DBW_COURSE/$KMOM for $THEUSER as $( whoami ) at `hostname`."
-    fi
-
-    printf "\n"
-
     if [ ! -d "$THEDIR" ]; then 
         
         printf "\n$MSG_FAILED Directory '$THEDIR' not readable.\n"
@@ -138,6 +127,10 @@ dbwebbInspectCheckEnvironment()
 #
 publishKmom()
 {
+    if [[ ! $COPY_DIR ]]; then
+        return
+    fi
+    
     if [ ! -d "$COPY_DIR" ]; then
         mkdir "$COPY_DIR"
     fi
@@ -246,6 +239,28 @@ do
             exit 0
         ;;
         
+        --publish-to)
+            if [ ! -d "$2" ]; then
+                badUsage "Path to --publish-to '$2' is not a directory."
+                exit 2                
+            fi
+            COPY_DIR="$2/inspect/"
+            shift
+            shift
+        ;;
+        
+        --publish-url)
+            COPY_URL="$2/inspect/"
+            shift
+            shift
+        ;;
+
+        --base-url)
+            BASE_URL="$2"
+            shift
+            shift
+        ;;
+
         *) 
             break
         ;;
@@ -260,8 +275,9 @@ done
 #
 REPO="$1"
 KMOM="$2"
-THEUSER="$3"
 THETARGET="me/$KMOM"
+
+
 
 #
 # Check incoming arguments
@@ -274,16 +290,7 @@ elif [ -z "$KMOM" ]; then
     exit 2    
 fi
 
-#
-# If omitting the user, expect a valid path, else use relative from its user.
-#
-if [ -z "$THEUSER" ]; then
-    THEDIR=$( eval echo "$REPO" )
-    THEUSER=$USER
-else
-    THEDIR=$( eval echo "~$THEUSER/$REPO" )
-fi
-
+THEDIR=$( readlink -f "$REPO" )
 if [ ! -d "$THEDIR" ]; then
     badUsage "The path '$THEDIR' is not a valid directory."
     exit 2
@@ -292,19 +299,26 @@ fi
 DBW_COURSE_DIR="$THEDIR"
 sourceCourseRepoFile
 
-COPY_DIR="$HOME/$DBW_REMOTE_WWWDIR/inspect/"
-COPY_URL="${DBW_WWW_HOST}~${USER}$DBW_REMOTE_BASEDIR/inspect/"
+THEUSER=$( ls -ld "$REPO" | awk '{print $3}' )
 
-printf "#"
-printf "\n# %s" "$( date )"
-printf "\n# %s" "$( dbwebb-inspect --version )"
-printf "\n#"
-printf "\n# Course:  %s" "$DBW_COURSE"
-printf "\n# Kmom:    %s" "$KMOM"
-printf "\n# Student: %s" "$THEUSER"
-printf "\n# By:      %s" "$USER"
-printf "\n#"
+# Guess BASE_URL if not available
+if [[ ! $BASE_URL ]]; then
+    BASE_URL="${DBW_WWW_HOST}~${THEUSER}/$DBW_REMOTE_BASEDIR"    
+fi
+
+
+echo "#"
+echo "# $( date )"
+echo "# $( dbwebb-inspect --version )"
+echo "#"
+echo "# Repo:    $DBW_COURSE_DIR"
+echo "# Course:  $DBW_COURSE"
+echo "# Kmom:    $KMOM"
+echo "# Student: $THEUSER"
+echo "# By:      $USER"
+echo "#"
 dbwebbInspectCheckEnvironment
+
 
 
 #

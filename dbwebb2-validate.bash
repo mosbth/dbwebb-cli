@@ -154,19 +154,19 @@ function validate()
 {
     local dir="$1"
 
-    validateCommand "$dir" "$HTMLHINT" "html" 
-    validateCommand "$dir" "$CSSLINT" "css" "$CSSLINT_OPTIONS $( cat "$CSSLINT_CONFIG" )"
-    validateCommand "$dir" "$JSHINT" "js"
-    #validateCommand "$dir" "$JSCS" "js" "$JSCS_OPTIONS $JSCS_CONFIG" "| grep -v 'No code style errors found.'; exit ${PIPESTATUS[0]}"
+    [[ $DISABLE_HTMLHINT ]]  || validateCommand "$dir" "$HTMLHINT" "html" 
+    [[ $DISABLE_CSSLINT ]]   || validateCommand "$dir" "$CSSLINT" "css" "$CSSLINT_OPTIONS $( cat "$CSSLINT_CONFIG" )"
+    [[ $DISABLE_JSHINT ]]    || validateCommand "$dir" "$JSHINT" "js"
+    [[ $DISABLE_JSCS ]]      || validateCommand "$dir" "$JSCS" "js" "$JSCS_OPTIONS $JSCS_CONFIG" "| grep -v 'No code style errors found.'; exit ${PIPESTATUS[0]}"
     #validateCommand "$dir" "$JSCS" "js" "$JSCS_OPTIONS $JSCS_CONFIG" ""
-    validateCommand "$dir" "$PYLINT" "py" "$PYLINT_OPTIONS $PYLINT_CONFIG" 
-    validateCommand "$dir" "$PYLINT" "cgi" "$PYLINT_OPTIONS $PYLINT_CONFIG" 
-    validateCommand "$dir" "$PHP" "php" "$PHP_OPTIONS" "> /dev/null"
-    validateCommand "$dir" "$PHPMD" "php" "" "$PHPMD_OPTIONS $PHPMD_CONFIG"
-    validateCommand "$dir" "$PHPCS" "php" "$PHPCS_OPTIONS $PHPCS_CONFIG"
-    validateCommand "$dir" "$CHECKBASH" "bash" "$CHECKBASH_OPTIONS" 
-    validateCommand "$dir" "$CHECKSH" "sh" "$CHECKSH_OPTIONS"
-    validateCommand "$dir" "$YAML" "yml" "$YAML_OPTIONS" "> /dev/null"
+    [[ $DISABLE_PYLINT ]]    || validateCommand "$dir" "$PYLINT" "py" "$PYLINT_OPTIONS $PYLINT_CONFIG" 
+    [[ $DISABLE_PYLINT ]]    || validateCommand "$dir" "$PYLINT" "cgi" "$PYLINT_OPTIONS $PYLINT_CONFIG" 
+    [[ $DISABLE_PHP ]]       || validateCommand "$dir" "$PHP" "php" "$PHP_OPTIONS" "> /dev/null"
+    [[ $DISABLE_PHPMD ]]     || validateCommand "$dir" "$PHPMD" "php" "" "$PHPMD_OPTIONS $PHPMD_CONFIG"
+    [[ $DISABLE_PHPCS ]]     || validateCommand "$dir" "$PHPCS" "php" "$PHPCS_OPTIONS $PHPCS_CONFIG"
+    [[ $DISABLE_CHECKBASH ]] || validateCommand "$dir" "$CHECKBASH" "bash" "$CHECKBASH_OPTIONS" 
+    [[ $DISABLE_CHECKSH ]]   || validateCommand "$dir" "$CHECKSH" "sh" "$CHECKSH_OPTIONS"
+    [[ $DISABLE_YAML ]]      || validateCommand "$dir" "$YAML" "yml" "$YAML_OPTIONS" "> /dev/null"
 }
 
 
