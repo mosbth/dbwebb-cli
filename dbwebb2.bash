@@ -357,8 +357,9 @@ function dbwebb-inspect()
         forCourse=" in course '$course'"
         kmom="$2"
     elif [[ $1 ]]; then
+        course="$DBW_COURSE"
         kmom="$1"
-        forCourse=" in course repo '$DBW_COURSE'"
+        forCourse=" in course repo '$course'"
         willUpload="\nI will start by uploading the course repo to the remote server."
     else
         usageInspect
@@ -370,7 +371,7 @@ function dbwebb-inspect()
     local intro="I will now inspect '$kmom'${forCourse}${forWho}.$willUpload"
     local log="$HOME/.dbwebb-inspect.log"
     local command1=
-    local command2="$SSH_CMD \"dbwebb-inspect --publish-url $DBW_BASEURL --publish-to ~$DBW_USER/$DBW_REMOTE_WWWDIR --base-url $DBW_WWW_HOST~$inspecUser/$DBW_REMOTE_BASEDIR ~$inspecUser/$DBW_REMOTE_BASEDIR/$DBW_COURSE $kmom\" | tee '$log';"
+    local command2="$SSH_CMD \"dbwebb-inspect --publish-url $DBW_BASEURL --publish-to ~$DBW_USER/$DBW_REMOTE_WWWDIR --base-url $DBW_WWW_HOST~$inspecUser/$DBW_REMOTE_BASEDIR ~$inspecUser/$DBW_REMOTE_BASEDIR/$course $kmom\" | tee '$log';"
     local message="to inspect the course results.\nSaved a log of the output, review it as:\nless -R '$log'"
 
     # Upload only if
