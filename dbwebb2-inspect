@@ -1498,7 +1498,7 @@ fi
 # Check if ARCHIVE should be used
 if [[ $ARCHIVE ]]; then
     echo -n "Archiving, please wait..."
-    rsync -a --delete "$THEDIR/" "$ARCHIVE/$THEUSER"
+    rsync -a --delete "$THEDIR/me/" "$ARCHIVE/$THEUSER"
     echo "done."
 fi
 
