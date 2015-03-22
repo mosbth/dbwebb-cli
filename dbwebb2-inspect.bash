@@ -292,7 +292,7 @@ fi
 
 THEDIR=$( readlink -f "$REPO" )
 if [ ! -d "$THEDIR" ]; then
-    badUsage "The path '$THEDIR' is not a valid directory."
+    badUsage "The path '$REPO' is not a valid directory."
     exit 2
 fi
 
@@ -310,7 +310,7 @@ fi
 
 # Guess COPY_URL if not available
 if [[ ! $COPY_URL ]]; then
-    COPY_URL="$DBW_WWW_HOST~$USER/$DBW_REMOTE_BASEDIR"    
+    COPY_URL="$DBW_WWW_HOST~$USER/$DBW_REMOTE_BASEDIR/inspect/"    
 fi
 
 
