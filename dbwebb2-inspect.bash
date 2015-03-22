@@ -247,6 +247,16 @@ do
             shift
         ;;
         
+        --config)
+            if [ ! -f "$2" ]; then
+                badUsage "Path to --config '$2' is not a file."
+                exit 2                
+            fi
+            INSPECT_CONFIGFILE="$2"
+            shift
+            shift
+        ;;
+        
         --publish-to)
             if [ ! -d "$2" ]; then
                 badUsage "Path to --publish-to '$2' is not a directory."
@@ -306,6 +316,9 @@ fi
 
 DBW_COURSE_DIR="$THEDIR"
 sourceCourseRepoFile
+
+# Source inspect config file
+[[ $INSPECT_CONFIGFILE ]] || . "$INSPECT_CONFIGFILE"
 
 THEUSER=$( ls -ld "$REPO" | awk '{print $3}' )
 

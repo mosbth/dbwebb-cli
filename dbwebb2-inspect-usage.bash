@@ -14,6 +14,7 @@ function usage ()
 "  --help, -h         Print help."
 "  --version, -v      Print version."
 "  --archive path     Path where the archive is."
+"  --config path      Path to config file to source."
 "  --baseurl url      Base URL for published version."
 "  --publish-to path  Path where to publish."
 "  --publish-url url  URL to whats published."
