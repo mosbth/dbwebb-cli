@@ -237,6 +237,16 @@ do
             exit 0
         ;;
         
+        --archive)
+            if [ ! -d "$2" ]; then
+                badUsage "Path to --archive '$2' is not a directory."
+                exit 2                
+            fi
+            ARCHIVE="$2"
+            shift
+            shift
+        ;;
+        
         --publish-to)
             if [ ! -d "$2" ]; then
                 badUsage "Path to --publish-to '$2' is not a directory."
@@ -311,17 +321,22 @@ if [[ ! $COPY_URL ]]; then
     COPY_URL="$DBW_WWW_HOST~$USER/$DBW_REMOTE_BASEDIR/inspect/"    
 fi
 
+# Check if ARCHIVE should be used
+if [[ $ARCHIVE ]]; then
+    rsync -a --delete "$THEDIR/" "$ARCHIVE/$THEUSER"
+fi
 
 
 echo "#"
 echo "# $( date )"
 echo "# $( dbwebb-inspect --version )"
 echo "#"
-echo "# Repo:    $DBW_COURSE_DIR"
-echo "# Course:  $DBW_COURSE"
-echo "# Kmom:    $KMOM"
-echo "# Student: $THEUSER"
-echo "# By:      $USER"
+echo "# Repo:     $DBW_COURSE_DIR"
+echo "# Course:   $DBW_COURSE"
+echo "# Kmom:     $KMOM"
+echo "# Student:  $THEUSER"
+echo "# By:       $USER"
+echo "# Archived: $( [[ $ARCHIVE ]] && echo "yes" || echo "no" )"
 echo "#"
 dbwebbInspectCheckEnvironment
 

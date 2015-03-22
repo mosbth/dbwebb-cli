@@ -13,6 +13,7 @@ function usage ()
 "  --selfupdate       Update to latest version."
 "  --help, -h         Print help."
 "  --version, -v      Print version."
+"  --archive path     Path where the archive is."
 "  --baseurl url      Base URL for published version."
 "  --publish-to path  Path where to publish."
 "  --publish-url url  URL to whats published."
