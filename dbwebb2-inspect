@@ -1475,10 +1475,16 @@ sourceCourseRepoFile
 THEUSER=$( ls -ld "$REPO" | awk '{print $3}' )
 
 # Guess BASE_URL if not available
+DBW_WWW_HOST=${DBW_WWW_HOST:=http://www.student.bth.se/}
 if [[ ! $BASE_URL ]]; then
-    DBW_WWW_HOST=${DBW_WWW_HOST:=http://www.student.bth.se}
-    BASE_URL="${DBW_WWW_HOST}~${THEUSER}/$DBW_REMOTE_BASEDIR"    
+    BASE_URL="$DBW_WWW_HOST~$THEUSER/$DBW_REMOTE_BASEDIR"    
 fi
+
+# Guess COPY_URL if not available
+if [[ ! $COPY_URL ]]; then
+    COPY_URL="$DBW_WWW_HOST~$USER/$DBW_REMOTE_BASEDIR"    
+fi
+
 
 
 echo "#"
