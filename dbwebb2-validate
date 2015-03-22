@@ -709,7 +709,11 @@ function setDefaultConfigFiles()
         PYLINT_CONFIG="--rcfile '$DBW_COURSE_DIR/.pylintrc'"
         PHPMD_CONFIG="'$DBW_COURSE_DIR/.phpmd.xml'"
         PHPCS_CONFIG="--standard='$DBW_COURSE_DIR/.phpcs.xml'"
-        CSSLINT_CONFIG="$DBW_COURSE_DIR/.csslintrc"
+        
+        if [ -f "$DBW_COURSE_DIR/.csslintrc"]; then
+            CSSLINT_CONFIG="$DBW_COURSE_DIR/.csslintrc"
+        fi
+        
         JSCS_CONFIG="--config=$DBW_COURSE_DIR/.jscsrc"
     else
         PHPMD_CONFIG="cleancode,codesize,controversial,design,naming,unusedcode"
