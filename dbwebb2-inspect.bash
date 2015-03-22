@@ -136,7 +136,9 @@ publishKmom()
     fi
     
     printf "\nPublishing a copy of %s to '%s'" "$KMOM" "$COPY_DIR"
-    echo rm -rf "$COPY_DIR/*"
+    rm -rf "$COPY_DIR/*"
+    echo $?
+    ls "$COPY_DIR/"
     rsync -a --delete "$THEDIR/me/$KMOM/" "${COPY_DIR}${KMOM}/"
     if [ -d "$THEDIR/me/redovisa/" ]; then
         rsync -a --delete "$THEDIR/me/redovisa/" "${COPY_DIR}/redovisa/"
