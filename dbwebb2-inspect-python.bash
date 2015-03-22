@@ -22,13 +22,14 @@ pythonme()
 pythonplane()
 {
     local target="me/$KMOM/plane"
+    local where="$COPY_DIR/$KMOM/plane"
     
     headerForTest "-- plane" "-- ${DBW_WWW}uppgift/ditt-forsta-python-skript"
     openFilesInEditor "$target"
     checkKmomDir "$target"
 
-    inspectCommand "plane.py" "$COPY_DIR/$target" "python3 plane.py"
-    inspectCommand "plane1.py" "$COPY_DIR/$target" "python3 plane1.py"
+    inspectCommand "plane.py" "$where" "python3 plane.py"
+    inspectCommand "plane1.py" "$where" "python3 plane1.py"
     
     printUrl "plane1.cgi" "$target"  
 
