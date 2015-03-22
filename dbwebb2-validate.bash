@@ -63,6 +63,8 @@ function setDefaultConfigFiles()
         
         if [ -f "$DBW_COURSE_DIR/.csslintrc" ]; then
             CSSLINT_CONFIG="$DBW_COURSE_DIR/.csslintrc"
+        else
+            CSSLINT_CONFIG="/dev/null"
         fi
         
         JSCS_CONFIG="--config=$DBW_COURSE_DIR/.jscsrc"
