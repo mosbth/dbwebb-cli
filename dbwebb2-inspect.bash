@@ -209,7 +209,7 @@ inspectCommand()
             fi
         fi
     else
-        assert 0 "test" "The file $what is missing or not readable."
+        assert 0 "test" "The file '$filename' is missing or not readable."
     fi
 }
 
