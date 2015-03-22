@@ -303,6 +303,7 @@ THEUSER=$( ls -ld "$REPO" | awk '{print $3}' )
 
 # Guess BASE_URL if not available
 DBW_WWW_HOST=${DBW_WWW_HOST:=http://www.student.bth.se/}
+DBW_REMOTE_BASEDIR=${DBW_REMOTE_BASEDIR:=dbwebb-kurser}
 if [[ ! $BASE_URL ]]; then
     BASE_URL="$DBW_WWW_HOST~$THEUSER/$DBW_REMOTE_BASEDIR"    
 fi
