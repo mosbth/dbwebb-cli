@@ -28,7 +28,7 @@ function htmlphplab()
     openFilesInEditor "$target"
     checkKmomDir "$target"
     printUrl "" "$target"  
-    inspectCommand "answer.php" "$COPY_DIR/$KMOM/$lab" "php answer.php"
+    inspectCommand "answer.php" "$EXEC_DIR/$KMOM/$lab" "php answer.php"
     pressEnterToContinue
 }
 

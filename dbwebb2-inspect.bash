@@ -127,9 +127,7 @@ dbwebbInspectCheckEnvironment()
 #
 publishKmom()
 {
-    if [[ ! $COPY_DIR ]]; then
-        return
-    fi
+    [[ $COPY_DIR ]] || return
     
     rm -rf "$COPY_DIR"
     mkdir "$COPY_DIR"
@@ -291,7 +289,6 @@ done
 #
 REPO="$1"
 KMOM="$2"
-THETARGET="me/$KMOM"
 
 
 
@@ -351,6 +348,20 @@ if [[ $ARCHIVE ]]; then
 fi
 
 
+
+#
+# Decide on target dir for execution
+#
+if [[ $COPY_DIR ]]; then
+    EXEC_DIR="$COPY_DIR"
+else
+    EXEC_DIR="$THEDIR/me/"
+fi
+
+
+#
+# Do inspect
+#
 echo "#"
 echo "# $( date )"
 echo "# $( dbwebb-inspect --version )"
@@ -399,5 +410,5 @@ fi
 
 printf " Asserts: $ASSERTS Faults: $FAULTS\n"
 pressEnterToContinue
-rm -rf "$COPY_DIR/*"
+[[ $COPY_DIR ]] && rm -rf "$COPY_DIR"
 exit $STATUS
