@@ -593,7 +593,7 @@ DBW_REMOTE_DESTINATION="${DBW_USER}@${DBW_HOST}:$DBW_REMOTE_BASEDIR/$DBW_COURSE"
 
 DBW_WWW="http://dbwebb.se/"
 DBW_VALIDATE_CONFIGFILE="/home/saxon/students/dbwebb/dbwebb-general-config"
-DBW_INSPECT_CONFIGFILE="/home/saxon/students/dbwebb/dbwebb-general-config"
+#DBW_INSPECT_CONFIGFILE="/home/saxon/students/dbwebb/dbwebb-general-config"
 DBW_ARCHIVE="/home/saxon/students/dbwebb/archive/"
 
 
@@ -984,13 +984,6 @@ done
 
 
 #
-# Source validate config file
-#
-[[ $DBW_VALIDATE_CONFIGFILE ]] || . "$DBW_VALIDATE_CONFIGFILE"
-
-
-
-#
 # Validate (and publish) the path choosen
 #
 dir="$( getPathToDirectoryFor "$command" )"
@@ -999,8 +992,14 @@ if [ ! -d "$dir" ]; then
     exit 2
 fi
 
-if [ -f "$HOME/.dbwebb-validate.config" ]; then . "$HOME/.dbwebb-validate.config"; fi
-if [ -f "$DBWEBB_VALIDATE_CONFIG" ]; then . "$DBWEBB_VALIDATE_CONFIG"; fi
+
+
+#
+# Source validate config file
+#
+[[ $DBW_VALIDATE_CONFIGFILE ]] || . "$DBW_VALIDATE_CONFIGFILE"
+
+
 
 printf "Validating '%s'." "$dir"
 setDefaultConfigFiles

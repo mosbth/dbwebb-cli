@@ -330,13 +330,6 @@ done
 
 
 #
-# Source validate config file
-#
-[[ $DBW_VALIDATE_CONFIGFILE ]] || . "$DBW_VALIDATE_CONFIGFILE"
-
-
-
-#
 # Validate (and publish) the path choosen
 #
 dir="$( getPathToDirectoryFor "$command" )"
@@ -345,8 +338,14 @@ if [ ! -d "$dir" ]; then
     exit 2
 fi
 
-if [ -f "$HOME/.dbwebb-validate.config" ]; then . "$HOME/.dbwebb-validate.config"; fi
-if [ -f "$DBWEBB_VALIDATE_CONFIG" ]; then . "$DBWEBB_VALIDATE_CONFIG"; fi
+
+
+#
+# Source validate config file
+#
+[[ $DBW_VALIDATE_CONFIGFILE ]] || . "$DBW_VALIDATE_CONFIGFILE"
+
+
 
 printf "Validating '%s'." "$dir"
 setDefaultConfigFiles
