@@ -102,7 +102,7 @@ javascript1kmom04()
 #
 javascript1kmom05()
 {
-    javascript1exercise "lab5" "answer.html" "uppgift/javascript-dom-och-events"
+    javascript1exercise "lab5" "index.html" "uppgift/javascript-dom-och-events"
     javascript1exercise "flag4" "index.html" "uppgift/memory-rita-flaggor-med-javascript-och-dom"
 }
 
