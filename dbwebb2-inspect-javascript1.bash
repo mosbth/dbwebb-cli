@@ -90,7 +90,7 @@ javascript1kmom03()
 javascript1kmom04()
 {
     javascript1exercise "lab3" "answer.html" "uppgift/javascript-och-arrayer"
-    javascript1exercise "lab4" "index.html" "uppgift/javascript-och-objekt"
+    javascript1exercise "lab4" "answer.html" "uppgift/javascript-och-objekt"
     javascript1exercise "flag3" "index.html" "uppgift/gor-svenska-flaggan-med-javascript-och-objekt"
     javascript1exercise "baddie3" "index.html" "uppgift/flytta-baddie-pa-webbsida-3"
 }
