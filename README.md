@@ -5,30 +5,12 @@ Part of course repos as a admin utility.
 
 
 
-License
--------------------
-
-This work is licensed under the Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License. To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-sa/4.0/ or send a letter to Creative Commons, 444 Castro Street, Suite 900, Mountain View, California, 94041, USA.
-
-
-
-Validate using external cli-programs
--------------------
-
-lrwxrwxrwx 1 mosstud 500   38 jun 12 16:07 cleancss -> ../node_modules/clean-css/bin/cleancss*
--rwxr-xr-x 1 mosstud 500 1231 jun 12 17:59 htmlhint*
-lrwxrwxrwx 1 mosstud 500   36 jun 12 16:06 html-minifier -> ../node_modules/html-minifier/cli.js*
-lrwxrwxrwx 1 mosstud 500   33 jun 12 15:50 jshint -> ../node_modules/jshint/bin/jshint*
-lrwxrwxrwx 1 mosstud 500   38 jun 12 16:30 uglifyjs -> ../node_modules/uglify-js/bin/uglifyjs*
-
-
-
 History
 -------------------
 
-v1.9.0 (2015-03-04)
+v1.9.0 (2015-03-23)
 
-* Updating dbwebb version 2, enabling for tests.
+* Updating dbwebb version 2, alpha release.
 
 
 v1.1.1 (2015-01-26)
