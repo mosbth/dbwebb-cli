@@ -8,7 +8,7 @@ Part of course repos as a admin utility.
 History
 -------------------
 
-v1.9.1 (2015-03-23)
+v1.9.2 (2015-03-23)
 
 * Inspect working on local files, no copy.
 * Inspect syncing essentials files on copy.
