@@ -1316,10 +1316,8 @@ publishKmom()
     mkdir "$COPY_DIR"
     
     printf "\nPublishing a copy of %s to '%s'" "$KMOM" "$COPY_DIR"
-    rsync -a --delete "$THEDIR/me/$KMOM/" "${COPY_DIR}${KMOM}/"
-    if [ -d "$THEDIR/me/redovisa/" ]; then
-        rsync -a --delete "$THEDIR/me/redovisa/" "${COPY_DIR}/redovisa/"
-    fi
+    rsync -a --exclude 'kmom*' "$THEDIR/me/" "$COPY_DIR/"
+    rsync -a "$THEDIR/me/$KMOM/" "${COPY_DIR}${KMOM}/"
     find "$COPY_DIR" -type f -name '*.cgi' -exec chmod a+x {} \;
 
     printf "\nURL: %s" "$COPY_URL"
