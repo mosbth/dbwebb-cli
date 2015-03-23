@@ -4,7 +4,7 @@
 #
 pythonme()
 {
-    headerForTest "-- me-page" "-- ${DBW_WWW}$DBw_COURSE/$KMOM#resultat_redovisning" 
+    headerForTest "-- me-page" "-- ${DBW_WWW}$DBW_COURSE/$KMOM#resultat_redovisning" 
     openFilesInEditor "me"
     checkKmomDir "me"
 
@@ -22,7 +22,7 @@ pythonme()
 pythonplane()
 {
     local target="me/$KMOM/plane"
-    local where="$COPY_DIR/$KMOM/plane"
+    local where="$EXEC_DIR/$KMOM/plane"
     
     headerForTest "-- plane" "-- ${DBW_WWW}uppgift/ditt-forsta-python-skript"
     openFilesInEditor "$target"
@@ -47,7 +47,7 @@ pythonmarvin5()
     local main="$2"
     local url="$3"
     local target="me/$KMOM/$lab"
-    local where="$COPY_DIR/$KMOM/$lab"
+    local where="$EXEC_DIR/$KMOM/$lab"
 
     headerForTest "-- $lab" "-- ${DBW_WWW}$url"
     openFilesInEditor "$target"
@@ -107,7 +107,7 @@ pythonAdventure()
     local main="$2"
     local url="$3"
     local target="me/$KMOM/$lab"
-    local where="$COPY_DIR/$KMOM/$lab"
+    local where="$EXEC_DIR/$KMOM/$lab"
 
     headerForTest "-- $lab" "-- ${DBW_WWW}$url"
     openFilesInEditor "$target"
@@ -156,7 +156,7 @@ pythongame()
     if [ -f "$THEDIR/$target/$main" ]; then
         printf "\nThe file $main is available, indicating this task is fulfilled."
         printf "\nYou need to execute '$main' outside of this script."
-        printf "\ncd \"$COPY_DIR/$KMOM/$lab\"; python3 $main"
+        printf "\ncd \"$EXEC_DIR/$KMOM/$lab\"; python3 $main"
         printf "\n"
     fi
 
@@ -178,7 +178,7 @@ pythonexercise()
     headerForTest "-- $lab" "-- ${DBW_WWW}$url"
     openFilesInEditor "$target"
     checkKmomDir "$target"
-    inspectCommand "$main" "$COPY_DIR/$KMOM/$lab" "python3 $main"
+    inspectCommand "$main" "$EXEC_DIR/$KMOM/$lab" "python3 $main"
     pressEnterToContinue
 }
     

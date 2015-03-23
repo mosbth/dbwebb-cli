@@ -8,6 +8,12 @@ Part of course repos as a admin utility.
 History
 -------------------
 
+v1.9.x (latest)
+
+* Inspect working on local files, no copy.
+* Inspect syncing essentials files on copy.
+
+
 v1.9.0 (2015-03-23)
 
 * Updating dbwebb version 2, alpha release.

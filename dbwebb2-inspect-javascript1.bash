@@ -4,7 +4,7 @@
 #
 javascript1me()
 {
-    headerForTest "-- me-page" "-- ${DBW_WWW}${DBw_COURSE}$KMOM#resultat_redovisning" 
+    headerForTest "-- me-page" "-- ${DBW_WWW}${DBW_COURSE}$KMOM#resultat_redovisning" 
     openFilesInEditor "me"
     checkKmomDir "me"
     printUrl "me.html" "me"  
