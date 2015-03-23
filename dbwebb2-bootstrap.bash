@@ -110,6 +110,8 @@ DBW_REMOTE_DESTINATION="${DBW_USER}@${DBW_HOST}:$DBW_REMOTE_BASEDIR/$DBW_COURSE"
 DBW_WWW="http://dbwebb.se/"
 DBW_VALIDATE_CONFIG="/home/saxon/students/dbwebb/dbwebb-general-config"
 DBW_INSPECT_CONFIG="/home/saxon/students/dbwebb/dbwebb-general-config"
+DBW_ARCHIVE="/home/saxon/students/dbwebb/archive/"
+
 
 
 # --------------- DBWEBB BOOTSTRAP PHASE END ---------------
