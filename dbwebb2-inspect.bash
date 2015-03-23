@@ -320,7 +320,7 @@ sourceCourseRepoFile
 #
 # Source validate config file
 #
-[[ $DBW_INSPECT_CONFIGFILE ]] || . "$DBW_INSPECT_CONFIGFILE"
+[[ $DBW_INSPECT_CONFIGFILE ]] && . "$DBW_INSPECT_CONFIGFILE"
 
 
 

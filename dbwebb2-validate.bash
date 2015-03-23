@@ -343,7 +343,7 @@ fi
 #
 # Source validate config file
 #
-[[ $DBW_VALIDATE_CONFIGFILE ]] || . "$DBW_VALIDATE_CONFIGFILE"
+[[ $DBW_VALIDATE_CONFIGFILE ]] && . "$DBW_VALIDATE_CONFIGFILE"
 
 
 
