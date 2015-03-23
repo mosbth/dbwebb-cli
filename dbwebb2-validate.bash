@@ -328,6 +328,14 @@ do
 done
 
 
+
+#
+# Source validate config file
+#
+[[ $DBW_VALIDATE_CONFIGFILE ]] || . "$DBW_VALIDATE_CONFIGFILE"
+
+
+
 #
 # Validate (and publish) the path choosen
 #

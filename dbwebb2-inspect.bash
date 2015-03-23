@@ -252,7 +252,7 @@ do
                 badUsage "Path to --config '$2' is not a file."
                 exit 2                
             fi
-            INSPECT_CONFIGFILE="$2"
+            DBW_INSPECT_CONFIGFILE="$2"
             shift
             shift
         ;;
@@ -317,12 +317,23 @@ fi
 DBW_COURSE_DIR="$THEDIR"
 sourceCourseRepoFile
 
-# Source inspect config file
-[[ $INSPECT_CONFIGFILE ]] || . "$INSPECT_CONFIGFILE"
+#
+# Source validate config file
+#
+[[ $DBW_INSPECT_CONFIGFILE ]] || . "$DBW_INSPECT_CONFIGFILE"
 
+
+
+#
+# Guess the user as owner of the repo
+#
 THEUSER=$( ls -ld "$REPO" | awk '{print $3}' )
 
+
+
+#
 # Guess BASE_URL if not available
+#
 DBW_WWW_HOST=${DBW_WWW_HOST:=http://www.student.bth.se/}
 DBW_REMOTE_BASEDIR=${DBW_REMOTE_BASEDIR:=dbwebb-kurser}
 if [[ ! $BASE_URL ]]; then
