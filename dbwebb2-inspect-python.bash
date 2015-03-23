@@ -54,8 +54,8 @@ pythonmarvin5()
     checkKmomDir "$target"
 
     # Exit status
-    assertExit 0 "cd $where; python3 $main --version 2> /dev/null" "Should return exit status 0 but did not."
-    assertExit 1 "cd $where; python3 $main --MISSINGOPTION 2> /dev/null" "Should return exit status 1 but did not."
+    assertExit 0 "cd $where; python3 $main --version &> /dev/null" "Should return exit status 0 but did not."
+    assertExit 1 "cd $where; python3 $main --MISSINGOPTION &> /dev/null" "Should return exit status 1 but did not."
 
     # General options
     opts="--help"
