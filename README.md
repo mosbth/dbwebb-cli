@@ -8,10 +8,11 @@ Part of course repos as a admin utility.
 History
 -------------------
 
-v1.9.x (latest)
+v1.9.1 (2015-03-23)
 
 * Inspect working on local files, no copy.
 * Inspect syncing essentials files on copy.
+* Correcting inspection for javascript1.
 
 
 v1.9.0 (2015-03-23)
