@@ -226,7 +226,7 @@ pythonkmom02()
 #
 pythonkmom03()
 {
-    pythonexercise "lab1" "answer.py" "uppgift/python-med-strangar-och-filer"
+    pythonexercise "lab2" "answer.py" "uppgift/python-med-strangar-och-filer"
     pythonexercise "marvin2" "main.py" "uppgift/din-egen-chattbot-marvin-steg-2"
 }
 
