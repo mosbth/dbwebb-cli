@@ -10,8 +10,9 @@ function usage ()
 "  selfupdate        Update to latest version."
 "  sshkey            Create and install ssh-keys."
 "  login             Login to the remote server."
-"  clone             Clone a course repo."
+"  clone [repo]      Clone a course repo."
 "  init              Init course repo and remote server."
+"  github [repo]     Get urls to repo on GitHub."
 "  update            Update course repo."
 "  upload [part]     Upload to server."
 "  download [part]   Download from server."
@@ -49,11 +50,35 @@ function badUsage ()
 
 
 
+function usageGithub ()
+{
+    local txt=(
+"Available course repos are: $( join , "${!DBW_REPOS[@]}" )"
+"Usage: dbwebb github [course repo]"
+)
+    printf "%s\n" "${txt[@]}"
+}
+
+
+
+function badUsageGithub ()
+{
+    local message="$1"
+
+    if [[ "$message" ]]; then
+        printf "$message\n"
+    fi
+    
+    usageGithub
+}
+
+
 function usageClone ()
 {
     local txt=(
-"Available course repos are python, javascript1, linux, webapp, htmlphp."
+"Available course repos are: $( join , "${!DBW_REPOS[@]}" )"
 "Usage: dbwebb clone [course repo]"
+"Read more: http://dbwebb.se/dbwebb-cli/clone"
 )
     printf "%s\n" "${txt[@]}"
 }

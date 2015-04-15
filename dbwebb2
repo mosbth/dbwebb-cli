@@ -34,6 +34,35 @@ DBW_VERSION="v1.9.2 (2015-03-23)"
 # --------------- DBWEBB FUNCTIONS PHASE START ---------------
 
 #
+# Does key exists in array?
+#
+function exists(){
+    if [ "$2" != in ]; then
+        echo "Incorrect usage."
+        echo "Correct usage: exists {key} in {array}"
+        return
+    fi   
+    eval '[ ${'$3'[$1]+muahaha} ]'
+}
+
+
+
+#
+# Join elements with separator
+# join , a "b c" d #a,b c,d
+# join / var local tmp #var/local/tmp
+# join , "${FOO[@]}" #a,b,c
+#
+function join()
+{ 
+    local IFS="$1"; 
+    shift; 
+    echo "$*";
+}
+
+
+
+#
 # Check for installed commands
 #
 function checkCommand()
@@ -498,7 +527,7 @@ CURL="curl"
 BASH="bash"
 FIND="find"
 
-# Settins
+# Messages
 MSG_OK="\033[0;30;42mOK\033[0m"
 MSG_DONE="\033[1;37;40mDONE\033[0m"
 MSG_WARNING="\033[43mWARNING\033[0m"
@@ -597,6 +626,14 @@ DBW_VALIDATE_CONFIGFILE="/home/saxon/students/dbwebb/dbwebb-general-config"
 DBW_ARCHIVE="/home/saxon/students/dbwebb/archive/"
 
 
+declare -A DBW_REPOS
+DBW_REPOS[python]="https://github.com/mosbth/python"
+DBW_REPOS[javascript1]="https://github.com/mosbth/javascript1"
+DBW_REPOS[linux]="https://github.com/mosbth/linux"
+DBW_REPOS[webapp]="https://github.com/mosbth/webapp"
+DBW_REPOS[htmlphp]="https://github.com/mosbth/htmlphp"
+
+
 
 # --------------- DBWEBB BOOTSTRAP PHASE END ---------------
 function usage ()
@@ -650,11 +687,35 @@ function badUsage ()
 
 
 
+function usageGithub ()
+{
+    local txt=(
+"Available course repos are: $( join , "${!DBW_REPOS[@]}" )"
+"Usage: dbwebb github [course repo]"
+)
+    printf "%s\n" "${txt[@]}"
+}
+
+
+
+function badUsageGithub ()
+{
+    local message="$1"
+
+    if [[ "$message" ]]; then
+        printf "$message\n"
+    fi
+    
+    usageGithub
+}
+
+
 function usageClone ()
 {
     local txt=(
-"Available course repos are python, javascript1, linux, webapp, htmlphp."
+"Available course repos are: $( join , "${!DBW_REPOS[@]}" )"
 "Usage: dbwebb clone [course repo]"
+"Read more: http://dbwebb.se/dbwebb-cli/clone"
 )
     printf "%s\n" "${txt[@]}"
 }
@@ -1222,35 +1283,51 @@ dbwebb-selfupdate()
 
 
 #
-# Selfupdate
+# Clone a repo
 #
 dbwebb-clone()
 {
     local repo="$1"
-    local github=
+    local saveas="$2"
     
     if [[ ! $repo ]]; then
         usageClone
         exit 0
     fi
     
-    case "$repo" in
-        python)      github="https://github.com/mosbth/python.git";;
-        javascript1) github="https://github.com/mosbth/javascript1.git";;
-        linux)       github="https://github.com/mosbth/linux.git";;
-        webapp)      github="https://github.com/mosbth/webapp.git";;
-        htmlphp)     github="https://github.com/mosbth/htmlphp.git";;
-    esac
-    
-    if [[ ! $github ]]; then
+    if ! exists "$repo" in DBW_REPOS; then
         badUsageClone "$MSG_FAILED Not a valid course repo: '$repo'"
         exit 1
     fi
     
-    local intro="Cloning course-repo for '$repo' from '$github'."
-    local cmd="git clone \"$github\""
-    local message="to clone course repo '$repo' from '$github'."
+    local intro="Cloning course-repo for '$repo' from '${DBW_REPOS[$repo]}'."
+    local cmd="git clone \"${DBW_REPOS[$repo]}.git\" $saveas"
+    local message="to clone course repo."
     executeCommand "$intro" "$cmd" "$message"
+}
+
+
+
+#
+# Link to a repo on GitHub
+#
+dbwebb-github()
+{
+    local repo="$1"
+    
+    if [[ ! $repo ]]; then
+        usageGithub
+        exit 0
+    fi
+    
+    if ! exists "$repo" in DBW_REPOS; then
+        badUsageGithub "$MSG_FAILED Not a valid course repo: '$repo'"
+        exit 1
+    fi
+    
+    echo "The course repo '$repo' exists on GitHub:"
+    echo "Repo:   ${DBW_REPOS[$repo]}"
+    echo "Issues: ${DBW_REPOS[$repo]}/issues"
 }
 
 
@@ -1307,6 +1384,7 @@ do
         update         \
         | check        \
         | clone        \
+        | github       \
         | config       \
         | updateconfig \
         | selfupdate   \

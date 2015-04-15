@@ -8,6 +8,11 @@ Part of course repos as a admin utility.
 History
 -------------------
 
+v1.9.3 (2015-04-15)
+
+* Adding github command, fix #39.
+
+
 v1.9.2 (2015-03-23)
 
 * Inspect working on local files, no copy.
@@ -127,5 +132,5 @@ v1.0.0 (2014-08-30)
 
 ```
  .
-..:  Copyright (c) 2014 Mikael Roos, me@mikaelroos.se
+..:  Copyright (c) 2014-2015 Mikael Roos, mos@dbwebb.se
 ```

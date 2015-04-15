@@ -498,35 +498,51 @@ dbwebb-selfupdate()
 
 
 #
-# Selfupdate
+# Clone a repo
 #
 dbwebb-clone()
 {
     local repo="$1"
-    local github=
+    local saveas="$2"
     
     if [[ ! $repo ]]; then
         usageClone
         exit 0
     fi
     
-    case "$repo" in
-        python)      github="https://github.com/mosbth/python.git";;
-        javascript1) github="https://github.com/mosbth/javascript1.git";;
-        linux)       github="https://github.com/mosbth/linux.git";;
-        webapp)      github="https://github.com/mosbth/webapp.git";;
-        htmlphp)     github="https://github.com/mosbth/htmlphp.git";;
-    esac
-    
-    if [[ ! $github ]]; then
+    if ! exists "$repo" in DBW_REPOS; then
         badUsageClone "$MSG_FAILED Not a valid course repo: '$repo'"
         exit 1
     fi
     
-    local intro="Cloning course-repo for '$repo' from '$github'."
-    local cmd="git clone \"$github\""
-    local message="to clone course repo '$repo' from '$github'."
+    local intro="Cloning course-repo for '$repo' from '${DBW_REPOS[$repo]}'."
+    local cmd="git clone \"${DBW_REPOS[$repo]}.git\" $saveas"
+    local message="to clone course repo."
     executeCommand "$intro" "$cmd" "$message"
+}
+
+
+
+#
+# Link to a repo on GitHub
+#
+dbwebb-github()
+{
+    local repo="$1"
+    
+    if [[ ! $repo ]]; then
+        usageGithub
+        exit 0
+    fi
+    
+    if ! exists "$repo" in DBW_REPOS; then
+        badUsageGithub "$MSG_FAILED Not a valid course repo: '$repo'"
+        exit 1
+    fi
+    
+    echo "The course repo '$repo' exists on GitHub:"
+    echo "Repo:   ${DBW_REPOS[$repo]}"
+    echo "Issues: ${DBW_REPOS[$repo]}/issues"
 }
 
 
@@ -583,6 +599,7 @@ do
         update         \
         | check        \
         | clone        \
+        | github       \
         | config       \
         | updateconfig \
         | selfupdate   \

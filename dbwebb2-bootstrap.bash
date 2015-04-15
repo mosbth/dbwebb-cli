@@ -14,7 +14,7 @@ CURL="curl"
 BASH="bash"
 FIND="find"
 
-# Settins
+# Messages
 MSG_OK="\033[0;30;42mOK\033[0m"
 MSG_DONE="\033[1;37;40mDONE\033[0m"
 MSG_WARNING="\033[43mWARNING\033[0m"
@@ -111,6 +111,14 @@ DBW_WWW="http://dbwebb.se/"
 DBW_VALIDATE_CONFIGFILE="/home/saxon/students/dbwebb/dbwebb-general-config"
 #DBW_INSPECT_CONFIGFILE="/home/saxon/students/dbwebb/dbwebb-general-config"
 DBW_ARCHIVE="/home/saxon/students/dbwebb/archive/"
+
+
+declare -A DBW_REPOS
+DBW_REPOS[python]="https://github.com/mosbth/python"
+DBW_REPOS[javascript1]="https://github.com/mosbth/javascript1"
+DBW_REPOS[linux]="https://github.com/mosbth/linux"
+DBW_REPOS[webapp]="https://github.com/mosbth/webapp"
+DBW_REPOS[htmlphp]="https://github.com/mosbth/htmlphp"
 
 
 

@@ -1,6 +1,35 @@
 # --------------- DBWEBB FUNCTIONS PHASE START ---------------
 
 #
+# Does key exists in array?
+#
+function exists(){
+    if [ "$2" != in ]; then
+        echo "Incorrect usage."
+        echo "Correct usage: exists {key} in {array}"
+        return
+    fi   
+    eval '[ ${'$3'[$1]+muahaha} ]'
+}
+
+
+
+#
+# Join elements with separator
+# join , a "b c" d #a,b c,d
+# join / var local tmp #var/local/tmp
+# join , "${FOO[@]}" #a,b,c
+#
+function join()
+{ 
+    local IFS="$1"; 
+    shift; 
+    echo "$*";
+}
+
+
+
+#
 # Check for installed commands
 #
 function checkCommand()
