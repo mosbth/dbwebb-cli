@@ -30,7 +30,7 @@
 #
 # Current version
 #
-DBW_VERSION="v1.9.2 (2015-03-23)"
+DBW_VERSION="v1.9.3 (2015-04-15)"
 # --------------- DBWEBB FUNCTIONS PHASE START ---------------
 
 #
@@ -648,8 +648,9 @@ function usage ()
 "  selfupdate        Update to latest version."
 "  sshkey            Create and install ssh-keys."
 "  login             Login to the remote server."
-"  clone             Clone a course repo."
+"  clone [repo]      Clone a course repo."
 "  init              Init course repo and remote server."
+"  github [repo]     Get urls to repo on GitHub."
 "  update            Update course repo."
 "  upload [part]     Upload to server."
 "  download [part]   Download from server."
