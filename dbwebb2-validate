@@ -493,14 +493,17 @@ assertExit()
     ASSERTS=$(( $ASSERTS + 1 ))
     FAILED=0
 
-    bash -c "$TEST" 2> "/dev/null"
+    bash -c "$TEST" 2> "$TMPFILE"
     STATUS=$?
-
+    ERROR=$( cat "$TMPFILE" )
+    rm -f "$TMPFILE"
+    
     if [ $STATUS -ne $EXPECTED ]; then
         FAULTS=$(( $FAULTS + 1 ))
 
         printf "\n$TEST"
         printf "\n$MSG_FAILED $MESSAGE\n"
+        [ -z "$ERROR" ] || printf "$ERROR\n\n"
 
         FAILED=1
     fi
