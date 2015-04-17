@@ -3,13 +3,24 @@
 #
 # Does key exists in array?
 #
-function exists(){
+function exists() {
     if [ "$2" != in ]; then
         echo "Incorrect usage."
         echo "Correct usage: exists {key} in {array}"
         return
     fi   
     eval '[ ${'$3'[$1]+muahaha} ]'
+}
+
+
+
+#
+# Check if array contains a value
+#
+function contains() {
+    local e
+    for e in "${@:2}"; do [[ "$e" == "$1" ]] && return 0; done
+    return 1
 }
 
 
@@ -25,6 +36,15 @@ function join()
     local IFS="$1"; 
     shift; 
     echo "$*";
+}
+
+
+
+#
+# Get the url to GitHub for a repo
+#
+function createGithubUrl(){
+    echo "https://github.com/mosbth/$1$2"
 }
 
 

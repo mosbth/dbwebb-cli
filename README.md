@@ -8,6 +8,11 @@ Part of course repos as a admin utility.
 History
 -------------------
 
+v1.9.x (2015-04-17)
+
+* Link to repo on GitHub, fix #41.
+
+
 v1.9.3 (2015-04-15)
 
 * Adding github command, fix #39.

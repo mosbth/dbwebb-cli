@@ -535,14 +535,14 @@ dbwebb-github()
         exit 0
     fi
     
-    if ! exists "$repo" in DBW_REPOS; then
+    if ! contains "$repo" "${DBW_COURSE_REPOS[@]}"; then
         badUsageGithub "$MSG_FAILED Not a valid course repo: '$repo'"
         exit 1
     fi
     
     echo "The course repo '$repo' exists on GitHub:"
-    echo "Repo:   ${DBW_REPOS[$repo]}"
-    echo "Issues: ${DBW_REPOS[$repo]}/issues"
+    echo "Repo:   $( createGithubUrl "$repo" )"
+    echo "Issues: $( createGithubUrl "$repo" "/issues" )"
 }
 
 

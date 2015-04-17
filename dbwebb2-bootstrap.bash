@@ -113,13 +113,15 @@ DBW_VALIDATE_CONFIGFILE="/home/saxon/students/dbwebb/dbwebb-general-config"
 DBW_ARCHIVE="/home/saxon/students/dbwebb/archive/"
 
 
-declare -A DBW_REPOS
-DBW_REPOS[python]="https://github.com/mosbth/python"
-DBW_REPOS[javascript1]="https://github.com/mosbth/javascript1"
-DBW_REPOS[linux]="https://github.com/mosbth/linux"
-DBW_REPOS[webapp]="https://github.com/mosbth/webapp"
-DBW_REPOS[htmlphp]="https://github.com/mosbth/htmlphp"
-
+# Ass arrays not supporter on mac bash v3.
+#declare -A DBW_REPOS
+#DBW_REPOS[python]="https://github.com/mosbth/python"
+#DBW_REPOS[javascript1]="https://github.com/mosbth/javascript1"
+#DBW_REPOS[linux]="https://github.com/mosbth/linux"
+#DBW_REPOS[webapp]="https://github.com/mosbth/webapp"
+#DBW_REPOS[htmlphp]="https://github.com/mosbth/htmlphp"
+DBW_COURSE_REPOS=( 'python' 'javascript1' 'linux' 'webapp' 'htmlphp' )
+DBW_REPO="dbwebb-cli"
 
 
 # --------------- DBWEBB BOOTSTRAP PHASE END ---------------

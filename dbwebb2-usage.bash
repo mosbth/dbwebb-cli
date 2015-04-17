@@ -53,8 +53,12 @@ function badUsage ()
 function usageGithub ()
 {
     local txt=(
-"Available course repos are: $( join , "${!DBW_REPOS[@]}" )"
+"Available course repos are: $( join , "${DBW_COURSE_REPOS[@]}" )"
 "Usage: dbwebb github [course repo]"
+""
+"The repo 'dbwebb-cli' exists on GitHub."
+"Repo:   $( createGithubUrl "$DBW_REPO" )"
+"Issues: $( createGithubUrl "$DBW_REPO" "/issues" )"
 )
     printf "%s\n" "${txt[@]}"
 }
@@ -76,7 +80,7 @@ function badUsageGithub ()
 function usageClone ()
 {
     local txt=(
-"Available course repos are: $( join , "${!DBW_REPOS[@]}" )"
+"Available course repos are: $( join , "${DBW_COURSE_REPOS[@]}" )"
 "Usage: dbwebb clone [course repo]"
 "Read more: http://dbwebb.se/dbwebb-cli/clone"
 )

@@ -36,13 +36,24 @@ DBW_VERSION="v1.9.3 (2015-04-15)"
 #
 # Does key exists in array?
 #
-function exists(){
+function exists() {
     if [ "$2" != in ]; then
         echo "Incorrect usage."
         echo "Correct usage: exists {key} in {array}"
         return
     fi   
     eval '[ ${'$3'[$1]+muahaha} ]'
+}
+
+
+
+#
+# Check if array contains a value
+#
+function contains() {
+    local e
+    for e in "${@:2}"; do [[ "$e" == "$1" ]] && return 0; done
+    return 1
 }
 
 
@@ -58,6 +69,15 @@ function join()
     local IFS="$1"; 
     shift; 
     echo "$*";
+}
+
+
+
+#
+# Get the url to GitHub for a repo
+#
+function createGithubUrl(){
+    echo "https://github.com/mosbth/$1$2"
 }
 
 
@@ -626,13 +646,15 @@ DBW_VALIDATE_CONFIGFILE="/home/saxon/students/dbwebb/dbwebb-general-config"
 DBW_ARCHIVE="/home/saxon/students/dbwebb/archive/"
 
 
-declare -A DBW_REPOS
-DBW_REPOS[python]="https://github.com/mosbth/python"
-DBW_REPOS[javascript1]="https://github.com/mosbth/javascript1"
-DBW_REPOS[linux]="https://github.com/mosbth/linux"
-DBW_REPOS[webapp]="https://github.com/mosbth/webapp"
-DBW_REPOS[htmlphp]="https://github.com/mosbth/htmlphp"
-
+# Ass arrays not supporter on mac bash v3.
+#declare -A DBW_REPOS
+#DBW_REPOS[python]="https://github.com/mosbth/python"
+#DBW_REPOS[javascript1]="https://github.com/mosbth/javascript1"
+#DBW_REPOS[linux]="https://github.com/mosbth/linux"
+#DBW_REPOS[webapp]="https://github.com/mosbth/webapp"
+#DBW_REPOS[htmlphp]="https://github.com/mosbth/htmlphp"
+DBW_COURSE_REPOS=( 'python' 'javascript1' 'linux' 'webapp' 'htmlphp' )
+DBW_REPO="dbwebb-cli"
 
 
 # --------------- DBWEBB BOOTSTRAP PHASE END ---------------
@@ -691,8 +713,12 @@ function badUsage ()
 function usageGithub ()
 {
     local txt=(
-"Available course repos are: $( join , "${!DBW_REPOS[@]}" )"
+"Available course repos are: $( join , "${DBW_COURSE_REPOS[@]}" )"
 "Usage: dbwebb github [course repo]"
+""
+"The repo 'dbwebb-cli' exists on GitHub."
+"Repo:   $( createGithubUrl "$DBW_REPO" )"
+"Issues: $( createGithubUrl "$DBW_REPO" "/issues" )"
 )
     printf "%s\n" "${txt[@]}"
 }
@@ -714,7 +740,7 @@ function badUsageGithub ()
 function usageClone ()
 {
     local txt=(
-"Available course repos are: $( join , "${!DBW_REPOS[@]}" )"
+"Available course repos are: $( join , "${DBW_COURSE_REPOS[@]}" )"
 "Usage: dbwebb clone [course repo]"
 "Read more: http://dbwebb.se/dbwebb-cli/clone"
 )
@@ -1321,14 +1347,14 @@ dbwebb-github()
         exit 0
     fi
     
-    if ! exists "$repo" in DBW_REPOS; then
+    if ! contains "$repo" "${DBW_COURSE_REPOS[@]}"; then
         badUsageGithub "$MSG_FAILED Not a valid course repo: '$repo'"
         exit 1
     fi
     
     echo "The course repo '$repo' exists on GitHub:"
-    echo "Repo:   ${DBW_REPOS[$repo]}"
-    echo "Issues: ${DBW_REPOS[$repo]}/issues"
+    echo "Repo:   $( createGithubUrl "$repo" )"
+    echo "Issues: $( createGithubUrl "$repo" "/issues" )"
 }
 
 
