@@ -343,6 +343,7 @@ function dbwebb-inspect()
     local forWho=" for user '$DBW_USER'"
     local forCourse=
     local willUpload=
+    local archive=
 
     checkIfValidConfigOrExit
 
@@ -352,6 +353,9 @@ function dbwebb-inspect()
         kmom="$2"
         who="$3"
         forWho=" for user '$who'"
+        if [ "$who" != "$DBW_USER" ]; then
+            archive="--archive $DBW_ARCHIVE"
+        fi
     elif [[ $2 ]]; then
         course="$1"
         forCourse=" in course '$course'"
@@ -371,7 +375,7 @@ function dbwebb-inspect()
     local intro="I will now inspect '$kmom'${forCourse}${forWho}.$willUpload"
     local log="$HOME/.dbwebb-inspect.log"
     local command1=
-    local command2="$SSH_CMD \"dbwebb-inspect --archive $DBW_ARCHIVE --publish-url $DBW_BASEURL --publish-to ~$DBW_USER/$DBW_REMOTE_WWWDIR --base-url $DBW_WWW_HOST~$inspecUser/$DBW_REMOTE_BASEDIR ~$inspecUser/$DBW_REMOTE_BASEDIR/$course $kmom\" 2>&1 | tee '$log';"
+    local command2="$SSH_CMD \"dbwebb-inspect $archive --publish-url $DBW_BASEURL --publish-to ~$DBW_USER/$DBW_REMOTE_WWWDIR --base-url $DBW_WWW_HOST~$inspecUser/$DBW_REMOTE_BASEDIR ~$inspecUser/$DBW_REMOTE_BASEDIR/$course $kmom\" 2>&1 | tee '$log';"
     local message="to inspect the course results.\nSaved a log of the output, review it as:\nless -R '$log'"
 
     # Upload only if
