@@ -470,7 +470,8 @@ assertExit()
 
         printf "\n$TEST"
         printf "\n$MSG_FAILED $MESSAGE\n"
-        [ -z "$ERROR" ] || printf "$ERROR\n\n"
+        #[[ "$ERROR" ]] && printf "$ERROR\n\n"
+        printf "$ERROR\n\n"
 
         FAILED=1
     fi
