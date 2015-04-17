@@ -10,6 +10,7 @@ History
 
 v1.9.x (2015-04-17)
 
+* Log also stderr during inspect, fix #42.
 * Link to repo on GitHub, fix #41.
 
 
