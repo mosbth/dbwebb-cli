@@ -514,13 +514,13 @@ dbwebb-clone()
         exit 0
     fi
     
-    if ! exists "$repo" in DBW_REPOS; then
+    if ! contains "$repo" "${DBW_COURSE_REPOS[@]}"; then
         badUsageClone "$MSG_FAILED Not a valid course repo: '$repo'"
         exit 1
     fi
     
-    local intro="Cloning course-repo for '$repo' from '${DBW_REPOS[$repo]}'."
-    local cmd="git clone \"${DBW_REPOS[$repo]}.git\" $saveas"
+    local intro="Cloning course-repo for '$repo' from '$( createGithubUrl "$repo" )'."
+    local cmd="git clone \"$( createGithubUrl "$repo" ).git\" $saveas"
     local message="to clone course repo."
     executeCommand "$intro" "$cmd" "$message"
 }

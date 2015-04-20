@@ -93,10 +93,8 @@ fileIsReadable()
 #
 # Check the environment
 #
-dbwebbInspectCheckEnvironment()
+dbwebbInspectTargetNotReadable()
 {
-    headerForTest "-- dbwebb inspect"
-
     if [ ! -d "$THEDIR" ]; then 
         
         printf "\n$MSG_FAILED Directory '$THEDIR' not readable.\n"
@@ -110,11 +108,17 @@ dbwebbInspectCheckEnvironment()
         fi
         
         printf "\nPerhaps login to the studserver and execute the command:\nsudo setpre-dbwebb-kurser.bash $THEUSER"        
-
-        printf "\n\nPress CTRL-C and fix it."
-        read answer
     fi 
+}
 
+
+
+#
+# Check the environment
+#
+dbwebbInspectCheckEnvironment()
+{
+    headerForTest "-- dbwebb inspect"
     printUrl "" "me"
     openFilesInEditor "me"
     changeToDirectory "me"
@@ -156,7 +160,9 @@ publishKmom()
 #
 validateKmom()
 {
-    printf "\nValidate %s [Yn]? " "$KMOM"
+    local kmom=${1-$KMOM}
+    
+    printf "\nValidate %s [Yn]? " "$kmom"
 
     read answer
     default="y"
@@ -164,7 +170,7 @@ validateKmom()
 
     if [ "$answer" = "y" -o "$answer" = "Y" ]
     then
-        dbwebb-validate --course-repo "$DBW_COURSE_DIR" "$KMOM"
+        dbwebb-validate --course-repo "$DBW_COURSE_DIR" "$kmom"
         pressEnterToContinue
     fi
 }
@@ -305,7 +311,8 @@ fi
 
 THEDIR=$( readlink -f "$REPO" )
 if [ ! -d "$THEDIR" ]; then
-    badUsage "The path '$REPO' is not a valid directory."
+    dbwebbInspectTargetNotReadable
+    #badUsage "The path '$REPO' is not a valid directory."
     exit 2
 fi
 

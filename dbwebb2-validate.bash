@@ -367,11 +367,3 @@ if [[ $optPublish ]]; then
 fi
 
 assertResults
-
-
-# TODO Validate for another user?
-#THETARGET="$TARGET"
-#if [ ! -z "$THEUSER" ]
-#then
-#    THETARGET=`eval echo "~$THEUSER/dbwebb-kurser/$COURSE"`
-#fi
