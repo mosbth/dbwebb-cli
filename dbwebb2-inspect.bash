@@ -99,7 +99,7 @@ dbwebbInspectTargetNotReadable()
     
     if [ ! -d "$thedir" ]; then 
         
-        printf "\n$MSG_FAILED Directory '$thedir' not readable.\n"
+        printf "\n$MSG_FAILED Directory '$REPO' not readable.\n"
 
         local dirname=$( dirname "$REPO" )
         if [ ! -r "$dirname" ]; then 
@@ -109,7 +109,7 @@ dbwebbInspectTargetNotReadable()
             ls "$dirname"
         fi
         
-        printf "\n{$MSG_FAILED}Perhaps login to the studserver and execute the command:\nsudo setpre-dbwebb-kurser.bash $THEUSER"        
+        printf "\n$MSG_FAILED Perhaps login to the studserver and execute the command:\nsudo setpre-dbwebb-kurser.bash $THEUSER"        
     fi 
 }
 
