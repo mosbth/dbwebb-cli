@@ -1337,11 +1337,13 @@ fileIsReadable()
 #
 dbwebbInspectTargetNotReadable()
 {
-    if [ ! -d "$THEDIR" ]; then 
+    local thedir="$( readlink -f "$REPO" )"
+    
+    if [ ! -d "$thedir" ]; then 
         
-        printf "\n$MSG_FAILED Directory '$THEDIR' not readable.\n"
+        printf "\n$MSG_FAILED Directory '$thedir' not readable.\n"
 
-        local dirname=$( dirname "$THEDIR" )
+        local dirname=$( dirname "$REPO" )
         if [ ! -r "$dirname" ]; then 
             printf "\n$MSG_FAILED Directory '$dirname' not readable.\n"
         else
@@ -1349,7 +1351,7 @@ dbwebbInspectTargetNotReadable()
             ls "$dirname"
         fi
         
-        printf "\nPerhaps login to the studserver and execute the command:\nsudo setpre-dbwebb-kurser.bash $THEUSER"        
+        printf "\n{$MSG_FAILED}Perhaps login to the studserver and execute the command:\nsudo setpre-dbwebb-kurser.bash $THEUSER"        
     fi 
 }
 
