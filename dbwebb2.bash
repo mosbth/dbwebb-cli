@@ -179,43 +179,52 @@ function dbwebb-check()
 {
     printf "Details on installed utilities."
     printf "\n------------------------------------"
-    printf "\nbash:                  %s" "$( checkCommand $BASH )"
-    printf "\ngit:                   %s" "$( checkCommand $GIT )"
-    printf "\nssh:                   %s" "$( checkCommand $SSH )"
-    printf "\nrsync:                 %s" "$( checkCommand $RSYNC )"
-    printf "\nwget:                  %s" "$( checkCommand $WGET )"
-    printf "\ncurl:                  %s" "$( checkCommand $CURL )"
+    printf "\nbash:               %s" "$( checkCommand bash )"
+    printf "\ngit:                %s" "$( checkCommand git )"
+    printf "\nssh:                %s" "$( checkCommand ssh )"
+    printf "\nrsync:              %s" "$( checkCommand rsync )"
+    printf "\nwget:               %s" "$( checkCommand wget )"
+    printf "\ncurl:               %s" "$( checkCommand curl )"
     printf "\n"
 
     printf "\nDetails on the dbwebb-environment."
     printf "\n------------------------------------"
-    printf "\nOperatingsystem:       $DBW_OS"
-    printf "\nCommand issued:        $DBW_EXECUTABLE"
-    printf "\nVersion of dbwebb is:  $DBW_VERSION"
-    printf "\nPath to executable:    '$DBW_EXECUTABLE_DIR'"
-    printf "\nConfig-file:           '$DBW_CONFIG_FILE'"
-    printf "\nWorking directory:     '$DBW_CURRENT_DIR'"
-    printf "\nLocal user:            '$USER'"
-    printf "\nLocal homedir:         '$HOME'"
-    printf "\nRemote user:           '$DBW_USER'"
-    printf "\nRemote host:           '$DBW_HOST'"
+    printf "\nOperatingsystem:    $DBW_OS"
+    printf "\nCommand issued:     $DBW_EXECUTABLE"
+    printf "\nVersion of dbwebb:  $DBW_VERSION"
+    printf "\nPath to executable: '$DBW_EXECUTABLE_DIR'"
+    printf "\nConfig-file:        '$DBW_CONFIG_FILE'"
+    printf "\nWorking directory:  '$DBW_CURRENT_DIR'"
+    printf "\nLocal user:         '$USER'"
+    printf "\nLocal homedir:      '$HOME'"
+    printf "\nRemote user:        '$DBW_USER'"
+    printf "\nRemote host:        '$DBW_HOST'"
     printf "\n"
 
-    printf "\nDetails on current course-repo."
-    printf "\n------------------------------------"
+    echo
+    echo "Details on current course-repo."
+    echo "------------------------------------"
 
     if [ "$DBW_COURSE_REPO_VALID" = "yes" ]; then
-        printf "\nCurrent course-repo:   '$DBW_COURSE'"
-        printf "\nCourse directory:      '$DBW_COURSE_DIR'"
-        printf "\nCourse-repo version:   $( $GIT describe --always )"
-        printf "\n\nLatest update to course repo was:"
-        printf "\n"
+        echo "Current course-repo:   '$DBW_COURSE'"
+        echo "Course directory:      '$DBW_COURSE_DIR'"
+        echo "Course-repo version:   $( git describe --always )"
+        echo "Latest update to course repo was:"
+        echo 
         $GIT log -1
+        echo
     else 
-        printf "\nThis is not a valid course repo."
+        echo "This is not a valid course repo."
+        echo
     fi
-    printf "\n"
-    printf "\n"
+
+    if contains python "$@"; then
+        echo "Details on Python installed utilities."
+        echo "------------------------------------"
+        echo "python3:            $( checkCommand python3 )"
+        echo "pip3:               $( checkCommand pip3 )"
+        echo 
+    fi
 }
 
 
