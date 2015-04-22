@@ -1351,7 +1351,7 @@ dbwebbInspectTargetNotReadable()
             ls "$dirname"
         fi
         
-        echo "$MSG_FAILED Perhaps login to the studserver and execute the command:"
+        printf "$MSG_FAILED Perhaps login to the studserver and execute the command:\n"
         echo "sudo setpre-dbwebb-kurser.bash $THEUSER"
         echo  
     fi 
