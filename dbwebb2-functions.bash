@@ -212,6 +212,7 @@ mapCmdToDir()
         example)    RES="example" ;;
         tutorial)   RES="tutorial" ;;
         me)         RES="me" ;;
+        redovisa)   RES="me/redovisa" ;;
         kmom01)     RES="me/kmom01" ;;
         kmom02)     RES="me/kmom02" ;;
         kmom03)     RES="me/kmom03" ;;
