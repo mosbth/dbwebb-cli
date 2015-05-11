@@ -230,6 +230,9 @@ mapCmdToDir()
     case "$DBW_COURSE" in
         htmlphp)
             case "$CMD" in
+                me1)        RES="me/kmom01/me1" ;;
+                me2)        RES="me/kmom02/me2" ;;
+                
                 lab1)       RES="me/kmom02/lab1" ;;
                 lab2)       RES="me/kmom03/lab2" ;;
                 lab3)       RES="me/kmom04/lab3" ;;
@@ -309,9 +312,20 @@ mapCmdToDir()
                 lab5)       RES="me/kmom06/lab5" ;;
             esac
             ;;
+
+        webgl)
+            case "$CMD" in
+                #lab1)       RES="me/kmom02/lab1" ;;
+                #lab2)       RES="me/kmom03/lab2" ;;
+                #lab3)       RES="me/kmom04/lab3" ;;
+                #lab4)       RES="me/kmom05/lab4" ;;
+                #lab5)       RES="me/kmom06/lab5" ;;
+                *)          NO_RES="Not implemented"
+            esac
+            ;;
     esac
 
-    printf "$RES"
+    echo "$RES"
     return
 }
 

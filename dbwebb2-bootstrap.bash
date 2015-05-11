@@ -120,7 +120,7 @@ DBW_ARCHIVE="/home/saxon/students/dbwebb/archive/"
 #DBW_REPOS[linux]="https://github.com/mosbth/linux"
 #DBW_REPOS[webapp]="https://github.com/mosbth/webapp"
 #DBW_REPOS[htmlphp]="https://github.com/mosbth/htmlphp"
-DBW_COURSE_REPOS=( 'python' 'javascript1' 'linux' 'webapp' 'htmlphp' )
+DBW_COURSE_REPOS=( 'python' 'javascript1' 'linux' 'webapp' 'htmlphp' 'webgl' )
 DBW_REPO="dbwebb-cli"
 
 
