@@ -8,8 +8,9 @@ Part of course repos as a admin utility.
 History
 -------------------
 
-v1.9.x (2015-04-17)
+v1.9.4 (2015-05-20)
 
+* Teacher can download sourcecode from student, fix #46.
 * Log also stderr during inspect, fix #42.
 * Link to repo on GitHub, fix #41.
 * Inspect archive only if another user.
