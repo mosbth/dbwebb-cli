@@ -232,7 +232,11 @@ mapCmdToDir()
             case "$CMD" in
                 me1)        RES="me/kmom01/me1" ;;
                 me2)        RES="me/kmom02/me2" ;;
+                me3)        RES="me/kmom03/me3" ;;
+                me4)        RES="me/kmom04/me4" ;;
+                
                 multi)      RES="me/kmom03/multi" ;;
+                stylechooser) RES="me/kmom04/stylechooser" ;;
                 
                 lab1)       RES="me/kmom02/lab1" ;;
                 lab2)       RES="me/kmom03/lab2" ;;
