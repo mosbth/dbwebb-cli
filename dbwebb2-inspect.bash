@@ -420,6 +420,6 @@ else
 fi
 
 printf " Asserts: $ASSERTS Faults: $FAULTS\n"
-pressEnterToContinue
-[[ $COPY_DIR ]] && rm -rf "$COPY_DIR"
+#pressEnterToContinue
+#[[ $COPY_DIR ]] && rm -rf "$COPY_DIR"
 exit $STATUS
