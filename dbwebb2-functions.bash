@@ -237,6 +237,7 @@ mapCmdToDir()
                 
                 multi)      RES="me/kmom03/multi" ;;
                 stylechooser) RES="me/kmom04/stylechooser" ;;
+                jetty)      RES="me/kmom05/jetty" ;;
                 
                 lab1)       RES="me/kmom02/lab1" ;;
                 lab2)       RES="me/kmom03/lab2" ;;
