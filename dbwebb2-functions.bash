@@ -234,6 +234,7 @@ mapCmdToDir()
                 me2)        RES="me/kmom02/me2" ;;
                 me3)        RES="me/kmom03/me3" ;;
                 me4)        RES="me/kmom04/me4" ;;
+                me5)        RES="me/kmom05/me5" ;;
                 
                 multi)      RES="me/kmom03/multi" ;;
                 stylechooser) RES="me/kmom04/stylechooser" ;;
