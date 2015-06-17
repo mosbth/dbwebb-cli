@@ -8,6 +8,11 @@ Part of course repos as a admin utility.
 History
 -------------------
 
+v1.9.5x (latest)
+
+* Do not validate/publish files in directories named `*/node_modules/*`.
+
+
 v1.9.5 (2015-06-17)
 
 * Corrected jscs output for linux.
