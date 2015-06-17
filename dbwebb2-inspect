@@ -30,7 +30,7 @@
 #
 # Current version
 #
-DBW_VERSION="v1.9.4x (latest)"
+DBW_VERSION="v1.9.5 (2015-06-17)"
 # --------------- DBWEBB FUNCTIONS PHASE START ---------------
 
 #
@@ -267,6 +267,7 @@ mapCmdToDir()
                 me2)        RES="me/kmom02/me2" ;;
                 me3)        RES="me/kmom03/me3" ;;
                 me4)        RES="me/kmom04/me4" ;;
+                me5)        RES="me/kmom05/me5" ;;
                 
                 multi)      RES="me/kmom03/multi" ;;
                 stylechooser) RES="me/kmom04/stylechooser" ;;
@@ -485,20 +486,26 @@ function assert()
     TEST=$2
     MESSAGE=$3
     ASSERTS=$(( $ASSERTS + 1 ))
+    local onlyExitStatus=$4
+    local error=
+    local status=
 
     bash -c "$TEST" &> "$TMPFILE"
-    STATUS=$?
-    ERROR=$( cat "$TMPFILE" )
+    status=$?
+    
+    if [ \( -z "$onlyExitStatus" \) -o \( ! $status -eq $EXPECTED \) ]; then
+        error=$( cat "$TMPFILE" )
+    fi
     rm -f "$TMPFILE"
 
-    if [ \( ! $STATUS -eq $EXPECTED \) -o \( ! -z "$ERROR" \) ]; then
+    if [ \( ! $status -eq $EXPECTED \) -o \( ! -z "$error" \) ]; then
         FAULTS=$(( $FAULTS + 1 ))
 
         printf "\n\n$MSG_WARNING $MESSAGE\n" 
-        [ -z "$ERROR" ] || printf "$ERROR\n\n"
+        [ -z "$error" ] || printf "$error\n\n"
     fi
 
-    return $STATUS
+    return $status
 }
 
 

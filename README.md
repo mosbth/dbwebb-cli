@@ -8,6 +8,11 @@ Part of course repos as a admin utility.
 History
 -------------------
 
+v1.9.5 (2015-06-17)
+
+* Corrected jscs output for linux.
+
+
 v1.9.4 (2015-05-20)
 
 * Teacher can download sourcecode from student, fix #46.

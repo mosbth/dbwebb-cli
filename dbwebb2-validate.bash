@@ -129,6 +129,7 @@ function validateCommand()
     local extension="$3"
     local options="$4"
     local output="$5"
+    local onlyExitStatus="$6"
     local counter=0
 
     if hash "$cmd" 2>/dev/null; then
@@ -138,9 +139,9 @@ function validateCommand()
                 printf "\n%s" "$cmd $options $filename $output"
             else
                 if [ -z $optOnly  ]; then
-                    assert 0 "$cmd $options $filename $output" "$cmd failed: $filename"
+                    assert 0 "$cmd $options $filename $output" "$cmd failed: $filename" "$onlyExitStatus"
                 elif [ "$extension" == "$optOnly" ]; then
-                    assert 0 "$cmd $options $filename $output" "$cmd failed: $filename"
+                    assert 0 "$cmd $options $filename $output" "$cmd failed: $filename" "$onlyExitStatus"
                 fi
             fi
             counter=$(( counter + 1 )) 
@@ -163,7 +164,7 @@ function validate()
     [[ $DISABLE_HTMLHINT ]]  || validateCommand "$dir" "$HTMLHINT" "html" 
     [[ $DISABLE_CSSLINT ]]   || validateCommand "$dir" "$CSSLINT" "css" "$CSSLINT_OPTIONS $( cat "$CSSLINT_CONFIG" )"
     [[ $DISABLE_JSHINT ]]    || validateCommand "$dir" "$JSHINT" "js"
-    [[ $DISABLE_JSCS ]]      || validateCommand "$dir" "$JSCS" "js" "$JSCS_OPTIONS $JSCS_CONFIG" "| grep -v 'No code style errors found.'; exit ${PIPESTATUS[0]}"
+    [[ $DISABLE_JSCS ]]      || validateCommand "$dir" "$JSCS" "js"  "$JSCS_OPTIONS $JSCS_CONFIG" "" "onlyExitStatus"
     #validateCommand "$dir" "$JSCS" "js" "$JSCS_OPTIONS $JSCS_CONFIG" ""
     [[ $DISABLE_PYLINT ]]    || validateCommand "$dir" "$PYLINT" "py" "$PYLINT_OPTIONS $PYLINT_CONFIG" 
     [[ $DISABLE_PYLINT ]]    || validateCommand "$dir" "$PYLINT" "cgi" "$PYLINT_OPTIONS $PYLINT_CONFIG" 

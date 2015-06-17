@@ -453,20 +453,26 @@ function assert()
     TEST=$2
     MESSAGE=$3
     ASSERTS=$(( $ASSERTS + 1 ))
+    local onlyExitStatus=$4
+    local error=
+    local status=
 
     bash -c "$TEST" &> "$TMPFILE"
-    STATUS=$?
-    ERROR=$( cat "$TMPFILE" )
+    status=$?
+    
+    if [ \( -z "$onlyExitStatus" \) -o \( ! $status -eq $EXPECTED \) ]; then
+        error=$( cat "$TMPFILE" )
+    fi
     rm -f "$TMPFILE"
 
-    if [ \( ! $STATUS -eq $EXPECTED \) -o \( ! -z "$ERROR" \) ]; then
+    if [ \( ! $status -eq $EXPECTED \) -o \( ! -z "$error" \) ]; then
         FAULTS=$(( $FAULTS + 1 ))
 
         printf "\n\n$MSG_WARNING $MESSAGE\n" 
-        [ -z "$ERROR" ] || printf "$ERROR\n\n"
+        [ -z "$error" ] || printf "$error\n\n"
     fi
 
-    return $STATUS
+    return $status
 }
 
 
