@@ -10,6 +10,7 @@ History
 
 v1.9.5x (latest)
 
+* Newline before url in publish, fix #35.
 * Do not validate/publish files in directories named `*/node_modules/*`.
 
 

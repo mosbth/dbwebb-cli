@@ -335,6 +335,8 @@ mapCmdToDir()
 
         linux)
             case "$CMD" in
+                install)    RES="me/kmom01/install" ;;
+
                 lab1)       RES="me/kmom02/lab1" ;;
                 lab2)       RES="me/kmom03/lab2" ;;
                 lab3)       RES="me/kmom04/lab3" ;;

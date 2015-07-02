@@ -343,7 +343,7 @@ function dbwebb-publish()
     else
         printf "Some of your files might be"
     fi
-    printf " published on $DBW_BASEURL/$DBW_COURSE/$SUBDIR\n"
+    printf " published on:\n $DBW_BASEURL/$DBW_COURSE/$SUBDIR\n"
 }
 
 

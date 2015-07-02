@@ -335,6 +335,8 @@ mapCmdToDir()
 
         linux)
             case "$CMD" in
+                install)    RES="me/kmom01/install" ;;
+
                 lab1)       RES="me/kmom02/lab1" ;;
                 lab2)       RES="me/kmom03/lab2" ;;
                 lab3)       RES="me/kmom04/lab3" ;;
@@ -1186,7 +1188,7 @@ function dbwebb-publish()
     else
         printf "Some of your files might be"
     fi
-    printf " published on $DBW_BASEURL/$DBW_COURSE/$SUBDIR\n"
+    printf " published on:\n $DBW_BASEURL/$DBW_COURSE/$SUBDIR\n"
 }
 
 
