@@ -336,17 +336,10 @@ mapCmdToDir()
         linux)
             case "$CMD" in
                 install)    RES="me/kmom01/install" ;;
-<<<<<<< HEAD
-
-                lab1)       RES="me/kmom02/lab1" ;;
-                lab2)       RES="me/kmom03/lab2" ;;
-                lab3)       RES="me/kmom04/lab3" ;;
-                lab4)       RES="me/kmom05/lab4" ;;
-                lab5)       RES="me/kmom06/lab5" ;;
-=======
                 vhosts)     RES="me/kmom02/vhosts" ;;
                 mysite)     RES="me/kmom02/mysite" ;;
->>>>>>> fa62c8e31dd8e2ddbd7bce528e3aaac39ed86204
+                irc)        RES="me/kmom03/irc" ;;
+                script)     RES="me/kmom03/script" ;;
             esac
             ;;
 
