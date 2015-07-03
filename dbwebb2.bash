@@ -104,6 +104,7 @@ function dbwebb-init()
 {    
     dbwebb-init-me
     dbwebb-init-server
+    dbwebb-upload
 }
 
 

@@ -10,6 +10,8 @@ History
 
 v1.9.5x (latest)
 
+* Init now includes upload, fix #49.
+* Upload ignore literature and tutorial, fix #48.
 * Newline before url in publish, fix #35.
 * Do not validate/publish files in directories named `*/node_modules/*`.
 
