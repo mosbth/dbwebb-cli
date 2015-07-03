@@ -102,7 +102,7 @@ DBW_OS="$( uname -a )"
 SSH_CMD="$SSH ${DBW_USER}@${DBW_HOST} $DBW_SSH_KEY_OPTION"
 
 # Create the basis for the upload command
-RSYNC_CMD="$RSYNC -av --delete --exclude .git --exclude .gitignore -e \"ssh $DBW_SSH_KEY_OPTION\""
+RSYNC_CMD="$RSYNC -av --delete --exclude .git --exclude .gitignore --exclude literature --exclude tutorial -e \"ssh $DBW_SSH_KEY_OPTION\""
 RSYNC_DOWNLOAD_CMD="$RSYNC -avu -e \"ssh $DBW_SSH_KEY_OPTION\""
 
 DBW_REMOTE_DESTINATION="${DBW_USER}@${DBW_HOST}:$DBW_REMOTE_BASEDIR/$DBW_COURSE"
