@@ -305,6 +305,8 @@ mapCmdToDir()
                 install)    RES="me/kmom01/install" ;;
                 vhosts)     RES="me/kmom02/vhosts" ;;
                 mysite)     RES="me/kmom02/mysite" ;;
+                irc)        RES="me/kmom03/irc" ;;
+                script)     RES="me/kmom03/script" ;;
             esac
             ;;
 
