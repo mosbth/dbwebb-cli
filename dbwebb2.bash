@@ -72,7 +72,7 @@ function dbwebb-init-me()
     local me="$DBW_COURSE_DIR/me/"
 
     local intro="Creating and initiating the directory 'me/' by copying directory structure and files from the directory '.default/' (will not overwrite existing files)."
-    local command="$RSYNC -av --exclude README.md --ignore-existing \"$meDefault\" \"$me\""
+    local command="rsync -av --exclude README.md --ignore-existing \"$meDefault\" \"$me\""
     local message="to init the directory 'me/'."
 
     checkIfValidCourseRepoOrExit
@@ -164,7 +164,7 @@ function dbwebb-login()
 function dbwebb-update()
 {
     local intro="Update course-repo with latest changes from its master at GitHub."
-    local command="$GIT pull"
+    local command="git pull"
     local message="to update course repo."
     
     checkIfValidCourseRepoOrExit
@@ -212,7 +212,7 @@ function dbwebb-check()
         echo "Course-repo version:   $( git describe --always )"
         echo "Latest update to course repo was:"
         echo 
-        $GIT log -1
+        git log -1
         echo
     else 
         echo "This is not a valid course repo."
