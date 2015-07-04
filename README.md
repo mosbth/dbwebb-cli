@@ -10,6 +10,7 @@ History
 
 v1.9.5x (latest)
 
+* Removed unused variables pointing to commands.
 * Init now includes upload, fix #49.
 * Upload ignore literature and tutorial, fix #48.
 * Newline before url in publish, fix #35.

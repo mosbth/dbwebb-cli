@@ -85,7 +85,7 @@ fi
 DBW_OS="$( uname -a )"
 
 # Create the ssh-command with details from the config-file
-SSH_CMD="$SSH ${DBW_USER}@${DBW_HOST} $DBW_SSH_KEY_OPTION"
+SSH_CMD="ssh ${DBW_USER}@${DBW_HOST} $DBW_SSH_KEY_OPTION"
 
 # Create the basis for the upload command
 RSYNC_CMD="rsync -av --delete --exclude .git --exclude .gitignore --exclude literature --exclude tutorial -e \"ssh $DBW_SSH_KEY_OPTION\""
