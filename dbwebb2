@@ -564,20 +564,6 @@ function assertResults()
 # --------------- DBWEBB FUNCTIONS PHASE END ---------------
 # --------------- DBWEBB BOOTSTRAP PHASE START ---------------
 
-#
-# Specify the utilities used
-# TODO Remove these, not really needed.
-#
-ECHO="printf"
-GIT="git"
-RSYNC="rsync"
-SSH="ssh"
-SED="sed"
-WGET="wget"
-CURL="curl"
-BASH="bash"
-FIND="find"
-
 # Messages
 MSG_OK="\033[0;30;42mOK\033[0m"
 MSG_DONE="\033[1;37;40mDONE\033[0m"
@@ -666,8 +652,8 @@ DBW_OS="$( uname -a )"
 SSH_CMD="$SSH ${DBW_USER}@${DBW_HOST} $DBW_SSH_KEY_OPTION"
 
 # Create the basis for the upload command
-RSYNC_CMD="$RSYNC -av --delete --exclude .git --exclude .gitignore --exclude literature --exclude tutorial -e \"ssh $DBW_SSH_KEY_OPTION\""
-RSYNC_DOWNLOAD_CMD="$RSYNC -avu -e \"ssh $DBW_SSH_KEY_OPTION\""
+RSYNC_CMD="rsync -av --delete --exclude .git --exclude .gitignore --exclude literature --exclude tutorial -e \"ssh $DBW_SSH_KEY_OPTION\""
+RSYNC_DOWNLOAD_CMD="rsync -avu -e \"ssh $DBW_SSH_KEY_OPTION\""
 
 DBW_REMOTE_DESTINATION="${DBW_USER}@${DBW_HOST}:$DBW_REMOTE_BASEDIR/$DBW_COURSE"
 
@@ -915,7 +901,7 @@ function dbwebb-init-me()
     local me="$DBW_COURSE_DIR/me/"
 
     local intro="Creating and initiating the directory 'me/' by copying directory structure and files from the directory '.default/' (will not overwrite existing files)."
-    local command="$RSYNC -av --exclude README.md --ignore-existing \"$meDefault\" \"$me\""
+    local command="rsync -av --exclude README.md --ignore-existing \"$meDefault\" \"$me\""
     local message="to init the directory 'me/'."
 
     checkIfValidCourseRepoOrExit
@@ -1007,7 +993,7 @@ function dbwebb-login()
 function dbwebb-update()
 {
     local intro="Update course-repo with latest changes from its master at GitHub."
-    local command="$GIT pull"
+    local command="git pull"
     local message="to update course repo."
     
     checkIfValidCourseRepoOrExit
@@ -1055,7 +1041,7 @@ function dbwebb-check()
         echo "Course-repo version:   $( git describe --always )"
         echo "Latest update to course repo was:"
         echo 
-        $GIT log -1
+        git log -1
         echo
     else 
         echo "This is not a valid course repo."
