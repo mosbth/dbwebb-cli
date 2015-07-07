@@ -412,6 +412,7 @@ function dbwebb-inspect()
 #
 dbwebb-create()
 {
+    local myWget=
     local lab="$1"
     local subdir="$( mapCmdToDir $lab )"
     local where="$DBW_COURSE_DIR/$subdir"
@@ -438,12 +439,12 @@ dbwebb-create()
         exit 2
     fi
 
-    # Check for wget
-    local myWget
-
+    # Check for wget or curl
     if hash wget 2> /dev/null; then
+        [[ $VERY_VERBOSE ]] && echo "Using wget as download method."
         myWget="wget -qO"
     elif hash curl 2> /dev/null; then
+        [[ $VERY_VERBOSE ]] && echo "Using curl as download method."
         myWget="curl -so"
     else
         printf "$MSG_FAILED Missing wget and curl, can not create a lab without both.\n"
@@ -457,6 +458,7 @@ dbwebb-create()
     # The lab description
     local getLab="lab.php?lab"
     printf " instruction.html"
+    [[ $VERY_VERBOSE ]] && printf " ($DBW_LABURL/$getLab&key=$key)"
     $myWget "$where/instruction.html" "$DBW_LABURL/$getLab&key=$key"
 
     # The lab documents

@@ -68,15 +68,15 @@ function checkCommand()
 #
 # Execute a command in a controlled manner
 #
-function wget {
-  if command wget -h &>/dev/null
-  then
-    command wget "$@"
-  else
-    set "${*: -1}"
-    lynx -source "$1" > "${1##*/}"
-  fi
-}
+#function wget {
+#  if command wget -h &>/dev/null
+#  then
+#    command wget "$@"
+#  else
+#    set "${*: -1}"
+#    lynx -source "$1" > "${1##*/}"
+#  fi
+#}
 
 
 
