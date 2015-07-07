@@ -10,6 +10,7 @@ History
 
 v1.9.5x (latest)
 
+* Adding install script.
 * Corrected curl to work when wget is not available.
 * Removed unused variables pointing to commands.
 * Init now includes upload, fix #49.
