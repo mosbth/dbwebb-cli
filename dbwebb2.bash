@@ -98,13 +98,47 @@ function dbwebb-init-server()
 
 
 #
+# Create default directory structure on the server.
+#
+function dbwebb-init-default()
+{
+    local meDefault="$DBW_COURSE_DIR/.default/"
+    local me="$DBW_COURSE_DIR/me/"
+
+    local intro="Ensuring that the directory structure exists on the server by syncing '.default/' (will not overwrite existing files)."
+    local command="rsync -av --exclude README.md --ignore-existing \"$meDefault\" \"$me\""
+    local message="to init the directory 'me/'."
+
+?    checkIfValidCourseRepoOrExit
+    executeCommand "$intro" "$command" "$message"
+
+? <
+    WHAT="$DBW_COURSE_DIR"
+    WHERE="$DBW_REMOTE_DESTINATION"
+    ITEM="$1"
+    SUBDIR=""
+
+    checkIfValidConfigOrExit
+    checkIfValidCourseRepoOrExit
+    createUploadDownloadPaths
+    setChmod
+
+    local intro="Uploading the directory '$WHAT' to '$WHERE'."
+    local command="$RSYNC_CMD '$WHAT' '$WHERE'"
+    local message="to upload data."
+    executeCommand "$intro" "$command" "$message"
+}
+
+
+
+#
 # Init course repo and directory structure at the server.
 #
 function dbwebb-init()
 {    
     dbwebb-init-me
     dbwebb-init-server
-    dbwebb-upload
+    dbwebb-init-default
 }
 
 
