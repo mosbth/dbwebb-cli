@@ -8,7 +8,7 @@ Part of course repos as a admin utility.
 History
 -------------------
 
-v1.9.5x (latest)
+v1.9.6 (2015-08-05)
 
 * Changed init-phase to rsync directory structure, fix #51.
 * Adding install script, fix #52.

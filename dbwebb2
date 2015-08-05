@@ -30,7 +30,7 @@
 #
 # Current version
 #
-DBW_VERSION="v1.9.5x (2015-06-17)"
+DBW_VERSION="v1.9.6 (2015-08-05)"
 # --------------- DBWEBB FUNCTIONS PHASE START ---------------
 
 #
@@ -919,7 +919,7 @@ function dbwebb-init-server()
     local intro="Intiating the remote server '$DBW_HOST' by connecting as '$DBW_USER' and creating directories (if needed) where all uploaded files will reside."
     # TODO Should use DBW_BASEDIR 
     local command="$SSH_CMD 'sh -c \"if [ ! -d \"$DBW_REMOTE_BASEDIR\" ]; then mkdir \"$DBW_REMOTE_BASEDIR\"; fi; chmod 700 \"$DBW_REMOTE_BASEDIR\"; echo; echo \"$DBW_REMOTE_BASEDIR:\"; ls -lF \"$DBW_REMOTE_BASEDIR\"; if [ ! -d \"$DBW_REMOTE_WWWDIR\" ]; then mkdir \"$DBW_REMOTE_WWWDIR\"; fi; chmod 755 \"$DBW_REMOTE_WWWDIR\"; echo; echo \"$DBW_REMOTE_WWWDIR:\"; ls -lF \"$DBW_REMOTE_WWWDIR\"\"'"
-    local message="to init the server."
+    local message="to init the base dirs on the server."
 
     checkIfValidConfigOrExit
     executeCommand "$intro" "$command" "$message"
@@ -959,7 +959,7 @@ function dbwebb-init-structure-www-dbwebb-kurser()
 {
     local intro="Ensuring that the directory structure exists on the server by syncing the me/ directory structure to www/dbwebb-kurser (will not overwrite existing files)."
     local command=
-    local message="to init the directory structure on the server."
+    local message="to init the www-directory structure on the server."
 
     checkIfValidConfigOrExit
     checkIfValidCourseRepoOrExit
