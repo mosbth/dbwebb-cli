@@ -10,6 +10,7 @@ History
 
 v1.9.6 (2015-08-05)
 
+* Always upload config and rc-files when validate and publish, fix #47.
 * Adding progressbar for validating since jscs and jshint was really slow.
 * Replaced own htmlhint with actual htmlhint, took care of exit values. 
 * Changed init-phase to rsync directory structure, fix #51.
