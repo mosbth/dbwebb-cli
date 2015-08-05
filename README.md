@@ -10,7 +10,8 @@ History
 
 v1.9.5x (latest)
 
-* Adding install script.
+* Changed init-phase to rsync directory structure, fix #51.
+* Adding install script, fix #52.
 * Corrected curl to work when wget is not available.
 * Removed unused variables pointing to commands.
 * Init now includes upload, fix #49.
