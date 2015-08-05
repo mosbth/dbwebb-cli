@@ -733,7 +733,10 @@ function badUsage ()
 #
 # External tools
 #
-HTMLHINT="dbwebb-htmlhint"
+#HTMLHINT="dbwebb-htmlhint"
+HTMLHINT="htmlhint"
+HTMLHINT_OPTIONS=
+HTMLHINT_CONFIG=
 
 CSSLINT="csslint"
 CSSLINT_OPTIONS="--quiet"
@@ -787,6 +790,10 @@ YAML_OPTIONS=""
 function setDefaultConfigFiles()
 {
     if [[ $DBW_COURSE_DIR ]]; then
+        if [ -f "$DBW_COURSE_DIR/.htmlhintrc" ]; then
+            HTMLHINT_CONFIG="--config '$DBW_COURSE_DIR/.htmlhintrc'"
+        fi
+        
         HTML_MINIFIER_CONFIG="--config-file '$DBW_COURSE_DIR/.html-minifier.conf'"
         PYLINT_CONFIG="--rcfile '$DBW_COURSE_DIR/.pylintrc'"
         PHPMD_CONFIG="'$DBW_COURSE_DIR/.phpmd.xml'"
@@ -892,7 +899,7 @@ function validate()
 {
     local dir="$1"
 
-    [[ $DISABLE_HTMLHINT ]]  || validateCommand "$dir" "$HTMLHINT" "html" 
+    [[ $DISABLE_HTMLHINT ]]  || validateCommand "$dir" "$HTMLHINT" "html" "$HTMLHINT_OPTIONS $HTMLHINT_CONFIG" '| grep -v "No problem."; test ${PIPESTATUS[0]} -eq 0'
     [[ $DISABLE_CSSLINT ]]   || validateCommand "$dir" "$CSSLINT" "css" "$CSSLINT_OPTIONS $( cat "$CSSLINT_CONFIG" )"
     [[ $DISABLE_JSHINT ]]    || validateCommand "$dir" "$JSHINT" "js"
     [[ $DISABLE_JSCS ]]      || validateCommand "$dir" "$JSCS" "js"  "$JSCS_OPTIONS $JSCS_CONFIG" "" "onlyExitStatus"

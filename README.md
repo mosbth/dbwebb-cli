@@ -10,6 +10,7 @@ History
 
 v1.9.6 (2015-08-05)
 
+* Replaced own htmlhint with actual htmlhint, took care of exit values. 
 * Changed init-phase to rsync directory structure, fix #51.
 * Adding install script, fix #52.
 * Corrected curl to work when wget is not available.
