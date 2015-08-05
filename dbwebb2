@@ -652,10 +652,11 @@ DBW_OS="$( uname -a )"
 SSH_CMD="ssh ${DBW_USER}@${DBW_HOST} $DBW_SSH_KEY_OPTION"
 
 # Create the basis for the upload command
-RSYNC_CMD="rsync -av --delete --exclude .git --exclude .gitignore --exclude literature --exclude tutorial -e \"ssh $DBW_SSH_KEY_OPTION\""
+RSYNC_CMD="rsync -av --delete --exclude .git --exclude .gitignore --exclude literature --exclude tutorial --exclude .default -e \"ssh $DBW_SSH_KEY_OPTION\""
 RSYNC_DOWNLOAD_CMD="rsync -avu -e \"ssh $DBW_SSH_KEY_OPTION\""
 
 DBW_REMOTE_DESTINATION="${DBW_USER}@${DBW_HOST}:$DBW_REMOTE_BASEDIR/$DBW_COURSE"
+DBW_REMOTE_WWW_DESTINATION="${DBW_USER}@${DBW_HOST}:$DBW_REMOTE_WWWDIR/$DBW_COURSE"
 
 DBW_WWW="http://dbwebb.se/"
 DBW_VALIDATE_CONFIGFILE="/home/saxon/students/dbwebb/dbwebb-general-config"
@@ -927,13 +928,64 @@ function dbwebb-init-server()
 
 
 #
+# Create default directory structure on the server for dbwebb-kurser/.
+#
+function dbwebb-init-structure-dbwebb-kurser()
+{
+    local intro="Ensuring that the directory structure exists on the server by syncing directory structure to dbwebb-kurser/ (will not overwrite existing files)."
+    local command=
+    local message="to init the directory structure on the server."
+
+    checkIfValidConfigOrExit
+    checkIfValidCourseRepoOrExit
+
+    WHAT="$DBW_COURSE_DIR"
+    WHERE="$DBW_REMOTE_DESTINATION"
+    ITEM="$1"
+    SUBDIR=""
+
+    createUploadDownloadPaths
+
+    command="rsync -av --exclude .git --exclude .gitignore --exclude literature --exclude tutorial --exclude .default --exclude example --include='*/' --include='.??*' --exclude='*' -e \"ssh $DBW_SSH_KEY_OPTION\" '$WHAT' '$WHERE'"
+    executeCommand "$intro" "$command" "$message"
+}
+
+
+
+#
+# Create default directory structure on the server for dbwebb-kurser/.
+#
+function dbwebb-init-structure-www-dbwebb-kurser()
+{
+    local intro="Ensuring that the directory structure exists on the server by syncing the me/ directory structure to www/dbwebb-kurser (will not overwrite existing files)."
+    local command=
+    local message="to init the directory structure on the server."
+
+    checkIfValidConfigOrExit
+    checkIfValidCourseRepoOrExit
+
+    WHAT="$DBW_COURSE_DIR"
+    WHERE="$DBW_REMOTE_WWW_DESTINATION"
+    ITEM="$1"
+    SUBDIR=""
+
+    createUploadDownloadPaths
+
+    command="rsync -av --exclude .git --exclude .gitignore --exclude literature --exclude tutorial --exclude .default --exclude example --include='*/' --exclude='*' -e \"ssh $DBW_SSH_KEY_OPTION\" '$WHAT' '$WHERE'"
+    executeCommand "$intro" "$command" "$message"
+}
+
+
+
+#
 # Init course repo and directory structure at the server.
 #
 function dbwebb-init()
 {    
     dbwebb-init-me
     dbwebb-init-server
-    dbwebb-upload
+    dbwebb-init-structure-dbwebb-kurser
+    dbwebb-init-structure-www-dbwebb-kurser
 }
 
 
@@ -1465,6 +1517,8 @@ do
         | create       \
         | init         \
         | init-server  \
+        | init-structure-dbwebb-kurser \
+        | init-structure-www-dbwebb-kurser \
         | init-me)
             command=$1
             shift

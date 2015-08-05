@@ -89,7 +89,7 @@ function dbwebb-init-server()
     local intro="Intiating the remote server '$DBW_HOST' by connecting as '$DBW_USER' and creating directories (if needed) where all uploaded files will reside."
     # TODO Should use DBW_BASEDIR 
     local command="$SSH_CMD 'sh -c \"if [ ! -d \"$DBW_REMOTE_BASEDIR\" ]; then mkdir \"$DBW_REMOTE_BASEDIR\"; fi; chmod 700 \"$DBW_REMOTE_BASEDIR\"; echo; echo \"$DBW_REMOTE_BASEDIR:\"; ls -lF \"$DBW_REMOTE_BASEDIR\"; if [ ! -d \"$DBW_REMOTE_WWWDIR\" ]; then mkdir \"$DBW_REMOTE_WWWDIR\"; fi; chmod 755 \"$DBW_REMOTE_WWWDIR\"; echo; echo \"$DBW_REMOTE_WWWDIR:\"; ls -lF \"$DBW_REMOTE_WWWDIR\"\"'"
-    local message="to init the server."
+    local message="to init the base dirs on the server."
 
     checkIfValidConfigOrExit
     executeCommand "$intro" "$command" "$message"
@@ -98,34 +98,50 @@ function dbwebb-init-server()
 
 
 #
-# Create default directory structure on the server.
+# Create default directory structure on the server for dbwebb-kurser/.
 #
-function dbwebb-init-default()
+function dbwebb-init-structure-dbwebb-kurser()
 {
-    local meDefault="$DBW_COURSE_DIR/.default/"
-    local me="$DBW_COURSE_DIR/me/"
+    local intro="Ensuring that the directory structure exists on the server by syncing directory structure to dbwebb-kurser/ (will not overwrite existing files)."
+    local command=
+    local message="to init the directory structure on the server."
 
-    local intro="Ensuring that the directory structure exists on the server by syncing '.default/' (will not overwrite existing files)."
-    local command="rsync -av --exclude README.md --ignore-existing \"$meDefault\" \"$me\""
-    local message="to init the directory 'me/'."
+    checkIfValidConfigOrExit
+    checkIfValidCourseRepoOrExit
 
-?    checkIfValidCourseRepoOrExit
-    executeCommand "$intro" "$command" "$message"
-
-? <
     WHAT="$DBW_COURSE_DIR"
     WHERE="$DBW_REMOTE_DESTINATION"
     ITEM="$1"
     SUBDIR=""
 
+    createUploadDownloadPaths
+
+    command="rsync -av --exclude .git --exclude .gitignore --exclude literature --exclude tutorial --exclude .default --exclude example --include='*/' --include='.??*' --exclude='*' -e \"ssh $DBW_SSH_KEY_OPTION\" '$WHAT' '$WHERE'"
+    executeCommand "$intro" "$command" "$message"
+}
+
+
+
+#
+# Create default directory structure on the server for dbwebb-kurser/.
+#
+function dbwebb-init-structure-www-dbwebb-kurser()
+{
+    local intro="Ensuring that the directory structure exists on the server by syncing the me/ directory structure to www/dbwebb-kurser (will not overwrite existing files)."
+    local command=
+    local message="to init the www-directory structure on the server."
+
     checkIfValidConfigOrExit
     checkIfValidCourseRepoOrExit
-    createUploadDownloadPaths
-    setChmod
 
-    local intro="Uploading the directory '$WHAT' to '$WHERE'."
-    local command="$RSYNC_CMD '$WHAT' '$WHERE'"
-    local message="to upload data."
+    WHAT="$DBW_COURSE_DIR"
+    WHERE="$DBW_REMOTE_WWW_DESTINATION"
+    ITEM="$1"
+    SUBDIR=""
+
+    createUploadDownloadPaths
+
+    command="rsync -av --exclude .git --exclude .gitignore --exclude literature --exclude tutorial --exclude .default --exclude example --include='*/' --exclude='*' -e \"ssh $DBW_SSH_KEY_OPTION\" '$WHAT' '$WHERE'"
     executeCommand "$intro" "$command" "$message"
 }
 
@@ -138,7 +154,8 @@ function dbwebb-init()
 {    
     dbwebb-init-me
     dbwebb-init-server
-    dbwebb-init-default
+    dbwebb-init-structure-dbwebb-kurser
+    dbwebb-init-structure-www-dbwebb-kurser
 }
 
 
@@ -670,6 +687,8 @@ do
         | create       \
         | init         \
         | init-server  \
+        | init-structure-dbwebb-kurser \
+        | init-structure-www-dbwebb-kurser \
         | init-me)
             command=$1
             shift
