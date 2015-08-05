@@ -882,7 +882,8 @@ function validateCommand()
                     assert 0 "$cmd $options $filename $output" "$cmd failed: $filename" "$onlyExitStatus"
                 fi
             fi
-            counter=$(( counter + 1 )) 
+            counter=$(( counter + 1 ))
+            printf "."
         done
         printf " ($counter)"
     else
