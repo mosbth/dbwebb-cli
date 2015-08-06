@@ -15,7 +15,7 @@ else
 fi;
 
 echo "[dbwebb] Installing into '/usr/local/bin/dbwebb' (you may need to provide root password)."
-sudo install --mode=0755 -D $TMP $WHERE
+sudo install -v --mode=0755 -D $TMP $WHERE
 ls -l $WHERE
 
 echo "[dbwebb] Cleaning up."
