@@ -65,7 +65,14 @@ sourceCourseRepoFile
 
 # Where is the .dbwebb.config-file
 DBW_CONFIG_FILE_NAME=".dbwebb.config"
-DBW_CONFIG_FILE="$HOME/$DBW_CONFIG_FILE_NAME"
+
+# Check if run as sudo, use SUDO_USER as HOME (only for selfupdate)
+if [[ $SUDO_USER ]]; then
+    DBW_CONFIG_FILE="~$SUDO_USER/$DBW_CONFIG_FILE_NAME"
+else    
+    DBW_CONFIG_FILE="$HOME/$DBW_CONFIG_FILE_NAME"
+fi
+
 if [ -f "$DBW_CONFIG_FILE" ]; then
     source "$DBW_CONFIG_FILE"
 fi

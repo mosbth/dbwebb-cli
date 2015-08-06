@@ -8,6 +8,12 @@ Part of course repos as a admin utility.
 History
 -------------------
 
+v1.9.6x (2015-08-05)
+
+* Enable to run selfupdate using sudo.
+* Ignore some files when upload config and rc-files.
+
+
 v1.9.6 (2015-08-05)
 
 * Always upload config and rc-files when validate and publish, fix #47.

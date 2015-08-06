@@ -4,14 +4,15 @@ if [ "$EUID" -ne 0 ]
 fi
 
 TMP="/tmp/$$"
+TARGET="https://raw.githubusercontent.com/mosbth/dbwebb-cli/master/dbwebb2"
 
 echo "[dbwebb] Downloading and installing dbwebb."
 if hash wget 2> /dev/null; then
     echo "Using wget."
-    wget -qO $TMP https://raw.githubusercontent.com/mosbth/dbwebb-cli/master/dbwebb2 
+    wget -qO $TMP $TARGET 
 elif hash curl 2> /dev/null; then
     echo "Using curl."
-    curl -so $TMP https://raw.githubusercontent.com/mosbth/dbwebb-cli/master/dbwebb2 
+    curl -so $TMP $TARGET
 else
     echo "Failed. Did not find wget nor curl. Please install either wget or curl."
     exit 1    
