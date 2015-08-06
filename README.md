@@ -8,8 +8,9 @@ Part of course repos as a admin utility.
 History
 -------------------
 
-v1.9.6x (latest)
+v1.9.7 (2015-08.06)
 
+* Adjustin install phase and documentation.
 * Enable to run selfupdate using sudo.
 * Ignore some files when upload config and rc-files.
 
