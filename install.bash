@@ -1,10 +1,6 @@
-if [ "$EUID" -ne 0 ]
-  then echo "Please run as root using sudo."
-  exit
-fi
-
 TMP="/tmp/$$"
 TARGET="https://raw.githubusercontent.com/mosbth/dbwebb-cli/master/dbwebb2"
+WHERE="/usr/local/bin/dbwebb"
 
 echo "[dbwebb] Downloading and installing dbwebb."
 if hash wget 2> /dev/null; then
@@ -18,14 +14,9 @@ else
     exit 1    
 fi;
 
-if [ ! -d /usr/local/bin ]; then
-    echo "[dbwebb] Creating directory structure for '/usr/local/bin'."
-    install -d /usr/local/bin
-fi
-
-echo "[dbwebb] Installing into '/usr/local/bin/dbwebb'."
-install $TMP /usr/local/bin/dbwebb
-ls -l /usr/local/bin/dbwebb
+echo "[dbwebb] Installing into '/usr/local/bin/dbwebb' (you may need to provide root password)."
+sudo install --mode=0755 -D $TMP $WHERE
+ls -l $WHERE
 
 echo "[dbwebb] Cleaning up."
 rm $TMP
