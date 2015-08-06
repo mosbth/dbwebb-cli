@@ -632,7 +632,7 @@ DBW_CONFIG_FILE_NAME=".dbwebb.config"
 
 # Check if run as sudo, use SUDO_USER as HOME (only for selfupdate)
 if [[ $SUDO_USER ]]; then
-    DBW_CONFIG_FILE="~$SUDO_USER/$DBW_CONFIG_FILE_NAME"
+    DBW_CONFIG_FILE=$( eval echo "~$SUDO_USER/$DBW_CONFIG_FILE_NAME" )
 else    
     DBW_CONFIG_FILE="$HOME/$DBW_CONFIG_FILE_NAME"
 fi
