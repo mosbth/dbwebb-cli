@@ -340,6 +340,8 @@ mapCmdToDir()
                 mysite)     RES="me/kmom02/mysite" ;;
                 irc)        RES="me/kmom03/irc" ;;
                 script)     RES="me/kmom03/script" ;;
+                javascripting) RES="me/kmom04/javascripting" ;;
+                learnyounode)  RES="me/kmom04/learnyounode" ;;
             esac
             ;;
 
@@ -598,7 +600,7 @@ DBW_CURRENT_DIR="$( pwd )"
 DBW_COURSE_FILE_NAME=".dbwebb.course"
 
 dir="$DBW_CURRENT_DIR/."
-while [ "$dir" != "/" ]; do 
+while [ "$dir" != "/" ]; do
     dir=$( dirname "$dir" )
     found="$( find "$dir" -maxdepth 1 -name $DBW_COURSE_FILE_NAME )"
     if [ "$found" ]; then 

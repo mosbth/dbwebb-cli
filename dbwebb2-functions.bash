@@ -307,6 +307,8 @@ mapCmdToDir()
                 mysite)     RES="me/kmom02/mysite" ;;
                 irc)        RES="me/kmom03/irc" ;;
                 script)     RES="me/kmom03/script" ;;
+                javascripting) RES="me/kmom04/javascripting" ;;
+                learnyounode)  RES="me/kmom04/learnyounode" ;;
             esac
             ;;
 

@@ -34,7 +34,7 @@ DBW_CURRENT_DIR="$( pwd )"
 DBW_COURSE_FILE_NAME=".dbwebb.course"
 
 dir="$DBW_CURRENT_DIR/."
-while [ "$dir" != "/" ]; do 
+while [ "$dir" != "/" ]; do
     dir=$( dirname "$dir" )
     found="$( find "$dir" -maxdepth 1 -name $DBW_COURSE_FILE_NAME )"
     if [ "$found" ]; then 
