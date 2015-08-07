@@ -378,9 +378,10 @@ createUploadDownloadPaths()
         exit 1
     fi
 
-    if [ -d "$DBW_CURRENT_DIR/$ITEM" ]; then
-        SUBDIR="${ITEM%/}"
-    elif [ ! -z "$ITEM" -a -z "$SUBDIR" ]; then
+    #if [ -d "$DBW_CURRENT_DIR/$ITEM" ]; then
+    #    SUBDIR="${ITEM%/}"
+    #elif [ ! -z "$ITEM" -a -z "$SUBDIR" ]; then
+    if [ ! -z "$ITEM" -a -z "$SUBDIR" ]; then
         printf "\n$MSG_FAILED Not a valid combination course: '$DBW_COURSE' and item: '$ITEM'."
         printf "\n\n"
         exit 1

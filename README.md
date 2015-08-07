@@ -8,6 +8,11 @@ Part of course repos as a admin utility.
 History
 -------------------
 
+v1.9.7x (latest)
+
+* When mapping paths to directories, only acknowledge preconfigured items, #53.
+
+
 v1.9.7 (2015-08.06)
 
 * Adjustin install phase and documentation.
