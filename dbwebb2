@@ -341,6 +341,7 @@ mapCmdToDir()
                 irc)        RES="me/kmom03/irc" ;;
                 script)     RES="me/kmom03/script" ;;
                 javascripting) RES="me/kmom04/javascripting" ;;
+                server)     RES="me/kmom04/server" ;;
             esac
             ;;
 
