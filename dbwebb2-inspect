@@ -1591,6 +1591,8 @@ fi
 DBW_COURSE_DIR="$THEDIR"
 sourceCourseRepoFile
 
+
+
 #
 # Source validate config file
 #
@@ -1622,7 +1624,13 @@ fi
 # Check if ARCHIVE should be used
 if [[ $ARCHIVE ]]; then
     echo -n "Archiving, please wait..."
-    rsync -a --delete "$THEDIR/me/" "$ARCHIVE/$THEUSER"
+    
+    if [ ! -d "$ARCHIVE/$THEUSER/$DBW_COURSE" ]; then
+        echo -n "creating '$ARCHIVE/$THEUSER/$DBW_COURSE'..."
+        install --directory "$ARCHIVE/$THEUSER/$DBW_COURSE"
+    fi
+    
+    rsync -a --group --delete "$THEDIR/me/" "$ARCHIVE/$THEUSER/$DBW_COURSE/"
     echo "done."
 fi
 
