@@ -10,6 +10,7 @@ History
 
 v1.9.7x (latest)
 
+* When updating leave configfile as is, use current settings as default settings.
 * When mapping paths to directories, only acknowledge preconfigured items, #53.
 
 

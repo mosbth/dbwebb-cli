@@ -41,13 +41,13 @@ function createConfig()
     fi
 
     acronym=${acronym:-$DBW_USER}
-    remoteHost=${remoteHost:-ssh.student.bth.se}
-    sshKey=${sshKey:-\$HOME/.ssh/dbwebb}
-    remoteDir=${remoteDir:-dbwebb-kurser}
-    remoteWwwHost=${remoteWwwHost:-http://www.student.bth.se/}
-    remoteWww=${remoteWww:-www/dbwebb-kurser}
-    baseurl=${baseurl:-http://www.student.bth.se/~$acronym/$remoteDir}
-    laburl=${laburl:-http://www.student.bth.se/~mosstud/kod-exempel/lab}
+    remoteHost=${DBW_HOST:-ssh.student.bth.se}
+    sshKey=${DBW_SSH_KEY:-\$HOME/.ssh/dbwebb}
+    remoteDir=${DBW_REMOTE_BASEDIR:-dbwebb-kurser}
+    remoteWwwHost=${DBW_WWW_HOST:-http://www.student.bth.se/}
+    remoteWww=${DBW_REMOTE_WWWDIR:-www/dbwebb-kurser}
+    baseurl=${DBW_BASEURL:-http://www.student.bth.se/~$acronym/$remoteDir}
+    laburl=${DBW_LABURL:-http://www.student.bth.se/~mosstud/kod-exempel/lab}
 
     echo "DBW_USER='$acronym'"               > "$DBW_CONFIG_FILE"
     echo "DBW_HOST='$remoteHost'"           >> "$DBW_CONFIG_FILE"
