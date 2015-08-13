@@ -359,10 +359,11 @@ if [[ $ARCHIVE ]]; then
     
     if [ ! -d "$ARCHIVE/$THEUSER/$DBW_COURSE" ]; then
         echo -n "creating '$ARCHIVE/$THEUSER/$DBW_COURSE'..."
-        install --directory "$ARCHIVE/$THEUSER/$DBW_COURSE"
+        install --mode=770 --directory "$ARCHIVE/$THEUSER/$DBW_COURSE"
     fi
     
-    rsync -a --group --delete "$THEDIR/me/" "$ARCHIVE/$THEUSER/$DBW_COURSE/"
+    rsync -a --delete "$THEDIR/me/" "$ARCHIVE/$THEUSER/$DBW_COURSE/"
+    chmod -R -g+w "$ARCHIVE/$THEUSER/$DBW_COURSE/"
     echo "done."
 fi
 
