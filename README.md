@@ -10,6 +10,8 @@ History
 
 v1.9.7x (latest)
 
+* Adding inspect for linux, webapp, webgl.
+* Updating inspect for htmlphp.
 * Inspect doing archive to subdirectory for each course and should preserve group ownership.
 * When updating leave configfile as is, use current settings as default settings.
 * When mapping paths to directories, only acknowledge preconfigured items, #53.

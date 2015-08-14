@@ -8,8 +8,8 @@ function linuxme()
     openFilesInEditor "me/redovisa/"
     checkKmomDir "me/redovisa"
 
-    printUrl "me.php" "me/redovisa"  
-    printUrl "redovisning.php" "me/redovisa"  
+    printUrl "me.html" "me/redovisa"  
+    printUrl "report.html" "me/redovisa"  
 
     pressEnterToContinue
 }
@@ -17,7 +17,7 @@ function linuxme()
 
 
 #
-#
+# NOT USED IN LINUX REMOVE WHEN DONE WITH VALIDATIONG OTHER STUFF
 #
 function linuxlab()
 {
@@ -54,6 +54,7 @@ function linux()
 function linuxkmom01()
 {
     test
+    #http://dbwebb.se/uppgift/installera-debian-som-server
 }
 
 
@@ -63,7 +64,9 @@ function linuxkmom01()
 #
 function linuxkmom02()
 {
-    linuxlab "lab1"
+    #http://dbwebb.se/uppgift/skapa-en-webbplats-pa-en-apache-virtual-host
+    #http://dbwebb.se/uppgift/strukturera-filer-kataloger-och-rattigheter-i-en-webbplats
+    test
 }
 
 
@@ -73,7 +76,9 @@ function linuxkmom02()
 #
 function linuxkmom03()
 {
-    linuxlab "lab2"
+    #http://dbwebb.se/uppgift/hitta-saker-i-en-loggfil-med-unix-kommandon
+    #http://dbwebb.se/uppgift/mina-forsta-bash-script
+    test
 }
 
 
@@ -83,7 +88,9 @@ function linuxkmom03()
 #
 function linuxkmom04()
 {
-    linuxlab "lab3"
+    #http://dbwebb.se/uppgift/utfor-nodeschool-workshopen-javascripting
+    #http://dbwebb.se/uppgift/skapa-en-restful-http-server-med-node-js-och-klient-i-bash
+    test
 }
 
 
@@ -93,7 +100,7 @@ function linuxkmom04()
 #
 function linuxkmom05()
 {
-    linuxlab "lab4"
+    test
 }
 
 
@@ -103,7 +110,7 @@ function linuxkmom05()
 #
 function linuxkmom06()
 {
-    linuxlab "lab5"
+    test
 }
 
 

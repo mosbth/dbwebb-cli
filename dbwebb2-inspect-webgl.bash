@@ -8,8 +8,8 @@ function webglme()
     openFilesInEditor "me/redovisa/"
     checkKmomDir "me/redovisa"
 
-    printUrl "me.php" "me/redovisa"  
-    printUrl "redovisning.php" "me/redovisa"  
+    printUrl "me.html" "me/redovisa"  
+    printUrl "report.html" "me/redovisa"  
 
     pressEnterToContinue
 }

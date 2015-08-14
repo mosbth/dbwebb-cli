@@ -8,8 +8,8 @@ function webappme()
     openFilesInEditor "me/redovisa/"
     checkKmomDir "me/redovisa"
 
-    printUrl "me.php" "me/redovisa"  
-    printUrl "redovisning.php" "me/redovisa"  
+    printUrl "me.html" "me/redovisa"  
+    printUrl "report.html" "me/redovisa"  
 
     pressEnterToContinue
 }
@@ -17,7 +17,7 @@ function webappme()
 
 
 #
-#
+# NOT USED IN WEBAPP REMOVE WHEN DONE WITH VALIDATIONG OTHER STUFF
 #
 function webapplab()
 {
@@ -63,7 +63,7 @@ function webappkmom01()
 #
 function webappkmom02()
 {
-    webapplab "lab1"
+    test
 }
 
 
@@ -73,7 +73,7 @@ function webappkmom02()
 #
 function webappkmom03()
 {
-    webapplab "lab2"
+    test
 }
 
 
@@ -83,7 +83,7 @@ function webappkmom03()
 #
 function webappkmom04()
 {
-    webapplab "lab3"
+    test
 }
 
 
@@ -93,7 +93,7 @@ function webappkmom04()
 #
 function webappkmom05()
 {
-    webapplab "lab4"
+    test
 }
 
 
@@ -103,7 +103,7 @@ function webappkmom05()
 #
 function webappkmom06()
 {
-    webapplab "lab5"
+    test
 }
 
 
