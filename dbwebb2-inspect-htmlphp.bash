@@ -1,15 +1,17 @@
-#---------------------------- INSPECT HTMLPHP STARRT --------------------------
+#---------------------------- INSPECT HTMLPHP START --------------------------
 #
 #
 #
 function htmlphpme()
 {
-    headerForTest "-- me-page" "-- ${DBW_WWW}$DBW_COURSE/$KMOM#resultat_redovisning" 
-    openFilesInEditor "me/redovisa/"
-    checkKmomDir "me/redovisa"
+    local me="$1"
+    
+    headerForTest "-- me-page $me" "-- ${DBW_WWW}$DBW_COURSE/$KMOM#resultat_redovisning" 
+    openFilesInEditor "me/$KMOM/$me"
+    checkKmomDir "me/$KMOM/$me"
 
-    printUrl "me.php" "me/redovisa"  
-    printUrl "redovisning.php" "me/redovisa"  
+    printUrl "me.php" "me/$KMOM/$me"  
+    printUrl "redovisning.php" "me/$KMOM/$me"  
 
     pressEnterToContinue
 }
@@ -35,7 +37,7 @@ function htmlphplab()
 
 
 #
-# Test kmom01
+# Test general
 #
 function htmlphp()
 {
@@ -43,7 +45,7 @@ function htmlphp()
     checkKmomDir
     publishKmom
     validateKmom "$KMOM"
-    htmlphpme
+    htmlphpme $( echo "$KMOM" | sed 's/kmom0/me/g' | sed 'a/kmom/me/g' )
 }
 
 

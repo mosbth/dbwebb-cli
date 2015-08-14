@@ -1145,18 +1145,20 @@ javascript1kmom10()
 
 
 #---------------------- INSPECT JAVASCRIP1 END ----------------------------
-#---------------------------- INSPECT HTMLPHP STARRT --------------------------
+#---------------------------- INSPECT HTMLPHP START --------------------------
 #
 #
 #
 function htmlphpme()
 {
-    headerForTest "-- me-page" "-- ${DBW_WWW}$DBW_COURSE/$KMOM#resultat_redovisning" 
-    openFilesInEditor "me/redovisa/"
-    checkKmomDir "me/redovisa"
+    local me="$1"
+    
+    headerForTest "-- me-page $me" "-- ${DBW_WWW}$DBW_COURSE/$KMOM#resultat_redovisning" 
+    openFilesInEditor "me/$KMOM/$me"
+    checkKmomDir "me/$KMOM/$me"
 
-    printUrl "me.php" "me/redovisa"  
-    printUrl "redovisning.php" "me/redovisa"  
+    printUrl "me.php" "me/$KMOM/$me"  
+    printUrl "redovisning.php" "me/$KMOM/$me"  
 
     pressEnterToContinue
 }
@@ -1182,7 +1184,7 @@ function htmlphplab()
 
 
 #
-# Test kmom01
+# Test general
 #
 function htmlphp()
 {
@@ -1190,7 +1192,7 @@ function htmlphp()
     checkKmomDir
     publishKmom
     validateKmom "$KMOM"
-    htmlphpme
+    htmlphpme $( echo "$KMOM" | sed 's/kmom0/me/g' | sed 'a/kmom/me/g' )
 }
 
 
@@ -1266,6 +1268,369 @@ function htmlphpkmom10()
 
 
 #---------------------------- INSPECT HTMLPHP END ----------------------------
+#---------------------------- INSPECT linux START --------------------------
+#
+#
+#
+function linuxme()
+{
+    headerForTest "-- me-page" "-- ${DBW_WWW}$DBW_COURSE/$KMOM#resultat_redovisning" 
+    openFilesInEditor "me/redovisa/"
+    checkKmomDir "me/redovisa"
+
+    printUrl "me.php" "me/redovisa"  
+    printUrl "redovisning.php" "me/redovisa"  
+
+    pressEnterToContinue
+}
+
+
+
+#
+#
+#
+function linuxlab()
+{
+    local lab="$1"
+    local target="me/$KMOM/$lab"
+    
+    headerForTest "-- Lab" "-- ${DBW_WWW}$DBW_COURSE/$lab" 
+    openFilesInEditor "$target"
+    checkKmomDir "$target"
+    printUrl "" "$target"  
+    inspectCommand "answer.php" "$EXEC_DIR/$KMOM/$lab" "php answer.php"
+    pressEnterToContinue
+}
+
+
+
+#
+# Test general
+#
+function linux()
+{
+    headerForTest "-- $DBW_COURSE $KMOM" "-- ${DBW_WWW}$DBW_COURSE/$KMOM"
+    checkKmomDir
+    publishKmom
+    validateKmom "$KMOM"
+    linuxme
+}
+
+
+
+#
+# Test kmom01
+#
+function linuxkmom01()
+{
+    test
+}
+
+
+
+#
+# Test kmom02
+#
+function linuxkmom02()
+{
+    linuxlab "lab1"
+}
+
+
+
+#
+# Test kmom03
+#
+function linuxkmom03()
+{
+    linuxlab "lab2"
+}
+
+
+
+#
+# Test kmom04
+#
+function linuxkmom04()
+{
+    linuxlab "lab3"
+}
+
+
+
+#
+# Test kmom
+#
+function linuxkmom05()
+{
+    linuxlab "lab4"
+}
+
+
+
+#
+# Test kmom
+#
+function linuxkmom06()
+{
+    linuxlab "lab5"
+}
+
+
+
+#
+# Test kmom
+#
+function linuxkmom10()
+{
+    test
+}
+
+
+
+#---------------------------- INSPECT linux END ----------------------------
+#---------------------------- INSPECT webapp START --------------------------
+#
+#
+#
+function webappme()
+{
+    headerForTest "-- me-page" "-- ${DBW_WWW}$DBW_COURSE/$KMOM#resultat_redovisning" 
+    openFilesInEditor "me/redovisa/"
+    checkKmomDir "me/redovisa"
+
+    printUrl "me.php" "me/redovisa"  
+    printUrl "redovisning.php" "me/redovisa"  
+
+    pressEnterToContinue
+}
+
+
+
+#
+#
+#
+function webapplab()
+{
+    local lab="$1"
+    local target="me/$KMOM/$lab"
+    
+    headerForTest "-- Lab" "-- ${DBW_WWW}$DBW_COURSE/$lab" 
+    openFilesInEditor "$target"
+    checkKmomDir "$target"
+    printUrl "" "$target"  
+    inspectCommand "answer.php" "$EXEC_DIR/$KMOM/$lab" "php answer.php"
+    pressEnterToContinue
+}
+
+
+
+#
+# Test general
+#
+function webapp()
+{
+    headerForTest "-- $DBW_COURSE $KMOM" "-- ${DBW_WWW}$DBW_COURSE/$KMOM"
+    checkKmomDir
+    publishKmom
+    validateKmom "$KMOM"
+    webappme
+}
+
+
+
+#
+# Test kmom01
+#
+function webappkmom01()
+{
+    test
+}
+
+
+
+#
+# Test kmom02
+#
+function webappkmom02()
+{
+    webapplab "lab1"
+}
+
+
+
+#
+# Test kmom03
+#
+function webappkmom03()
+{
+    webapplab "lab2"
+}
+
+
+
+#
+# Test kmom04
+#
+function webappkmom04()
+{
+    webapplab "lab3"
+}
+
+
+
+#
+# Test kmom
+#
+function webappkmom05()
+{
+    webapplab "lab4"
+}
+
+
+
+#
+# Test kmom
+#
+function webappkmom06()
+{
+    webapplab "lab5"
+}
+
+
+
+#
+# Test kmom
+#
+function webappkmom10()
+{
+    test
+}
+
+
+
+#---------------------------- INSPECT webapp END ----------------------------
+#---------------------------- INSPECT webgl START --------------------------
+#
+#
+#
+function webglme()
+{
+    headerForTest "-- me-page" "-- ${DBW_WWW}$DBW_COURSE/$KMOM#resultat_redovisning" 
+    openFilesInEditor "me/redovisa/"
+    checkKmomDir "me/redovisa"
+
+    printUrl "me.php" "me/redovisa"  
+    printUrl "redovisning.php" "me/redovisa"  
+
+    pressEnterToContinue
+}
+
+
+
+#
+#
+#
+function webgllab()
+{
+    local lab="$1"
+    local target="me/$KMOM/$lab"
+    
+    headerForTest "-- Lab" "-- ${DBW_WWW}$DBW_COURSE/$lab" 
+    openFilesInEditor "$target"
+    checkKmomDir "$target"
+    printUrl "" "$target"  
+    inspectCommand "answer.php" "$EXEC_DIR/$KMOM/$lab" "php answer.php"
+    pressEnterToContinue
+}
+
+
+
+#
+# Test general
+#
+function webgl()
+{
+    headerForTest "-- $DBW_COURSE $KMOM" "-- ${DBW_WWW}$DBW_COURSE/$KMOM"
+    checkKmomDir
+    publishKmom
+    validateKmom "$KMOM"
+    webglme
+}
+
+
+
+#
+# Test kmom01
+#
+function webglkmom01()
+{
+    test
+}
+
+
+
+#
+# Test kmom02
+#
+function webglkmom02()
+{
+    webgllab "lab1"
+}
+
+
+
+#
+# Test kmom03
+#
+function webglkmom03()
+{
+    webgllab "lab2"
+}
+
+
+
+#
+# Test kmom04
+#
+function webglkmom04()
+{
+    webgllab "lab3"
+}
+
+
+
+#
+# Test kmom
+#
+function webglkmom05()
+{
+    webgllab "lab4"
+}
+
+
+
+#
+# Test kmom
+#
+function webglkmom06()
+{
+    webgllab "lab5"
+}
+
+
+
+#
+# Test kmom
+#
+function webglkmom10()
+{
+    test
+}
+
+
+
+#---------------------------- INSPECT webgl END ----------------------------
 # --------------- DBWEBB-INSPECT MAIN START HERE ---------------
 #
 # Settings
@@ -1631,7 +1996,7 @@ if [[ $ARCHIVE ]]; then
     fi
     
     rsync -a --delete "$THEDIR/me/" "$ARCHIVE/$THEUSER/$DBW_COURSE/"
-    chmod -R -g+w "$ARCHIVE/$THEUSER/$DBW_COURSE/"
+    chmod -R g+w "$ARCHIVE/$THEUSER/$DBW_COURSE/"
     echo "done."
 fi
 

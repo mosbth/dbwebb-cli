@@ -33,6 +33,9 @@ inspect:
 		dbwebb2-inspect-python.bash \
 		dbwebb2-inspect-javascript1.bash \
 		dbwebb2-inspect-htmlphp.bash \
+		dbwebb2-inspect-linux.bash \
+		dbwebb2-inspect-webapp.bash \
+		dbwebb2-inspect-webgl.bash \
 		dbwebb2-inspect.bash \
 		> dbwebb2-inspect
 	chmod 755 dbwebb2-inspect
