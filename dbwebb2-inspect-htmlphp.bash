@@ -66,6 +66,7 @@ function htmlphpkmom01()
 function htmlphpkmom02()
 {
     htmlphplab "lab1"
+    #http://dbwebb.se/uppgift/bygg-ut-din-htmlphp-me-sida-till-version-2 OM DET GÅR
 }
 
 
@@ -76,6 +77,8 @@ function htmlphpkmom02()
 function htmlphpkmom03()
 {
     htmlphplab "lab2"
+    #http://dbwebb.se/uppgift/bygg-en-multisida-och-testa-arrayer
+    #http://dbwebb.se/uppgift/bygg-ut-din-htmlphp-me-sida-till-version-3
 }
 
 
@@ -86,6 +89,8 @@ function htmlphpkmom03()
 function htmlphpkmom04()
 {
     htmlphplab "lab3"
+    #http://dbwebb.se/uppgift/bygg-en-stylevaljare-till-din-webbplats
+    #http://dbwebb.se/uppgift/bygg-ut-din-me-sida-till-version-4
 }
 
 
@@ -96,6 +101,8 @@ function htmlphpkmom04()
 function htmlphpkmom05()
 {
     htmlphplab "lab4"
+    #http://dbwebb.se/uppgift/bygg-en-multisida-for-att-soka-i-en-databas
+    #http://dbwebb.se/htmlphp/proj5
 }
 
 
