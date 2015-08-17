@@ -325,15 +325,13 @@ function dbwebb-download()
     SUBDIR=""
     local who="$2"
 
-    if [ $who != "$DBW_USER" ]; then
+    if [ "$who" != "$DBW_USER" ]; then
         WHERE="${DBW_USER}@${DBW_HOST}:~$who/$DBW_REMOTE_BASEDIR/$DBW_COURSE"
     fi
     
-    echo $WHERE
     checkIfValidConfigOrExit
     checkIfValidCourseRepoOrExit
     createUploadDownloadPaths
-    echo $WHERE
 
     local intro="Downloading the directory '$WHERE' to '$WHAT'.\nExisting local files that are newer will not be overwritten."
     local command="$RSYNC_DOWNLOAD_CMD '$WHERE' '$WHAT'"

@@ -8,8 +8,9 @@ Part of course repos as a admin utility.
 History
 -------------------
 
-v1.9.7x (latest)
+v1.9.8 (2015-08-17)
 
+* Correcting dbwebb download, gave error message.
 * Adding inspect for linux, webapp, webgl.
 * Updating inspect for htmlphp.
 * Inspect doing archive to subdirectory for each course and should preserve group ownership.
