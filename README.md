@@ -8,6 +8,11 @@ Part of course repos as a admin utility.
 History
 -------------------
 
+v1.9.8x (2015-08-24)
+
+* htmlphp inspect for report.php, not redovisning.php.
+
+
 v1.9.8 (2015-08-17)
 
 * Correcting dbwebb download, gave error message.

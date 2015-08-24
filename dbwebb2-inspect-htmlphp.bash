@@ -11,7 +11,7 @@ function htmlphpme()
     checkKmomDir "me/$KMOM/$me"
 
     printUrl "me.php" "me/$KMOM/$me"  
-    printUrl "redovisning.php" "me/$KMOM/$me"  
+    printUrl "report.php" "me/$KMOM/$me"  
 
     pressEnterToContinue
 }
