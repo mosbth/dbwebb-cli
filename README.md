@@ -10,6 +10,7 @@ History
 
 v1.9.8x (2015-08-24)
 
+* Removing sudo from installation script.
 * htmlphp inspect for report.php, not redovisning.php.
 
 
