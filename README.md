@@ -8,7 +8,7 @@ Part of course repos as a admin utility.
 History
 -------------------
 
-v1.9.8x (2015-08-24)
+v1.9.9 (2015-08-24)
 
 * Removing sudo from installation script.
 * htmlphp inspect for report.php, not redovisning.php.
