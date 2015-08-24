@@ -1,6 +1,8 @@
 TMP="/tmp/$$"
 TARGET="https://raw.githubusercontent.com/mosbth/dbwebb-cli/master/dbwebb2"
-WHERE="/usr/local/bin/dbwebb"
+PATH1="/usr/local/bin"
+PATH2="/usr/bin"
+WHERE="$PATH1/dbwebb"
 
 echo "[dbwebb] Downloading and installing dbwebb."
 if hash wget 2> /dev/null; then
@@ -14,14 +16,18 @@ else
     exit 1    
 fi
 
-echo "[dbwebb] Installing into '/usr/local/bin/dbwebb'."
-install --verbose --mode=0755 -D $TMP $WHERE
+if [ ! -d "$PATH1" ]; then
+    WHERE="$PATH2/dbwebb"
+fi
+
+echo "[dbwebb] Installing into '$WHERE'."
+install -v -m 0755 $TMP $WHERE
 
 if [[ $? != 0 ]]; then
     echo "[dbwebb] FAILED. Could not successfully execute the install command."
     echo "Try re-run the installation-command as root using 'sudo'."
     echo "Or, execute the following command, as root or using sudo, to move 'dbwebb' into its place in $WHERE."
-    echo " install --verbose --mode=0755 -D $TMP $WHERE"
+    echo " install -v -m 0755 $TMP $WHERE"
     echo "Or, install using the manual procedure, as explained here:"
     echo " http://dbwebb.se/dbwebb-cli#steg"
     exit 1
