@@ -8,8 +8,9 @@ Part of course repos as a admin utility.
 History
 -------------------
 
-v1.9.9x (2015-08-24)
+v1.9.10 (2015-08-25)
 
+* Generate default ssh-keys instead of DSA-keys.
 * Fixing installation script for Mac OS.
 
 
