@@ -30,7 +30,7 @@
 #
 # Current version
 #
-DBW_VERSION="v1.9.9x (2015-08-24)"
+DBW_VERSION="v1.9.10 (2015-08-25)"
 # --------------- DBWEBB FUNCTIONS PHASE START ---------------
 
 #
@@ -1015,7 +1015,7 @@ function dbwebb-sshkey()
     printf "First we need to create a ssh key and store it locally."
     printf "\nPress enter/return to continue..."
     read void
-    ssh-keygen -t dsa -f "$sshkey" -N ''
+    ssh-keygen -f "$sshkey" -N ''
     
     # Bug (?) om Cygwin & win 8
     # TODO refactor 

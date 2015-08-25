@@ -175,7 +175,7 @@ function dbwebb-sshkey()
     printf "First we need to create a ssh key and store it locally."
     printf "\nPress enter/return to continue..."
     read void
-    ssh-keygen -t dsa -f "$sshkey" -N ''
+    ssh-keygen -f "$sshkey" -N ''
     
     # Bug (?) om Cygwin & win 8
     # TODO refactor 
