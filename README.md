@@ -8,6 +8,11 @@ Part of course repos as a admin utility.
 History
 -------------------
 
+v1.9.10x (2015-08-27)
+
+* Added support for htmlphp/kmom06/me6.
+
+
 v1.9.10 (2015-08-25)
 
 * Generate default ssh-keys instead of DSA-keys.
