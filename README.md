@@ -10,6 +10,7 @@ History
 
 v1.9.10x (2015-08-31)
 
+* Change order of options for dbwebb publish and uglifyjs to work.
 * Add dots when doing publish to track progress.
 * Added support for htmlphp/kmom06/me6.
 
