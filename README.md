@@ -8,8 +8,9 @@ Part of course repos as a admin utility.
 History
 -------------------
 
-v1.9.10x (2015-08-27)
+v1.9.10x (2015-08-31)
 
+* Add dots when doing publish to track progress.
 * Added support for htmlphp/kmom06/me6.
 
 

@@ -206,7 +206,8 @@ function publishCommand()
             else
                 assert 0 "$cmd $options $filename $output $filename" "$cmd failed: $filename"
             fi
-            counter=$(( counter + 1 )) 
+            counter=$(( counter + 1 ))
+            printf "."
         done
         printf " ($counter)"
     else
