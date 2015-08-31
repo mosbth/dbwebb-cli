@@ -247,7 +247,8 @@ publish()
     
     [[ $DISABLE_HTML_MINIFIER ]] || publishCommand "$to" "$HTML_MINIFIER" "html" "$HTML_MINIFIER_CONFIG $HTML_MINIFIER_OPTIONS" "--output" 
     [[ $DISABLE_CLEANCSS ]]      || publishCommand "$to" "$CLEANCSS" "css" "$CLEANCSS_OPTIONS" "-o" 
-    [[ $DISABLE_UGLIFYJS ]]      || publishCommand "$to" "$UGLIFYJS" "js" "$UGLIFYJS_OPTIONS" "-o"
+    #[[ $DISABLE_UGLIFYJS ]]      || publishCommand "$to" "$UGLIFYJS" "js" "$UGLIFYJS_OPTIONS" "-o"
+    [[ $DISABLE_UGLIFYJS ]]      || publishCommand "$to" "$UGLIFYJS" "js" "$UGLIFYJS_OPTIONS --output" "--"
     [[ $DISABLE_PHPMINIFY ]]     || publishCommand "$to" "$PHPMINIFY" "php" "$PHPMINIFY_OPTIONS" "> /tmp/$$; mv /tmp/$$ "
     #publishCommand "$to" "$UGLIFYPHP" "php" "" "--output" 
 
