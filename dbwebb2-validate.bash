@@ -360,6 +360,7 @@ fi
 
 printf "Validating '%s'." "$dir"
 setDefaultConfigFiles
+setChmod
 validate "$dir" 
 
 if [[ $optPublish ]]; then
