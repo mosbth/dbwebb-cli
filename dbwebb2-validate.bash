@@ -121,6 +121,7 @@ publishChmod()
         find "$dir" -type d -exec chmod a+rx {} \;  
         find "$dir" -type f -exec chmod a+r {} \;   
         find "$dir" -type f -name '*.py' -exec chmod go-r {} \;
+        find "$dir" -type f -name '*.cgi' -exec chmod a+rx {} \;   
     fi
 }
 

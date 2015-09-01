@@ -225,7 +225,6 @@ setChmod()
 
     find "$DBW_COURSE_DIR" -type d -exec chmod u+rwx,go+rx {} \;  
     find "$DBW_COURSE_DIR" -type f -exec chmod u+rw,go+r {} \;   
-    find "$DBW_COURSE_DIR" -type f -name '*.cgi' -exec chmod a+rx {} \;   
 }
 
 
@@ -864,6 +863,7 @@ publishChmod()
         find "$dir" -type d -exec chmod a+rx {} \;  
         find "$dir" -type f -exec chmod a+r {} \;   
         find "$dir" -type f -name '*.py' -exec chmod go-r {} \;
+        find "$dir" -type f -name '*.cgi' -exec chmod a+rx {} \;   
     fi
 }
 
