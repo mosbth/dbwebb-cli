@@ -8,8 +8,9 @@ Part of course repos as a admin utility.
 History
 -------------------
 
-v1.9.10x (2015-08-31)
+v1.9.11 (2015-09-01)
 
+* Correcting chmod for python cgi-scripts on publish.
 * Change order of options for dbwebb publish and uglifyjs to work.
 * Add dots when doing publish to track progress.
 * Added support for htmlphp/kmom06/me6.
