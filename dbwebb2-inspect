@@ -2011,7 +2011,7 @@ if [[ $ARCHIVE ]]; then
         install --mode=770 --directory "$ARCHIVE/$THEUSER/$DBW_COURSE"
     fi
     
-    rsync -a --delete "$THEDIR/me/" "$ARCHIVE/$THEUSER/$DBW_COURSE/"
+    rsync -a --no-perms --delete "$THEDIR/me/" "$ARCHIVE/$THEUSER/$DBW_COURSE/"
     find "$ARCHIVE/$THEUSER/$DBW_COURSE/" -user $USER -exec chmod g+w {} \;   
     echo "done."
 fi
