@@ -8,6 +8,11 @@ Part of course repos as a admin utility.
 History
 -------------------
 
+v1.9.11x (2015-09-02)
+
+* Added support for linux kmom05/maze.
+
+
 v1.9.11 (2015-09-01)
 
 * Correcting chmod for python cgi-scripts on publish.

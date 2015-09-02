@@ -30,7 +30,7 @@
 #
 # Current version
 #
-DBW_VERSION="v1.9.11 (2015-09-01)"
+DBW_VERSION="v1.9.11x (2015-09-02)"
 # --------------- DBWEBB FUNCTIONS PHASE START ---------------
 
 #
@@ -343,6 +343,7 @@ mapCmdToDir()
                 script)     RES="me/kmom03/script" ;;
                 javascripting) RES="me/kmom04/javascripting" ;;
                 server)     RES="me/kmom04/server" ;;
+                maze)       RES="me/kmom05/maze" ;;
             esac
             ;;
 

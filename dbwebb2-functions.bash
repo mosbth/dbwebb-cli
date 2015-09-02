@@ -310,6 +310,7 @@ mapCmdToDir()
                 script)     RES="me/kmom03/script" ;;
                 javascripting) RES="me/kmom04/javascripting" ;;
                 server)     RES="me/kmom04/server" ;;
+                maze)       RES="me/kmom05/maze" ;;
             esac
             ;;
 
