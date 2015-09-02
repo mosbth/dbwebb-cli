@@ -361,7 +361,7 @@ fi
 
 printf "Validating '%s'." "$dir"
 setDefaultConfigFiles
-setChmod
+#setChmod
 validate "$dir" 
 
 if [[ $optPublish ]]; then
