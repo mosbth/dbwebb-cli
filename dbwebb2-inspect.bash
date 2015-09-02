@@ -363,7 +363,7 @@ if [[ $ARCHIVE ]]; then
     fi
     
     rsync -a --delete "$THEDIR/me/" "$ARCHIVE/$THEUSER/$DBW_COURSE/"
-    chmod -R g+w "$ARCHIVE/$THEUSER/$DBW_COURSE/"
+    find "$ARCHIVE/$THEUSER/$DBW_COURSE/" -user $USER -exec chmod g+w {} \;   
     echo "done."
 fi
 
