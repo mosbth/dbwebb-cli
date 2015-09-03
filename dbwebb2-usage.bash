@@ -24,6 +24,7 @@ function usage ()
 "Options:"
 "  --inspect, -i  Help for inspect."
 "  --verbose, -v  More verbose."
+"  --force, -f    Force upload/download of files, overwrite existing."
 "  --yes, -y      Do not wait for my input."
 "  --help, -h     Print help."
 "  --version      Print version."

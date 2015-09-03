@@ -8,6 +8,12 @@ Part of course repos as a admin utility.
 History
 -------------------
 
+v1.9.13 (2015-09-03)
+
+* Adding option `-f, --force` to upload, validate and publish to force upload and overwrite of all files.
+* Replacing `--delete` with `--force`.
+
+
 v1.9.12 (2015-09-03)
 
 * Fixing permissions on files and dirs from Cygwin since chmod does not work.
