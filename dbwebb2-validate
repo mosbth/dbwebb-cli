@@ -663,9 +663,12 @@ DBW_OS="$( uname -a )"
 # Create the ssh-command with details from the config-file
 SSH_CMD="ssh ${DBW_USER}@${DBW_HOST} $DBW_SSH_KEY_OPTION"
 
+# Default chmod for rsync-command 
+RSYNC_CHMOD="--chmod=Du+w,Dgo+rx,Fu+rw,Fgo+r"
+
 # Create the basis for the upload command
-RSYNC_CMD="rsync -av --delete --exclude .git --exclude .gitignore --exclude literature --exclude tutorial --exclude .default -e \"ssh $DBW_SSH_KEY_OPTION\""
-RSYNC_DOWNLOAD_CMD="rsync -avuc -e \"ssh $DBW_SSH_KEY_OPTION\""
+RSYNC_CMD="rsync -av $RSYNC_CHMOD --delete --exclude .git --exclude .gitignore --exclude literature --exclude tutorial --exclude .default -e \"ssh $DBW_SSH_KEY_OPTION\""
+RSYNC_DOWNLOAD_CMD="rsync -avuc $RSYNC_CHMOD -e \"ssh $DBW_SSH_KEY_OPTION\""
 
 DBW_REMOTE_DESTINATION="${DBW_USER}@${DBW_HOST}:$DBW_REMOTE_BASEDIR/$DBW_COURSE"
 DBW_REMOTE_WWW_DESTINATION="${DBW_USER}@${DBW_HOST}:$DBW_REMOTE_WWWDIR/$DBW_COURSE"
@@ -861,9 +864,9 @@ publishChmod()
     local dir="$1"
 
     if [ -d "$dir" ]; then
-        find "$dir" -type d -exec chmod a+rx {} \;  
-        find "$dir" -type f -exec chmod a+r {} \;   
-        find "$dir" -type f -name '*.py' -exec chmod go-r {} \;
+        #find "$dir" -type d -exec chmod a+rx {} \;  
+        #find "$dir" -type f -exec chmod a+r {} \;   
+        find "$dir" -type f -name '*.py' -exec chmod o-r {} \;
         find "$dir" -type f -name '*.cgi' -exec chmod a+rx {} \;   
     fi
 }
@@ -984,9 +987,9 @@ publish()
     fi
 
     if [[ $optDryRun ]]; then
-        printf "\nrsync -a --delete %s %s" "$from/" "$to/"
+        printf "\nrsync -a $RSYNC_CHMOD --delete %s %s" "$from/" "$to/"
     else
-        rsync -a --delete "$from/" "$to/"
+        rsync -a $RSYNC_CHMOD --delete "$from/" "$to/"
     fi
     
     [[ $DISABLE_HTML_MINIFIER ]] || publishCommand "$to" "$HTML_MINIFIER" "html" "$HTML_MINIFIER_CONFIG $HTML_MINIFIER_OPTIONS" "--output" 

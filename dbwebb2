@@ -663,9 +663,12 @@ DBW_OS="$( uname -a )"
 # Create the ssh-command with details from the config-file
 SSH_CMD="ssh ${DBW_USER}@${DBW_HOST} $DBW_SSH_KEY_OPTION"
 
+# Default chmod for rsync-command 
+RSYNC_CHMOD="--chmod=Du+w,Dgo+rx,Fu+rw,Fgo+r"
+
 # Create the basis for the upload command
-RSYNC_CMD="rsync -av --delete --exclude .git --exclude .gitignore --exclude literature --exclude tutorial --exclude .default -e \"ssh $DBW_SSH_KEY_OPTION\""
-RSYNC_DOWNLOAD_CMD="rsync -avuc -e \"ssh $DBW_SSH_KEY_OPTION\""
+RSYNC_CMD="rsync -av $RSYNC_CHMOD --delete --exclude .git --exclude .gitignore --exclude literature --exclude tutorial --exclude .default -e \"ssh $DBW_SSH_KEY_OPTION\""
+RSYNC_DOWNLOAD_CMD="rsync -avuc $RSYNC_CHMOD -e \"ssh $DBW_SSH_KEY_OPTION\""
 
 DBW_REMOTE_DESTINATION="${DBW_USER}@${DBW_HOST}:$DBW_REMOTE_BASEDIR/$DBW_COURSE"
 DBW_REMOTE_WWW_DESTINATION="${DBW_USER}@${DBW_HOST}:$DBW_REMOTE_WWWDIR/$DBW_COURSE"
@@ -914,7 +917,7 @@ function dbwebb-init-me()
     local me="$DBW_COURSE_DIR/me/"
 
     local intro="Creating and initiating the directory 'me/' by copying directory structure and files from the directory '.default/' (will not overwrite existing files)."
-    local command="rsync -av --exclude README.md --ignore-existing \"$meDefault\" \"$me\""
+    local command="rsync -av $RSYNC_CHMOD --exclude README.md --ignore-existing \"$meDefault\" \"$me\""
     local message="to init the directory 'me/'."
 
     checkIfValidCourseRepoOrExit
@@ -958,7 +961,7 @@ function dbwebb-init-structure-dbwebb-kurser()
 
     createUploadDownloadPaths
 
-    command="rsync -av --exclude .git --exclude .gitignore --exclude literature --exclude tutorial --exclude .default --exclude example --include='*/' --include='.??*' --exclude='*' -e \"ssh $DBW_SSH_KEY_OPTION\" '$WHAT' '$WHERE'"
+    command="rsync -av $RSYNC_CHMOD --exclude .git --exclude .gitignore --exclude literature --exclude tutorial --exclude .default --exclude example --include='*/' --include='.??*' --exclude='*' -e \"ssh $DBW_SSH_KEY_OPTION\" '$WHAT' '$WHERE'"
     executeCommand "$intro" "$command" "$message"
 }
 
@@ -983,7 +986,7 @@ function dbwebb-init-structure-www-dbwebb-kurser()
 
     createUploadDownloadPaths
 
-    command="rsync -av --exclude .git --exclude .gitignore --exclude literature --exclude tutorial --exclude .default --exclude example --include='*/' --exclude='*' -e \"ssh $DBW_SSH_KEY_OPTION\" '$WHAT' '$WHERE'"
+    command="rsync -av $RSYNC_CHMOD --exclude .git --exclude .gitignore --exclude literature --exclude tutorial --exclude .default --exclude example --include='*/' --exclude='*' -e \"ssh $DBW_SSH_KEY_OPTION\" '$WHAT' '$WHERE'"
     executeCommand "$intro" "$command" "$message"
 }
 
@@ -1210,7 +1213,7 @@ function dbwebb-validate()
     local log="$HOME/.dbwebb-validate.log"
     local intro="Uploading the directory '$WHAT' to '$WHERE' for validation."
     local command1="$RSYNC_CMD '$WHAT' '$WHERE'"
-    local command2="rsync -av --exclude .git --exclude .gitignore --exclude .default --include='.??*' --exclude='*' -e \"ssh $DBW_SSH_KEY_OPTION\" '$DBW_COURSE_DIR/' '$DBW_REMOTE_DESTINATION/'"
+    local command2="rsync -av $RSYNC_CHMOD --exclude .git --exclude .gitignore --exclude .default --include='.??*' --exclude='*' -e \"ssh $DBW_SSH_KEY_OPTION\" '$DBW_COURSE_DIR/' '$DBW_REMOTE_DESTINATION/'"
     local command3="$SSH_CMD 'dbwebb-validate --course-repo \"$DBW_REMOTE_BASEDIR/$DBW_COURSE\" \"$DBW_REMOTE_BASEDIR/$DBW_COURSE/$SUBDIR\"' 2>&1 | tee '$log';"
     local message="to validate course results.\nSaved a log of the output: less -R '$log'"
     executeCommand "$intro" "$command1; $command2; $command3" "$message"
@@ -1236,7 +1239,7 @@ function dbwebb-publish()
     local log="$HOME/.dbwebb-publish.log"
     local intro="Uploading the directory '$WHAT' to '$WHERE' to validate and publish."
     local command1="$RSYNC_CMD '$WHAT' '$WHERE'"
-    local command2="rsync -av --exclude .git --exclude .gitignore --exclude .default --include='.??*' --exclude='*' -e \"ssh $DBW_SSH_KEY_OPTION\" '$DBW_COURSE_DIR/' '$DBW_REMOTE_DESTINATION/'"
+    local command2="rsync -av $RSYNC_CHMOD --exclude .git --exclude .gitignore --exclude .default --include='.??*' --exclude='*' -e \"ssh $DBW_SSH_KEY_OPTION\" '$DBW_COURSE_DIR/' '$DBW_REMOTE_DESTINATION/'"
     local command3="$SSH_CMD 'dbwebb-validate --publish --course-repo \"$DBW_REMOTE_BASEDIR/$DBW_COURSE\" --publish-to \"$DBW_REMOTE_WWWDIR/$DBW_COURSE/$SUBDIR\" \"$DBW_REMOTE_BASEDIR/$DBW_COURSE/$SUBDIR\"' 2>&1 | tee '$log';"
     local message="to validate and publish course results.\nSaved a log of the output: less -R '$log'"
     executeCommand "$intro" "$command1; $command2; $command3" "$message"

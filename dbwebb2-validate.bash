@@ -118,9 +118,9 @@ publishChmod()
     local dir="$1"
 
     if [ -d "$dir" ]; then
-        find "$dir" -type d -exec chmod a+rx {} \;  
-        find "$dir" -type f -exec chmod a+r {} \;   
-        find "$dir" -type f -name '*.py' -exec chmod go-r {} \;
+        #find "$dir" -type d -exec chmod a+rx {} \;  
+        #find "$dir" -type f -exec chmod a+r {} \;   
+        find "$dir" -type f -name '*.py' -exec chmod o-r {} \;
         find "$dir" -type f -name '*.cgi' -exec chmod a+rx {} \;   
     fi
 }
@@ -241,9 +241,9 @@ publish()
     fi
 
     if [[ $optDryRun ]]; then
-        printf "\nrsync -a --delete %s %s" "$from/" "$to/"
+        printf "\nrsync -a $RSYNC_CHMOD --delete %s %s" "$from/" "$to/"
     else
-        rsync -a --delete "$from/" "$to/"
+        rsync -a $RSYNC_CHMOD --delete "$from/" "$to/"
     fi
     
     [[ $DISABLE_HTML_MINIFIER ]] || publishCommand "$to" "$HTML_MINIFIER" "html" "$HTML_MINIFIER_CONFIG $HTML_MINIFIER_OPTIONS" "--output" 

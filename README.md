@@ -10,6 +10,7 @@ History
 
 v1.9.11x (2015-09-03)
 
+* Fixing permissions on files and dirs from Cygwin since chmod does not work.
 * Added option --delete for download to make an exact copy of the remote.
 * Added support for linux kmom05/maze.
 
