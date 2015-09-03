@@ -8,8 +8,9 @@ Part of course repos as a admin utility.
 History
 -------------------
 
-v1.9.11x (2015-09-02)
+v1.9.11x (2015-09-03)
 
+* Added option --delete for download to make an exact copy of the remote.
 * Added support for linux kmom05/maze.
 
 

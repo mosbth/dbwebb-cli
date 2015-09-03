@@ -333,8 +333,18 @@ function dbwebb-download()
     checkIfValidCourseRepoOrExit
     createUploadDownloadPaths
 
-    local intro="Downloading the directory '$WHERE' to '$WHAT'.\nExisting local files that are newer will not be overwritten."
-    local command="$RSYNC_DOWNLOAD_CMD '$WHERE' '$WHAT'"
+    local command=
+    local overwrite=
+    
+    if [[ $DELETE ]]; then
+        command="$RSYNC_CMD '$WHERE' '$WHAT'"
+        overwrite="WILL BE"
+    else
+        command="$RSYNC_DOWNLOAD_CMD '$WHERE' '$WHAT'"
+        overwrite="WILL NOT BE"
+    fi
+    
+    local intro="Downloading the directory '$WHERE' to '$WHAT'.\nExisting local files that are newer $overwrite overwritten."
     local message="to download data."
     executeCommand "$intro" "$command" "$message" "really?"
 }
@@ -645,6 +655,11 @@ do
 
         --verbose | -v)
             VERY_VERBOSE="yes"
+            shift
+        ;;
+
+        --delete)
+            DELETE="--delete"
             shift
         ;;
 
