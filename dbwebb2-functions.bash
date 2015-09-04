@@ -1,6 +1,26 @@
 # --------------- DBWEBB FUNCTIONS PHASE START ---------------
 
 #
+# Set correct mode on published file and dirs
+#
+publishChmod()
+{
+    local dir="$1"
+
+    if [ -d "$dir" ]; then
+        #find "$dir" -type d -exec chmod a+rx {} \;  
+        #find "$dir" -type f -exec chmod a+r {} \;   
+        find "$dir" -type f -name '*.conf' -exec chmod go-r {} \;
+        find "$dir" -type f -name '*.py' -exec chmod go-r {} \;
+        find "$dir" -type f -name '*.txt' -exec chmod go-r {} \;
+        find "$dir" -type f -name '*.bash' -exec chmod go-r {} \;
+        find "$dir" -type f -name '*.cgi' -exec chmod a+rx {} \;   
+    fi
+}
+
+
+
+#
 # Does key exists in array?
 #
 function exists() {

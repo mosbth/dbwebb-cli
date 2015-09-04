@@ -1,49 +1,48 @@
 #---------------------------- INSPECT linux START --------------------------
 #
-#
-#
-function linuxme()
-{
-    headerForTest "-- me-page" "-- ${DBW_WWW}$DBW_COURSE/$KMOM#resultat_redovisning" 
-    openFilesInEditor "me/redovisa/"
-    checkKmomDir "me/redovisa"
-
-    printUrl "me.html" "me/redovisa"  
-    printUrl "report.html" "me/redovisa"  
-
-    pressEnterToContinue
-}
-
-
-
-#
-# NOT USED IN LINUX REMOVE WHEN DONE WITH VALIDATIONG OTHER STUFF
-#
-function linuxlab()
-{
-    local lab="$1"
-    local target="me/$KMOM/$lab"
-    
-    headerForTest "-- Lab" "-- ${DBW_WWW}$DBW_COURSE/$lab" 
-    openFilesInEditor "$target"
-    checkKmomDir "$target"
-    printUrl "" "$target"  
-    inspectCommand "answer.php" "$EXEC_DIR/$KMOM/$lab" "php answer.php"
-    pressEnterToContinue
-}
-
-
-
-#
 # Test general
 #
 function linux()
 {
-    headerForTest "-- $DBW_COURSE $KMOM" "-- ${DBW_WWW}$DBW_COURSE/$KMOM"
-    checkKmomDir
-    publishKmom
-    validateKmom "$KMOM"
-    linuxme
+    inspectIntro
+    inspectMe "me/redovisa" "me.html" "report.html"
+}
+
+
+
+#
+# Test script exercise
+#
+linuxExerciseScript()
+{
+    local target="me/$KMOM/$1"
+    
+    inspectCommand "hello.bash" "$THEDIR/$target" "bash hello.bash"
+    viewFileContent "hello.bash" "$target"
+
+    inspectCommand "argument.bash" "$THEDIR/$target" "bash argument.bash make-me-proud"
+    viewFileContent "argument.bash" "$target"
+
+    inspectCommand "if_1.bash" "$THEDIR/$target" "bash if_1.bash 7"
+    inspectCommand "if_1.bash" "$THEDIR/$target" "bash if_1.bash 5"
+    inspectCommand "if_1.bash" "$THEDIR/$target" "bash if_1.bash 3"
+    viewFileContent "if_1.bash" "$target"
+
+    inspectCommand "if_2.bash" "$THEDIR/$target" "bash if_2.bash 7"
+    inspectCommand "if_2.bash" "$THEDIR/$target" "bash if_2.bash 5"
+    inspectCommand "if_2.bash" "$THEDIR/$target" "bash if_2.bash 3"
+    viewFileContent "if_2.bash" "$target"
+
+    inspectCommand "argument_2.bash" "$THEDIR/$target" "bash argument_2.bash d"
+    inspectCommand "argument_2.bash" "$THEDIR/$target" "bash argument_2.bash n"
+    inspectCommand "argument_2.bash" "$THEDIR/$target" "bash argument_2.bash a second-argument"
+    viewFileContent "argument_2.bash" "$target"
+
+    inspectCommand "forloop.bash" "$THEDIR/$target" "bash forloop.bash"
+    viewFileContent "forloop.bash" "$target"
+
+    inspectCommand "myFunction.bash" "$THEDIR/$target" "bash myFunction.bash"
+    viewFileContent "myFunction.bash" "$target"
 }
 
 
@@ -53,8 +52,7 @@ function linux()
 #
 function linuxkmom01()
 {
-    test
-    #http://dbwebb.se/uppgift/installera-debian-som-server
+    inspectExercise "install" "uppgift/installera-debian-som-server" "log.txt" "" "ssh.png"
 }
 
 
@@ -64,9 +62,9 @@ function linuxkmom01()
 #
 function linuxkmom02()
 {
-    #http://dbwebb.se/uppgift/skapa-en-webbplats-pa-en-apache-virtual-host
-    #http://dbwebb.se/uppgift/strukturera-filer-kataloger-och-rattigheter-i-en-webbplats
-    test
+    inspectExercise "vhost" "uppgift/skapa-en-webbplats-pa-en-apache-virtual-host" "log.txt" "me.linux.se.conf" "dump.png"
+
+    inspectExercise "mysite" "uppgift/strukturera-filer-kataloger-och-rattigheter-i-en-webbplats" "log.txt" "mysite.linux.se.conf" "dump.png"
 }
 
 
@@ -76,9 +74,10 @@ function linuxkmom02()
 #
 function linuxkmom03()
 {
-    #http://dbwebb.se/uppgift/hitta-saker-i-en-loggfil-med-unix-kommandon
-    #http://dbwebb.se/uppgift/mina-forsta-bash-script
-    test
+    inspectExercise "irc" "uppgift/hitta-saker-i-en-loggfil-med-unix-kommandon" "log.txt" "solutions.bash" "" "" "solutions.bash" "bash solutions.bash" "" "more ?.txt"
+
+    inspectExercise "script" "uppgift/mina-forsta-bash-script"
+    linuxExerciseScript "script"
 }
 
 

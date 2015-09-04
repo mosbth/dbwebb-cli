@@ -1,6 +1,7 @@
 #---------------------------- INSPECT PYTHON START ----------------------------
 #
 # Test python me
+# TODO rearrange structure of me in js1 and remove this function
 #
 pythonme()
 {
@@ -10,8 +11,18 @@ pythonme()
 
     printUrl "me.cgi" "me"  
     printUrl "redovisning.cgi" "me"  
+}
 
-    pressEnterToContinue
+
+
+#
+# Test python general
+#
+python()
+{
+    inspectIntro
+    pythonme
+    #inspectMe "me" "me.cgi" "redovisning.cgi"
 }
 
 
@@ -32,8 +43,6 @@ pythonplane()
     inspectCommand "plane1.py" "$where" "python3 plane1.py"
     
     printUrl "plane1.cgi" "$target"  
-
-    pressEnterToContinue
 }
 
 
@@ -92,8 +101,6 @@ pythonmarvin5()
     # seo
     opts="--json seo http://dbwebb.se"
     inspectCommand "$main" "$where" "python3 $main $opts" "$opts"
-
-    pressEnterToContinue
 }
 
 
@@ -132,8 +139,6 @@ pythonAdventure()
     # run it
     opts=""
     inspectCommand "$main" "$where" "python3 $main $opts" "$opts"
-
-    pressEnterToContinue
 }
 
 
@@ -159,8 +164,6 @@ pythongame()
         printf "\ncd \"$EXEC_DIR/$KMOM/$lab\"; python3 $main"
         printf "\n"
     fi
-
-    pressEnterToContinue
 }
 
 
@@ -179,25 +182,8 @@ pythonexercise()
     openFilesInEditor "$target"
     checkKmomDir "$target"
     inspectCommand "$main" "$EXEC_DIR/$KMOM/$lab" "python3 $main"
-    pressEnterToContinue
 }
     
-
-
-#
-# Test python general
-#
-python()
-{
-    local target="me/$KMOM"
-
-    headerForTest "-- $DBW_COURSE $KMOM" "-- ${DBW_WWW}$DBW_COURSE/$KMOM"
-    checkKmomDir "$target"
-    publishKmom 
-    validateKmom 
-    pythonme
-}
-
 
 
 #

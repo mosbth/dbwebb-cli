@@ -41,10 +41,10 @@ PHPMINIFY="php"
 PHPMINIFY_OPTIONS="--strip"
 
 CHECKBASH="shellcheck"
-CHECKBASH_OPTIONS="--shell=bash"
+CHECKBASH_OPTIONS="--shell=bash --exclude=SC2002"
 
 CHECKSH="shellcheck"
-CHECKSH_OPTIONS="--shell=sh"
+CHECKSH_OPTIONS="--shell=sh --exclude=SC2002"
 
 #YAML="dbwebb-js-yaml"
 #YAML_OPTIONS="--silent"
@@ -106,23 +106,6 @@ function checkInstalledValidateTools
     printf " uglifyjs:      %s\n" "$( checkCommand $UGLIFYJS )"
     printf " phpminify:     %s\n" "$( checkCommand $PHPMINIFY )"
     printf " phpuglify:     %s\n" "$( checkCommand $PHPUGLIFY )"
-}
-
-
-
-#
-# Set correct mode on published file and dirs
-#
-publishChmod()
-{
-    local dir="$1"
-
-    if [ -d "$dir" ]; then
-        #find "$dir" -type d -exec chmod a+rx {} \;  
-        #find "$dir" -type f -exec chmod a+r {} \;   
-        find "$dir" -type f -name '*.py' -exec chmod o-r {} \;
-        find "$dir" -type f -name '*.cgi' -exec chmod a+rx {} \;   
-    fi
 }
 
 

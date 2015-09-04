@@ -1,6 +1,7 @@
 #---------------------- INSPECT JAVASCRIPT1 START -----------------------
 #
 # Test javascript1 me
+# TODO rearrange structure of me in js1 and remove this function
 #
 javascript1me()
 {
@@ -9,7 +10,18 @@ javascript1me()
     checkKmomDir "me"
     printUrl "me.html" "me"  
     printUrl "redovisning.html" "me"
-    pressEnterToContinue
+}
+
+
+
+#
+# Test javascript1 general
+#
+javascript1()
+{
+    inspectIntro
+    javascript1me
+    #inspectMe "me" "me.html" "redovisning.html"
 }
 
 
@@ -29,23 +41,6 @@ javascript1exercise()
     checkKmomDir "$target"
     fileIsReadable "$target/$main"
     printUrl "$main" "$target"  
-    pressEnterToContinue
-}
-
-
-
-#
-# Test javascript1 general
-#
-javascript1()
-{
-    local target="me/$KMOM"
-
-    headerForTest "-- $DBW_COURSE $KMOM" "-- ${DBW_WWW}$DBW_COURSE/$KMOM"
-    checkKmomDir "$target"
-    publishKmom 
-    validateKmom 
-    javascript1me
 }
 
 

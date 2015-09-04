@@ -8,6 +8,16 @@ Part of course repos as a admin utility.
 History
 -------------------
 
+v1.9.14 (2015-09-04)
+
+* Adding tree for all inspect.
+* Rework of inspects for all courses.
+* Adding inspect for htmlphp kmom01 - kmom10, not complete yet.
+* Adding inspect for linux kmom01 - kmom03.
+* Chmod to unreadable files `*.txt` and `*.bash` when publish.
+* Exclude SC2002 from shellcheck.
+
+
 v1.9.13 (2015-09-03)
 
 * Adding option `-f, --force` to upload, validate and publish to force upload and overwrite of all files.

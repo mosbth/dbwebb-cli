@@ -15,6 +15,8 @@ headerForTest()
     what="$1"
     task="$2"
 
+    pressEnterToContinue
+    
     printf "$WRAP_HEADER"
     printf "\n$what"
     if [ ! -z "$task" ]; then
@@ -25,7 +27,7 @@ headerForTest()
 
 
 #
-# Open viles in editor
+# Open files in editor
 #
 openFilesInEditor()
 {
@@ -35,12 +37,27 @@ openFilesInEditor()
 }
 
 
+
+#
+# Open files in editor
+#
+viewFileTree()
+{
+    local dirname="$THEDIR/$1"
+
+    printf "\nView content of directory:\n"
+    tree -ph "$dirname"
+}
+
+
+
 #
 # Change to directory
 #
 changeToDirectory()
 {
-    printf "\nChange to directory:"
+    local dirname="$THEDIR/$1"
+    
     printf "\ncd \"%s/%s\"" "$THEDIR" "$1"
     printf "\n"
 }
@@ -69,11 +86,41 @@ printUrl()
 
 
 #
+# Check if file exists and display it 
+#
+viewFileContent()
+{
+    local file="$1"
+    local dir="$2"
+    
+    assert 0 "test -f \"$THEDIR/$dir/$file\"" "The file '$file' is missing or not readable."
+
+    if [ $? -eq 0 ]; then
+        printf "\nView file '%s' [Yn]? " "$file"
+
+        read answer
+        default="y"
+        answer=${answer:-$default}
+
+        if [ "$answer" = "y" -o "$answer" = "Y" ]
+        then
+            echo ">>>"
+            more "$THEDIR/$dir/$file"
+            echo "<<<"
+            pressEnterToContinue
+        fi
+    fi
+}
+
+
+
+#
 # Test check the kmom dir exists
 #
 checkKmomDir()
 {
     local dirname="$THEDIR/$1"
+    
     assert 0 "test -r $dirname -a -d $dirname" "Directory $dirname not readable."
 }
 
@@ -85,7 +132,86 @@ checkKmomDir()
 fileIsReadable()
 {
     local filename="$THEDIR/$1"
+    
     assert 0 "test -r $filename" "The file $filename is not readable."
+}
+
+
+
+#
+# Test general
+#
+function inspectIntro()
+{
+    local target="me/$KMOM"
+
+    headerForTest "-- $DBW_COURSE $KMOM" "-- ${DBW_WWW}$DBW_COURSE/$KMOM"
+    checkKmomDir "$target"
+    publishKmom
+    viewFileTree "$target"
+    validateKmom "$KMOM"
+}
+
+
+
+#
+# The me-page
+#
+function inspectMe()
+{
+    local target="$1"
+    local mepage="$2"
+    local reportpage="$3"
+    local assignment="$4"
+
+    if [ ! -z "$assignment" ]; then
+        assignment="\n-- ${DBW_WWW}$assignment"
+    fi
+
+    headerForTest "-- me-page" "-- ${DBW_WWW}$DBW_COURSE/$KMOM#resultat_redovisning$assignment" 
+    checkKmomDir "$target"
+    viewFileTree "$target"
+    openFilesInEditor "$target"
+
+    printUrl "$mepage" "$target"  
+    printUrl "$reportpage" "$target"  
+}
+
+
+
+#
+# Test a exercise
+#
+inspectExercise()
+{
+    local exercise="$1"
+    local url="$2"
+    local file1="$3"
+    local file2="$4"
+    local file3="$5"
+    local file4="$6"
+    local file5="$7"
+    local file6="$8"
+    local file7="$9"
+    local file8="${10}"
+    local target="me/$KMOM/$exercise"
+
+    headerForTest "-- $exercise" "-- ${DBW_WWW}$url"
+    checkKmomDir "$target"
+    viewFileTree "$target"
+    openFilesInEditor "$target"
+    
+    # As files
+    [ -z "$file1" ] || viewFileContent "$file1" "$target"
+    [ -z "$file2" ] || viewFileContent "$file2" "$target"
+
+    # As urls
+    [ -z "$file3" ] || printUrl "$file3" "$target"
+    [ -z "$file4" ] || printUrl "$file4" "$target"
+
+    # As commands
+    [ -z "$file5" -a -z "$file6" ] || inspectCommand "$file5" "$THEDIR/$target" "$file6"
+    [ -z "$file7" -a -z "$file8" ] || inspectCommand "$file7" "$THEDIR/$target" "$file8"
 }
 
 
@@ -143,7 +269,8 @@ publishKmom()
     printf "\nPublishing a copy of %s to '%s'" "$KMOM" "$COPY_DIR"
     rsync -a --exclude 'kmom*' "$THEDIR/me/" "$COPY_DIR/"
     rsync -a "$THEDIR/me/$KMOM/" "${COPY_DIR}${KMOM}/"
-    find "$COPY_DIR" -type f -name '*.cgi' -exec chmod a+x {} \;
+    
+    publishChmod "$COPY_DIR"
 
     printf "\nURL: %s" "$COPY_URL"
     printf "\n"
@@ -175,7 +302,6 @@ validateKmom()
     if [ "$answer" = "y" -o "$answer" = "Y" ]
     then
         dbwebb-validate --course-repo "$DBW_COURSE_DIR" "$kmom"
-        pressEnterToContinue
     fi
 }
 
@@ -183,6 +309,7 @@ validateKmom()
 
 #
 # Execute a command, maybe as another user
+# TODO remove support for $4 $opts, its not really used, but check in python & js1 before doing it.
 #
 inspectCommand()
 {
@@ -193,8 +320,12 @@ inspectCommand()
 
     filename="$move/$what"
 
-    if [ -f "$filename" -o -r "$filename" ]; then
-        printf "\nExecute: $what $opts [Yn]? "
+    if [ ! -z "$what" ]; then
+        assert 0 "test -f \"$filename\" -o -r \"$filename\"" "The file '$what' is missing or not readable."
+    fi
+    
+    if [ $? == 0 ]; then
+        printf "\nExecute '%s' [Yn]? " "$cmd"
         read answer
         default="y"
         answer=${answer:-$default}
@@ -202,8 +333,10 @@ inspectCommand()
         if [ "$answer" = "y" -o "$answer" = "Y" ]; then
 
             pushd "$move" > /dev/null
-            $cmd            
+            echo ">>>"
+            $cmd
             status=$?
+            echo "<<<"
             popd > /dev/null
 
             if [ $status -eq 0 ]; then
@@ -214,8 +347,6 @@ inspectCommand()
                 assert 0 "test" "Command returned non-zero exit status which might indicate failure."
             fi
         fi
-    else
-        assert 0 "test" "The file '$filename' is missing or not readable."
     fi
 }
 
