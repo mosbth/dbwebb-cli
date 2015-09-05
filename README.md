@@ -8,6 +8,11 @@ Part of course repos as a admin utility.
 History
 -------------------
 
+v1.9.14x (2015-09-05)
+
+* Changing linux vhosts to vhost.
+
+
 v1.9.14 (2015-09-04)
 
 * Adding tree for all inspect.

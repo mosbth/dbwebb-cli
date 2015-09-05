@@ -30,7 +30,7 @@
 #
 # Current version
 #
-DBW_VERSION="v1.9.14 (2015-09-04)"
+DBW_VERSION="v1.9.14x (2015-09-05)"
 # --------------- DBWEBB FUNCTIONS PHASE START ---------------
 
 #
@@ -357,7 +357,7 @@ mapCmdToDir()
         linux)
             case "$CMD" in
                 install)    RES="me/kmom01/install" ;;
-                vhosts)     RES="me/kmom02/vhosts" ;;
+                vhost)      RES="me/kmom02/vhost" ;;
                 mysite)     RES="me/kmom02/mysite" ;;
                 irc)        RES="me/kmom03/irc" ;;
                 script)     RES="me/kmom03/script" ;;

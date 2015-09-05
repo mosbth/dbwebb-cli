@@ -324,7 +324,7 @@ mapCmdToDir()
         linux)
             case "$CMD" in
                 install)    RES="me/kmom01/install" ;;
-                vhosts)     RES="me/kmom02/vhosts" ;;
+                vhost)      RES="me/kmom02/vhost" ;;
                 mysite)     RES="me/kmom02/mysite" ;;
                 irc)        RES="me/kmom03/irc" ;;
                 script)     RES="me/kmom03/script" ;;
