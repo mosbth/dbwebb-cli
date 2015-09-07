@@ -10,6 +10,7 @@ History
 
 v1.9.14x (2015-09-05)
 
+* Inspect failed on viewing content of file, fix.
 * Changing linux vhosts to vhost.
 
 

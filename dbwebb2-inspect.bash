@@ -105,7 +105,7 @@ viewFileContent()
         if [ "$answer" = "y" -o "$answer" = "Y" ]
         then
             echo ">>>"
-            more "$THEDIR/$dir/$file"
+            less --quit-if-one-screen --no-init "$THEDIR/$dir/$file"
             echo "<<<"
             pressEnterToContinue
         fi
