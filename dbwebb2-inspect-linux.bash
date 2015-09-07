@@ -48,6 +48,22 @@ linuxExerciseScript()
 
 
 #
+# View files in irc exercise
+#
+linuxExerciseIrc()
+{
+    local target="me/$KMOM/$1"
+    
+    pushd "$THEDIR/$target"
+    for file in ?.txt; do
+        viewFileContent "$file" "$target"
+    done
+    popd
+}
+
+
+
+#
 # Test kmom01
 #
 function linuxkmom01()
@@ -74,8 +90,10 @@ function linuxkmom02()
 #
 function linuxkmom03()
 {
-    inspectExercise "irc" "uppgift/hitta-saker-i-en-loggfil-med-unix-kommandon" "log.txt" "solutions.bash" "" "" "solutions.bash" "bash solutions.bash" "" "tail n+1 ?.txt | less --quit-if-one-screen --no-init"
+    inspectExercise "irc" "uppgift/hitta-saker-i-en-loggfil-med-unix-kommandon" "log.txt" "solutions.bash" "" "" "solutions.bash" "bash solutions.bash"
 
+    linuxExerciseIrc "irc"
+    
     inspectExercise "script" "uppgift/mina-forsta-bash-script"
     linuxExerciseScript "script"
 }
