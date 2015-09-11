@@ -8,8 +8,9 @@ Part of course repos as a admin utility.
 History
 -------------------
 
-v1.9.14x (2015-09-05)
+v1.9.14x (2015-09-11)
 
+* Adding linux gomoku and javascript1 baddie4.
 * Inspect failed on viewing content of file, fix.
 * Changing linux vhosts to vhost.
 

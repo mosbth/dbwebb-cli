@@ -316,7 +316,7 @@ mapCmdToDir()
                 baddie1)    RES="me/kmom02/baddie1" ;;
                 baddie2)    RES="me/kmom03/baddie2" ;;
                 baddie3)    RES="me/kmom04/baddie3" ;;
-                #baddie4)    RES="me/kmom05/baddie4" ;;
+                baddie4)    RES="me/kmom05/baddie4" ;;
                 #baddie5)    RES="me/kmom06/baddie5" ;;
             esac
             ;;
@@ -331,6 +331,7 @@ mapCmdToDir()
                 javascripting) RES="me/kmom04/javascripting" ;;
                 server)     RES="me/kmom04/server" ;;
                 maze)       RES="me/kmom05/maze" ;;
+                gomoku)     RES="me/kmom06/gomoku" ;;
             esac
             ;;
 
