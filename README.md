@@ -8,8 +8,9 @@ Part of course repos as a admin utility.
 History
 -------------------
 
-v1.9.14x (2015-09-11)
+v1.9.14x (2015-09-24)
 
+* Adding solution as target for dbwebb validate.
 * Adding linux gomoku and javascript1 baddie4.
 * Inspect failed on viewing content of file, fix.
 * Changing linux vhosts to vhost.

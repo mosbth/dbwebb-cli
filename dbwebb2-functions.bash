@@ -230,6 +230,7 @@ mapCmdToDir()
 
     case "$CMD" in
         example)    RES="example" ;;
+        solution)   RES="solution" ;;
         tutorial)   RES="tutorial" ;;
         me)         RES="me" ;;
         redovisa)   RES="me/redovisa" ;;
