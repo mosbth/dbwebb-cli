@@ -8,8 +8,12 @@ Part of course repos as a admin utility.
 History
 -------------------
 
-v1.9.14x (2015-09-24)
+v1.9.15 (2015-10-01)
 
+* Publish setting correct permissions for sqlite, sql files and db directory.
+* Excluding 'phpliteadmin.php' from validation phase.
+* Added option `--no-validate` to dbwebb-validate and command `fastpublish` to dbwebb.
+* Adding course oophp.
 * Adding solution as target for dbwebb validate.
 * Adding linux gomoku and javascript1 baddie4.
 * Inspect failed on viewing content of file, fix.

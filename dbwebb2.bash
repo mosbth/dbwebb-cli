@@ -381,6 +381,8 @@ function dbwebb-validate()
 #
 function dbwebb-publish()
 {
+    local options="$1"
+    
     checkIfValidConfigOrExit
     checkIfValidCourseRepoOrExit
     setChmod
@@ -395,7 +397,7 @@ function dbwebb-publish()
     local intro="Uploading the directory '$WHAT' to '$WHERE' to validate and publish."
     local command1="$RSYNC_CMD $OVERWRITE '$WHAT' '$WHERE'"
     local command2="rsync -av $RSYNC_CHMOD $OVERWRITE --exclude .git --exclude .gitignore --exclude .default --include='.??*' --exclude='*' -e \"ssh $DBW_SSH_KEY_OPTION\" '$DBW_COURSE_DIR/' '$DBW_REMOTE_DESTINATION/'"
-    local command3="$SSH_CMD 'dbwebb-validate --publish --course-repo \"$DBW_REMOTE_BASEDIR/$DBW_COURSE\" --publish-to \"$DBW_REMOTE_WWWDIR/$DBW_COURSE/$SUBDIR\" \"$DBW_REMOTE_BASEDIR/$DBW_COURSE/$SUBDIR\"' 2>&1 | tee '$log';"
+    local command3="$SSH_CMD 'dbwebb-validate $options --publish --course-repo \"$DBW_REMOTE_BASEDIR/$DBW_COURSE\" --publish-to \"$DBW_REMOTE_WWWDIR/$DBW_COURSE/$SUBDIR\" \"$DBW_REMOTE_BASEDIR/$DBW_COURSE/$SUBDIR\"' 2>&1 | tee '$log';"
     local message="to validate and publish course results.\nSaved a log of the output: less -R '$log'"
     executeCommand "$intro" "$command1; $command2; $command3" "$message"
 
@@ -405,6 +407,16 @@ function dbwebb-publish()
         printf "Some of your files might be"
     fi
     printf " published on:\n $DBW_BASEURL/$DBW_COURSE/$SUBDIR\n"
+}
+
+
+
+#
+# Publish the uploaded files
+#
+function dbwebb-fastpublish()
+{
+    dbwebb-publish "--no-validate"
 }
 
 
@@ -494,7 +506,7 @@ dbwebb-create()
     fi
 
     # Check if lab is already there
-    if [ -f "$where/answer.php" -o -f "$where/answer.js" -o -f "$where/answer.py" ]; then
+    if [ -f "$where/answer.php" -o -f "$where/answer.js" -o -f "$where/answer.py" -o -f "$where/answer.bash" ]; then
         printf "$MSG_FAILED You have already created lab-files at: '$where'\nRemove the files in the directory, then you can generate new files.\n"
         exit 2
     fi
@@ -550,6 +562,18 @@ dbwebb-create()
 
             printf "\n Dbwebb.py"
             $myWget "$where/Dbwebb.py" "$DBW_LABURL/lab.php?answer-py-assert&key=$key"
+
+            printf "\n answer.json"
+            $myWget "$where/answer.json" "$DBW_LABURL/lab.php?answer-json&key=$key"
+        ;;
+
+        linux)
+            printf "\n answer.bash"
+            $myWget "$where/answer.bash" "$DBW_LABURL/lab.php?answer-bash&key=$key"
+            chmod 755 "$where/answer.bash"
+
+            printf "\n dbwebb.bash"
+            $myWget "$where/dbwebb.bash" "$DBW_LABURL/lab.php?answer-bash-assert&key=$key"
 
             printf "\n answer.json"
             $myWget "$where/answer.json" "$DBW_LABURL/lab.php?answer-json&key=$key"
@@ -697,6 +721,7 @@ do
         | download     \
         | validate     \
         | publish      \
+        | fastpublish  \
         | inspect      \
         | create       \
         | init         \

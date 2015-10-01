@@ -125,7 +125,7 @@ function validateCommand()
 
     if hash "$cmd" 2>/dev/null; then
         printf "\n *.$extension using $cmd"
-        for filename in $(find "$dir/" -not -path '*/node_modules/*' -type f -name \*.$extension); do
+        for filename in $(find "$dir/" -not -name 'phpliteadmin*' -not -path '*/node_modules/*' -type f -name \*.$extension); do
             if [[ $optDryRun ]]; then
                 printf "\n%s" "$cmd $options $filename $output"
             else
@@ -184,7 +184,7 @@ function publishCommand()
 
     if hash "$cmd" 2>/dev/null; then
         printf "\n *.$extension using $cmd"
-        for filename in $( find "$dir/" -not -path '*/node_modules/*' -type f -name \*.$extension ); do
+        for filename in $( find "$dir/" -not -name 'phpliteadmin*' -not -path '*/node_modules/*' -type f -name \*.$extension ); do
             if [[ $optDryRun ]]; then
                 printf "\n%s" "$cmd $options $filename $output $filename"
             else
@@ -255,6 +255,11 @@ do
 
         --publish | -p)
             optPublish="yes"
+            shift
+            ;;
+
+        --no-validate)
+            noValidate="yes"
             shift
             ;;
 
@@ -342,10 +347,14 @@ fi
 
 
 
-printf "Validating '%s'." "$dir"
 setDefaultConfigFiles
-#setChmod
-validate "$dir" 
+
+
+if [[ ! $noValidate ]]; then
+    printf "Validating '%s'." "$dir"
+    validate "$dir" 
+fi
+
 
 if [[ $optPublish ]]; then
     if [ -z "$DBW_PUBLISH_TO" ]; then

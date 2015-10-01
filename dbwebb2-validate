@@ -30,7 +30,7 @@
 #
 # Current version
 #
-DBW_VERSION="v1.9.14x (2015-09-07)"
+DBW_VERSION="v1.9.15 (2015-10-01)"
 # --------------- DBWEBB FUNCTIONS PHASE START ---------------
 
 #
@@ -48,6 +48,9 @@ publishChmod()
         find "$dir" -type f -name '*.txt' -exec chmod go-r {} \;
         find "$dir" -type f -name '*.bash' -exec chmod go-r {} \;
         find "$dir" -type f -name '*.cgi' -exec chmod a+rx {} \;   
+        find "$dir" -type d -name 'db' -exec chmod a+rwx {} \;   
+        find "$dir" -type f -name '*.sqlite' -exec chmod a+rw {} \;   
+        find "$dir" -type f -name '*.sql' -exec chmod go-r {} \;   
     fi
 }
 
@@ -304,6 +307,16 @@ mapCmdToDir()
             esac
             ;;
 
+        oophp)
+            case "$CMD" in
+                lab1)       RES="me/kmom02/lab1" ;;
+                #lab2)       RES="me/kmom03/lab2" ;;
+                #lab3)       RES="me/kmom04/lab3" ;;
+                #lab4)       RES="me/kmom05/lab4" ;;
+                #lab5)       RES="me/kmom06/lab5" ;;
+            esac
+            ;;
+
         python)
             case "$CMD" in
                 hello)      RES="me/kmom01/hello" ;;
@@ -367,6 +380,9 @@ mapCmdToDir()
                 server)     RES="me/kmom04/server" ;;
                 maze)       RES="me/kmom05/maze" ;;
                 gomoku)     RES="me/kmom06/gomoku" ;;
+
+                lab1)       RES="me/kmom02/lab1" ;; # for testing
+                lab2)       RES="me/kmom04/lab2" ;; # for testing
             esac
             ;;
 
@@ -567,7 +583,8 @@ assertExit()
         return 1
     fi
 
-    return 0
+    return lab1
+    
 }
 
 
@@ -712,7 +729,7 @@ DBW_ARCHIVE="/home/saxon/students/dbwebb/archive/"
 #DBW_REPOS[linux]="https://github.com/mosbth/linux"
 #DBW_REPOS[webapp]="https://github.com/mosbth/webapp"
 #DBW_REPOS[htmlphp]="https://github.com/mosbth/htmlphp"
-DBW_COURSE_REPOS=( 'python' 'javascript1' 'linux' 'webapp' 'htmlphp' 'webgl' )
+DBW_COURSE_REPOS=( 'python' 'javascript1' 'linux' 'webapp' 'oopython' 'htmlphp' 'design' 'oophp' 'phpmvc' 'webgl' )
 DBW_REPO="dbwebb-cli"
 
 
@@ -736,6 +753,7 @@ function usage ()
 "  --dry, -d           Dry run, only display."
 "  --only extension    Only test for extension."
 "  --course-repo path  Use this path as course repo."
+"  --no-validate       Skip validation phase."
 "  --publish, -p       Publish it."
 "  --publish-to path   Path where to publish."
 "  --help, -h          Print help."
@@ -897,7 +915,7 @@ function validateCommand()
 
     if hash "$cmd" 2>/dev/null; then
         printf "\n *.$extension using $cmd"
-        for filename in $(find "$dir/" -not -path '*/node_modules/*' -type f -name \*.$extension); do
+        for filename in $(find "$dir/" -not -name 'phpliteadmin*' -not -path '*/node_modules/*' -type f -name \*.$extension); do
             if [[ $optDryRun ]]; then
                 printf "\n%s" "$cmd $options $filename $output"
             else
@@ -956,7 +974,7 @@ function publishCommand()
 
     if hash "$cmd" 2>/dev/null; then
         printf "\n *.$extension using $cmd"
-        for filename in $( find "$dir/" -not -path '*/node_modules/*' -type f -name \*.$extension ); do
+        for filename in $( find "$dir/" -not -name 'phpliteadmin*' -not -path '*/node_modules/*' -type f -name \*.$extension ); do
             if [[ $optDryRun ]]; then
                 printf "\n%s" "$cmd $options $filename $output $filename"
             else
@@ -1027,6 +1045,11 @@ do
 
         --publish | -p)
             optPublish="yes"
+            shift
+            ;;
+
+        --no-validate)
+            noValidate="yes"
             shift
             ;;
 
@@ -1114,10 +1137,14 @@ fi
 
 
 
-printf "Validating '%s'." "$dir"
 setDefaultConfigFiles
-#setChmod
-validate "$dir" 
+
+
+if [[ ! $noValidate ]]; then
+    printf "Validating '%s'." "$dir"
+    validate "$dir" 
+fi
+
 
 if [[ $optPublish ]]; then
     if [ -z "$DBW_PUBLISH_TO" ]; then

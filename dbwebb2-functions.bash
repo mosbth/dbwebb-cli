@@ -15,6 +15,9 @@ publishChmod()
         find "$dir" -type f -name '*.txt' -exec chmod go-r {} \;
         find "$dir" -type f -name '*.bash' -exec chmod go-r {} \;
         find "$dir" -type f -name '*.cgi' -exec chmod a+rx {} \;   
+        find "$dir" -type d -name 'db' -exec chmod a+rwx {} \;   
+        find "$dir" -type f -name '*.sqlite' -exec chmod a+rw {} \;   
+        find "$dir" -type f -name '*.sql' -exec chmod go-r {} \;   
     fi
 }
 
@@ -271,6 +274,16 @@ mapCmdToDir()
             esac
             ;;
 
+        oophp)
+            case "$CMD" in
+                lab1)       RES="me/kmom02/lab1" ;;
+                #lab2)       RES="me/kmom03/lab2" ;;
+                #lab3)       RES="me/kmom04/lab3" ;;
+                #lab4)       RES="me/kmom05/lab4" ;;
+                #lab5)       RES="me/kmom06/lab5" ;;
+            esac
+            ;;
+
         python)
             case "$CMD" in
                 hello)      RES="me/kmom01/hello" ;;
@@ -334,6 +347,9 @@ mapCmdToDir()
                 server)     RES="me/kmom04/server" ;;
                 maze)       RES="me/kmom05/maze" ;;
                 gomoku)     RES="me/kmom06/gomoku" ;;
+
+                lab1)       RES="me/kmom02/lab1" ;; # for testing
+                lab2)       RES="me/kmom04/lab2" ;; # for testing
             esac
             ;;
 
@@ -534,7 +550,8 @@ assertExit()
         return 1
     fi
 
-    return 0
+    return lab1
+    
 }
 
 

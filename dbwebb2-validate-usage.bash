@@ -17,6 +17,7 @@ function usage ()
 "  --dry, -d           Dry run, only display."
 "  --only extension    Only test for extension."
 "  --course-repo path  Use this path as course repo."
+"  --no-validate       Skip validation phase."
 "  --publish, -p       Publish it."
 "  --publish-to path   Path where to publish."
 "  --help, -h          Print help."
