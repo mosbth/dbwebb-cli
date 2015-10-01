@@ -415,7 +415,7 @@ function dbwebb-publish()
 function dbwebb-fastpublish()
 {
     PUBLISH_OPTIONS="--no-validate"
-    dbwebb-publish $*
+    dbwebb-publish "$1" "$2" "$3"
 }
 
 
