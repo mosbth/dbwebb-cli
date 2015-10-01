@@ -8,6 +8,11 @@ Part of course repos as a admin utility.
 History
 -------------------
 
+v1.9.16 (2015-10-01)
+
+* Correcting `fastpublish`.
+
+
 v1.9.15 (2015-10-01)
 
 * Publish setting correct permissions for sqlite, sql files and db directory.
