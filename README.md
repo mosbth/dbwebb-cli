@@ -8,6 +8,11 @@ Part of course repos as a admin utility.
 History
 -------------------
 
+v1.9.16x (2015-10-02)
+
+* Exclude `-not -path '*/jquery/*'` from validation & publish.
+
+
 v1.9.16 (2015-10-01)
 
 * Correcting `fastpublish`.

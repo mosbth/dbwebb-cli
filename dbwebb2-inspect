@@ -30,7 +30,7 @@
 #
 # Current version
 #
-DBW_VERSION="v1.9.16 (2015-10-01)"
+DBW_VERSION="v1.9.16x (2015-10-02)"
 # --------------- DBWEBB FUNCTIONS PHASE START ---------------
 
 #
@@ -266,8 +266,8 @@ mapCmdToDir()
 
     case "$CMD" in
         example)    RES="example" ;;
-        solution)   RES="solution" ;;
-        solution/me)   RES="solution/me" ;;
+        solution)   RES=".solution" ;;
+        solution/me)   RES=".solution/me" ;;
         tutorial)   RES="tutorial" ;;
         me)         RES="me" ;;
         redovisa)   RES="me/redovisa" ;;
