@@ -45,7 +45,8 @@ publishChmod()
         #find "$dir" -type f -exec chmod a+r {} \;   
         find "$dir" -type f -name '*.conf' -exec chmod go-r {} \;
         find "$dir" -type f -name '*.py' -exec chmod go-r {} \;
-        find "$dir" -type f -name '*.txt' -exec chmod go-r {} \;
+        #find "$dir" -type f -name '*.txt' -exec chmod go-r {} \;
+        find "$dir" -type f -name 'log.txt' -exec chmod go-r {} \;
         find "$dir" -type f -name '*.bash' -exec chmod go-r {} \;
         find "$dir" -type f -name '*.cgi' -exec chmod a+rx {} \;   
         find "$dir" -type d -name 'db' -exec chmod a+rwx {} \;   

@@ -414,6 +414,7 @@ function dbwebb-publish()
 #
 function dbwebb-fastpublish()
 {
+    SKIP_READLINE="yes"
     PUBLISH_OPTIONS="--no-validate"
     dbwebb-publish "$1" "$2" "$3"
 }

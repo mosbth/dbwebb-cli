@@ -8,8 +8,10 @@ Part of course repos as a admin utility.
 History
 -------------------
 
-v1.9.16x (2015-10-02)
+v1.9.16x (2015-10-06)
 
+* First test with bash completion.
+* `.txt` is not readonly on publish, only `log.txt`.
 * Exclude `-not -path '*/jquery/*'` from validation & publish.
 
 
