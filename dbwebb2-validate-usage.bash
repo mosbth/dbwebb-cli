@@ -18,6 +18,7 @@ function usage ()
 "  --only extension    Only test for extension."
 "  --course-repo path  Use this path as course repo."
 "  --no-validate       Skip validation phase."
+"  --no-minification   Skip minification phase."
 "  --publish, -p       Publish it."
 "  --publish-to path   Path where to publish."
 "  --help, -h          Print help."

@@ -410,12 +410,24 @@ function dbwebb-publish()
 
 
 #
-# Publish the uploaded files
+# Publish the uploaded files without validation.
 #
 function dbwebb-fastpublish()
 {
     SKIP_READLINE="yes"
     PUBLISH_OPTIONS="--no-validate"
+    dbwebb-publish "$1" "$2" "$3"
+}
+
+
+
+#
+# Publish the uploaded files
+#
+function dbwebb-purepublish()
+{
+    SKIP_READLINE="yes"
+    PUBLISH_OPTIONS="--no-validate --no-minification"
     dbwebb-publish "$1" "$2" "$3"
 }
 
@@ -722,6 +734,7 @@ do
         | validate     \
         | publish      \
         | fastpublish  \
+        | purepublish  \
         | inspect      \
         | create       \
         | init         \

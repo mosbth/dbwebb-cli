@@ -20,6 +20,7 @@ function usage ()
 "  validate [part]    Validate it."
 "  publish [part]     Publish it."
 "  fastpublish [part] Publish without validation."
+"  purepublish [part] Publish without minification."
 "  inspect [course] [kmom] [user]  Inspect a kmom."
 ""
 "Options:"
