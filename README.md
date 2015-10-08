@@ -10,6 +10,7 @@ History
 
 v1.9.16x (2015-10-06)
 
+* Fastpublish is always with --yes.
 * First test with bash completion.
 * `.txt` is not readonly on publish, only `log.txt`.
 * Exclude `-not -path '*/jquery/*'` from validation & publish.
