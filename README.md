@@ -8,6 +8,11 @@ Part of course repos as a admin utility.
 History
 -------------------
 
+v1.9.17x (2015-10-08)
+
+* Adding task webgl sandbox2.
+
+
 v1.9.17 (2015-10-08)
 
 * Adding `purepublish`, acting as `fastpublish` but without minifying.

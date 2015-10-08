@@ -373,6 +373,7 @@ mapCmdToDir()
                 point)      RES="me/kmom01/point" ;;
                 lab1)       RES="me/kmom02/lab1" ;;
                 tri)        RES="me/kmom02/tri" ;;
+                sandbox)    RES="me/kmom02/sandbox2" ;;
                 lab2)       RES="me/kmom03/lab2" ;;
                 game)       RES="me/kmom03/game" ;;
                 proj)       RES="me/kmom05/proj" ;;
