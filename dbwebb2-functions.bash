@@ -369,12 +369,13 @@ mapCmdToDir()
 
         webgl)
             case "$CMD" in
-                #lab1)       RES="me/kmom02/lab1" ;;
-                #lab2)       RES="me/kmom03/lab2" ;;
-                #lab3)       RES="me/kmom04/lab3" ;;
-                #lab4)       RES="me/kmom05/lab4" ;;
-                #lab5)       RES="me/kmom06/lab5" ;;
-                *)          NO_RES="Not implemented"
+                sandbox)    RES="me/kmom01/sandbox" ;;
+                point)      RES="me/kmom01/point" ;;
+                lab1)       RES="me/kmom02/lab1" ;;
+                tri)        RES="me/kmom02/tri" ;;
+                lab2)       RES="me/kmom03/lab2" ;;
+                game)       RES="me/kmom03/game" ;;
+                proj)       RES="me/kmom05/proj" ;;
             esac
             ;;
     esac

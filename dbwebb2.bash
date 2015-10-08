@@ -547,7 +547,7 @@ dbwebb-create()
             $myWget "$where/answer.json" "$DBW_LABURL/lab.php?answer-json&key=$key"
         ;;
         
-        javascript1)
+        javascript1 | webgl)
             printf "\n answer.html"
             $myWget "$where/answer.html" "$DBW_LABURL/lab.php?answer-html&key=$key"
 

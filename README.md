@@ -8,8 +8,9 @@ Part of course repos as a admin utility.
 History
 -------------------
 
-v1.9.16x (2015-10-06)
+v1.9.16x (2015-10-08)
 
+* Added webgl with support or all assignments.
 * Fastpublish is always with --yes.
 * First test with bash completion.
 * `.txt` is not readonly on publish, only `log.txt`.
