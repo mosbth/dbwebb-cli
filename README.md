@@ -8,8 +8,9 @@ Part of course repos as a admin utility.
 History
 -------------------
 
-v1.9.17x (2015-10-08)
+v1.9.17x (2015-10-09)
 
+* Adding tasks from htmlphp kmom10.
 * Adding task webgl sandbox2.
 
 
