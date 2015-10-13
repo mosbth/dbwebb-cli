@@ -349,6 +349,7 @@ mapCmdToDir()
                 server)     RES="me/kmom04/server" ;;
                 maze)       RES="me/kmom05/maze" ;;
                 gomoku)     RES="me/kmom06/gomoku" ;;
+                bthappen)   RES="me/kmom10/bthappen" ;;
 
                 lab1)       RES="me/kmom02/lab1" ;; # for testing
                 lab2)       RES="me/kmom04/lab2" ;; # for testing
