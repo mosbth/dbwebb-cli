@@ -92,6 +92,13 @@ viewFileContent()
 {
     local file="$1"
     local dir="$2"
+    local fileAlt="$3"
+    
+    if [ ! -f "$THEDIR/$dir/$file" ]; then 
+        if [ -f "$THEDIR/$dir/$fileAlt" ]; then
+            file="$fileAlt"
+        fi
+    fi
     
     assert 0 "test -f \"$THEDIR/$dir/$file\"" "The file '$file' is missing or not readable."
 

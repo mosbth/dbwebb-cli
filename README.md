@@ -8,8 +8,9 @@ Part of course repos as a admin utility.
 History
 -------------------
 
-v1.9.17x (2015-10-13)
+v1.9.17x (2015-10-14)
 
+* Inspect support alternate place for file view content.
 * Adding tasks for linux kmom10.
 * Adding tasks for htmlphp kmom10.
 * Adding task webgl sandbox2.

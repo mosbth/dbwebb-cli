@@ -76,7 +76,7 @@ function htmlphpkmom04()
 {
     inspectMe "$METARGET" "me.php" "report.php" "uppgift/bygg-ut-din-me-sida-till-version-4"
 
-    viewFileContent "config.php" "$METARGET"
+    viewFileContent "config.php" "$METARGET" "incl/config.php"
     viewFileContent "stylechooser.php" "$METARGET"
 
     htmlphplab "lab3"
