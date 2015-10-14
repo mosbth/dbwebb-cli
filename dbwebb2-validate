@@ -811,6 +811,9 @@ JSHINT="jshint"
 JSCS="jscs"
 JSCS_OPTIONS="--verbose"
 
+JSONLINT="jsonlint"
+JSONLINT_OPTIONS="--quiet"
+
 HTML_MINIFIER="html-minifier"
 
 CLEANCSS="cleancss"
@@ -888,6 +891,7 @@ function checkInstalledValidateTools
     printf " csslint:       %s\n" "$( checkCommand $CSSLINT )"
     printf " jshint:        %s\n" "$( checkCommand $JSHINT )"
     printf " jscs:          %s\n" "$( checkCommand $JSCS )"
+    printf " jsonlint:      %s\n" "$( checkCommand $JSONLINT )"
     printf " pylint:        %s\n" "$( checkCommand $PYLINT )"
     printf " php:           %s\n" "$( checkCommand $PHP )"
     printf " phpmd:         %s\n" "$( checkCommand $PHPMD )"
@@ -953,6 +957,7 @@ function validate()
     [[ $DISABLE_CSSLINT ]]   || validateCommand "$dir" "$CSSLINT" "css" "$CSSLINT_OPTIONS $( cat "$CSSLINT_CONFIG" )"
     [[ $DISABLE_JSHINT ]]    || validateCommand "$dir" "$JSHINT" "js"
     [[ $DISABLE_JSCS ]]      || validateCommand "$dir" "$JSCS" "js"  "$JSCS_OPTIONS $JSCS_CONFIG" "" "onlyExitStatus"
+    [[ $DISABLE_JSONLINT ]]  || validateCommand "$dir" "$JSONLINT" "json" "$JSONLINT_OPTIONS" "" ""
     #validateCommand "$dir" "$JSCS" "js" "$JSCS_OPTIONS $JSCS_CONFIG" ""
     [[ $DISABLE_PYLINT ]]    || validateCommand "$dir" "$PYLINT" "py" "$PYLINT_OPTIONS $PYLINT_CONFIG" 
     [[ $DISABLE_PYLINT ]]    || validateCommand "$dir" "$PYLINT" "cgi" "$PYLINT_OPTIONS $PYLINT_CONFIG" 

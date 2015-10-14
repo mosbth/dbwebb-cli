@@ -10,6 +10,7 @@ History
 
 v1.9.17x (2015-10-14)
 
+* Validate add support for jsonlint.
 * Inspect support alternate place for file view content.
 * Adding tasks for linux kmom10.
 * Adding tasks for htmlphp kmom10.
