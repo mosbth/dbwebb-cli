@@ -201,9 +201,10 @@ inspectExercise()
     local file6="$8"
     local file7="$9"
     local file8="${10}"
+    local info="${11}"
     local target="me/$KMOM/$exercise"
 
-    headerForTest "-- $exercise" "-- ${DBW_WWW}$url"
+    headerForTest "-- $exercise$info" "-- ${DBW_WWW}$url"
     checkKmomDir "$target"
     viewFileTree "$target"
     openFilesInEditor "$target"
@@ -355,6 +356,75 @@ inspectCommand()
             fi
         fi
     fi
+}
+
+
+
+#
+# Execute a command as a server in the background logging output to a file.
+#
+runServer()
+{
+    local what="$1"
+    local move="$2"
+    local cmd="$3"
+    local opts="$4"
+
+    local filename="$move/$what"
+    
+    local logfile=".serverlog.txt"
+    SERVER_LOG="$move/$logfile"
+
+    if [ ! -z "$what" ]; then
+        assert 0 "test -f \"$filename\" -o -r \"$filename\"" "The file '$what' is missing or not readable."
+    fi
+    
+    if [ $? == 0 ]; then
+        printf "\nExecute '%s' as server and log its output to '$logfile' [Yn]? " "$cmd"
+        read answer
+        default="y"
+        answer=${answer:-$default}
+
+        if [ "$answer" = "y" -o "$answer" = "Y" ]; then
+
+            pushd "$move" > /dev/null
+            echo ">>>"
+            $cmd &> "$SERVER_LOG" &
+            status=$?
+            SERVER_PID=$!
+            echo "$cmd started with pid $SERVER_PID."
+            echo "Sleeping 3 before continuing."
+            sleep 3
+            echo "<<<"
+            popd > /dev/null
+
+            if [ $status -eq 0 ]; then
+                assert 1 "test" "Command executed successfully."
+                printf "\n$MSG_OK Command executed with a exit status 0  - indicating success."
+                printf "\n"
+            else
+                assert 0 "test" "Command returned non-zero exit status which might indicate failure."
+            fi
+        fi
+    fi
+}
+
+
+
+#
+# Kill the server started with startServer and output its logfile.
+#
+killServer()
+{
+    echo "Killing server."
+    echo ">>>"
+    kill $SERVER_PID
+    echo "Sent kill signal to server."
+    echo "Sleeping 3 before continuing."
+    sleep 3
+    echo "Printing logfile from server:"
+    cat "$SERVER_LOG"
+    echo "<<<"
 }
 
 

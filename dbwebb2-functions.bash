@@ -372,11 +372,14 @@ mapCmdToDir()
         webgl)
             case "$CMD" in
                 sandbox)    RES="me/kmom01/sandbox" ;;
-                point)      RES="me/kmom01/point" ;;
+                sandbox2)   RES="me/kmom01/sandbox2" ;;
+                sandbox3)   RES="me/kmom01/sandbox3" ;;
+
                 lab1)       RES="me/kmom02/lab1" ;;
-                tri)        RES="me/kmom02/tri" ;;
-                sandbox)    RES="me/kmom02/sandbox2" ;;
                 lab2)       RES="me/kmom03/lab2" ;;
+
+                point)      RES="me/kmom01/point" ;;
+                tri)        RES="me/kmom02/tri" ;;
                 game)       RES="me/kmom03/game" ;;
                 proj)       RES="me/kmom05/proj" ;;
             esac

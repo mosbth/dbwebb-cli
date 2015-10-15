@@ -405,11 +405,14 @@ mapCmdToDir()
         webgl)
             case "$CMD" in
                 sandbox)    RES="me/kmom01/sandbox" ;;
-                point)      RES="me/kmom01/point" ;;
+                sandbox2)   RES="me/kmom01/sandbox2" ;;
+                sandbox3)   RES="me/kmom01/sandbox3" ;;
+
                 lab1)       RES="me/kmom02/lab1" ;;
-                tri)        RES="me/kmom02/tri" ;;
-                sandbox)    RES="me/kmom02/sandbox2" ;;
                 lab2)       RES="me/kmom03/lab2" ;;
+
+                point)      RES="me/kmom01/point" ;;
+                tri)        RES="me/kmom02/tri" ;;
                 game)       RES="me/kmom03/game" ;;
                 proj)       RES="me/kmom05/proj" ;;
             esac
@@ -1416,9 +1419,22 @@ function linuxkmom03()
 #
 function linuxkmom04()
 {
-    #http://dbwebb.se/uppgift/utfor-nodeschool-workshopen-javascripting
-    #http://dbwebb.se/uppgift/skapa-en-restful-http-server-med-node-js-och-klient-i-bash
-    test
+    inspectExercise "javascripting" "uppgift/utfor-nodeschool-workshopen-javascripting" "" "" "" "" "" ""
+
+    inspectExercise "server" "uppgift/skapa-en-restful-http-server-med-node-js-och-klient-i-bash" "index.js" "server.js" "" "" "" "" "" "" " (del 1 servern)"
+
+    inspectExercise "server" "uppgift/skapa-en-restful-http-server-med-node-js-och-klient-i-bash" "client.bash" "" "" "" "" "" "" "" " (del 2 klienten)"
+
+    local target="me/$KMOM/server"
+    runServer "index.js" "$THEDIR/$target" "babel-node index.js"
+    inspectCommand "client.bash" "$THEDIR/$target" "bash client.bash hello"
+    inspectCommand "client.bash" "$THEDIR/$target" "bash client.bash html"
+    inspectCommand "client.bash" "$THEDIR/$target" "bash client.bash status"
+    inspectCommand "client.bash" "$THEDIR/$target" "bash client.bash sum 2 3 4"
+    inspectCommand "client.bash" "$THEDIR/$target" "bash client.bash filter 2 3 42 99"
+    inspectCommand "client.bash" "$THEDIR/$target" "bash client.bash 404"
+    inspectCommand "client.bash" "$THEDIR/$target" "bash client.bash all"
+    killServer
 }
 
 
@@ -1428,6 +1444,7 @@ function linuxkmom04()
 #
 function linuxkmom05()
 {
+    # http://dbwebb.se/uppgift/los-mazen-med-din-mazerunner-i-bash
     test
 }
 
@@ -1438,6 +1455,7 @@ function linuxkmom05()
 #
 function linuxkmom06()
 {
+    #http://dbwebb.se/uppgift/skapa-klienter-och-servrar-som-spelar-luffarschack-i-node-js
     test
 }
 
@@ -1899,9 +1917,10 @@ inspectExercise()
     local file6="$8"
     local file7="$9"
     local file8="${10}"
+    local info="${11}"
     local target="me/$KMOM/$exercise"
 
-    headerForTest "-- $exercise" "-- ${DBW_WWW}$url"
+    headerForTest "-- $exercise$info" "-- ${DBW_WWW}$url"
     checkKmomDir "$target"
     viewFileTree "$target"
     openFilesInEditor "$target"
@@ -2053,6 +2072,75 @@ inspectCommand()
             fi
         fi
     fi
+}
+
+
+
+#
+# Execute a command as a server in the background logging output to a file.
+#
+runServer()
+{
+    local what="$1"
+    local move="$2"
+    local cmd="$3"
+    local opts="$4"
+
+    local filename="$move/$what"
+    
+    local logfile=".serverlog.txt"
+    SERVER_LOG="$move/$logfile"
+
+    if [ ! -z "$what" ]; then
+        assert 0 "test -f \"$filename\" -o -r \"$filename\"" "The file '$what' is missing or not readable."
+    fi
+    
+    if [ $? == 0 ]; then
+        printf "\nExecute '%s' as server and log its output to '$logfile' [Yn]? " "$cmd"
+        read answer
+        default="y"
+        answer=${answer:-$default}
+
+        if [ "$answer" = "y" -o "$answer" = "Y" ]; then
+
+            pushd "$move" > /dev/null
+            echo ">>>"
+            $cmd &> "$SERVER_LOG" &
+            status=$?
+            SERVER_PID=$!
+            echo "$cmd started with pid $SERVER_PID."
+            echo "Sleeping 3 before continuing."
+            sleep 3
+            echo "<<<"
+            popd > /dev/null
+
+            if [ $status -eq 0 ]; then
+                assert 1 "test" "Command executed successfully."
+                printf "\n$MSG_OK Command executed with a exit status 0  - indicating success."
+                printf "\n"
+            else
+                assert 0 "test" "Command returned non-zero exit status which might indicate failure."
+            fi
+        fi
+    fi
+}
+
+
+
+#
+# Kill the server started with startServer and output its logfile.
+#
+killServer()
+{
+    echo "Killing server."
+    echo ">>>"
+    kill $SERVER_PID
+    echo "Sent kill signal to server."
+    echo "Sleeping 3 before continuing."
+    sleep 3
+    echo "Printing logfile from server:"
+    cat "$SERVER_LOG"
+    echo "<<<"
 }
 
 

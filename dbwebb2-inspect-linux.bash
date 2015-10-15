@@ -105,9 +105,22 @@ function linuxkmom03()
 #
 function linuxkmom04()
 {
-    #http://dbwebb.se/uppgift/utfor-nodeschool-workshopen-javascripting
-    #http://dbwebb.se/uppgift/skapa-en-restful-http-server-med-node-js-och-klient-i-bash
-    test
+    inspectExercise "javascripting" "uppgift/utfor-nodeschool-workshopen-javascripting" "" "" "" "" "" ""
+
+    inspectExercise "server" "uppgift/skapa-en-restful-http-server-med-node-js-och-klient-i-bash" "index.js" "server.js" "" "" "" "" "" "" " (del 1 servern)"
+
+    inspectExercise "server" "uppgift/skapa-en-restful-http-server-med-node-js-och-klient-i-bash" "client.bash" "" "" "" "" "" "" "" " (del 2 klienten)"
+
+    local target="me/$KMOM/server"
+    runServer "index.js" "$THEDIR/$target" "babel-node index.js"
+    inspectCommand "client.bash" "$THEDIR/$target" "bash client.bash hello"
+    inspectCommand "client.bash" "$THEDIR/$target" "bash client.bash html"
+    inspectCommand "client.bash" "$THEDIR/$target" "bash client.bash status"
+    inspectCommand "client.bash" "$THEDIR/$target" "bash client.bash sum 2 3 4"
+    inspectCommand "client.bash" "$THEDIR/$target" "bash client.bash filter 2 3 42 99"
+    inspectCommand "client.bash" "$THEDIR/$target" "bash client.bash 404"
+    inspectCommand "client.bash" "$THEDIR/$target" "bash client.bash all"
+    killServer
 }
 
 
@@ -117,6 +130,7 @@ function linuxkmom04()
 #
 function linuxkmom05()
 {
+    # http://dbwebb.se/uppgift/los-mazen-med-din-mazerunner-i-bash
     test
 }
 
@@ -127,6 +141,7 @@ function linuxkmom05()
 #
 function linuxkmom06()
 {
+    #http://dbwebb.se/uppgift/skapa-klienter-och-servrar-som-spelar-luffarschack-i-node-js
     test
 }
 
