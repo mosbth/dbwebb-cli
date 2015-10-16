@@ -2126,7 +2126,7 @@ runServer()
             SERVER_PID=$!
             echo "$cmd started with pid $SERVER_PID."
             echo -n "Will kill server automatically within 60 seconds."
-            sleep 60 && kill $SERVER_PID
+            sleep 60 && kill $SERVER_PID &
             echo "Sleeping 3 before continuing."
             sleep 3
             echo "<<<"
