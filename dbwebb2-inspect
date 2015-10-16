@@ -47,6 +47,7 @@ publishChmod()
         find "$dir" -type f -name '*.py' -exec chmod go-r {} \;
         #find "$dir" -type f -name '*.txt' -exec chmod go-r {} \;
         find "$dir" -type f -name 'log.txt' -exec chmod go-r {} \;
+        find "$dir" -type f -name '*.sh' -exec chmod go-r {} \;
         find "$dir" -type f -name '*.bash' -exec chmod go-r {} \;
         find "$dir" -type f -name '*.cgi' -exec chmod a+rx {} \;
         find "$dir" -type d -name 'db' -exec chmod a+rwx {} \;
@@ -56,6 +57,7 @@ publishChmod()
         case "$DBW_COURSE" in
             linux)
                 find "$dir" -type f -not -path '*/me/redovisa/*' -not -path '*/mysite/*' -name '*.js' -exec chmod go-r {} \;
+                find "$dir" -type f -name 'mazerunner' -exec chmod go-r {} \;
             ;;
         esac
     fi
