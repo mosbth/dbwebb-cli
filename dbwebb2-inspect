@@ -1435,6 +1435,8 @@ function linuxkmom04()
 
     inspectExercise "server" "uppgift/skapa-en-restful-http-server-med-node-js-och-klient-i-bash" "client.bash" "" "" "" "" "" "" "" " (del 2 klienten)"
 
+    export LINUX_SERVER="127.0.0.1"
+    export LINUX_PORT="1337"
     local target="me/$KMOM/server"
     runServer "index.js" "$THEDIR/$target" "babel-node index.js"
     inspectCommand "client.bash" "$THEDIR/$target" "bash client.bash hello"
@@ -1455,6 +1457,7 @@ function linuxkmom04()
 function linuxkmom05()
 {
     # http://dbwebb.se/uppgift/los-mazen-med-din-mazerunner-i-bash
+    # mazerunner.sh mazerunner.bash
     test
 }
 

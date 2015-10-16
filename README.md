@@ -10,6 +10,7 @@ History
 
 v1.9.17x (2015-10-16)
 
+* Add linux inspect kmom04.
 * Publish make .sh-file readonly.
 * Publish linux make js-files readonly instead of uglifyjs.
 * Validate and publish ignore directories -not -path `*/libs/*`.
