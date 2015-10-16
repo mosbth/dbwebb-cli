@@ -58,6 +58,7 @@ publishChmod()
             linux)
                 find "$dir" -type f -not -path '*/me/redovisa/*' -not -path '*/mysite/*' -name '*.js' -exec chmod go-r {} \;
                 find "$dir" -type f -name 'mazerunner' -exec chmod go-r {} \;
+                find "$dir" -type f -name '*.txt' -exec chmod go-r {} \;
             ;;
         esac
     fi
