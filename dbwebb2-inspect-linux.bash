@@ -112,7 +112,10 @@ function linuxkmom04()
     inspectExercise "server" "uppgift/skapa-en-restful-http-server-med-node-js-och-klient-i-bash" "client.bash" "" "" "" "" "" "" "" " (del 2 klienten)"
 
     export LINUX_SERVER="127.0.0.1"
-    export LINUX_PORT="1337"
+    if [[ ! ${LINUX_PORT+x} ]]; then 
+        export LINUX_PORT="1337"
+    fi
+    
     local target="me/$KMOM/server"
     runServer "index.js" "$THEDIR/$target" "babel-node index.js"
     inspectCommand "client.bash" "$THEDIR/$target" "bash client.bash hello"

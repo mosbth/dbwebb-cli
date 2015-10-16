@@ -389,7 +389,7 @@ runServer()
 
             pushd "$move" > /dev/null
             echo ">>>"
-            $cmd &> "$SERVER_LOG" &
+            $cmd > "$SERVER_LOG" &
             status=$?
             SERVER_PID=$!
             echo "$cmd started with pid $SERVER_PID."
