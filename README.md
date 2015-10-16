@@ -8,8 +8,9 @@ Part of course repos as a admin utility.
 History
 -------------------
 
-v1.9.17x (2015-10-14)
+v1.9.17x (2015-10-16)
 
+* Validate and publish ignore directories -not -path `*/libs/*`.
 * Validate add support for jsonlint.
 * Inspect support alternate place for file view content.
 * Adding tasks for linux kmom10.

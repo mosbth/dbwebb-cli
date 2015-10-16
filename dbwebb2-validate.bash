@@ -129,7 +129,7 @@ function validateCommand()
 
     if hash "$cmd" 2>/dev/null; then
         printf "\n *.$extension using $cmd"
-        for filename in $(find "$dir/" -not -name 'phpliteadmin*' -not -path '*/jquery/*' -not -path '*/node_modules/*' -type f -name \*.$extension); do
+        for filename in $(find "$dir/" -not -name 'phpliteadmin*' -not -path '*/jquery/*' -not -path '*/libs/*' -not -path '*/node_modules/*' -type f -name \*.$extension); do
             if [[ $optDryRun ]]; then
                 printf "\n%s" "$cmd $options $filename $output"
             else
@@ -189,7 +189,7 @@ function publishCommand()
 
     if hash "$cmd" 2>/dev/null; then
         printf "\n *.$extension using $cmd"
-        for filename in $( find "$dir/" -not -name 'phpliteadmin*' -not -path '*/jquery/*' -not -path '*/node_modules/*' -type f -name \*.$extension ); do
+        for filename in $( find "$dir/" -not -name 'phpliteadmin*' -not -path '*/jquery/*' -not -path '*/libs/*' -not -path '*/node_modules/*' -type f -name \*.$extension ); do
             if [[ $optDryRun ]]; then
                 printf "\n%s" "$cmd $options $filename $output $filename"
             else
