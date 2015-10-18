@@ -8,8 +8,10 @@ Part of course repos as a admin utility.
 History
 -------------------
 
-v1.9.17x (2015-10-16)
+v1.9.18 (2015-10-18)
 
+* Adding support for `run`, `--host` and `cwd` to execute command on remote server.
+* Support publishfast and publishpure as alias for purepublish and fastpublish.
 * Add linux inspect kmom04.
 * Publish make .sh-file readonly.
 * Publish linux make js-files readonly instead of uglifyjs.

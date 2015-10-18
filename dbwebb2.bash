@@ -419,6 +419,11 @@ function dbwebb-fastpublish()
     dbwebb-publish "$1" "$2" "$3"
 }
 
+dbwebb-publishfast()
+{
+    dbwebb-fastpublish "$*"
+}
+
 
 
 #
@@ -429,6 +434,44 @@ function dbwebb-purepublish()
     SKIP_READLINE="yes"
     PUBLISH_OPTIONS="--no-validate --no-minification"
     dbwebb-publish "$1" "$2" "$3"
+}
+
+dbwebb-publishpure()
+{
+    dbwebb-purepublish "$*"
+}
+
+
+
+#
+# Run command on remote server
+#
+function dbwebb-run()
+{
+    local cmd="$*"
+    local cwd=
+    
+    # Prepare options
+    if [[ ! $VERY_VERBOSE ]]; then
+        SKIP_READLINE="yes"
+        SILENT="yes"
+    fi
+
+    if [[ $OPTION_CWD ]]; then
+        cwd="cd $OPTION_CWD; "
+    fi
+
+    checkIfValidConfigOrExit
+    
+    # Create ssh-command for host
+    local server=${OPTION_HOSTNAME:-$DBW_HOST}
+    local ssh_cmd="ssh ${DBW_USER}@${server} $DBW_SSH_KEY_OPTION"
+    
+    local intro="I will now login to the server '$server' as '$DBW_USER' and execute the command '$cwd$cmd'."
+    local command="$SSH_CMD \"$cwd$cmd\""
+    local message="to run the command."
+    
+    executeCommand "$intro" "$command" "$message"
 }
 
 
@@ -694,6 +737,11 @@ do
             shift
         ;;
 
+        --silent | -s)
+            SILENT="yes"
+            shift
+        ;;
+
         --yes | -y)
             SKIP_READLINE="yes"
             shift
@@ -701,6 +749,18 @@ do
 
         --force | -f)
             OVERWRITE="--ignore-times"
+            shift
+        ;;
+
+        --host | --hostname)
+            OPTION_HOSTNAME="$2"
+            shift
+            shift
+        ;;
+
+        --cwd)
+            OPTION_CWD="$2"
+            shift
             shift
         ;;
 
@@ -733,9 +793,12 @@ do
         | download     \
         | validate     \
         | publish      \
+        | publishfast  \
+        | publishpure  \
         | fastpublish  \
         | purepublish  \
         | inspect      \
+        | run          \
         | create       \
         | init         \
         | init-server  \

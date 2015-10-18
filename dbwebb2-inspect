@@ -30,7 +30,7 @@
 #
 # Current version
 #
-DBW_VERSION="v1.9.17x (2015-10-08)"
+DBW_VERSION="v1.9.18 (2015-10-18)"
 # --------------- DBWEBB FUNCTIONS PHASE START ---------------
 
 #
@@ -206,13 +206,15 @@ executeCommand()
     fi
 
     MESSAGE=$3
-    if [ $STATUS = 0 ]
-    then
-        printf "$MSG_DONE $MESSAGE"
-    else
-        printf "$MSG_FAILED $MESSAGE"
+    if [[ ! $SILENT ]]; then
+        if [ $STATUS = 0 ]
+        then
+            printf "$MSG_DONE $MESSAGE"
+        else
+            printf "$MSG_FAILED $MESSAGE"
+        fi
+        printf "\n"
     fi
-    printf "\n"
 
     return $STATUS
 }

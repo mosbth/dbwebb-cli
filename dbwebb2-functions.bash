@@ -173,13 +173,15 @@ executeCommand()
     fi
 
     MESSAGE=$3
-    if [ $STATUS = 0 ]
-    then
-        printf "$MSG_DONE $MESSAGE"
-    else
-        printf "$MSG_FAILED $MESSAGE"
+    if [[ ! $SILENT ]]; then
+        if [ $STATUS = 0 ]
+        then
+            printf "$MSG_DONE $MESSAGE"
+        else
+            printf "$MSG_FAILED $MESSAGE"
+        fi
+        printf "\n"
     fi
-    printf "\n"
 
     return $STATUS
 }
