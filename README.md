@@ -10,7 +10,7 @@ History
 
 v1.9.18 (2015-10-18)
 
-* Adding support for `run`, `--host` and `cwd` to execute command on remote server.
+* Adding support for `run`, `--host` and `--cwd` to execute command on remote server.
 * Support publishfast and publishpure as alias for purepublish and fastpublish.
 * Add linux inspect kmom04.
 * Publish make .sh-file readonly.
