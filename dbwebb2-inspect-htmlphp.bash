@@ -95,6 +95,7 @@ function htmlphpkmom05()
 
     viewFileContent "jetty.php" "$METARGET"
     viewFileContent "search.php" "$METARGET"
+    viewFileContent "config.php" "$METARGET"
 
     htmlphplab "lab4"
 
