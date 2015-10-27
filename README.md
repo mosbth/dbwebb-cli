@@ -11,7 +11,7 @@ History
 v1.9.18* (2015-10-27)
 
 * Adding inspect for webapp kmom01 and kmom02.
-* Exclude `me/lib/*` from validation and publishing tools.
+* Exclude `*/lib/*` from validation and publishing tools.
 
 
 v1.9.18 (2015-10-18)

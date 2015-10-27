@@ -55,7 +55,8 @@ YAML="js-yaml"
 YAML_OPTIONS=""
 
 # Exclude these from tools processing
-EXCLUDE_FROM_PROCESSING="-not -name 'phpliteadmin*' -not -path '*/libs/*' -not -path '*/me/lib/*' -not -path '*/node_modules/*'"
+# Not currently used, need to be evaluated in find expression
+EXCLUDE_FROM_PROCESSING="-not -name 'phpliteadmin*' -not -path '*/libs/*' -not -path '*/lib/*' -not -path '*/node_modules/*'"
 
 
 #
@@ -131,7 +132,9 @@ function validateCommand()
 
     if hash "$cmd" 2>/dev/null; then
         printf "\n *.$extension using $cmd"
-        for filename in $(find "$dir/" $EXCLUDE_FROM_PROCESSING -type f -name \*.$extension); do
+        [[ $optDryRun ]] && echo "find $dir/ $EXCLUDE_FROM_PROCESSING -type f -name \*.$extension"
+        
+        for filename in $(find "$dir/" -not -name 'phpliteadmin*' -not -path '*/libs/*' -not -path '*/lib/*' -not -path '*/node_modules/*' -type f -name \*.$extension); do
             if [[ $optDryRun ]]; then
                 printf "\n%s" "$cmd $options $filename $output"
             else
@@ -191,7 +194,9 @@ function publishCommand()
 
     if hash "$cmd" 2>/dev/null; then
         printf "\n *.$extension using $cmd"
-        for filename in $( find "$dir/" $EXCLUDE_FROM_PROCESSING -type f -name \*.$extension ); do
+        [[ $optDryRun ]] && echo "find $dir/ $EXCLUDE_FROM_PROCESSING -type f -name \*.$extension"
+
+        for filename in $( find "$dir/" -not -name 'phpliteadmin*' -not -path '*/libs/*' -not -path '*/lib/*' -not -path '*/node_modules/*' -type f -name \*.$extension ); do
             if [[ $optDryRun ]]; then
                 printf "\n%s" "$cmd $options $filename $output $filename"
             else
