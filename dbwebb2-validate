@@ -30,7 +30,7 @@
 #
 # Current version
 #
-DBW_VERSION="v1.9.18 (2015-10-18)"
+DBW_VERSION="v1.9.18* (2015-10-26)"
 # --------------- DBWEBB FUNCTIONS PHASE START ---------------
 
 #
@@ -53,7 +53,7 @@ publishChmod()
         find "$dir" -type d -name 'db' -exec chmod a+rwx {} \;
         find "$dir" -type f -name '*.sqlite' -exec chmod a+rw {} \;
         find "$dir" -type f -name '*.sql' -exec chmod go-r {} \;
-        
+
         case "$DBW_COURSE" in
             linux)
                 find "$dir" -type f -not -path '*/me/redovisa/*' -not -path '*/mysite/*' -name '*.js' -exec chmod go-r {} \;
@@ -279,6 +279,7 @@ mapCmdToDir()
 
     case "$CMD" in
         example)    RES="example" ;;
+        lib)        RES="me/lib" ;;
         solution)   RES=".solution" ;;
         solution/me)   RES=".solution/me" ;;
         tutorial)   RES="tutorial" ;;
@@ -865,6 +866,8 @@ CHECKSH_OPTIONS="--shell=sh --exclude=SC2002"
 YAML="js-yaml"
 YAML_OPTIONS=""
 
+# Exclude these from tools processing
+EXCLUDE_FROM_PROCESSING="-not -name 'phpliteadmin*' -not -path '*/libs/*' -not -path '*/me/lib/*' -not -path '*/node_modules/*'"
 
 
 #
@@ -940,7 +943,7 @@ function validateCommand()
 
     if hash "$cmd" 2>/dev/null; then
         printf "\n *.$extension using $cmd"
-        for filename in $(find "$dir/" -not -name 'phpliteadmin*' -not -path '*/jquery/*' -not -path '*/libs/*' -not -path '*/node_modules/*' -type f -name \*.$extension); do
+        for filename in $(find "$dir/" $EXCLUDE_FROM_PROCESSING -type f -name \*.$extension); do
             if [[ $optDryRun ]]; then
                 printf "\n%s" "$cmd $options $filename $output"
             else
@@ -1000,7 +1003,7 @@ function publishCommand()
 
     if hash "$cmd" 2>/dev/null; then
         printf "\n *.$extension using $cmd"
-        for filename in $( find "$dir/" -not -name 'phpliteadmin*' -not -path '*/jquery/*' -not -path '*/libs/*' -not -path '*/node_modules/*' -type f -name \*.$extension ); do
+        for filename in $( find "$dir/" $EXCLUDE_FROM_PROCESSING -type f -name \*.$extension ); do
             if [[ $optDryRun ]]; then
                 printf "\n%s" "$cmd $options $filename $output $filename"
             else

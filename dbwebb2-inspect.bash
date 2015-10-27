@@ -181,7 +181,7 @@ function inspectMe()
     openFilesInEditor "$target"
 
     printUrl "$mepage" "$target"  
-    printUrl "$reportpage" "$target"  
+    [[ $reportpage ]] && printUrl "$reportpage" "$target"  
 }
 
 

@@ -8,6 +8,12 @@ Part of course repos as a admin utility.
 History
 -------------------
 
+v1.9.18* (2015-10-27)
+
+* Adding inspect for webapp kmom01 and kmom02.
+* Exclude `me/lib/*` from validation and publishing tools.
+
+
 v1.9.18 (2015-10-18)
 
 * Adding support for `run`, `--host` and `--cwd` to execute command on remote server.

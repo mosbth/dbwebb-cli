@@ -30,7 +30,7 @@
 #
 # Current version
 #
-DBW_VERSION="v1.9.18 (2015-10-18)"
+DBW_VERSION="v1.9.18* (2015-10-26)"
 # --------------- DBWEBB FUNCTIONS PHASE START ---------------
 
 #
@@ -53,7 +53,7 @@ publishChmod()
         find "$dir" -type d -name 'db' -exec chmod a+rwx {} \;
         find "$dir" -type f -name '*.sqlite' -exec chmod a+rw {} \;
         find "$dir" -type f -name '*.sql' -exec chmod go-r {} \;
-        
+
         case "$DBW_COURSE" in
             linux)
                 find "$dir" -type f -not -path '*/me/redovisa/*' -not -path '*/mysite/*' -name '*.js' -exec chmod go-r {} \;
@@ -279,6 +279,7 @@ mapCmdToDir()
 
     case "$CMD" in
         example)    RES="example" ;;
+        lib)        RES="me/lib" ;;
         solution)   RES=".solution" ;;
         solution/me)   RES=".solution/me" ;;
         tutorial)   RES="tutorial" ;;
@@ -1493,6 +1494,19 @@ function linuxkmom10()
 #---------------------------- INSPECT linux END ----------------------------
 #---------------------------- INSPECT webapp START --------------------------
 #
+# Test general
+#
+function webapp()
+{
+    inspectIntro
+    
+    local meDir=
+    
+    meDir="$( echo "$KMOM" | sed 's/kmom0/me/g' | sed 's/kmom/me/g' )"
+    METARGET="me/$KMOM/$meDir"
+}
+
+#
 #
 #
 function webappme()
@@ -1510,43 +1524,12 @@ function webappme()
 
 
 #
-# NOT USED IN WEBAPP REMOVE WHEN DONE WITH VALIDATIONG OTHER STUFF
-#
-function webapplab()
-{
-    local lab="$1"
-    local target="me/$KMOM/$lab"
-    
-    headerForTest "-- Lab" "-- ${DBW_WWW}$DBW_COURSE/$lab" 
-    openFilesInEditor "$target"
-    checkKmomDir "$target"
-    printUrl "" "$target"  
-    inspectCommand "answer.php" "$EXEC_DIR/$KMOM/$lab" "php answer.php"
-    pressEnterToContinue
-}
-
-
-
-#
-# Test general
-#
-function webapp()
-{
-    headerForTest "-- $DBW_COURSE $KMOM" "-- ${DBW_WWW}$DBW_COURSE/$KMOM"
-    checkKmomDir
-    publishKmom
-    validateKmom "$KMOM"
-    webappme
-}
-
-
-
 #
 # Test kmom01
 #
 function webappkmom01()
 {
-    test
+    inspectMe "$METARGET" "index.html" "" "uppgift/skapa-en-me-app-till-webapp-kursen"
 }
 
 
@@ -1556,7 +1539,7 @@ function webappkmom01()
 #
 function webappkmom02()
 {
-    test
+    inspectMe "$METARGET" "index.html" "" "uppgift/bygg-ut-me-appen-med-ett-potpurri-av-tester"
 }
 
 
@@ -1916,7 +1899,7 @@ function inspectMe()
     openFilesInEditor "$target"
 
     printUrl "$mepage" "$target"  
-    printUrl "$reportpage" "$target"  
+    [[ $reportpage ]] && printUrl "$reportpage" "$target"  
 }
 
 

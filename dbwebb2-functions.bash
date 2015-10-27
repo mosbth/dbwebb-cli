@@ -20,7 +20,7 @@ publishChmod()
         find "$dir" -type d -name 'db' -exec chmod a+rwx {} \;
         find "$dir" -type f -name '*.sqlite' -exec chmod a+rw {} \;
         find "$dir" -type f -name '*.sql' -exec chmod go-r {} \;
-        
+
         case "$DBW_COURSE" in
             linux)
                 find "$dir" -type f -not -path '*/me/redovisa/*' -not -path '*/mysite/*' -name '*.js' -exec chmod go-r {} \;
@@ -246,6 +246,7 @@ mapCmdToDir()
 
     case "$CMD" in
         example)    RES="example" ;;
+        lib)        RES="me/lib" ;;
         solution)   RES=".solution" ;;
         solution/me)   RES=".solution/me" ;;
         tutorial)   RES="tutorial" ;;

@@ -1,5 +1,18 @@
 #---------------------------- INSPECT webapp START --------------------------
 #
+# Test general
+#
+function webapp()
+{
+    inspectIntro
+    
+    local meDir=
+    
+    meDir="$( echo "$KMOM" | sed 's/kmom0/me/g' | sed 's/kmom/me/g' )"
+    METARGET="me/$KMOM/$meDir"
+}
+
+#
 #
 #
 function webappme()
@@ -17,43 +30,12 @@ function webappme()
 
 
 #
-# NOT USED IN WEBAPP REMOVE WHEN DONE WITH VALIDATIONG OTHER STUFF
-#
-function webapplab()
-{
-    local lab="$1"
-    local target="me/$KMOM/$lab"
-    
-    headerForTest "-- Lab" "-- ${DBW_WWW}$DBW_COURSE/$lab" 
-    openFilesInEditor "$target"
-    checkKmomDir "$target"
-    printUrl "" "$target"  
-    inspectCommand "answer.php" "$EXEC_DIR/$KMOM/$lab" "php answer.php"
-    pressEnterToContinue
-}
-
-
-
-#
-# Test general
-#
-function webapp()
-{
-    headerForTest "-- $DBW_COURSE $KMOM" "-- ${DBW_WWW}$DBW_COURSE/$KMOM"
-    checkKmomDir
-    publishKmom
-    validateKmom "$KMOM"
-    webappme
-}
-
-
-
 #
 # Test kmom01
 #
 function webappkmom01()
 {
-    test
+    inspectMe "$METARGET" "index.html" "" "uppgift/skapa-en-me-app-till-webapp-kursen"
 }
 
 
@@ -63,7 +45,7 @@ function webappkmom01()
 #
 function webappkmom02()
 {
-    test
+    inspectMe "$METARGET" "index.html" "" "uppgift/bygg-ut-me-appen-med-ett-potpurri-av-tester"
 }
 
 
