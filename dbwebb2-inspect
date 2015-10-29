@@ -30,7 +30,7 @@
 #
 # Current version
 #
-DBW_VERSION="v1.9.18* (2015-10-26)"
+DBW_VERSION="v1.9.19 (2015-10-29)"
 # --------------- DBWEBB FUNCTIONS PHASE START ---------------
 
 #
@@ -750,7 +750,7 @@ DBW_ARCHIVE="/home/saxon/students/dbwebb/archive/"
 #DBW_REPOS[linux]="https://github.com/mosbth/linux"
 #DBW_REPOS[webapp]="https://github.com/mosbth/webapp"
 #DBW_REPOS[htmlphp]="https://github.com/mosbth/htmlphp"
-DBW_COURSE_REPOS=( 'python' 'javascript1' 'linux' 'webapp' 'oopython' 'htmlphp' 'design' 'oophp' 'phpmvc' 'webgl' )
+DBW_COURSE_REPOS=( 'python' 'javascript1' 'linux' 'webapp' 'oopython' 'htmlphp' 'design' 'oophp' 'phpmvc' 'javascript' 'webgl' )
 DBW_REPO="dbwebb-cli"
 
 
@@ -1326,6 +1326,258 @@ function htmlphpkmom10()
 
 
 #---------------------------- INSPECT HTMLPHP END ----------------------------
+#---------------------------- INSPECT oophp START --------------------------
+#
+# Test general
+#
+function oophp()
+{
+    inspectIntro
+    
+    METARGET="me/$KMOM"
+}
+
+
+
+#
+# Test kmom
+#
+function oophpkmom01()
+{
+    inspectMe "$METARGET" "" "" "oophp/kmom01#uppgifter"
+}
+
+
+
+#
+# Test kmom
+#
+function oophpkmom02()
+{
+    inspectMe "$METARGET" "" "" "oophp/kmom02#uppgifter"
+}
+
+
+
+#
+# Test kmom
+#
+function oophpkmom03()
+{
+    inspectMe "$METARGET" "" "" "oophp/kmom03#uppgifter"
+}
+
+
+
+#
+# Test kmom
+#
+function oophpkmom04()
+{
+    inspectMe "$METARGET" "" "" "oophp/kmom04#uppgifter"
+}
+
+
+
+#
+# Test kmom
+#
+function oophpkmom05()
+{
+    inspectMe "$METARGET" "" "" "oophp/kmom05#uppgifter"
+}
+
+
+
+#
+# Test kmom
+#
+function oophpkmom06()
+{
+    inspectMe "$METARGET" "" "" "oophp/kmom06#uppgifter"
+}
+
+
+
+#
+# Test kmom
+#
+function oophpkmom10()
+{
+    inspectMe "$METARGET" "" "" "oophp/kmom10#redovisning"
+}
+
+
+
+#---------------------------- INSPECT oophp END ----------------------------
+#---------------------------- INSPECT phpmvc START --------------------------
+#
+# Test general
+#
+function phpmvc()
+{
+    inspectIntro
+    
+    METARGET="me/$KMOM"
+}
+
+
+
+#
+# Test kmom
+#
+function phpmvckmom01()
+{
+    inspectMe "$METARGET" "" "" "phpmvc/kmom01#uppgifter"
+}
+
+
+
+#
+# Test kmom
+#
+function phpmvckmom02()
+{
+    inspectMe "$METARGET" "" "" "phpmvc/kmom02#uppgifter"
+}
+
+
+
+#
+# Test kmom
+#
+function phpmvckmom03()
+{
+    inspectMe "$METARGET" "" "" "phpmvc/kmom03#uppgifter"
+}
+
+
+
+#
+# Test kmom
+#
+function phpmvckmom04()
+{
+    inspectMe "$METARGET" "" "" "phpmvc/kmom04#uppgifter"
+}
+
+
+
+#
+# Test kmom
+#
+function phpmvckmom05()
+{
+    inspectMe "$METARGET" "" "" "phpmvc/kmom05#uppgifter"
+}
+
+
+
+#
+# Test kmom
+#
+function phpmvckmom06()
+{
+    inspectMe "$METARGET" "" "" "phpmvc/kmom06#uppgifter"
+}
+
+
+
+#
+# Test kmom
+#
+function phpmvckmom10()
+{
+    inspectMe "$METARGET" "" "" "phpmvc/kmom10#redovisning"
+}
+
+
+
+#---------------------------- INSPECT phpmvc END ----------------------------
+#---------------------------- INSPECT javascript START --------------------------
+#
+# Test general
+#
+function javascript()
+{
+    inspectIntro
+    
+    METARGET="me/$KMOM"
+}
+
+
+
+#
+# Test kmom
+#
+function javascriptkmom01()
+{
+    inspectMe "$METARGET" "" "" "javascript/kmom01#uppgifter"
+}
+
+
+
+#
+# Test kmom
+#
+function javascriptkmom02()
+{
+    inspectMe "$METARGET" "" "" "javascript/kmom02#uppgifter"
+}
+
+
+
+#
+# Test kmom
+#
+function javascriptkmom03()
+{
+    inspectMe "$METARGET" "" "" "javascript/kmom03#uppgifter"
+}
+
+
+
+#
+# Test kmom
+#
+function javascriptkmom04()
+{
+    inspectMe "$METARGET" "" "" "javascript/kmom04#uppgifter"
+}
+
+
+
+#
+# Test kmom
+#
+function javascriptkmom05()
+{
+    inspectMe "$METARGET" "" "" "javascript/kmom05#uppgifter"
+}
+
+
+
+#
+# Test kmom
+#
+function javascriptkmom06()
+{
+    inspectMe "$METARGET" "" "" "javascript/kmom06#uppgifter"
+}
+
+
+
+#
+# Test kmom
+#
+function javascriptkmom10()
+{
+    inspectMe "$METARGET" "" "" "javascript/kmom10#redovisning"
+}
+
+
+
+#---------------------------- INSPECT javascript END ----------------------------
 #---------------------------- INSPECT linux START --------------------------
 #
 # Test general

@@ -8,8 +8,9 @@ Part of course repos as a admin utility.
 History
 -------------------
 
-v1.9.18* (2015-10-27)
+v1.9.19 (2015-10-29)
 
+* Added inspect for phpmvc, javascript and oophp.
 * Adding inspect for webapp kmom01 and kmom02.
 * Exclude `*/lib/*` from validation and publishing tools.
 
