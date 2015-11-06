@@ -8,6 +8,11 @@ Part of course repos as a admin utility.
 History
 -------------------
 
+v1.9.20 (2015-11-06)
+
+* Do not upload `slide` directory or dir named `old`.
+
+
 v1.9.19 (2015-10-29)
 
 * Added inspect for phpmvc, javascript and oophp.
