@@ -30,7 +30,7 @@
 #
 # Current version
 #
-DBW_VERSION="v1.9.20 (2015-11-06)"
+DBW_VERSION="v1.9.20x (2015-11-06)"
 # --------------- DBWEBB FUNCTIONS PHASE START ---------------
 
 #
@@ -731,7 +731,7 @@ SSH_CMD="ssh ${DBW_USER}@${DBW_HOST} $DBW_SSH_KEY_OPTION"
 RSYNC_CHMOD="--chmod=Du+w,Dgo+rx,Fu+rw,Fgo+r"
 
 # Create the basis for the upload command
-RSYNC_CMD="rsync -av $RSYNC_CHMOD --delete --exclude .git --exclude .gitignore --exclude literature --exclude tutorial --exclude slide --exclude old --exclude .default -e \"ssh $DBW_SSH_KEY_OPTION\""
+RSYNC_CMD="rsync -av $RSYNC_CHMOD --delete --exclude .git --exclude .gitignore --exclude literature --exclude tutorial --exclude slide --exclude .solution --exclude old --exclude .default -e \"ssh $DBW_SSH_KEY_OPTION\""
 RSYNC_DOWNLOAD_CMD="rsync -avuc $RSYNC_CHMOD -e \"ssh $DBW_SSH_KEY_OPTION\""
 
 DBW_REMOTE_DESTINATION="${DBW_USER}@${DBW_HOST}:$DBW_REMOTE_BASEDIR/$DBW_COURSE"
@@ -1284,7 +1284,7 @@ function dbwebb-validate()
     local log="$HOME/.dbwebb-validate.log"
     local intro="Uploading the directory '$WHAT' to '$WHERE' for validation."
     local command1="$RSYNC_CMD $OVERWRITE '$WHAT' '$WHERE'"
-    local command2="rsync -av $RSYNC_CHMOD $OVERWRITE --exclude .git --exclude .gitignore --exclude .default --include='.??*' --exclude='*' -e \"ssh $DBW_SSH_KEY_OPTION\" '$DBW_COURSE_DIR/' '$DBW_REMOTE_DESTINATION/'"
+    local command2="rsync -av $RSYNC_CHMOD $OVERWRITE --exclude .git --exclude .gitignore --exclude .default --exclude .solution --exclude .old --include='.??*' --exclude='*' -e \"ssh $DBW_SSH_KEY_OPTION\" '$DBW_COURSE_DIR/' '$DBW_REMOTE_DESTINATION/'"
     local command3="$SSH_CMD 'dbwebb-validate --course-repo \"$DBW_REMOTE_BASEDIR/$DBW_COURSE\" \"$DBW_REMOTE_BASEDIR/$DBW_COURSE/$SUBDIR\"' 2>&1 | tee '$log';"
     local message="to validate course results.\nSaved a log of the output: less -R '$log'"
     executeCommand "$intro" "$command1; $command2; $command3" "$message"
@@ -1310,7 +1310,7 @@ function dbwebb-publish()
     local log="$HOME/.dbwebb-publish.log"
     local intro="Uploading the directory '$WHAT' to '$WHERE' to validate and publish."
     local command1="$RSYNC_CMD $OVERWRITE '$WHAT' '$WHERE'"
-    local command2="rsync -av $RSYNC_CHMOD $OVERWRITE --exclude .git --exclude .gitignore --exclude .default --include='.??*' --exclude='*' -e \"ssh $DBW_SSH_KEY_OPTION\" '$DBW_COURSE_DIR/' '$DBW_REMOTE_DESTINATION/'"
+    local command2="rsync -av $RSYNC_CHMOD $OVERWRITE --exclude .git --exclude .gitignore --exclude .default --exclude .solution --exclude .old --include='.??*' --exclude='*' -e \"ssh $DBW_SSH_KEY_OPTION\" '$DBW_COURSE_DIR/' '$DBW_REMOTE_DESTINATION/'"
     local command3="$SSH_CMD 'dbwebb-validate $PUBLISH_OPTIONS --publish --course-repo \"$DBW_REMOTE_BASEDIR/$DBW_COURSE\" --publish-to \"$DBW_REMOTE_WWWDIR/$DBW_COURSE/$SUBDIR\" \"$DBW_REMOTE_BASEDIR/$DBW_COURSE/$SUBDIR\"' 2>&1 | tee '$log';"
     local message="to validate and publish course results.\nSaved a log of the output: less -R '$log'"
     executeCommand "$intro" "$command1; $command2; $command3" "$message"

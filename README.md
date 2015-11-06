@@ -8,6 +8,12 @@ Part of course repos as a admin utility.
 History
 -------------------
 
+v1.9.20x (2015-11-06)
+
+* Do not upload `.solution` directory.
+* Do not sync `.solution` and `.old` when upload for validate and publish.
+
+
 v1.9.20 (2015-11-06)
 
 * Do not upload `slide` directory or dir named `old`.
