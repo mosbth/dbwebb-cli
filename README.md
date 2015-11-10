@@ -8,8 +8,9 @@ Part of course repos as a admin utility.
 History
 -------------------
 
-v1.9.20x (2015-11-06)
+v1.9.20x (2015-11-10)
 
+* Do not validate/publish files named `*.min.*`.
 * Do not upload `.solution` directory.
 * Do not sync `.solution` and `.old` when upload for validate and publish.
 

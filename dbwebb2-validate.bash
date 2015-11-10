@@ -134,7 +134,7 @@ function validateCommand()
         printf "\n *.$extension using $cmd"
         [[ $optDryRun ]] && echo "find $dir/ $EXCLUDE_FROM_PROCESSING -type f -name \*.$extension"
         
-        for filename in $(find "$dir/" -not -name 'phpliteadmin*' -not -path '*/libs/*' -not -path '*/lib/*' -not -path '*/node_modules/*' -type f -name \*.$extension); do
+        for filename in $(find "$dir/" -not -name '*.min.*' -not -name 'phpliteadmin*' -not -path '*/libs/*' -not -path '*/lib/*' -not -path '*/node_modules/*' -type f -name \*.$extension); do
             if [[ $optDryRun ]]; then
                 printf "\n%s" "$cmd $options $filename $output"
             else
@@ -196,7 +196,7 @@ function publishCommand()
         printf "\n *.$extension using $cmd"
         [[ $optDryRun ]] && echo "find $dir/ $EXCLUDE_FROM_PROCESSING -type f -name \*.$extension"
 
-        for filename in $( find "$dir/" -not -name 'phpliteadmin*' -not -path '*/libs/*' -not -path '*/lib/*' -not -path '*/node_modules/*' -type f -name \*.$extension ); do
+        for filename in $( find "$dir/"  -not -name '*.min.*' -not -name 'phpliteadmin*' -not -path '*/libs/*' -not -path '*/lib/*' -not -path '*/node_modules/*' -type f -name \*.$extension ); do
             if [[ $optDryRun ]]; then
                 printf "\n%s" "$cmd $options $filename $output $filename"
             else
