@@ -344,7 +344,7 @@ mapCmdToDir()
                 lab5)       RES="me/kmom06/lab5" ;;
                 lab6)       RES="me/kmom06/lab6" ;;
 
-                marvin1)    RES="me/kmom02/marvin1" ;;l
+                marvin1)    RES="me/kmom02/marvin1" ;;
                 marvin2)    RES="me/kmom03/marvin2" ;;
                 marvin3)    RES="me/kmom04/marvin3" ;;
                 marvin4)    RES="me/kmom05/marvin4" ;;
