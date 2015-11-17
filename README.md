@@ -8,6 +8,11 @@ Part of course repos as a admin utility.
 History
 -------------------
 
+v1.9.21x (2015-11-17)
+
+* Validation of course webgl ignored, fixed.
+
+
 v1.9.21 (2015-11-17)
 
 * htmlhint changed its output and broke validation, fixed.

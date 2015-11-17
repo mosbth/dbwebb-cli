@@ -55,7 +55,8 @@ YAML="js-yaml"
 YAML_OPTIONS=""
 
 # Exclude these paths/filenames from tools processing
-EXCLUDE_PATHS='\*/webgl/\* \*/libs/\* \*/lib/\* \*/node_modules/\*'
+#EXCLUDE_PATHS='\*/webgl/\* \*/libs/\* \*/lib/\* \*/node_modules/\*'
+EXCLUDE_PATHS='\*/example/webgl/\* \*/libs/\* \*/lib/\* \*/node_modules/\*'
 EXCLUDE_FILES='phpliteadmin\* \*.min.\*'
 
 
