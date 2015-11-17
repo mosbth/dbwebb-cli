@@ -8,8 +8,11 @@ Part of course repos as a admin utility.
 History
 -------------------
 
-v1.9.20x (2015-11-13)
+v1.9.21 (2015-11-17)
 
+* htmlhint changed its output and broke validation, fixed.
+* Rewrite find-expression and exclude path/names for validate and publish.
+* Adding config file `.dbwebb-validate.config` for dbwebb-validate in course repo and in $HOME
 * Wrong path to webgl kmom02/sandbox3.
 * Do not validate/publish files named `*.min.*`.
 * Do not upload `.solution` directory.

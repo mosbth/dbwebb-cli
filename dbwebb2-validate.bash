@@ -54,9 +54,10 @@ CHECKSH_OPTIONS="--shell=sh --exclude=SC2002"
 YAML="js-yaml"
 YAML_OPTIONS=""
 
-# Exclude these from tools processing
-# Not currently used, need to be evaluated in find expression
-EXCLUDE_FROM_PROCESSING="-not -name 'phpliteadmin*' -not -path '*/libs/*' -not -path '*/lib/*' -not -path '*/node_modules/*'"
+# Exclude these paths/filenames from tools processing
+EXCLUDE_PATHS='\*/webgl/\* \*/libs/\* \*/lib/\* \*/node_modules/\*'
+EXCLUDE_FILES='phpliteadmin\* \*.min.\*'
+
 
 
 #
@@ -68,22 +69,22 @@ function setDefaultConfigFiles()
         if [ -f "$DBW_COURSE_DIR/.htmlhintrc" ]; then
             HTMLHINT_CONFIG="--config '$DBW_COURSE_DIR/.htmlhintrc'"
         fi
-        
+
         HTML_MINIFIER_CONFIG="--config-file '$DBW_COURSE_DIR/.html-minifier.conf'"
         PYLINT_CONFIG="--rcfile '$DBW_COURSE_DIR/.pylintrc'"
         PHPMD_CONFIG="'$DBW_COURSE_DIR/.phpmd.xml'"
         PHPCS_CONFIG="--standard='$DBW_COURSE_DIR/.phpcs.xml'"
-        
+
         if [ -f "$DBW_COURSE_DIR/.csslintrc" ]; then
             CSSLINT_CONFIG="$DBW_COURSE_DIR/.csslintrc"
         else
             CSSLINT_CONFIG="/dev/null"
         fi
-        
+
         JSCS_CONFIG="--config=$DBW_COURSE_DIR/.jscsrc"
     else
         PHPMD_CONFIG="cleancode,codesize,controversial,design,naming,unusedcode"
-    fi    
+    fi
 }
 
 
@@ -118,6 +119,24 @@ function checkInstalledValidateTools
 
 
 #
+# Create a find expression for validate and publish
+#
+function getFindExpression
+{
+    local ignorePaths
+    local ignoreFiles
+    local findExpression
+
+    ignorePaths=$( printf " -not -path %s " $( echo $EXCLUDE_PATHS ) )
+    ignoreFiles=$( printf " -not -name %s " $( echo $EXCLUDE_FILES ) )
+    findExpression=$( echo find "$dir/" -type f -name \*.$extension $ignorePaths $ignoreFiles )
+
+    echo $findExpression
+}
+
+
+
+#
 # Perform validation tests
 #
 function validateCommand()
@@ -129,12 +148,16 @@ function validateCommand()
     local output="$5"
     local onlyExitStatus="$6"
     local counter=0
+    local findExpression=
 
     if hash "$cmd" 2>/dev/null; then
         printf "\n *.$extension using $cmd"
-        [[ $optDryRun ]] && echo "find $dir/ $EXCLUDE_FROM_PROCESSING -type f -name \*.$extension"
-        
-        for filename in $(find "$dir/" -not -name '*.min.*' -not -name 'phpliteadmin*' -not -path '*/libs/*' -not -path '*/lib/*' -not -path '*/node_modules/*' -type f -name \*.$extension); do
+
+        findExpression=$( getFindExpression )
+
+        [[ $optDryRun ]] && echo "$findExpression"
+
+        for filename in $( eval $findExpression ); do
             if [[ $optDryRun ]]; then
                 printf "\n%s" "$cmd $options $filename $output"
             else
@@ -162,26 +185,26 @@ function validate()
 {
     local dir="$1"
 
-    [[ $DISABLE_HTMLHINT ]]  || validateCommand "$dir" "$HTMLHINT" "html" "$HTMLHINT_OPTIONS $HTMLHINT_CONFIG" '| grep -v "No problem."; test ${PIPESTATUS[0]} -eq 0'
-    [[ $DISABLE_CSSLINT ]]   || validateCommand "$dir" "$CSSLINT" "css" "$CSSLINT_OPTIONS $( cat "$CSSLINT_CONFIG" )"
-    [[ $DISABLE_JSHINT ]]    || validateCommand "$dir" "$JSHINT" "js"
-    [[ $DISABLE_JSCS ]]      || validateCommand "$dir" "$JSCS" "js"  "$JSCS_OPTIONS $JSCS_CONFIG" "" "onlyExitStatus"
-    [[ $DISABLE_JSONLINT ]]  || validateCommand "$dir" "$JSONLINT" "json" "$JSONLINT_OPTIONS" "" ""
+    [[ $ENABLE_ALL || ! $DISABLE_HTMLHINT ]]  && validateCommand "$dir" "$HTMLHINT" "html" "$HTMLHINT_OPTIONS $HTMLHINT_CONFIG" '| grep -v "No problem." | grep -v "Config loaded." |grep -v "Scan "; test ${PIPESTATUS[0]} -eq 0'
+    [[ $ENABLE_ALL || ! $DISABLE_CSSLINT ]]   && validateCommand "$dir" "$CSSLINT" "css" "$CSSLINT_OPTIONS $( cat "$CSSLINT_CONFIG" )"
+    [[ $ENABLE_ALL || ! $DISABLE_JSHINT ]]    && validateCommand "$dir" "$JSHINT" "js"
+    [[ $ENABLE_ALL || ! $DISABLE_JSCS ]]      && validateCommand "$dir" "$JSCS" "js"  "$JSCS_OPTIONS $JSCS_CONFIG" "" "onlyExitStatus"
+    [[ $ENABLE_ALL || ! $DISABLE_JSONLINT ]]  && validateCommand "$dir" "$JSONLINT" "json" "$JSONLINT_OPTIONS" "" ""
     #validateCommand "$dir" "$JSCS" "js" "$JSCS_OPTIONS $JSCS_CONFIG" ""
-    [[ $DISABLE_PYLINT ]]    || validateCommand "$dir" "$PYLINT" "py" "$PYLINT_OPTIONS $PYLINT_CONFIG" 
-    [[ $DISABLE_PYLINT ]]    || validateCommand "$dir" "$PYLINT" "cgi" "$PYLINT_OPTIONS $PYLINT_CONFIG" 
-    [[ $DISABLE_PHP ]]       || validateCommand "$dir" "$PHP" "php" "$PHP_OPTIONS" "> /dev/null"
-    [[ $DISABLE_PHPMD ]]     || validateCommand "$dir" "$PHPMD" "php" "" "$PHPMD_OPTIONS $PHPMD_CONFIG"
-    [[ $DISABLE_PHPCS ]]     || validateCommand "$dir" "$PHPCS" "php" "$PHPCS_OPTIONS $PHPCS_CONFIG"
-    [[ $DISABLE_CHECKBASH ]] || validateCommand "$dir" "$CHECKBASH" "bash" "$CHECKBASH_OPTIONS" 
-    [[ $DISABLE_CHECKSH ]]   || validateCommand "$dir" "$CHECKSH" "sh" "$CHECKSH_OPTIONS"
-    [[ $DISABLE_YAML ]]      || validateCommand "$dir" "$YAML" "yml" "$YAML_OPTIONS" "> /dev/null"
+    [[ $ENABLE_ALL || ! $DISABLE_PYLINT ]]    && validateCommand "$dir" "$PYLINT" "py" "$PYLINT_OPTIONS $PYLINT_CONFIG"
+    [[ $ENABLE_ALL || ! $DISABLE_PYLINT ]]    && validateCommand "$dir" "$PYLINT" "cgi" "$PYLINT_OPTIONS $PYLINT_CONFIG"
+    [[ $ENABLE_ALL || ! $DISABLE_PHP ]]       && validateCommand "$dir" "$PHP" "php" "$PHP_OPTIONS" "> /dev/null"
+    [[ $ENABLE_ALL || ! $DISABLE_PHPMD ]]     && validateCommand "$dir" "$PHPMD" "php" "" "$PHPMD_OPTIONS $PHPMD_CONFIG"
+    [[ $ENABLE_ALL || ! $DISABLE_PHPCS ]]     && validateCommand "$dir" "$PHPCS" "php" "$PHPCS_OPTIONS $PHPCS_CONFIG"
+    [[ $ENABLE_ALL || ! $DISABLE_CHECKBASH ]] && validateCommand "$dir" "$CHECKBASH" "bash" "$CHECKBASH_OPTIONS"
+    [[ $ENABLE_ALL || ! $DISABLE_CHECKSH ]]   && validateCommand "$dir" "$CHECKSH" "sh" "$CHECKSH_OPTIONS"
+    [[ $ENABLE_ALL || ! $DISABLE_YAML ]]      && validateCommand "$dir" "$YAML" "yml" "$YAML_OPTIONS" "> /dev/null"
 }
 
 
 
 #
-# Perform publish 
+# Perform publish
 #
 function publishCommand()
 {
@@ -194,9 +217,12 @@ function publishCommand()
 
     if hash "$cmd" 2>/dev/null; then
         printf "\n *.$extension using $cmd"
-        [[ $optDryRun ]] && echo "find $dir/ $EXCLUDE_FROM_PROCESSING -type f -name \*.$extension"
+        
+        findExpression=$( getFindExpression )
 
-        for filename in $( find "$dir/"  -not -name '*.min.*' -not -name 'phpliteadmin*' -not -path '*/libs/*' -not -path '*/lib/*' -not -path '*/node_modules/*' -type f -name \*.$extension ); do
+        [[ $optDryRun ]] && echo "$findExpression"
+
+        for filename in $( eval $findExpression ); do
             if [[ $optDryRun ]]; then
                 printf "\n%s" "$cmd $options $filename $output $filename"
             else
@@ -220,7 +246,7 @@ publish()
 {
     local from="$1"
     local to="$2"
- 
+
     if [ -z "$from" ]; then
         printf "\n$MSG_FAILED Publish with empty source directory: '$from'\n"
         exit 2
@@ -242,12 +268,12 @@ publish()
     fi
 
     if [[ ! $noMinification ]]; then
-        [[ $DISABLE_HTML_MINIFIER ]] || publishCommand "$to" "$HTML_MINIFIER" "html" "$HTML_MINIFIER_CONFIG $HTML_MINIFIER_OPTIONS" "--output" 
-        [[ $DISABLE_CLEANCSS ]]      || publishCommand "$to" "$CLEANCSS" "css" "$CLEANCSS_OPTIONS" "-o" 
-        [[ $DISABLE_UGLIFYJS ]]      || publishCommand "$to" "$UGLIFYJS" "js" "$UGLIFYJS_OPTIONS --output" "--"
-        [[ $DISABLE_PHPMINIFY ]]     || publishCommand "$to" "$PHPMINIFY" "php"     "$PHPMINIFY_OPTIONS" "> /tmp/$$; mv /tmp/$$ "
+        [[ $ENABLE_ALL || ! $DISABLE_HTML_MINIFIER ]] && publishCommand "$to" "$HTML_MINIFIER" "html" "$HTML_MINIFIER_CONFIG $HTML_MINIFIER_OPTIONS" "--output"
+        [[ $ENABLE_ALL || ! $DISABLE_CLEANCSS ]]      && publishCommand "$to" "$CLEANCSS" "css" "$CLEANCSS_OPTIONS" "-o"
+        [[ $ENABLE_ALL || ! $DISABLE_UGLIFYJS ]]      && publishCommand "$to" "$UGLIFYJS" "js" "$UGLIFYJS_OPTIONS --output" "--"
+        [[ $ENABLE_ALL || ! $DISABLE_PHPMINIFY ]]     && publishCommand "$to" "$PHPMINIFY" "php"     "$PHPMINIFY_OPTIONS" "> /tmp/$$; mv /tmp/$$ "
     fi
-    
+
     publishChmod "$to"
 }
 
@@ -259,7 +285,7 @@ publish()
 while (( $# ))
 do
     case "$1" in
-        
+
         --check | -c)
             checkInstalledValidateTools
             exit 0
@@ -286,7 +312,7 @@ do
                 badUsage "$MSG_FAILED --publish-to '$DBW_PUBLISH_TO' is not a valid directory."
                 exit 2
             fi
-                
+
             shift
             shift
             ;;
@@ -300,7 +326,7 @@ do
 
             # Get the name of the course as $DBW_COURSE
             sourceCourseRepoFile
-                
+
             shift
             shift
             ;;
@@ -320,17 +346,17 @@ do
             usage
             exit 0
         ;;
-        
+
         --version | -v)
             version
             exit 0
         ;;
-                
+
         --selfupdate)
             selfupdate dbwebb-validate
             exit 0
         ;;
-                
+
         *)
             if [[ $command ]]; then
                 badUsage "$MSG_FAILED Too many options/items and/or option not recognized."
@@ -340,7 +366,7 @@ do
             fi
             shift
         ;;
-        
+
     esac
 done
 
@@ -358,10 +384,13 @@ fi
 
 
 #
-# Source validate config file
+# Source validate config files
 #
-[[ $DBW_VALIDATE_CONFIGFILE ]] && . "$DBW_VALIDATE_CONFIGFILE"
+configFile=".dbwebb-validate.config"
 
+[[ -f $DBW_VALIDATE_CONFIGFILE ]]    && . "$DBW_VALIDATE_CONFIGFILE"
+[[ -f $HOME/$configFile ]]           && . "$HOME/$configFile"
+[[ -f $DBW_COURSE_DIR/$configFile ]] && . "$DBW_COURSE_DIR/$configFile"
 
 
 setDefaultConfigFiles
@@ -369,7 +398,7 @@ setDefaultConfigFiles
 
 if [[ ! $noValidate ]]; then
     printf "Validating '%s'." "$dir"
-    validate "$dir" 
+    validate "$dir"
 fi
 
 
@@ -378,12 +407,12 @@ if [[ $optPublish ]]; then
         printf "\n$MSG_FAILED Missing target dir for publish, not supported.\n"
         exit 2
     fi
-    
+
     if [ ! -d $( dirname "$DBW_PUBLISH_TO" ) ]; then
         printf "\n$MSG_FAILED Target dir for publish is not a valid directory '%s'.\n" "$DBW_PUBLISH_TO"
         exit 2
     fi
-    
+
     printf "\nPublishing to '%s'." "$DBW_PUBLISH_TO"
     publish "$dir" "$DBW_PUBLISH_TO"
 fi
