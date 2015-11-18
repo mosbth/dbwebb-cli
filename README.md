@@ -8,7 +8,7 @@ Part of course repos as a admin utility.
 History
 -------------------
 
-v1.9.21x (2015-11-17)
+v1.9.22 (2015-11-18)
 
 * Validation of course webgl ignored, fixed.
 
