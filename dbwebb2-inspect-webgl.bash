@@ -28,7 +28,9 @@ function webgllab()
     openFilesInEditor "$target"
     checkKmomDir "$target"
     printUrl "" "$target"  
-    inspectCommand "answer.php" "$EXEC_DIR/$KMOM/$lab" "php answer.php"
+    
+    # Need support for lab to execute in nodejs environment
+    #inspectCommand "answer.js" "$EXEC_DIR/$KMOM/$lab" "php answer.php"
     pressEnterToContinue
 }
 

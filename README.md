@@ -8,6 +8,11 @@ Part of course repos as a admin utility.
 History
 -------------------
 
+v1.9.22x (2015-11-20)
+
+* Inspection of labs in webgl.
+
+
 v1.9.22 (2015-11-18)
 
 * Validation of course webgl ignored, fixed.
