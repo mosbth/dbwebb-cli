@@ -412,6 +412,9 @@ mapCmdToDir()
                 me6)        RES="me/kmom06/me6" ;;
                 
                 meapp)      RES="me/kmom01/meapp" ;;
+                ajax)       RES="me/kmom03/ajax" ;;
+                jq)         RES="me/kmom03/jq" ;;
+                mithril)    RES="me/kmom04/mithril" ;;
             esac
             ;;
 

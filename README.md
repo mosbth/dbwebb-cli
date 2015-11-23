@@ -8,8 +8,9 @@ Part of course repos as a admin utility.
 History
 -------------------
 
-v1.9.22x (2015-11-20)
+v1.9.22x (2015-11-23)
 
+* Adding assignment webapp jq.
 * Inspection of labs in webgl.
 
 
