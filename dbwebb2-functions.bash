@@ -396,7 +396,7 @@ mapCmdToDir()
 
                 point)      RES="me/kmom01/point" ;;
                 tri)        RES="me/kmom02/tri" ;;
-                game)       RES="me/kmom03/game" ;;
+                world)      RES="me/kmom03/world" ;;
                 proj)       RES="me/kmom05/proj" ;;
             esac
             ;;
