@@ -30,7 +30,7 @@
 #
 # Current version
 #
-DBW_VERSION="v1.9.22x (2015-11-29)"
+DBW_VERSION="v1.9.22x (2015-12-04)"
 # --------------- DBWEBB FUNCTIONS PHASE START ---------------
 
 #
@@ -791,7 +791,6 @@ function usage ()
 "  --verbose, -v  More verbose."
 "  --silent, -s   Less verbose output."
 "  --force, -f    Force upload/download of files, overwrite existing."
-"  --yes, -y      Do not wait for my input."
 "  --host         Host to connect to (supported by run)."
 "  --cwd          Working dir for command (supported by run)."
 "  --help, -h     Print help."
@@ -1644,6 +1643,9 @@ dbwebb-updateconfig()
 #
 # Process options
 #
+# Always skip readline
+SKIP_READLINE="yes"
+
 while (( $# ))
 do
     case "$1" in
@@ -1660,11 +1662,6 @@ do
 
         --silent | -s)
             SILENT="yes"
-            shift
-        ;;
-
-        --yes | -y)
-            SKIP_READLINE="yes"
             shift
         ;;
 

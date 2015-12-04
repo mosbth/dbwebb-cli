@@ -723,6 +723,9 @@ dbwebb-updateconfig()
 #
 # Process options
 #
+# Always skip readline
+SKIP_READLINE="yes"
+
 while (( $# ))
 do
     case "$1" in
@@ -739,11 +742,6 @@ do
 
         --silent | -s)
             SILENT="yes"
-            shift
-        ;;
-
-        --yes | -y)
-            SKIP_READLINE="yes"
             shift
         ;;
 

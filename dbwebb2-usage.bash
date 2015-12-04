@@ -29,7 +29,6 @@ function usage ()
 "  --verbose, -v  More verbose."
 "  --silent, -s   Less verbose output."
 "  --force, -f    Force upload/download of files, overwrite existing."
-"  --yes, -y      Do not wait for my input."
 "  --host         Host to connect to (supported by run)."
 "  --cwd          Working dir for command (supported by run)."
 "  --help, -h     Print help."

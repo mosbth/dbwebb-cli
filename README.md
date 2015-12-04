@@ -10,6 +10,7 @@ History
 
 v1.9.22x (2015-12-04)
 
+* Default is to skip press enter, fix #68.
 * Speedup on cygwin by removing chmod, fix #69.
 * Validate failed due to find expression, fix #64.
 * dbwebb run with sudo commands on remote.
