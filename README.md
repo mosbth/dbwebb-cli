@@ -8,7 +8,7 @@ Part of course repos as a admin utility.
 History
 -------------------
 
-v1.9.22x (2015-12-04)
+v1.9.23 (2015-12-04)
 
 * Default is to skip press enter, fix #68.
 * Speedup on cygwin by removing chmod, fix #69.
