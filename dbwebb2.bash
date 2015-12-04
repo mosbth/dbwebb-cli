@@ -414,7 +414,6 @@ function dbwebb-publish()
 #
 function dbwebb-fastpublish()
 {
-    SKIP_READLINE="yes"
     PUBLISH_OPTIONS="--no-validate"
     dbwebb-publish "$1" "$2" "$3"
 }
@@ -431,7 +430,6 @@ dbwebb-publishfast()
 #
 function dbwebb-purepublish()
 {
-    SKIP_READLINE="yes"
     PUBLISH_OPTIONS="--no-validate --no-minification"
     dbwebb-publish "$1" "$2" "$3"
 }
@@ -453,7 +451,6 @@ function dbwebb-run()
     
     # Prepare options
     if [[ ! $VERY_VERBOSE ]]; then
-        SKIP_READLINE="yes"
         SILENT="yes"
     fi
 
@@ -723,9 +720,6 @@ dbwebb-updateconfig()
 #
 # Process options
 #
-# Always skip readline
-SKIP_READLINE="yes"
-
 while (( $# ))
 do
     case "$1" in

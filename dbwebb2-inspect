@@ -165,11 +165,7 @@ executeCommand()
 {
     INTRO="$1"
 
-    if [[ ! $SKIP_READLINE ]]
-    then
-        printf "$INTRO"
-        pressEnterToContinue
-    fi
+    printf "$INTRO"
 
     REALLY="$4"
     if [ ! -z $REALLY ]
@@ -609,7 +605,7 @@ assertExit()
         return 1
     fi
 
-    return lab1
+    return 0
     
 }
 
