@@ -8,8 +8,10 @@ Part of course repos as a admin utility.
 History
 -------------------
 
-v1.9.22x (2015-11-29)
+v1.9.22x (2015-12-04)
 
+* dbwebb run with sudo commands on remote.
+* webapp adding task pizza.
 * webgl changed task game to world.
 * Adding assignment webapp jq.
 * Inspection of labs in webgl.

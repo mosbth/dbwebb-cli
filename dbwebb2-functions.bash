@@ -382,6 +382,7 @@ mapCmdToDir()
                 ajax)       RES="me/kmom03/ajax" ;;
                 jq)         RES="me/kmom03/jq" ;;
                 mithril)    RES="me/kmom04/mithril" ;;
+                pizza)      RES="me/kmom05/pizza" ;;
             esac
             ;;
 

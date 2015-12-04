@@ -468,7 +468,7 @@ function dbwebb-run()
     local ssh_cmd="ssh ${DBW_USER}@${server} $DBW_SSH_KEY_OPTION"
     
     local intro="I will now login to the server '$server' as '$DBW_USER' and execute the command '$cwd$cmd'."
-    local command="$SSH_CMD \"$cwd$cmd\""
+    local command="$SSH_CMD -t \"$cwd$cmd\""
     local message="to run the command."
     
     executeCommand "$intro" "$command" "$message"

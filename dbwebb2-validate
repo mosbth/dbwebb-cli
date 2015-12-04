@@ -415,6 +415,7 @@ mapCmdToDir()
                 ajax)       RES="me/kmom03/ajax" ;;
                 jq)         RES="me/kmom03/jq" ;;
                 mithril)    RES="me/kmom04/mithril" ;;
+                pizza)      RES="me/kmom05/pizza" ;;
             esac
             ;;
 
@@ -945,7 +946,7 @@ function getFindExpression
 
     ignorePaths=$( printf " -not -path %s " $( echo $EXCLUDE_PATHS ) )
     ignoreFiles=$( printf " -not -name %s " $( echo $EXCLUDE_FILES ) )
-    findExpression=$( echo find "$dir/" -type f -name \*.$extension $ignorePaths $ignoreFiles )
+    findExpression=$( echo "find \"$dir/\" -type f -name \*.$extension $ignorePaths $ignoreFiles" )
 
     echo $findExpression
 }

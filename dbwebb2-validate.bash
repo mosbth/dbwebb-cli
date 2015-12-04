@@ -130,7 +130,7 @@ function getFindExpression
 
     ignorePaths=$( printf " -not -path %s " $( echo $EXCLUDE_PATHS ) )
     ignoreFiles=$( printf " -not -name %s " $( echo $EXCLUDE_FILES ) )
-    findExpression=$( echo find "$dir/" -type f -name \*.$extension $ignorePaths $ignoreFiles )
+    findExpression=$( echo "find \"$dir/\" -type f -name \*.$extension $ignorePaths $ignoreFiles" )
 
     echo $findExpression
 }
