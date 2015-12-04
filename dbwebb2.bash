@@ -304,7 +304,7 @@ function dbwebb-upload()
     checkIfValidConfigOrExit
     checkIfValidCourseRepoOrExit
     createUploadDownloadPaths
-    setChmod
+    #setChmod
 
     local intro="Uploading the directory '$WHAT' to '$WHERE'."
     local command="$RSYNC_CMD $OVERWRITE '$WHAT' '$WHERE'"
@@ -357,7 +357,7 @@ function dbwebb-validate()
 {
     checkIfValidConfigOrExit
     checkIfValidCourseRepoOrExit
-    setChmod
+    #setChmod
 
     WHAT="$DBW_COURSE_DIR"
     WHERE="$DBW_REMOTE_DESTINATION"
@@ -383,7 +383,7 @@ function dbwebb-publish()
 {
     checkIfValidConfigOrExit
     checkIfValidCourseRepoOrExit
-    setChmod
+    #setChmod
 
     WHAT="$DBW_COURSE_DIR"
     WHERE="$DBW_REMOTE_DESTINATION"
@@ -525,7 +525,7 @@ function dbwebb-inspect()
     # Upload only if
     if [[ $willUpload ]]; then
         checkIfValidCourseRepoOrExit
-        setChmod
+        #setChmod
         command1="$RSYNC_CMD $OVERWRITE '$DBW_COURSE_DIR/' '$DBW_REMOTE_DESTINATION/';"
     fi
 

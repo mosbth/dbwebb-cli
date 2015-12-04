@@ -219,6 +219,7 @@ function checkIfValidConfigOrExit()
 
 #
 # Set proper rights for files and directories
+# OBSOLETE to be replaced by rsync --chmod
 #
 setChmod()
 {
