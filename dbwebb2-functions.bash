@@ -132,7 +132,7 @@ executeCommand()
 {
     INTRO="$1"
 
-    printf "$INTRO"
+    echo "$INTRO"
 
     REALLY="$4"
     if [ ! -z $REALLY ]
