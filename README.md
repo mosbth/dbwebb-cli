@@ -8,6 +8,11 @@ Part of course repos as a admin utility.
 History
 -------------------
 
+v1.9.23* (2015-12-06)
+
+* Enable to create oophp lab1.
+
+
 v1.9.23 (2015-12-04)
 
 * Default is to skip press enter, fix #68.

@@ -588,7 +588,7 @@ dbwebb-create()
     # The lab documents
     case "$DBW_COURSE" in
         
-        htmlphp)
+        htmlphp | oophp)
             printf "\n answer.php"
             $myWget "$where/answer.php" "$DBW_LABURL/lab.php?answer-php&key=$key"
 
