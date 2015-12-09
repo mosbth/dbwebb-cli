@@ -8,8 +8,9 @@ Part of course repos as a admin utility.
 History
 -------------------
 
-v1.9.23* (2015-12-06)
+v1.9.23* (2015-12-09)
 
+* Adding webapp kmom06/cordova.
 * Enable to create oophp lab1.
 
 

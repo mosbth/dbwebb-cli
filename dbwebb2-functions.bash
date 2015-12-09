@@ -380,6 +380,7 @@ mapCmdToDir()
                 jq)         RES="me/kmom03/jq" ;;
                 mithril)    RES="me/kmom04/mithril" ;;
                 pizza)      RES="me/kmom05/pizza" ;;
+                cordova)    RES="me/kmom06/cordova" ;;
             esac
             ;;
 
