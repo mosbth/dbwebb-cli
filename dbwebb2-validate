@@ -852,6 +852,12 @@ PHPMD_OPTIONS="text"
 PHPCS="phpcs"
 PHPCS_OPTIONS=""
 
+FILE_CRLF="file"
+FILE_CRLF_OPTIONS=""
+
+FILE_BOM="file"
+FILE_BOM_OPTIONS=""
+
 PHPUGLIFY=""
 
 PHPMINIFY="php"
@@ -922,6 +928,8 @@ function checkInstalledValidateTools
     printf " bash:          %s\n" "$( checkCommand $CHECKBASH )"
     printf " sh:            %s\n" "$( checkCommand $CHECKSH )"
     printf " yaml:          %s\n" "$( checkCommand $YAML )"
+    printf " file crlf:     %s\n" "$( checkCommand $FILE_CRLF )"
+    printf " file BOM:      %s\n" "$( checkCommand $FILE_BOM )"
 
     printf "Check for installed publishing tools.\n"
     printf " html-minifier: %s\n" "$( checkCommand $HTML_MINIFIER )"
@@ -941,11 +949,17 @@ function getFindExpression
     local ignorePaths
     local ignoreFiles
     local findExpression
+    local ignoreExtension="$1"
 
     ignorePaths=$( printf " -not -path %s " $( echo $EXCLUDE_PATHS ) )
     ignoreFiles=$( printf " -not -name %s " $( echo $EXCLUDE_FILES ) )
-    findExpression=$( echo "find \"$dir/\" -type f -name \*.$extension $ignorePaths $ignoreFiles" )
 
+    if [ -z "$ignoreExtension" ]; then
+        findExpression=$( echo "find \"$dir/\" -type f -name \*.$extension $ignorePaths $ignoreFiles" )
+    else
+        findExpression=$( echo "find \"$dir/\" $ignorePaths $ignoreFiles" )
+    fi
+    
     echo $findExpression
 }
 
@@ -964,11 +978,12 @@ function validateCommand()
     local onlyExitStatus="$6"
     local counter=0
     local findExpression=
+    local ignoreExtension="$7"
 
     if hash "$cmd" 2>/dev/null; then
         printf "\n *.$extension using $cmd"
 
-        findExpression=$( getFindExpression )
+        findExpression=$( getFindExpression $ignoreExtension )
 
         [[ $optDryRun ]] && echo "$findExpression"
 
@@ -1000,7 +1015,7 @@ function validate()
 {
     local dir="$1"
 
-    [[ $ENABLE_ALL || ! $DISABLE_HTMLHINT ]]  && validateCommand "$dir" "$HTMLHINT" "html" "$HTMLHINT_OPTIONS $HTMLHINT_CONFIG" '| grep -v "No problem." | grep -v "Config loaded." |grep -v "Scan "; test ${PIPESTATUS[0]} -eq 0'
+    [[ $ENABLE_ALL || ! $DISABLE_HTMLHINT ]]  && validateCommand "$dir" "$HTMLHINT" "html" "$HTMLHINT_OPTIONS $HTMLHINT_CONFIG" '| grep -v "No problem." | grep -v "Config loaded." | grep -v "Scan "; test ${PIPESTATUS[0]} -eq 0'
     [[ $ENABLE_ALL || ! $DISABLE_CSSLINT ]]   && validateCommand "$dir" "$CSSLINT" "css" "$CSSLINT_OPTIONS $( cat "$CSSLINT_CONFIG" )"
     [[ $ENABLE_ALL || ! $DISABLE_JSHINT ]]    && validateCommand "$dir" "$JSHINT" "js"
     [[ $ENABLE_ALL || ! $DISABLE_JSCS ]]      && validateCommand "$dir" "$JSCS" "js"  "$JSCS_OPTIONS $JSCS_CONFIG" "" "onlyExitStatus"
@@ -1014,6 +1029,8 @@ function validate()
     [[ $ENABLE_ALL || ! $DISABLE_CHECKBASH ]] && validateCommand "$dir" "$CHECKBASH" "bash" "$CHECKBASH_OPTIONS"
     [[ $ENABLE_ALL || ! $DISABLE_CHECKSH ]]   && validateCommand "$dir" "$CHECKSH" "sh" "$CHECKSH_OPTIONS"
     [[ $ENABLE_ALL || ! $DISABLE_YAML ]]      && validateCommand "$dir" "$YAML" "yml" "$YAML_OPTIONS" "> /dev/null"
+    [[ $ENABLE_ALL || ! $DISABLE_FILE_CRLF ]] && validateCommand "$dir" "$FILE_CRLF" "" "$FILE_CRLF_OPTIONS" '| grep CRLF; test $? -eq 1' "" "allExtensions"
+    [[ $ENABLE_ALL || ! $DISABLE_FILE_BOM ]]  && validateCommand "$dir" "$FILE_BOM" "" "$FILE_BOM_OPTIONS" '| grep BOM; test $? -eq 1' "" "allExtensions"
 }
 
 

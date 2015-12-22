@@ -8,6 +8,11 @@ Part of course repos as a admin utility.
 History
 -------------------
 
+v1.9.25 (2015-12-22)
+
+* Add validation tests for CRLF and BOM using `file`.
+
+
 v1.9.24 (2015-12-22)
 
 * Exlude paths for Cordova during validation/publishing `*/platforms/*` and `*/plugins/*`.
