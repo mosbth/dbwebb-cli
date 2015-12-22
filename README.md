@@ -8,6 +8,7 @@ Part of course repos as a admin utility.
 History
 -------------------
 
+v1.9.26 (2015-12-22)
 v1.9.25 (2015-12-22)
 
 * Add validation tests for CRLF and BOM using `file`.

@@ -30,7 +30,7 @@
 #
 # Current version
 #
-DBW_VERSION="v1.9.25 (2015-12-22)"
+DBW_VERSION="v1.9.26 (2015-12-22)"
 # --------------- DBWEBB FUNCTIONS PHASE START ---------------
 
 #
@@ -928,7 +928,7 @@ function checkInstalledValidateTools
     printf " bash:          %s\n" "$( checkCommand $CHECKBASH )"
     printf " sh:            %s\n" "$( checkCommand $CHECKSH )"
     printf " yaml:          %s\n" "$( checkCommand $YAML )"
-    printf " file crlf:     %s\n" "$( checkCommand $FILE_CRLF )"
+    printf " file CRLF:     %s\n" "$( checkCommand $FILE_CRLF )"
     printf " file BOM:      %s\n" "$( checkCommand $FILE_BOM )"
 
     printf "Check for installed publishing tools.\n"
