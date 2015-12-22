@@ -9,6 +9,7 @@ publishChmod()
 
     if [ -d "$dir" ]; then
         find "$dir" -type d -name 'cache' -exec chmod a+rw {} \;  
+        find "$dir" -type d -name 'cache' -exec chmod a+rw {}/\* \;  
         find "$dir" -type d -name 'db' -exec chmod a+rwx {} \;
 
         find "$dir" -type f -name '*.conf' -exec chmod go-r {} \;
