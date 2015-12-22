@@ -114,7 +114,7 @@ function checkInstalledValidateTools
     printf " bash:          %s\n" "$( checkCommand $CHECKBASH )"
     printf " sh:            %s\n" "$( checkCommand $CHECKSH )"
     printf " yaml:          %s\n" "$( checkCommand $YAML )"
-    printf " file crlf:     %s\n" "$( checkCommand $FILE_CRLF )"
+    printf " file CRLF:     %s\n" "$( checkCommand $FILE_CRLF )"
     printf " file BOM:      %s\n" "$( checkCommand $FILE_BOM )"
 
     printf "Check for installed publishing tools.\n"
