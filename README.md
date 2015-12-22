@@ -8,8 +8,9 @@ Part of course repos as a admin utility.
 History
 -------------------
 
-v1.9.23* (2015-12-22)
+v1.9.24 (2015-12-22)
 
+* Exlude paths for Cordova during validation/publishing `*/platforms/*` and `*/plugins/*`.
 * Make `*.sql` readable by all when publish.
 * Make dirs named `cache/*` writable when publish.
 * Fix inspect htmlphp kmom10.
