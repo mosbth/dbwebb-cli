@@ -41,16 +41,15 @@ publishChmod()
     local dir="$1"
 
     if [ -d "$dir" ]; then
-        #find "$dir" -type d -exec chmod a+rx {} \;  
-        #find "$dir" -type f -exec chmod a+r {} \;   
+        find "$dir" -type d -name 'cache' -exec chmod a+rw {} \;  
+        find "$dir" -type d -name 'db' -exec chmod a+rwx {} \;
+
         find "$dir" -type f -name '*.conf' -exec chmod go-r {} \;
         find "$dir" -type f -name '*.py' -exec chmod go-r {} \;
-        #find "$dir" -type f -name '*.txt' -exec chmod go-r {} \;
         find "$dir" -type f -name 'log.txt' -exec chmod go-r {} \;
         find "$dir" -type f -name '*.sh' -exec chmod go-r {} \;
         find "$dir" -type f -name '*.bash' -exec chmod go-r {} \;
         find "$dir" -type f -name '*.cgi' -exec chmod a+rx {} \;
-        find "$dir" -type d -name 'db' -exec chmod a+rwx {} \;
         find "$dir" -type f -name '*.sqlite' -exec chmod a+rw {} \;
         find "$dir" -type f -name '*.sql' -exec chmod go-r {} \;
 
@@ -414,6 +413,7 @@ mapCmdToDir()
                 mithril)    RES="me/kmom04/mithril" ;;
                 pizza)      RES="me/kmom05/pizza" ;;
                 cordova)    RES="me/kmom06/cordova" ;;
+                proj)       RES="me/kmom10/proj" ;;
             esac
             ;;
 

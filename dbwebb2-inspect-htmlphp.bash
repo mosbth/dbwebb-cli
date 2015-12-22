@@ -4,6 +4,7 @@
 #
 function htmlphp()
 {
+    TREE_OPTIONS="-d"
     inspectIntro
     
     local meDir=
@@ -74,6 +75,7 @@ function htmlphpkmom03()
 #
 function htmlphpkmom04()
 {
+    TREE_OPTIONS="-d"
     inspectMe "$METARGET" "me.php" "report.php" "uppgift/bygg-ut-din-me-sida-till-version-4"
 
     viewFileContent "config.php" "$METARGET" "incl/config.php"
@@ -91,6 +93,7 @@ function htmlphpkmom04()
 #
 function htmlphpkmom05()
 {
+    TREE_OPTIONS="-d"
     inspectMe "$METARGET" "me.php" "report.php" "htmlphp/proj5"
 
     viewFileContent "jetty.php" "$METARGET"
@@ -109,6 +112,7 @@ function htmlphpkmom05()
 #
 function htmlphpkmom06()
 {
+    TREE_OPTIONS="-d"
     inspectMe "$METARGET" "me.php" "report.php" "htmlphp/proj6"
     
     viewFileContent "admin.php" "$METARGET"
@@ -123,7 +127,11 @@ function htmlphpkmom06()
 #
 function htmlphpkmom10()
 {
-    inspectMe "$METARGET" "me.php" "report.php"
+    TREE_OPTIONS="-d"
+    inspectMe "me/kmom06/me6" "me.php" "report.php" ""
+
+    TREE_OPTIONS="-d"
+    inspectExercise "bmo" "htmlphp/kmom10" "" "" "-"
 }
 
 

@@ -44,9 +44,12 @@ openFilesInEditor()
 viewFileTree()
 {
     local dirname="$THEDIR/$1"
+    local options="$TREE_OPTIONS"
+
+    TREE_OPTIONS=
 
     printf "\nView content of directory:\n"
-    tree -ph "$dirname"
+    tree -ph $options "$dirname"
 }
 
 
@@ -71,6 +74,10 @@ printUrl()
 {
     local what="$1"
     local where="$2"
+
+    if [ "$what" == "-" ]; then
+        what=
+    fi
     
     printf "\nURL: $BASE_URL/$DBW_COURSE/$where/$what"
 

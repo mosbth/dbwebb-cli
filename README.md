@@ -8,8 +8,11 @@ Part of course repos as a admin utility.
 History
 -------------------
 
-v1.9.23* (2015-12-09)
+v1.9.23* (2015-12-22)
 
+* Fix inspect htmlphp kmom10.
+* Support for phpmvc.
+* Adding webapp kmom10/proj.
 * Adding webapp kmom06/cordova.
 * Enable to create oophp lab1.
 
