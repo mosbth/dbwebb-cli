@@ -18,7 +18,7 @@ publishChmod()
         find "$dir" -type f -name '*.bash' -exec chmod go-r {} \;
         find "$dir" -type f -name '*.cgi' -exec chmod a+rx {} \;
         find "$dir" -type f -name '*.sqlite' -exec chmod a+rw {} \;
-        find "$dir" -type f -name '*.sql' -exec chmod go-r {} \;
+        find "$dir" -type f -name '*.sql' -exec chmod go+r {} \;
 
         case "$DBW_COURSE" in
             linux)

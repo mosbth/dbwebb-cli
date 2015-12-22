@@ -10,6 +10,8 @@ History
 
 v1.9.23* (2015-12-22)
 
+* Make `*.sql` readable by all when publish.
+* Make dirs named `cache/*` writable when publish.
 * Fix inspect htmlphp kmom10.
 * Support for phpmvc.
 * Adding webapp kmom10/proj.
