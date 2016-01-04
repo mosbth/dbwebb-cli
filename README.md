@@ -8,6 +8,11 @@ Part of course repos as a admin utility.
 History
 -------------------
 
+v1.9.27* (2016-01-04)
+
+* Validate work with filenames containing spaces.
+
+
 v1.9.27 (2016-01-04)
 
 * Do not upload files in platforms/ directory.

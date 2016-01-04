@@ -173,19 +173,25 @@ function validateCommand()
 
         [[ $optDryRun ]] && echo "$findExpression"
 
+        OIFS="$IFS"
+        IFS=$'\n'
+
         for filename in $( eval $findExpression ); do
             if [[ $optDryRun ]]; then
-                printf "\n%s" "$cmd $options $filename $output"
+                printf "\n%s" "$cmd $options '$filename' $output"
             else
                 if [ -z $optOnly  ]; then
-                    assert 0 "$cmd $options $filename $output" "$cmd failed: $filename" "$onlyExitStatus"
+                    assert 0 "$cmd $options '$filename' $output" "$cmd failed: '$filename'" "$onlyExitStatus"
                 elif [ "$extension" == "$optOnly" ]; then
-                    assert 0 "$cmd $options $filename $output" "$cmd failed: $filename" "$onlyExitStatus"
+                    assert 0 "$cmd $options '$filename' $output" "$cmd failed: '$filename'" "$onlyExitStatus"
                 fi
             fi
             counter=$(( counter + 1 ))
             printf "."
         done
+        
+        IFS="$OIFS"
+
         printf " ($counter)"
     else
         printf "\n *.$extension (skipping - $cmd not installed)"
