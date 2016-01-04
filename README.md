@@ -8,6 +8,11 @@ Part of course repos as a admin utility.
 History
 -------------------
 
+v1.9.27 (2016-01-04)
+
+* Do not upload files in platforms/ directory.
+
+
 v1.9.26 (2015-12-22)
 v1.9.25 (2015-12-22)
 
