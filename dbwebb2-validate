@@ -30,7 +30,7 @@
 #
 # Current version
 #
-DBW_VERSION="v1.9.27* (2016-01-04)"
+DBW_VERSION="v1.9.27* (2016-01-15)"
 # --------------- DBWEBB FUNCTIONS PHASE START ---------------
 
 #
@@ -876,7 +876,7 @@ YAML_OPTIONS=""
 
 # Exclude these paths/filenames from tools processing
 #EXCLUDE_PATHS='\*/webgl/\* \*/libs/\* \*/lib/\* \*/node_modules/\*'
-EXCLUDE_PATHS='\*/example/webgl/\* \*/libs/\* \*/lib/\* \*/node_modules/\* \*/platforms/\* \*/plugins/\*'
+EXCLUDE_PATHS='\*/example/webgl/\* \*/libs/\* \*/lib/\* \*/node_modules/\* \*/platforms/\* \*/plugins/\* \*/docs/api/\* \*/vendor/\* \*/3pp/\*'
 EXCLUDE_FILES='phpliteadmin\* \*.min.\*'
 
 

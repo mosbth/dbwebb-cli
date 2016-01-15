@@ -8,8 +8,9 @@ Part of course repos as a admin utility.
 History
 -------------------
 
-v1.9.27* (2016-01-04)
+v1.9.28 (2016-01-15)
 
+* Exclude files related to Anax-MVC during validation.
 * Validate work with filenames containing spaces.
 
 
