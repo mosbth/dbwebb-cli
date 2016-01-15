@@ -63,7 +63,7 @@ YAML_OPTIONS=""
 # Exclude these paths/filenames from tools processing
 #EXCLUDE_PATHS='\*/webgl/\* \*/libs/\* \*/lib/\* \*/node_modules/\*'
 EXCLUDE_PATHS='\*/example/webgl/\* \*/libs/\* \*/lib/\* \*/node_modules/\* \*/platforms/\* \*/plugins/\* \*/docs/api/\* \*/vendor/\* \*/3pp/\*'
-EXCLUDE_FILES='phpliteadmin\* \*.min.\*'
+EXCLUDE_FILES='phpliteadmin\* \*.min.\* \*.tpl.php'
 
 
 
