@@ -10,6 +10,7 @@ History
 
 v1.9.28 (2016-01-15)
 
+* Ignore .tpl.php files for validation
 * Exclude files related to Anax-MVC during validation.
 * Validate work with filenames containing spaces.
 
