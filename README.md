@@ -8,6 +8,11 @@ Part of course repos as a admin utility.
 History
 -------------------
 
+v1.9.28* (2016-01-26)
+
+* dbwebb config should change baseurl when setting username, #71.
+
+
 v1.9.28 (2016-01-15)
 
 * Ignore .tpl.php files for validation
