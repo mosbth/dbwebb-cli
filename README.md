@@ -8,8 +8,9 @@ Part of course repos as a admin utility.
 History
 -------------------
 
-v1.9.28* (2016-01-26)
+v1.9.29 (2016-01-26)
 
+* Do not upload files like npm-debug.log, #74.
 * dbwebb config should change baseurl when setting username, #71.
 
 
