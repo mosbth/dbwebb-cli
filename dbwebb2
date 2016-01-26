@@ -955,6 +955,7 @@ function createConfig()
         DBW_USER=${DBW_USER:-$USER}
         printf "\nWhat is your student acronym? [$DBW_USER] "
         read acronym
+        unset DBW_BASEURL
     fi
 
     acronym=${acronym:-$DBW_USER}
