@@ -8,6 +8,11 @@ Part of course repos as a admin utility.
 History
 -------------------
 
+v1.9.30 (2016-02-04)
+
+* Changed how the configfile is generating the path to the ssh key, #75.
+
+
 v1.9.29 (2016-01-26)
 
 * Do not upload files like npm-debug.log, #74.

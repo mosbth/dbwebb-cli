@@ -960,7 +960,7 @@ function createConfig()
 
     acronym=${acronym:-$DBW_USER}
     remoteHost=${DBW_HOST:-ssh.student.bth.se}
-    sshKey=${DBW_SSH_KEY:-\$HOME/.ssh/dbwebb}
+    sshKey=${DBW_SSH_KEY:-$HOME/.ssh/dbwebb}
     remoteDir=${DBW_REMOTE_BASEDIR:-dbwebb-kurser}
     remoteWwwHost=${DBW_WWW_HOST:-http://www.student.bth.se/}
     remoteWww=${DBW_REMOTE_WWWDIR:-www/dbwebb-kurser}
