@@ -26,6 +26,9 @@ function createConfig()
 
         printf "Your config file will be automatically updated."
 
+        # Temporary to solve upgrades from v1.9.29 to v1.9.31
+        unset DBW_SSH_KEY
+
     elif [ $first = "create" ]
     then
 
@@ -41,12 +44,9 @@ function createConfig()
         unset DBW_BASEURL
     fi
 
-    # Temporary to solve upgrades from v1.9.29 to v1.9.30
-    unset DBW_SSH_KEY
-
     acronym=${acronym:-$DBW_USER}
     remoteHost=${DBW_HOST:-ssh.student.bth.se}
-    sshKey=${DBW_SSH_KEY:-$HOME/.ssh/dbwebb}
+    sshKey=${DBW_SSH_KEY:-\~/.ssh/dbwebb}
     remoteDir=${DBW_REMOTE_BASEDIR:-dbwebb-kurser}
     remoteWwwHost=${DBW_WWW_HOST:-http://www.student.bth.se/}
     remoteWww=${DBW_REMOTE_WWWDIR:-www/dbwebb-kurser}
@@ -290,7 +290,7 @@ function dbwebb-check()
 #
 function dbwebb-config()
 {
-    createConfig
+    createConfig $1 $2
 }
 
 
