@@ -29,6 +29,12 @@ function createConfig()
         # Temporary to solve upgrades from v1.9.29 to v1.9.31
         unset DBW_SSH_KEY
 
+    elif [ $first = "selfupgrade" ]
+    then
+
+        # Temporary to solve upgrades from v1.9.29 to v1.9.31
+        unset DBW_SSH_KEY
+
     elif [ $first = "create" ]
     then
 
