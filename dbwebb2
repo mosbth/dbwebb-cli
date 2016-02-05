@@ -30,7 +30,7 @@
 #
 # Current version
 #
-DBW_VERSION="v1.9.30 (2016-02-04)"
+DBW_VERSION="v1.9.31 (2016-02-05)"
 # --------------- DBWEBB FUNCTIONS PHASE START ---------------
 
 #
@@ -957,6 +957,9 @@ function createConfig()
         read acronym
         unset DBW_BASEURL
     fi
+
+    # Temporary to solve upgrades from v1.9.29 to v1.9.30
+    unset DBW_SSH_KEY
 
     acronym=${acronym:-$DBW_USER}
     remoteHost=${DBW_HOST:-ssh.student.bth.se}

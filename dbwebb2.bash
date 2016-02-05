@@ -41,6 +41,9 @@ function createConfig()
         unset DBW_BASEURL
     fi
 
+    # Temporary to solve upgrades from v1.9.29 to v1.9.30
+    unset DBW_SSH_KEY
+
     acronym=${acronym:-$DBW_USER}
     remoteHost=${DBW_HOST:-ssh.student.bth.se}
     sshKey=${DBW_SSH_KEY:-$HOME/.ssh/dbwebb}

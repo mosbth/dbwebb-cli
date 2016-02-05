@@ -8,6 +8,11 @@ Part of course repos as a admin utility.
 History
 -------------------
 
+v1.9.31 (2016-02-05)
+
+* Temporary fix to solve upgrades from v1.9.29 without destroying config-file for ssh key on mac/unix, #75.
+
+
 v1.9.30 (2016-02-04)
 
 * Changed how the configfile is generating the path to the ssh key, #75.
