@@ -30,7 +30,7 @@
 #
 # Current version
 #
-DBW_VERSION="v1.9.34 (2016-02-05)"
+DBW_VERSION="v1.9.35 (2016-02-14)"
 # --------------- DBWEBB FUNCTIONS PHASE START ---------------
 
 #
@@ -906,9 +906,18 @@ function inspectUsage ()
 "Add acronym for inspect"
 " sudo /usr/local/sbin/setpre-dbwebb-kurser.bash acronym"
 ""
+"or add as an alias in your .cshrc"
+" dbwebb run echo 'alias potatoe \"sudo setpre-dbwebb-kurser.bash\"' >> .cshrc"
+""
+"and then run as this:"
+" dbwebb run potatoe akronym"
+""
 "Add or delete teacher (on each server)"
 " sudo update-dbwebb-kurser.bash -a acronym"
 " sudo update-dbwebb-kurser.bash -d acronym"
+""
+"Change owner to mosstud of all files in the archive"
+" sudo /usr/local/sbin/setowner-on-dbwebb-archive.bash"
 ""
 "Execute command as the user dbwebb."
 " sudo -u dbwebb script"

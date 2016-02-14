@@ -8,6 +8,11 @@ Part of course repos as a admin utility.
 History
 -------------------
 
+v1.9.35 (2016-02-14)
+
+* Updated help text for teachers.
+
+
 v1.9.32, 33, 34 (2016-02-05)
 
 * Another fix for #75...
