@@ -8,6 +8,11 @@ Part of course repos as a admin utility.
 History
 -------------------
 
+v1.9.36 (2016-04-06)
+
+* Do not upload dir with name coverage/.
+
+
 v1.9.35 (2016-02-14)
 
 * Updated help text for teachers.
