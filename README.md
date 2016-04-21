@@ -8,7 +8,7 @@ Part of course repos as a admin utility.
 History
 -------------------
 
-v1.9.37 (2016-04-06)
+v1.9.37 (2016-04-21)
 
 * Make anax-grid writable to allow style.php to work in phpmvc.
 
