@@ -574,83 +574,23 @@ dbwebb-create()
     fi
 
     # Check for wget or curl
-    if hash wget 2> /dev/null; then
-        [[ $VERY_VERBOSE ]] && echo "Using wget as download method."
-        myWget="wget -qO"
-    elif hash curl 2> /dev/null; then
-        [[ $VERY_VERBOSE ]] && echo "Using curl as download method."
-        myWget="curl -so"
-    else
-        printf "$MSG_FAILED Missing wget and curl, can not create a lab without both.\n"
-        exit 2
-    fi
+    myWget="wget -qO"
+    #myWget="curl -so"
 
-    # Create the key
-    local getKey="action=only-key&acronym=$DBW_USER&course=$DBW_COURSE&doGenerate=Submit"
-    local key="$( ${myWget}- "$DBW_LABURL/?$getKey&lab=$lab" )"
+    # Get the lab bundle
+    #http://localhost/git/lab/?action=bundle&key=a07e843ca67d647900e8259729119ddf
+    #http://localhost/git/lab/?action=bundle&course=linux&lab=lab1&acronym=mos&doGenerate
+    local bundleQuery="?action=bundle&acronym=$DBW_USER&course=$DBW_COURSE&lab=$lab&doGenerate=Submit"
 
-    # The lab description
-    local getLab="lab.php?lab"
-    printf " instruction.html"
-    [[ $VERY_VERBOSE ]] && printf " ($DBW_LABURL/$getLab&key=$key)"
-    $myWget "$where/instruction.html" "$DBW_LABURL/$getLab&key=$key"
-
-    # The lab documents
-    case "$DBW_COURSE" in
-        
-        htmlphp | oophp)
-            printf "\n answer.php"
-            $myWget "$where/answer.php" "$DBW_LABURL/lab.php?answer-php&key=$key"
-
-            printf "\n CDbwebb.php"
-            $myWget "$where/CDbwebb.php" "$DBW_LABURL/lab.php?answer-php-assert&key=$key"
-
-            printf "\n answer.json"
-            $myWget "$where/answer.json" "$DBW_LABURL/lab.php?answer-json&key=$key"
-        ;;
-        
-        javascript1 | webgl)
-            printf "\n answer.html"
-            $myWget "$where/answer.html" "$DBW_LABURL/lab.php?answer-html&key=$key"
-
-            printf "\n answer.js"
-            $myWget "$where/answer.js" "$DBW_LABURL/lab.php?answer-js&key=$key"
-        ;;
-
-        python)
-            printf "\n answer.py"
-            $myWget "$where/answer.py" "$DBW_LABURL/lab.php?answer-py&key=$key"
-            chmod 755 "$where/answer.py"
-
-            printf "\n Dbwebb.py"
-            $myWget "$where/Dbwebb.py" "$DBW_LABURL/lab.php?answer-py-assert&key=$key"
-
-            printf "\n answer.json"
-            $myWget "$where/answer.json" "$DBW_LABURL/lab.php?answer-json&key=$key"
-        ;;
-
-        linux)
-            printf "\n answer.bash"
-            $myWget "$where/answer.bash" "$DBW_LABURL/lab.php?answer-bash&key=$key"
-            chmod 755 "$where/answer.bash"
-
-            printf "\n dbwebb.bash"
-            $myWget "$where/dbwebb.bash" "$DBW_LABURL/lab.php?answer-bash-assert&key=$key"
-
-            printf "\n answer.json"
-            $myWget "$where/answer.json" "$DBW_LABURL/lab.php?answer-json&key=$key"
-        ;;
-
-    esac
-
-    # Extras
-    local getAnswerExtra="lab.php?answer-extra"
-    printf "\n (extras)"
-    $myWget "$where/extra.tar" "$DBW_LABURL/$getAnswerExtra&key=$key"
-    tar -xvf "$where/extra.tar" -C "$where"
-    rm -f "$where/extra.tar"
-
-    printf "\n$MSG_DONE You can find the lab and all files here: '$where'\n"
+    printf "Downloading and extracting lab bundle\n"
+    [[ $VERY_VERBOSE ]] && echo " ($DBW_LABURL/$bundleQuery)"
+    [[ $VERY_VERBOSE ]] && echo " ($myWget $where/bundle.tar '$DBW_LABURL/$bundleQuery')"
+    $myWget "$where/bundle.tar" "$DBW_LABURL/$bundleQuery"
+    tar -xf "$where/bundle.tar" -C "$where"
+    rm -f "$where/bundle.tar"
+    printf "$MSG_DONE You can find the lab and all files here:\n"
+    echo "'$where'"
+    ls -lF "$where"
 }
 
 

@@ -404,6 +404,13 @@ mapCmdToDir()
                 proj)       RES="me/kmom05/proj" ;;
             esac
             ;;
+
+            oopython)
+                case "$CMD" in
+                    lab1)       RES="me/kmom01/lab1" ;;
+                    lab2)       RES="me/kmom02/lab2" ;;
+                esac
+                ;;
     esac
 
     echo "$RES"
