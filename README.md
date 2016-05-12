@@ -10,7 +10,7 @@ History
 
 v1.9.38 (2016-05-12)
 
-* New way to gereate lab bundles, supported by lab v2.2.0.
+* New way to create lab bundles, supported by lab v2.2.0.
 
 
 v1.9.37 (2016-04-21)
