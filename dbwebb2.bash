@@ -586,7 +586,7 @@ dbwebb-create()
     [[ $VERY_VERBOSE ]] && echo " ($DBW_LABURL/$bundleQuery)"
     [[ $VERY_VERBOSE ]] && echo " ($myWget $where/bundle.tar '$DBW_LABURL/$bundleQuery')"
     $myWget "$where/bundle.tar" "$DBW_LABURL/$bundleQuery"
-    tar -xf "$where/bundle.tar" -C "$where"
+    tar -xmf "$where/bundle.tar" -C "$where"
     rm -f "$where/bundle.tar"
     printf "$MSG_DONE You can find the lab and all files here:\n"
     echo "'$where'"

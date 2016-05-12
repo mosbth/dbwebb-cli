@@ -8,6 +8,11 @@ Part of course repos as a admin utility.
 History
 -------------------
 
+v1.9.38 (2016-05-12)
+
+* New way to gereate lab bundles, supported by lab v2.2.0.
+
+
 v1.9.37 (2016-04-21)
 
 * Make anax-grid writable to allow style.php to work in phpmvc.
