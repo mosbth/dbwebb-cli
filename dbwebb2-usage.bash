@@ -17,6 +17,7 @@ function usage ()
 "  upload [part]      Upload to server."
 "  download [part]    Download from server."
 "  create labid       Create a lab."
+"  recreate labid     Re-create environment for a lab."
 "  validate [part]    Validate it."
 "  publish [part]     Publish it."
 "  publishfast [part] Publish without validation."

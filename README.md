@@ -8,6 +8,11 @@ Part of course repos as a admin utility.
 History
 -------------------
 
+v1.9.39 (2016-05-13)
+
+* Added command to recreate labs, dbwebb recreate lab1.
+
+
 v1.9.38 (2016-05-12)
 
 * New way to create lab bundles, supported by lab v2.2.0.

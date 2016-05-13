@@ -542,12 +542,45 @@ function dbwebb-inspect()
 
 
 #
+# Re-create a lab
+#
+dbwebb-recreate()
+{
+    dbwebb-create "$1" "save-answers"
+}
+
+
+
+#
+# Support re-create a lab by saving the lab answer
+#
+moveLabAnswer()
+{
+    local where="$1"
+    local postfixFrom="$2"
+    local postfixTo="$3"
+
+    for extension in php js py bash
+    do
+        from="$where/answer.$extension$postfixFrom"
+        to="$where/answer.$extension$postfixTo"
+        if [ -f "$from" ]; then
+            echo "(moving answer.$extension$postfixFrom to answer.$extension$postfixTo)"
+            mv "$from" "$to"
+        fi
+    done
+}
+
+
+
+#
 # Create a lab
 #
 dbwebb-create()
 {
     local myWget=
     local lab="$1"
+    local save="$2"
     local subdir="$( mapCmdToDir $lab )"
     local where="$DBW_COURSE_DIR/$subdir"
     
@@ -569,8 +602,12 @@ dbwebb-create()
 
     # Check if lab is already there
     if [ -f "$where/answer.php" -o -f "$where/answer.js" -o -f "$where/answer.py" -o -f "$where/answer.bash" ]; then
-        printf "$MSG_FAILED You have already created lab-files at: '$where'\nRemove the files in the directory, then you can generate new files.\n"
-        exit 2
+        if [[ $save ]]; then
+            moveLabAnswer "$where" "" "_$$"
+        else
+            printf "$MSG_FAILED You have already created lab-files at: '$where'\nRemove the files in the directory, then you can generate new files.\n"
+            exit 2
+        fi
     fi
 
     # Check for wget or curl
@@ -588,6 +625,9 @@ dbwebb-create()
     $myWget "$where/bundle.tar" "$DBW_LABURL/$bundleQuery"
     tar -xmf "$where/bundle.tar" -C "$where"
     rm -f "$where/bundle.tar"
+    if [[ $save ]]; then
+        moveLabAnswer "$where" "_$$" ""
+    fi
     printf "$MSG_DONE You can find the lab and all files here:\n"
     echo "'$where'"
     ls -lF "$where"
@@ -742,6 +782,7 @@ do
         | inspect      \
         | run          \
         | create       \
+        | recreate     \
         | init         \
         | init-server  \
         | init-structure-dbwebb-kurser \
