@@ -543,6 +543,7 @@ selfupdate()
     local inc="install /tmp/$$ $target"
     local inm="to install."
     executeCommand "$ini" "$inc" "$inm"
+    local ins=$?
 
     # Cleaning up
     # printf '\nCleaning up... '; rm /tmp/$$;
@@ -550,6 +551,10 @@ selfupdate()
     local clc="rm /tmp/$$"
     local clm="to clean up."
     executeCommand "$cli" "$clc" "$clm"
+
+    if [ $ins != 0 ]; then
+        exit 1
+    fi
 
     printf "The updated version is now: "
     $what --version
