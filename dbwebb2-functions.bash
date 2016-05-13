@@ -405,12 +405,17 @@ mapCmdToDir()
             esac
             ;;
 
-            oopython)
-                case "$CMD" in
-                    lab1)       RES="me/kmom01/lab1" ;;
-                    lab2)       RES="me/kmom02/lab2" ;;
-                esac
-                ;;
+        oopython)
+            case "$CMD" in
+                flask)      RES="me/kmom01/flask" ;;
+                minizoo)    RES="me/kmom02/minizoo" ;;
+                test)       RES="me/kmom02/test" ;;
+                uml)        RES="me/kmom02/uml" ;;
+
+                lab1)       RES="me/kmom01/lab1" ;;
+                lab2)       RES="me/kmom02/lab2" ;;
+            esac
+            ;;
     esac
 
     echo "$RES"

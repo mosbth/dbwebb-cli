@@ -8,6 +8,11 @@ Part of course repos as a admin utility.
 History
 -------------------
 
+v1.9.40 (2016-05-13)
+
+* Added command to test course repos, testrepo.
+
+
 v1.9.39 (2016-05-13)
 
 * Added command to recreate labs, dbwebb recreate lab1.

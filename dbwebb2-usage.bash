@@ -24,6 +24,7 @@ function usage ()
 "  publishpure [part] Publish without minification."
 "  inspect [course] [kmom] [user]  Inspect a kmom."
 "  run <command>      Run a command on remote host."
+"  testrepo           Automated tests of a course repo."
 ""
 "Options:"
 "  --inspect, -i  Help for inspect."

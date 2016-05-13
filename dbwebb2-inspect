@@ -30,7 +30,7 @@
 #
 # Current version
 #
-DBW_VERSION="v1.9.39 (2016-05-13)"
+DBW_VERSION="v1.9.40 (2016-05-13)"
 # --------------- DBWEBB FUNCTIONS PHASE START ---------------
 
 #
@@ -438,12 +438,17 @@ mapCmdToDir()
             esac
             ;;
 
-            oopython)
-                case "$CMD" in
-                    lab1)       RES="me/kmom01/lab1" ;;
-                    lab2)       RES="me/kmom02/lab2" ;;
-                esac
-                ;;
+        oopython)
+            case "$CMD" in
+                flask)      RES="me/kmom01/flask" ;;
+                minizoo)    RES="me/kmom02/minizoo" ;;
+                test)       RES="me/kmom02/test" ;;
+                uml)        RES="me/kmom02/uml" ;;
+
+                lab1)       RES="me/kmom01/lab1" ;;
+                lab2)       RES="me/kmom02/lab2" ;;
+            esac
+            ;;
     esac
 
     echo "$RES"
@@ -739,7 +744,7 @@ fi
 DBW_OS="$( uname -a )"
 
 # Create the ssh-command with details from the config-file
-SSH_CMD="ssh ${DBW_USER}@${DBW_HOST} $DBW_SSH_KEY_OPTION"
+SSH_CMD="ssh -n ${DBW_USER}@${DBW_HOST} $DBW_SSH_KEY_OPTION"
 
 # Default chmod for rsync-command 
 RSYNC_CHMOD="--chmod=Du+w,Dgo+rx,Fu+rw,Fgo+r"

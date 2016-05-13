@@ -379,7 +379,7 @@ function dbwebb-validate()
     local intro="Uploading the directory '$WHAT' to '$WHERE' for validation."
     local command1="$RSYNC_CMD $OVERWRITE '$WHAT' '$WHERE'"
     local command2="rsync -av $RSYNC_CHMOD $OVERWRITE --exclude .git --exclude .gitignore --exclude .default --exclude .solution --exclude .old --include='.??*' --exclude='*' -e \"ssh $DBW_SSH_KEY_OPTION\" '$DBW_COURSE_DIR/' '$DBW_REMOTE_DESTINATION/'"
-    local command3="$SSH_CMD 'dbwebb-validate --course-repo \"$DBW_REMOTE_BASEDIR/$DBW_COURSE\" \"$DBW_REMOTE_BASEDIR/$DBW_COURSE/$SUBDIR\"' 2>&1 | tee '$log';"
+    local command3="$SSH_CMD 'dbwebb-validate --course-repo \"$DBW_REMOTE_BASEDIR/$DBW_COURSE\" \"$DBW_REMOTE_BASEDIR/$DBW_COURSE/$SUBDIR\"' 2>&1 | tee '$log'; test \${PIPESTATUS[0]} -eq 0"
     local message="to validate course results.\nSaved a log of the output: less -R '$log'"
     executeCommand "$intro" "$command1; $command2; $command3" "$message"
 }
@@ -405,7 +405,7 @@ function dbwebb-publish()
     local intro="Uploading the directory '$WHAT' to '$WHERE' to validate and publish."
     local command1="$RSYNC_CMD $OVERWRITE '$WHAT' '$WHERE'"
     local command2="rsync -av $RSYNC_CHMOD $OVERWRITE --exclude .git --exclude .gitignore --exclude .default --exclude .solution --exclude .old --include='.??*' --exclude='*' -e \"ssh $DBW_SSH_KEY_OPTION\" '$DBW_COURSE_DIR/' '$DBW_REMOTE_DESTINATION/'"
-    local command3="$SSH_CMD 'dbwebb-validate $PUBLISH_OPTIONS --publish --course-repo \"$DBW_REMOTE_BASEDIR/$DBW_COURSE\" --publish-to \"$DBW_REMOTE_WWWDIR/$DBW_COURSE/$SUBDIR\" \"$DBW_REMOTE_BASEDIR/$DBW_COURSE/$SUBDIR\"' 2>&1 | tee '$log';"
+    local command3="$SSH_CMD 'dbwebb-validate $PUBLISH_OPTIONS --publish --course-repo \"$DBW_REMOTE_BASEDIR/$DBW_COURSE\" --publish-to \"$DBW_REMOTE_WWWDIR/$DBW_COURSE/$SUBDIR\" \"$DBW_REMOTE_BASEDIR/$DBW_COURSE/$SUBDIR\"' 2>&1 | tee '$log'; test \${PIPESTATUS[0]} -eq 0"
     local message="to validate and publish course results.\nSaved a log of the output: less -R '$log'"
     executeCommand "$intro" "$command1; $command2; $command3" "$message"
 
@@ -526,7 +526,7 @@ function dbwebb-inspect()
     local intro="I will now inspect '$kmom'${forCourse}${forWho}.$willUpload"
     local log="$HOME/.dbwebb-inspect.log"
     local command1=
-    local command2="$SSH_CMD \"dbwebb-inspect $archive --publish-url $DBW_BASEURL --publish-to ~$DBW_USER/$DBW_REMOTE_WWWDIR --base-url $DBW_WWW_HOST~$inspecUser/$DBW_REMOTE_BASEDIR ~$inspecUser/$DBW_REMOTE_BASEDIR/$course $kmom\" 2>&1 | tee '$log';"
+    local command2="$SSH_CMD \"dbwebb-inspect $archive --publish-url $DBW_BASEURL --publish-to ~$DBW_USER/$DBW_REMOTE_WWWDIR --base-url $DBW_WWW_HOST~$inspecUser/$DBW_REMOTE_BASEDIR ~$inspecUser/$DBW_REMOTE_BASEDIR/$course $kmom\" 2>&1 | tee '$log'; test \${PIPESTATUS[0]} -eq 0"
     local message="to inspect the course results.\nSaved a log of the output, review it as:\nless -R '$log'"
 
     # Upload only if
@@ -706,6 +706,74 @@ dbwebb-updateconfig()
 
 
 
+#
+# Support testing procedure of course repo
+#
+dbwebb-testrepo()
+{
+    checkIfValidConfigOrExit
+    checkIfValidCourseRepoOrExit
+
+    local base="$DBW_COURSE_DIR"
+    local me="$base/me"
+    local testsuite="$base/.dbwebb.tests"
+    local prompt="==="
+    local silent=
+
+    if [ ! -f "$testsuite" ]; then
+        printf "$MSG_FAILED There is no testsuite file '.dbwebb.tests' in this course repo. This courese repo does not (yet) support automated tests.\n"
+        exit 2
+    fi
+
+    if [ -d "$me" -a -z "$OVERWRITE" ]; then
+        printf "$MSG_FAILED The me-directory is already here. You can not run tests with an existing me-directory. Remove the me-directory so it can be recreated by the test procedure.\n"
+        exit 2
+    fi
+
+    if [[ $SILENT ]]; then
+        silent=" > /dev/null"
+    fi
+
+    echo "$prompt Beginning testsuite"
+    cd "$base"
+
+    local lineNum=0
+    local assertions=0
+    local fail=0
+    
+    while IFS= read -r line
+    do
+        ((lineNum++))
+        printf "$prompt $lineNum: $line\n"
+
+        if [ -z "$line" -o "${line:0:1}" == "#" ]; then
+            continue;
+        fi
+        
+        if [[ $SILENT ]]; then
+            line=$( echo "$line" | sed 's/;/ > \/dev\/null;/' )
+        fi
+
+        ((assertions++))
+        ( bash -c "$line $silent" )
+        if [ $? != 0 ]; then
+            printf "$prompt $lineNum: $MSG_FAILED\n"
+            ((fail++))
+        fi
+
+    done < <(grep "" "$testsuite")
+
+    echo "$prompt Done with $assertions assertions and $fail failure(s)."
+    if [[ $fail = 0 ]]; then
+        printf "$prompt $MSG_OK All tests passed.\n"
+    else 
+        printf "$prompt $MSG_FAILED $fail assertion(s) failed.\n"
+        exit 1
+    fi
+}
+
+
+
 # --------------- DBWEBB MAIN START HERE ------------------------------
 #
 # Process options
@@ -783,6 +851,7 @@ do
         | run          \
         | create       \
         | recreate     \
+        | testrepo     \
         | init         \
         | init-server  \
         | init-structure-dbwebb-kurser \
@@ -791,7 +860,7 @@ do
             command=$1
             shift
             dbwebb-$command $*
-            exit 0
+            exit
         ;;
         
         *)
