@@ -8,6 +8,11 @@ Part of course repos as a admin utility.
 History
 -------------------
 
+v1.9.41 (2016-05-13)
+
+* Adding to dbwebb-validate to install compatible npm modules needed. Useful for automating tests.
+
+
 v1.9.40 (2016-05-13)
 
 * Added command to test course repos, testrepo.

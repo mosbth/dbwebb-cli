@@ -361,6 +361,11 @@ do
             shift
             ;;
 
+        --install-npm)
+            npm install -g htmlhint csslint jshint jscs jsonlint js-yaml html-minifier@0.8.0 clean-css uglify-js
+            exit
+            ;;
+
         --dry | -d)
             optDryRun="yes"
             shift
