@@ -551,12 +551,6 @@ selfupdate()
     local clm="to clean up."
     executeCommand "$cli" "$clc" "$clm"
 
-    # Previous code
-    # local intro="Selfupdating '$what' from $repo"
-    # local cmd="printf 'Downloading...'; wget $silent $remote -O /tmp/$$; printf ' installing...'; install /tmp/$$ $target; printf ' cleaning up...'; rm /tmp/$$; printf ' done.\n'"
-    # local message="to update '$what'."
-    # executeCommand "$intro" "$cmd" "$message"
-
     printf "The updated version is now: "
     $what --version
 }
