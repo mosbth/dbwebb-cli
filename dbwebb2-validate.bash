@@ -362,7 +362,7 @@ do
             ;;
 
         --install-npm)
-            npm install -g htmlhint@0.9.12 csslint jshint jscs jsonlint js-yaml html-minifier@0.8.0 clean-css uglify-js
+            npm install -g htmlhint@0.9.12 csslint jshint jscs@2.11.0 jsonlint js-yaml html-minifier@0.8.0 clean-css uglify-js
             exit
             ;;
 
