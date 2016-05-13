@@ -8,7 +8,7 @@ publishChmod()
     local dir="$1"
 
     if [ -d "$dir" ]; then
-        find "$dir" -type d -name 'cache' -exec chmod -R a+rw {} \;  
+        find "$dir" -type d -name 'cache' -exec chmod -R a+rw {} \;
         find "$dir" -type d -name 'db' -exec chmod a+rwx {} \;
 
         find "$dir" -type f -name '*.conf' -exec chmod go-r {} \;
@@ -46,7 +46,7 @@ function exists() {
         echo "Incorrect usage."
         echo "Correct usage: exists {key} in {array}"
         return
-    fi   
+    fi
     eval '[ ${'$3'[$1]+muahaha} ]'
 }
 
@@ -70,9 +70,9 @@ function contains() {
 # join , "${FOO[@]}" #a,b,c
 #
 function join()
-{ 
-    local IFS="$1"; 
-    shift; 
+{
+    local IFS="$1";
+    shift;
     echo "$*";
 }
 
@@ -96,7 +96,7 @@ function checkCommand()
 
     if ! hash "$COMMAND" 2>/dev/null; then
         printf "Command $COMMAND not found."
-    else 
+    else
         printf "$( which $COMMAND )"
     fi
 }
@@ -227,8 +227,8 @@ setChmod()
         printf "Ensuring that all files and directories are readable for all, below $DBW_COURSE_DIR.\n"
     fi
 
-    find "$DBW_COURSE_DIR" -type d -exec chmod u+rwx,go+rx {} \;  
-    find "$DBW_COURSE_DIR" -type f -exec chmod u+rw,go+r {} \;   
+    find "$DBW_COURSE_DIR" -type d -exec chmod u+rwx,go+rx {} \;
+    find "$DBW_COURSE_DIR" -type f -exec chmod u+rw,go+r {} \;
 }
 
 
@@ -241,9 +241,9 @@ mapCmdToDir()
     local CMD="$1"
     local RES=""
 
-    if [ -z "$CMD" ]; then 
+    if [ -z "$CMD" ]; then
         return
-    fi 
+    fi
 
     case "$CMD" in
         example)    RES="example" ;;
@@ -262,10 +262,10 @@ mapCmdToDir()
         kmom10)     RES="me/kmom10" ;;
     esac
 
-    if [ ! -z $RES ]; then 
+    if [ ! -z $RES ]; then
         printf "$RES"
         return
-    fi 
+    fi
 
     case "$DBW_COURSE" in
         htmlphp)
@@ -276,12 +276,12 @@ mapCmdToDir()
                 me4)        RES="me/kmom04/me4" ;;
                 me5)        RES="me/kmom05/me5" ;;
                 me6)        RES="me/kmom06/me6" ;;
-                
+
                 multi)      RES="me/kmom03/multi" ;;
                 stylechooser) RES="me/kmom04/stylechooser" ;;
                 jetty)      RES="me/kmom05/jetty" ;;
                 bmo)        RES="me/kmom10/bmo" ;;
-                
+
                 lab1)       RES="me/kmom02/lab1" ;;
                 lab2)       RES="me/kmom03/lab2" ;;
                 lab3)       RES="me/kmom04/lab3" ;;
@@ -378,7 +378,7 @@ mapCmdToDir()
                 me4)        RES="me/kmom04/me4" ;;
                 me5)        RES="me/kmom05/me5" ;;
                 me6)        RES="me/kmom06/me6" ;;
-                
+
                 meapp)      RES="me/kmom01/meapp" ;;
                 ajax)       RES="me/kmom03/ajax" ;;
                 jq)         RES="me/kmom03/jq" ;;
@@ -405,17 +405,12 @@ mapCmdToDir()
             esac
             ;;
 
-        oopython)
-            case "$CMD" in
-                flask)      RES="me/kmom01/flask" ;;
-                minizoo)    RES="me/kmom02/minizoo" ;;
-                test)       RES="me/kmom02/test" ;;
-                uml)        RES="me/kmom02/uml" ;;
-
-                lab1)       RES="me/kmom01/lab1" ;;
-                lab2)       RES="me/kmom02/lab2" ;;
-            esac
-            ;;
+            oopython)
+                case "$CMD" in
+                    lab1)       RES="me/kmom01/lab1" ;;
+                    lab2)       RES="me/kmom02/lab2" ;;
+                esac
+                ;;
     esac
 
     echo "$RES"
@@ -430,8 +425,8 @@ mapCmdToDir()
 #
 function getPathToDirectoryFor()
 {
-    local dir="$( mapCmdToDir $1 )" 
-    
+    local dir="$( mapCmdToDir $1 )"
+
     if [ -z "$command" ]; then
         echo "$DBW_CURRENT_DIR"
     elif [ -z "$dir" -a -d "$command" ]; then
@@ -440,7 +435,7 @@ function getPathToDirectoryFor()
         echo "$DBW_CURRENT_DIR/$command"
     elif [ -d "$DBW_COURSE_DIR" -a -d "$DBW_COURSE_DIR/$dir" ]; then
         echo "$DBW_COURSE_DIR/$dir"
-    else 
+    else
         printf "\n$MSG_FAILED The item '$command' was mapped to directory '$dir' which is not a valid directory."
         printf "\n"
         exit 1
@@ -498,33 +493,38 @@ selfupdate()
     local remote=
     local silent="--quiet"
     local repo="https://raw.githubusercontent.com/mosbth/dbwebb-cli"
-    
+
     if [[ $VERY_VERBOSE ]]; then
         silent=""
     fi
-    
+
     case $what in
         dbwebb)
             remote="$repo/master/dbwebb2"
         ;;
-        
+
         dbwebb-validate)
             remote="$repo/master/dbwebb2-validate"
         ;;
-        
+
         dbwebb-inspect)
             remote="$repo/master/dbwebb2-inspect"
         ;;
     esac
-    
+
     printf "Your current version is: "
     $what --version
 
     local intro="Selfupdating '$what' from $repo"
     local cmd="printf 'Downloading...'; wget $silent $remote -O /tmp/$$; printf ' installing...'; install /tmp/$$ $target; printf ' cleaning up...'; rm /tmp/$$; printf ' done.\n'"
+    # Splitting 'cmd' into separate rows.
+    # printf '\nDownloading... '; wget $silent $remote -O /tmp/$$;
+    # printf '\nInstalling... '; install /tmp/$$ $target;
+    # printf '\nCleaning up... '; rm /tmp/$$;
+    # Probably going to rewrite this to not use executeCommand
     local message="to update '$what'."
     executeCommand "$intro" "$cmd" "$message"
-        
+
     printf "The updated version is now: "
     $what --version
 }
@@ -546,7 +546,7 @@ function assert()
 
     bash -c "$TEST" &> "$TMPFILE"
     status=$?
-    
+
     if [ \( -z "$onlyExitStatus" \) -o \( ! $status -eq $EXPECTED \) ]; then
         error=$( cat "$TMPFILE" )
     fi
@@ -555,7 +555,7 @@ function assert()
     if [ \( ! $status -eq $EXPECTED \) -o \( ! -z "$error" \) ]; then
         FAULTS=$(( $FAULTS + 1 ))
 
-        printf "\n\n$MSG_WARNING $MESSAGE\n" 
+        printf "\n\n$MSG_WARNING $MESSAGE\n"
         [ -z "$error" ] || printf "$error\n\n"
     fi
 
@@ -584,14 +584,14 @@ assertExit()
         FAULTS=$(( $FAULTS + 1 ))
 
         printf "\n$TEST"
-        printf "\n\n$MSG_FAILED $MESSAGE\n" 
+        printf "\n\n$MSG_FAILED $MESSAGE\n"
         [ -z "$ERROR" ] || printf "$ERROR\n\n"
 
         return 1
     fi
 
     return 0
-    
+
 }
 
 
@@ -608,7 +608,7 @@ function assertResults()
         printf " Asserts: $ASSERTS Faults: $FAULTS\n\n"
         exit 1
     fi
-    
+
     printf "\n$MSG_OK"
     printf " Asserts: $ASSERTS Faults: $FAULTS\n"
     exit 0
