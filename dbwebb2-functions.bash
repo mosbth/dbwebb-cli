@@ -520,15 +520,42 @@ selfupdate()
     printf "Your current version is: "
     $what --version
 
-    local intro="Selfupdating '$what' from $repo"
-    local cmd="printf 'Downloading...'; wget $silent $remote -O /tmp/$$; printf ' installing...'; install /tmp/$$ $target; printf ' cleaning up...'; rm /tmp/$$; printf ' done.\n'"
-    # Splitting 'cmd' into separate rows.
+    echo "Selfupdating '$what' from $repo"
+
+    # Downloading
     # printf '\nDownloading... '; wget $silent $remote -O /tmp/$$;
+    if hash wget 2> /dev/null; then
+        local dli="Downloading using wget... "
+        local dlc="wget $silent $remote -O /tmp/$$"
+    elif hash curl 2> /dev/null; then
+        local dli="Downloading using curl... "
+        local dlc="curl -so /tmp/$$ $remote"
+    else
+        echo "Failed. Did not find wget nor curl. Please install either wget or curl."
+        exit 1
+    fi
+    local dlm="to download."
+    executeCommand "$dli" "$dlc" "$dlm"
+
+    # Installing
     # printf '\nInstalling... '; install /tmp/$$ $target;
+    local ini="Installing... "
+    local inc="install /tmp/$$ $target"
+    local inm="to install."
+    executeCommand "$ini" "$inc" "$inm"
+
+    # Cleaning up
     # printf '\nCleaning up... '; rm /tmp/$$;
-    # Probably going to rewrite this to not use executeCommand
-    local message="to update '$what'."
-    executeCommand "$intro" "$cmd" "$message"
+    local cli="Cleaning up... "
+    local clc="rm /tmp/$$"
+    local clm="to clean up."
+    executeCommand "$cli" "$clc" "$clm"
+
+    # Previous code
+    # local intro="Selfupdating '$what' from $repo"
+    # local cmd="printf 'Downloading...'; wget $silent $remote -O /tmp/$$; printf ' installing...'; install /tmp/$$ $target; printf ' cleaning up...'; rm /tmp/$$; printf ' done.\n'"
+    # local message="to update '$what'."
+    # executeCommand "$intro" "$cmd" "$message"
 
     printf "The updated version is now: "
     $what --version
