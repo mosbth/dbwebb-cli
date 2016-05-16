@@ -6,7 +6,7 @@ v1.9.45 (2016-05-16)
 -------------------
 
 * Correcting dbwebb inspect to work, re-change ssh -n option.
-
+* Improving dbwebb testrepo.
 
 
 v1.9.44 (2016-05-16)

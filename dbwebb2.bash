@@ -536,7 +536,7 @@ function dbwebb-inspect()
     local intro="I will now inspect '$kmom'${forCourse}${forWho}.$willUpload"
     local log="$HOME/.dbwebb-inspect.log"
     local command1=
-    local command2="$SSH_CMD \"dbwebb-inspect $archive --publish-url $DBW_BASEURL --publish-to ~$DBW_USER/$DBW_REMOTE_WWWDIR --base-url $DBW_WWW_HOST~$inspecUser/$DBW_REMOTE_BASEDIR ~$inspecUser/$DBW_REMOTE_BASEDIR/$course $kmom\" 2>&1 | tee '$log'; test \${PIPESTATUS[0]} -eq 0"
+    local command2="$SSH_CMD_INTERACTIVE \"dbwebb-inspect $archive --publish-url $DBW_BASEURL --publish-to ~$DBW_USER/$DBW_REMOTE_WWWDIR --base-url $DBW_WWW_HOST~$inspecUser/$DBW_REMOTE_BASEDIR ~$inspecUser/$DBW_REMOTE_BASEDIR/$course $kmom\" 2>&1 | tee '$log'; test \${PIPESTATUS[0]} -eq 0"
     local message="to inspect the course results.\nSaved a log of the output, review it as:\nless -R '$log'"
 
     # Upload only if
@@ -741,10 +741,13 @@ dbwebb-testrepo()
     fi
 
     if [[ $SILENT ]]; then
-        silent=" > /dev/null"
+        silent=" &> /dev/null"
     fi
 
     echo "$prompt Beginning testsuite"
+    if [[ $OPTION_LOCAL ]]; then
+        echo "$prompt Test locally, using dbwebb-validate"
+    fi
     cd "$base"
 
     local lineNum=0
@@ -754,14 +757,22 @@ dbwebb-testrepo()
     while IFS= read -r line
     do
         ((lineNum++))
-        printf "$prompt $lineNum: $line\n"
+        printf "%s %s: %s\n" "$prompt" "$lineNum" "$line"
 
         if [ -z "$line" -o "${line:0:1}" == "#" ]; then
             continue;
         fi
-        
+
+        if [[ $OPTION_LOCAL ]]; then
+            line=$( echo "$line" | sed 's/dbwebb validate /make dbwebb-validate arg1=/' )
+        fi
+
         if [[ $SILENT ]]; then
-            line=$( echo "$line" | sed 's/;/ > \/dev\/null;/' )
+            line=$( echo "$line" | sed 's/;/ \&> \/dev\/null;/' )
+        fi
+
+        if [[ $VERY_VERBOSE ]]; then
+            printf "$prompt $lineNum: $line $silent\n"
         fi
 
         ((assertions++))
@@ -804,6 +815,11 @@ do
 
         --silent | -s)
             SILENT="yes"
+            shift
+        ;;
+
+        --local | -l)
+            OPTION_LOCAL="yes"
             shift
         ;;
 
