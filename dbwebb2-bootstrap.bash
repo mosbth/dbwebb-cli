@@ -110,7 +110,7 @@ fi
 DBW_OS="$( uname -a )"
 
 # Create the ssh-command with details from the config-file
-SSH_CMD="ssh -n ${DBW_USER}@${DBW_HOST} $DBW_SSH_KEY_OPTION"
+SSH_CMD="ssh ${DBW_USER}@${DBW_HOST} $DBW_SSH_KEY_OPTION"
 SSH_CMD_INTERACTIVE="ssh ${DBW_USER}@${DBW_HOST} $DBW_SSH_KEY_OPTION"
 
 # Default chmod for rsync-command 

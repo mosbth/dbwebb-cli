@@ -2,6 +2,13 @@ Revision History
 ============================================================
 
 
+v1.9.47 (2016-05-16)
+-------------------
+
+* Rechange ssh -n again, avoid using it.
+* Solved loop with filedescriptors that stopped working during dbwebb validate.
+
+
 v1.9.46 (2016-05-16)
 -------------------
 

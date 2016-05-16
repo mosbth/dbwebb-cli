@@ -30,7 +30,7 @@
 #
 # Current version
 #
-DBW_VERSION="v1.9.46 (2016-05-16)"
+DBW_VERSION="v1.9.47 (2016-05-16)"
 # --------------- DBWEBB FUNCTIONS PHASE START ---------------
 
 #
@@ -891,7 +891,7 @@ fi
 DBW_OS="$( uname -a )"
 
 # Create the ssh-command with details from the config-file
-SSH_CMD="ssh -n ${DBW_USER}@${DBW_HOST} $DBW_SSH_KEY_OPTION"
+SSH_CMD="ssh ${DBW_USER}@${DBW_HOST} $DBW_SSH_KEY_OPTION"
 SSH_CMD_INTERACTIVE="ssh ${DBW_USER}@${DBW_HOST} $DBW_SSH_KEY_OPTION"
 
 # Default chmod for rsync-command 
@@ -1847,7 +1847,7 @@ dbwebb-testrepo()
     local assertions=0
     local fail=0
     
-    while IFS= read -r line
+    while IFS= read -r line <&3
     do
         ((lineNum++))
         printf "%s %s: %s\n" "$prompt" "$lineNum" "$line"
@@ -1869,13 +1869,13 @@ dbwebb-testrepo()
         fi
 
         ((assertions++))
-        ( bash -c "$line $silent" )
+        ( bash -c "$line $silent 3<&-" )
         if [ $? != 0 ]; then
             printf "$prompt $lineNum: $MSG_FAILED\n"
             ((fail++))
         fi
 
-    done < <(grep "" "$testsuite")
+    done 3< <(grep "" "$testsuite")
 
     echo "$prompt Done with $assertions assertions and $fail failure(s)."
     if [[ $fail = 0 ]]; then

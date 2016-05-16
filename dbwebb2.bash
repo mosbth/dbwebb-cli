@@ -754,7 +754,7 @@ dbwebb-testrepo()
     local assertions=0
     local fail=0
     
-    while IFS= read -r line
+    while IFS= read -r line <&3
     do
         ((lineNum++))
         printf "%s %s: %s\n" "$prompt" "$lineNum" "$line"
@@ -776,13 +776,13 @@ dbwebb-testrepo()
         fi
 
         ((assertions++))
-        ( bash -c "$line $silent" )
+        ( bash -c "$line $silent 3<&-" )
         if [ $? != 0 ]; then
             printf "$prompt $lineNum: $MSG_FAILED\n"
             ((fail++))
         fi
 
-    done < <(grep "" "$testsuite")
+    done 3< <(grep "" "$testsuite")
 
     echo "$prompt Done with $assertions assertions and $fail failure(s)."
     if [[ $fail = 0 ]]; then
