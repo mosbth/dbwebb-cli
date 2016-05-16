@@ -132,11 +132,23 @@ pressEnterToContinue()
 #
 # Execute a command in a controlled manner
 #
-executeCommand()
+function executeCommandInSubShell
 {
-    INTRO="$1"
+    executeCommand "$1" "$2" "$3" "$4" "subshell"
+}
 
-    echo "$INTRO"
+
+
+#
+# Execute a command in a controlled manner
+#
+function executeCommand
+{
+    local introText="$1"
+    local subshell="$5"
+    
+    # Introduction text for the command
+    echo "$introText"
 
     REALLY="$4"
     if [ ! -z $REALLY ]
@@ -163,7 +175,11 @@ executeCommand()
         printf "\n"
     fi
 
-    bash -c "$COMMAND"
+    if [ "$subshell" = "subshell" ]; then
+        ( "$COMMAND" )
+    else
+        bash -c "$COMMAND"
+    fi
     STATUS=$?
 
     if [[ $VERY_VERBOSE ]]
@@ -189,16 +205,49 @@ executeCommand()
 
 
 #
+# Convert version to a compareble string
+#
+function getSemanticVersion
+{
+    local version=${1:1}
+    echo "$version" | awk -F. '{ printf("%03d%03d%03d\n", $1,$2,$3); }'
+}
+
+
+
+#
+# Check if current version of dbwebb-cli matches minimum required version.
+#
+function checkMinimumVersionRequirementOrExit
+{
+    if [[ $DBW_VERSION_REQUIREMENT ]]; then
+        local required current
+        required=$( getSemanticVersion $DBW_VERSION_REQUIREMENT )
+        current=$( getSemanticVersion $DBW_VERSION )
+        if [ "$current" -lt "$required" ]; then
+            printf "$MSG_FAILED You need to upgrade dbwebb-cli to work with this course repo.\nDo a 'dbwebb selfupdate'.\n"
+            printf "Your current version is:     %s\n" "$DBW_VERSION"
+            printf "Minimum required version is: %s\n" "$DBW_VERSION_REQUIREMENT"
+            exit 1
+        fi
+    fi
+}
+
+
+
+#
 # Check if within a valid course repo or exit
 #
-function checkIfValidCourseRepoOrExit()
+function checkIfValidCourseRepoOrExit
 {
     if [ "$DBW_COURSE_REPO_VALID" != "yes" ]; then
-        printf "$MSG_FAILED Could not find file '$DBW_COURSE_FILE_NAME', this is not a valid course repo."
+        printf "$MSG_FAILED Could not find file '%s', this is not a valid course repo." "$DBW_COURSE_FILE_NAME"
         printf "\nThis command must be executed within a valid course repo."
         printf "\n"
         exit 1
     fi
+
+    checkMinimumVersionRequirementOrExit
 }
 
 
@@ -247,12 +296,12 @@ mapCmdToDir()
 
     case "$CMD" in
         example)    RES="example" ;;
-        lib)        RES="me/lib" ;;
+        lib)        RES="me/lib" ;;  # OBSOLETE?
         solution)   RES=".solution" ;;
         solution/me)   RES=".solution/me" ;;
         tutorial)   RES="tutorial" ;;
         me)         RES="me" ;;
-        redovisa)   RES="me/redovisa" ;;
+        redovisa)   RES="me/redovisa" ;; #OBSOLETE?
         kmom01)     RES="me/kmom01" ;;
         kmom02)     RES="me/kmom02" ;;
         kmom03)     RES="me/kmom03" ;;
@@ -263,7 +312,7 @@ mapCmdToDir()
     esac
 
     if [ ! -z $RES ]; then 
-        printf "$RES"
+        echo "$RES"
         return
     fi 
 
@@ -404,19 +453,26 @@ mapCmdToDir()
                 proj)       RES="me/kmom05/proj" ;;
             esac
             ;;
-
-        oopython)
-            case "$CMD" in
-                flask)      RES="me/kmom01/flask" ;;
-                minizoo)    RES="me/kmom02/minizoo" ;;
-                test)       RES="me/kmom02/test" ;;
-                uml)        RES="me/kmom02/uml" ;;
-
-                lab1)       RES="me/kmom01/lab1" ;;
-                lab2)       RES="me/kmom02/lab2" ;;
-            esac
-            ;;
     esac
+
+    if [ ! -z $RES ]; then 
+        echo "$RES"
+        return
+    fi 
+
+    # Check for known pathes in course repo config file
+    local mapFile="$DBW_COURSE_DIR/.dbwebb.map"
+    local item=
+    if [ -f "$mapFile" ]; then
+        while IFS= read -r path
+        do
+            item=$( basename "$path" )
+            if [ "$CMD" = "$item" ]; then
+                echo "$path"
+                return
+            fi
+        done < <(grep "^[^#]" "$mapFile")
+    fi
 
     echo "$RES"
     return
@@ -428,7 +484,26 @@ mapCmdToDir()
 # Get path to dir to check, use both parts of courses and fallback
 # to absolute and relative paths.
 #
-function getPathToDirectoryFor()
+function createDirsInMeFromMapFile
+{
+    local mapFile="$DBW_COURSE_DIR/.dbwebb.map"
+    local me="$DBW_COURSE_DIR/me/"
+    if [ -f "$mapFile" ]; then
+        while IFS= read -r path
+        do
+            echo "$path"
+            install -d "$path"
+        done < <(grep "^[^#]" "$mapFile")
+    fi
+}
+
+
+
+#
+# Get path to dir to check, use both parts of courses and fallback
+# to absolute and relative paths.
+#
+function getPathToDirectoryFor
 {
     local dir="$( mapCmdToDir $1 )" 
     

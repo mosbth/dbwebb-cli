@@ -8,6 +8,13 @@ Part of course repos as a admin utility.
 History
 -------------------
 
+v1.9.42 (2016-05-16)
+
+* Support course repo having minimum requirement on dbwebb-cli version, .dbwebb.version.
+* Add config file for moss, .dbwebb.moss.
+* Add config file for subdirs in me, .dbwebb.map.
+
+
 v1.9.41 (2016-05-13)
 
 * Adding to dbwebb-validate to install compatible npm modules needed. Useful for automating tests.

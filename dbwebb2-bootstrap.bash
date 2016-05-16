@@ -48,7 +48,7 @@ done
 #
 # Get the name of the course as $DBW_COURSE
 #
-function sourceCourseRepoFile()
+function sourceCourseRepoFile
 {
     DBW_COURSE_FILE="$DBW_COURSE_DIR/$DBW_COURSE_FILE_NAME"
     DBW_COURSE_REPO_VALID=""
@@ -60,6 +60,24 @@ function sourceCourseRepoFile()
 
 # Get the name of the course as $DBW_COURSE
 sourceCourseRepoFile
+
+
+
+#
+# Get the name of the course as $DBW_COURSE
+#
+function sourceDbwebbVersionFile
+{
+    DBW_VERSION_FILE="$DBW_COURSE_DIR/$DBW_VERSION_FILE_NAME"
+    DBW_VERSION_REQUIREMENT=""
+    if [ -f "$DBW_VERSION_FILE" ]; then
+        DBW_VERSION_REQUIREMENT=$(< "$DBW_VERSION_FILE" )
+    fi
+}
+
+# Get the proposed minimum version for dbwebb-cli in current course repo
+DBW_VERSION_FILE_NAME=".dbwebb.version"
+sourceDbwebbVersionFile
 
 
 

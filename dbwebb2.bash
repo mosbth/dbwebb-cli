@@ -78,6 +78,17 @@ function createConfig()
 #
 function dbwebb-init-me()
 {
+    checkIfValidCourseRepoOrExit
+
+    local mapFile="$DBW_COURSE_DIR/.dbwebb.map"
+    if [ -f "$mapFile" ]; then
+        local intro="Creating and initiating the directory structure in 'me/' (will not overwrite existing files)."
+        local command="createDirsInMeFromMapFile"
+        local message="to init the directory 'me/'."
+        executeCommandInSubShell "$intro" "$command" "$message"
+        return
+    fi
+
     local meDefault="$DBW_COURSE_DIR/.default/"
     local me="$DBW_COURSE_DIR/me/"
 
@@ -85,7 +96,6 @@ function dbwebb-init-me()
     local command="rsync -av $RSYNC_CHMOD --exclude README.md --ignore-existing \"$meDefault\" \"$me\""
     local message="to init the directory 'me/'."
 
-    checkIfValidCourseRepoOrExit
     executeCommand "$intro" "$command" "$message"
 }
 
