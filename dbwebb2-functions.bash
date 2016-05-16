@@ -90,7 +90,7 @@ function createGithubUrl(){
 #
 # Check for installed commands
 #
-function checkCommand()
+function checkCommand
 {
     local COMMAND="$1"
 
@@ -100,6 +100,29 @@ function checkCommand()
         printf "$( which $COMMAND )"
     fi
 }
+
+
+
+#
+# Check command and version of it with nice string as result
+#
+function checkCommandWithVersion
+{
+    local what="$1"
+    local version="$2"
+    local options="$3"
+
+    if ! hash "$what" 2>/dev/null; then
+        printf "%-10s Command '%s' not found." "-" "$what"
+    else
+        if [ ! -z "$version" ]; then
+            printf "%-10s %s" "$( eval $what $version $options )" "$( which $what )"
+        else
+            printf "%-10s %s" "?" "$( which $what )"
+        fi
+    fi
+}
+
 
 
 
