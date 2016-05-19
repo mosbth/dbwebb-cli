@@ -5,7 +5,7 @@ Revision History
 v1.9.47* (2016-05-19)
 -------------------
 
-* Add python3 version to be displayed in dbwebb-validate --check.
+* Add python3 and pip3 version to be displayed in dbwebb-validate --check.
 
 
 v1.9.47 (2016-05-16)
