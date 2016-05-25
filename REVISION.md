@@ -2,9 +2,10 @@ Revision History
 ============================================================
 
 
-v1.9.47* (2016-05-19)
+v1.9.48 (2016-05-25)
 -------------------
 
+* The .dbwebb.map did only work in base directory, fix #79.
 * Add python3 and pip3 version to be displayed in dbwebb-validate --check.
 
 

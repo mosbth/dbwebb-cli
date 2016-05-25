@@ -510,12 +510,11 @@ mapCmdToDir()
 function createDirsInMeFromMapFile
 {
     local mapFile="$DBW_COURSE_DIR/.dbwebb.map"
-    local me="$DBW_COURSE_DIR/me/"
     if [ -f "$mapFile" ]; then
         while IFS= read -r path
         do
             echo "$path"
-            install -d "$path"
+            install -d "$DBW_COURSE_DIR/$path"
         done < <(grep "^[^#]" "$mapFile")
     fi
 }
