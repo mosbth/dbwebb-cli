@@ -525,7 +525,7 @@ function dbwebb-inspect()
         course="$DBW_COURSE"
         kmom="$1"
         forCourse=" in course repo '$course'"
-        willUpload="\nI will start by uploading the course repo to the remote server."
+        willUpload=" I will start by uploading the course repo to the remote server."
     else
         usageInspect
         exit 0

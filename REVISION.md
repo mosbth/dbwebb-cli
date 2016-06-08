@@ -2,6 +2,13 @@ Revision History
 ============================================================
 
 
+v1.9.49 (2016-06-08)
+-------------------
+
+* Add .dbwebb.exclude with list of files to exclude from upload.
+* Add .dbwebb.include with list of files to include in upload.
+
+
 v1.9.48 (2016-05-25)
 -------------------
 
