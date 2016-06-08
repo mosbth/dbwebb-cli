@@ -33,6 +33,7 @@ inspect:
 		dbwebb2-inspect-python.bash \
 		dbwebb2-inspect-javascript1.bash \
 		dbwebb2-inspect-htmlphp.bash \
+		dbwebb2-inspect-design.bash \
 		dbwebb2-inspect-oophp.bash \
 		dbwebb2-inspect-phpmvc.bash \
 		dbwebb2-inspect-javascript.bash \

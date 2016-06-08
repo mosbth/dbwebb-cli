@@ -153,6 +153,52 @@ fileIsReadable()
 
 
 #
+# Check if dir seems to be a git repo
+#
+isGitRepo()
+{
+    local dirname="$THEDIR/$1"
+
+    #echo "Validate that path is a Git repo."
+    assert 0 "test -r $dirname -a -d $dirname" "Directory $dirname does not seem to be a git repo."
+}
+
+
+
+#
+# Check if the git tag is between argument
+#
+hasGitTagBetween()
+{
+    local where="$1"
+    local low=
+    local high=
+    local semTag=
+
+    low=$( getSemanticVersion "$2" )
+    high=$( getSemanticVersion "$3" )
+
+    #echo "Validate that tag exists >=$2 and <$3 ."
+
+    local success=false
+    if [ -d "$where" ]; then
+        while read -r tag; do
+            semTag=$( getSemanticVersion "$tag" )
+            if [ $semTag -ge $low -a $semTag -lt $high ]; then
+                #echo "$tag"
+                success=
+            fi
+        done < <( cd "$where" && git tag )
+    fi
+
+    if [ "$success" = "false" ]; then
+        assert -1 "test -d $where" "Failed to validate tag exists >=$2 and <$3."
+    fi
+}
+
+
+
+#
 # Test general
 #
 function inspectIntro()
