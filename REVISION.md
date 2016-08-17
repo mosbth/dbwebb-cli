@@ -2,6 +2,12 @@ Revision History
 ============================================================
 
 
+v1.9.52 (2016-08-18)
+-------------------
+
+* Ignore font-awesome.css, lessc.inc.php and \*/css/anax-grid/\* during validation (repo phpmvc).
+
+
 v1.9.51 (2016-08-17)
 -------------------
 
