@@ -5,6 +5,8 @@ Command-line utility `dbwebb` to work with course repositories
 
 Admin utility for course repos.
 
+[Read the manual](https://dbwebb.se/dbwebb-cli) (swedish only).
+
 
 
 ```
