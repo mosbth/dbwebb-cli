@@ -6,6 +6,7 @@ v1.9.54* (2016-08-27)
 -------------------
 
 * Add link to manual.
+* Add lab sql1 to inspect htmlphp.
 
 
 v1.9.53 (2016-08-19)

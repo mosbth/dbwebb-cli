@@ -33,6 +33,23 @@ function htmlphplab()
 
 
 #
+#
+#
+function htmlphpsqllab()
+{
+    local lab="$1"
+    local target="me/$KMOM/$lab"
+    
+    headerForTest "-- Lab" "-- ${DBW_WWW}$DBW_COURSE/$lab" 
+    openFilesInEditor "$target"
+    checkKmomDir "$target"
+    printUrl "" "$target"  
+    inspectCommand "answer.bash" "$EXEC_DIR/$KMOM/$lab" "./answer.bash"
+}
+
+
+
+#
 # Test kmom
 #
 function htmlphpkmom01()
@@ -101,6 +118,7 @@ function htmlphpkmom05()
     viewFileContent "config.php" "$METARGET"
 
     htmlphplab "lab4"
+    htmlphpsqllab "sql1"
 
     inspectExercise "jetty" "uppgift/bygg-en-multisida-for-att-soka-i-en-databas"
 }
