@@ -119,7 +119,7 @@ RSYNC_CHMOD="--chmod=Du+w,Dgo+rx,Fu+rw,Fgo+r"
 # Prefer using file to exclude from
 RSYNC_EXCLUDE="$DBW_COURSE_DIR/.dbwebb.exclude"
 if [ -f "$RSYNC_EXCLUDE" ]; then
-    RSYNC_EXCLUDE="--exclude-from=$RSYNC_EXCLUDE"
+    RSYNC_EXCLUDE="--exclude-from='$RSYNC_EXCLUDE'"
 else
     RSYNC_EXCLUDE="--exclude .git --exclude .gitignore --exclude literature --exclude tutorial --exclude slide --exclude .solution --exclude old --exclude .default --exclude platforms/ --exclude coverage/ --exclude .DS_Store --exclude npm-debug.log"
 fi

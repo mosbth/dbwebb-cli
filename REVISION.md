@@ -2,11 +2,23 @@ Revision History
 ============================================================
 
 
-v1.9.54 (2016-08-27)
+v1.9.57 (2016-08-27)
 -------------------
 
 * Add link to manual.
 * Add lab sql1 to inspect htmlphp.
+
+
+v1.9.56 (2016-09-13)
+-------------------
+
+* Ignore `/slide` in dbwebb-validate.
+
+
+v1.9.55 (2016-08-29)
+-------------------
+
+* Fix upload failed due to space in filenames.
 
 
 v1.9.53 (2016-08-19)

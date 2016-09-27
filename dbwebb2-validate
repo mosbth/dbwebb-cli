@@ -30,7 +30,7 @@
 #
 # Current version
 #
-DBW_VERSION="v1.9.53 (2016-08-19)"
+DBW_VERSION="v1.9.57 (2016-08-27)"
 # --------------- DBWEBB FUNCTIONS PHASE START ---------------
 
 #
@@ -899,7 +899,7 @@ RSYNC_CHMOD="--chmod=Du+w,Dgo+rx,Fu+rw,Fgo+r"
 # Prefer using file to exclude from
 RSYNC_EXCLUDE="$DBW_COURSE_DIR/.dbwebb.exclude"
 if [ -f "$RSYNC_EXCLUDE" ]; then
-    RSYNC_EXCLUDE="--exclude-from=$RSYNC_EXCLUDE"
+    RSYNC_EXCLUDE="--exclude-from='$RSYNC_EXCLUDE'"
 else
     RSYNC_EXCLUDE="--exclude .git --exclude .gitignore --exclude literature --exclude tutorial --exclude slide --exclude .solution --exclude old --exclude .default --exclude platforms/ --exclude coverage/ --exclude .DS_Store --exclude npm-debug.log"
 fi
@@ -1059,7 +1059,7 @@ YAML_OPTIONS=""
 
 # Exclude these paths/filenames from tools processing
 #EXCLUDE_PATHS='\*/webgl/\* \*/libs/\* \*/lib/\* \*/node_modules/\*'
-EXCLUDE_PATHS='\*/example/webgl/\* \*/libs/\* \*/lib/\* \*/node_modules/\* \*/platforms/\* \*/plugins/\* \*/docs/api/\* \*/vendor/\* \*/3pp/\* \*/example/lekplats/\* \*/css/anax-grid/\* \*/me/anax-flat/\* \*/cache/\* \*/build/\* \*/.git/\*'
+EXCLUDE_PATHS='\*/example/webgl/\* \*/libs/\* \*/lib/\* \*/node_modules/\* \*/platforms/\* \*/plugins/\* \*/docs/api/\* \*/vendor/\* \*/3pp/\* \*/example/lekplats/\* \*/css/anax-grid/\* \*/me/anax-flat/\* \*/cache/\* \*/build/\* \*/.git/\* \*/slide/\*'
 EXCLUDE_FILES='phpliteadmin\* \*.min.\* \*.tpl.php font-awesome.css lessc.inc.php'
 
 
