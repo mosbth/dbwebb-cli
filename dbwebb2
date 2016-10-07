@@ -30,7 +30,7 @@
 #
 # Current version
 #
-DBW_VERSION="v1.9.57 (2016-08-27)"
+DBW_VERSION="v1.9.58 (2016-10-07)"
 # --------------- DBWEBB FUNCTIONS PHASE START ---------------
 
 #
@@ -262,10 +262,12 @@ function executeCommand
 
 #
 # Convert version to a compareble string
+# Works for 1.0.0 and v1.0.0
 #
 function getSemanticVersion
 {
-    local version=${1:1}
+    #local version=${1:1}
+    local version=$( echo $1 | sed s/^[vV]// )
     echo "$version" | awk -F. '{ printf("%03d%03d%03d\n", $1,$2,$3); }'
 }
 
@@ -921,7 +923,7 @@ RSYNC_DOWNLOAD_CMD="rsync -avuc $RSYNC_CHMOD -e \"ssh $DBW_SSH_KEY_OPTION\""
 DBW_REMOTE_DESTINATION="${DBW_USER}@${DBW_HOST}:$DBW_REMOTE_BASEDIR/$DBW_COURSE"
 DBW_REMOTE_WWW_DESTINATION="${DBW_USER}@${DBW_HOST}:$DBW_REMOTE_WWWDIR/$DBW_COURSE"
 
-DBW_WWW="http://dbwebb.se/"
+DBW_WWW="https://dbwebb.se/"
 DBW_VALIDATE_CONFIGFILE="/home/saxon/students/dbwebb/dbwebb-general-config"
 #DBW_INSPECT_CONFIGFILE="/home/saxon/students/dbwebb/dbwebb-general-config"
 DBW_ARCHIVE="/home/saxon/students/dbwebb/archive/"

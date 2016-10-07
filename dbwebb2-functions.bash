@@ -229,10 +229,12 @@ function executeCommand
 
 #
 # Convert version to a compareble string
+# Works for 1.0.0 and v1.0.0
 #
 function getSemanticVersion
 {
-    local version=${1:1}
+    #local version=${1:1}
+    local version=$( echo $1 | sed s/^[vV]// )
     echo "$version" | awk -F. '{ printf("%03d%03d%03d\n", $1,$2,$3); }'
 }
 
