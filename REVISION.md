@@ -8,7 +8,7 @@ v1.9.58 (2016-10-07)
 * Inspect version number of git repo supporting 1.0.0 and v1.0.0.
 
 
-v1.9.57 (2016-08-27)
+v1.9.57 (2016-09-27)
 -------------------
 
 * Add link to manual.
