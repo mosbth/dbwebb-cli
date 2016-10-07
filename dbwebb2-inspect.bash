@@ -177,17 +177,15 @@ hasGitTagBetween()
 
     low=$( getSemanticVersion "$2" )
     high=$( getSemanticVersion "$3" )
-echo "$2 = $low"
-echo "$3 = $high"
     #echo "Validate that tag exists >=$2 and <$3 ."
 
     local success=false
     if [ -d "$where" ]; then
         while read -r tag; do
             semTag=$( getSemanticVersion "$tag" )
-            echo "trying tag $tag = $semTag"
+            #echo "trying tag $tag = $semTag"
             if [ $semTag -ge $low -a $semTag -lt $high ]; then
-                echo "success with $tag"
+                #echo "success with $tag"
                 success=
             fi
         done < <( cd "$where" && git tag )
