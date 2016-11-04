@@ -202,7 +202,7 @@ hasGitTagBetween()
         assert -1 "test -d $where" "Failed to validate tag exists >=$2 and <$3."
     fi
 
-    echo $tag
+    echo $highestTag
 }
 
 
