@@ -1584,7 +1584,7 @@ function designRepo()
     fi
 
     #assert 0 "make test" "Make test did not pass."
-    inspectCommand "make test" "$where" "make test" ""
+    inspectCommand "Makefile" "$where" "make test" ""
 
     #inspectCommand "" "$EXEC_DIR/$repo" "git tag"
     #cd "$EXEC_DIR/$repo" && git status
