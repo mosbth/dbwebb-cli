@@ -1576,14 +1576,14 @@ function designRepo()
     headerForTest "-- Repo $repo" "-- ${DBW_WWW}$DBW_COURSE/$target" 
     openFilesInEditor "$target"
     printUrl "" "$target"  
+
     isGitRepo "$target"
-    hasGitTagBetween "$EXEC_DIR/$repo" "$2" "$3"
+    tag=$( hasGitTagBetween "$EXEC_DIR/$repo" "$2" "$3" )
     if [ ! -z "$4" ]; then
-        hasGitTagBetween "$EXEC_DIR/$repo" "$4" "$5"
+        hasGitTagBetween "$EXEC_DIR/$repo" "$4" "$5" > /dev/null
     fi
 
-    checkoutLatestGitTagBetween "$EXEC_DIR/$repo" "$2" "$3"
-
+    inspectCommand "" "$EXEC_DIR/$repo" "git checkout -b inspect $tag" ""
     inspectCommand "" "$EXEC_DIR/$repo" "git tag" ""
     inspectCommand "" "$EXEC_DIR/$repo" "git status" ""
     inspectCommand "" "$EXEC_DIR/$repo" "git log -n 20 --pretty=format:\"%h_%ad_:_%s%d_[%an]\" --graph --date=short" ""
