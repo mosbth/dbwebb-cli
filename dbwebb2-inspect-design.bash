@@ -70,7 +70,8 @@ function designkmom01()
 #
 function designkmom02()
 {
-    echo "TBD"
+    designRepo "anax-flat" "2.0.0" "3.0.0"
+    designRepo "anax-flat/theme" "2.0.0" "3.0.0"
 }
 
 
@@ -80,7 +81,7 @@ function designkmom02()
 #
 function designkmom03()
 {
-    designRepo "anax-flat" "4.0.0" "5.0.0"
+    designRepo "anax-flat" "3.0.0" "4.0.0"
     designRepo "anax-flat/theme" "3.0.0" "4.0.0"
 }
 

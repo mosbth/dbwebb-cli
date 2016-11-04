@@ -1610,7 +1610,8 @@ function designkmom01()
 #
 function designkmom02()
 {
-    echo "TBD"
+    designRepo "anax-flat" "2.0.0" "3.0.0"
+    designRepo "anax-flat/theme" "2.0.0" "3.0.0"
 }
 
 
@@ -1620,7 +1621,7 @@ function designkmom02()
 #
 function designkmom03()
 {
-    designRepo "anax-flat" "4.0.0" "5.0.0"
+    designRepo "anax-flat" "3.0.0" "4.0.0"
     designRepo "anax-flat/theme" "3.0.0" "4.0.0"
 }
 
@@ -2497,6 +2498,7 @@ hasGitTagBetween()
         while read -r tag; do
             semTag=$( getSemanticVersion "$tag" )
             #echo "trying tag $tag = $semTag"
+            echo "$semTag"
             if [ $semTag -ge $low -a $semTag -lt $high ]; then
                 #echo "success with $tag"
                 success=

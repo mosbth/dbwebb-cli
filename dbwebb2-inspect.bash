@@ -184,6 +184,7 @@ hasGitTagBetween()
         while read -r tag; do
             semTag=$( getSemanticVersion "$tag" )
             #echo "trying tag $tag = $semTag"
+            echo "$semTag"
             if [ $semTag -ge $low -a $semTag -lt $high ]; then
                 #echo "success with $tag"
                 success=
