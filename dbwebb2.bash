@@ -517,8 +517,6 @@ function dbwebb-inspect()
         if [ "$who" != "$DBW_USER" -a -z "$OPTION_NOARCHIVE" ]; then
             archive="--archive $DBW_ARCHIVE"
         fi
-        echo " ARCHIVE $archive"
-        
     elif [[ $2 ]]; then
         course="$1"
         forCourse=" in course '$course'"

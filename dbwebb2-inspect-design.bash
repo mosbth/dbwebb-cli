@@ -32,7 +32,6 @@ function designRepo()
 {
     local repo="$1"
     local target="me/$repo"
-    local where="$EXEC_DIR/$repo"
     
     headerForTest "-- Repo $repo" "-- ${DBW_WWW}$DBW_COURSE/$target" 
     openFilesInEditor "$target"
@@ -43,9 +42,11 @@ function designRepo()
         hasGitTagBetween "$EXEC_DIR/$repo" "$4" "$5"
     fi
 
-    #assert 0 "make test" "Make test did not pass."
-    inspectCommand "Makefile" "$where" "make test" ""
+    # All repos does not include make test
+    # Make test need test environment
+    #inspectCommand "Makefile" "$EXEC_DIR/$repo" "make test" ""
 
+    # ? below
     #inspectCommand "" "$EXEC_DIR/$repo" "git tag"
     #cd "$EXEC_DIR/$repo" && git status
     #validateKmom "$repo"
@@ -79,7 +80,7 @@ function designkmom02()
 #
 function designkmom03()
 {
-    designRepo "anax-flat" "3.0.0" "4.0.0"
+    designRepo "anax-flat" "4.0.0" "5.0.0"
     designRepo "anax-flat/theme" "3.0.0" "4.0.0"
 }
 
