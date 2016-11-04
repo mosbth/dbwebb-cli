@@ -13,7 +13,7 @@ function design()
     checkKmomDir "me/anax-flat"
     #publishKmom
     #viewFileTree "$target"
-    validateKmom ""
+    validateKmom "me"
 
 
     
