@@ -45,7 +45,7 @@ function designRepo()
     pushd "$EXEC_DIR/$repo" && git tag && popd
     
     inspectCommand "" "$EXEC_DIR/$repo" "git tag" ""
-    inspectCommand "" "$EXEC_DIR/$repo" "git log \"--pretty=format:\"%h %ad | %s%d [%an]\"\" --graph --date=short | head -10" ""
+    inspectCommand "" "$EXEC_DIR/$repo" "git log --pretty=format:\\\"%h %ad | %s%d [%an]\\\" --graph --date=short | head -10" ""
 
     # All repos does not include make test
     # Make test need test environment
