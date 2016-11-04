@@ -93,7 +93,8 @@ function designkmom03()
 #
 function designkmom04()
 {
-    echo "TBD"
+    designRepo "anax-flat" "4.0.0" "5.0.0"
+    designRepo "anax-flat/theme" "4.0.0" "5.0.0"
 }
 
 
@@ -103,7 +104,8 @@ function designkmom04()
 #
 function designkmom05()
 {
-    echo "TBD"
+    designRepo "anax-flat" "5.0.0" "6.0.0"
+    designRepo "anax-flat/theme" "5.0.0" "6.0.0"
 }
 
 
@@ -113,7 +115,8 @@ function designkmom05()
 #
 function designkmom06()
 {
-    echo "TBD"
+    designRepo "anax-flat" "6.0.0" "7.0.0"
+    designRepo "anax-flat/theme" "6.0.0" "7.0.0"
 }
 
 
@@ -123,7 +126,8 @@ function designkmom06()
 #
 function designkmom10()
 {
-    echo "TBD"
+    designRepo "anax-flat" "10.0.0" "11.0.0"
+    designRepo "anax-flat/theme" "10.0.0" "11.0.0"
 }
 
 
