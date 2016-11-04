@@ -1627,10 +1627,11 @@ function dbwebb-inspect()
         kmom="$2"
         who="$3"
         forWho=" for user '$who'"
-        if [ "$who" != "$DBW_USER" -o -z "$OPTION_NOARCHIVE" ]; then
+        if [ "$who" != "$DBW_USER" -a -z "$OPTION_NOARCHIVE" ]; then
             archive="--archive $DBW_ARCHIVE"
         fi
         echo " ARCHIVE $archive"
+        
     elif [[ $2 ]]; then
         course="$1"
         forCourse=" in course '$course'"
