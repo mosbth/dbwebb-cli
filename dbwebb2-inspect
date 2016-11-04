@@ -1578,9 +1578,15 @@ function designRepo()
     printUrl "" "$target"  
 
     isGitRepo "$target"
-    tag=$( hasGitTagBetween "$EXEC_DIR/$repo" "$2" "$3" )
+    hasGitTagBetween "$EXEC_DIR/$repo" "$2" "$3" > /dev/null
     if [ ! -z "$4" ]; then
         hasGitTagBetween "$EXEC_DIR/$repo" "$4" "$5" > /dev/null
+    fi
+
+    if [ ! -z "$4" ]; then
+        tag=$( hasGitTagBetween "$EXEC_DIR/$repo" "$2" "$5" )
+    else
+        tag=$( hasGitTagBetween "$EXEC_DIR/$repo" "$2" "$3" )
     fi
 
     inspectCommand "" "$EXEC_DIR/$repo" "git tag" ""
