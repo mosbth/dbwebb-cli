@@ -67,7 +67,6 @@ function designRepo()
 function designkmom01()
 {
     designRepo "anax-flat" "1.0.0" "1.1.0" "1.1.0" "1.2.0"
-    designRepo "anax-flat/theme" "1.0.0" "1.1.0" "1.1.0" "1.2.0"
 }
 
 
