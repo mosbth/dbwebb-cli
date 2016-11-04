@@ -1582,6 +1582,8 @@ function designRepo()
         hasGitTagBetween "$EXEC_DIR/$repo" "$4" "$5"
     fi
 
+    pushd "$EXEC_DIR/$repo" && git tag && popd
+    
     # All repos does not include make test
     # Make test need test environment
     #inspectCommand "Makefile" "$EXEC_DIR/$repo" "make test" ""
@@ -2498,7 +2500,6 @@ hasGitTagBetween()
         while read -r tag; do
             semTag=$( getSemanticVersion "$tag" )
             #echo "trying tag $tag = $semTag"
-            echo "$semTag"
             if [ $semTag -ge $low -a $semTag -lt $high ]; then
                 #echo "success with $tag"
                 success=

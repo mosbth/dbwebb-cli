@@ -42,6 +42,8 @@ function designRepo()
         hasGitTagBetween "$EXEC_DIR/$repo" "$4" "$5"
     fi
 
+    pushd "$EXEC_DIR/$repo" && git tag && popd
+    
     # All repos does not include make test
     # Make test need test environment
     #inspectCommand "Makefile" "$EXEC_DIR/$repo" "make test" ""
