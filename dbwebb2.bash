@@ -819,6 +819,7 @@ do
         ;;
 
         --no-archive)
+        echo "NO ARCHIVE"
             OPTION_NOARCHIVE="yes"
             shift
         ;;
