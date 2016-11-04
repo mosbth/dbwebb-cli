@@ -5,7 +5,17 @@
 function design()
 {
     TREE_OPTIONS="-d"
-    inspectIntro
+    #inspectIntro
+
+    #local target="me/$KMOM"
+
+    headerForTest "-- $DBW_COURSE $KMOM" "-- ${DBW_WWW}$DBW_COURSE/$KMOM"
+    checkKmomDir "me/anax-flat"
+    #publishKmom
+    #viewFileTree "$target"
+    validateKmom "anax-flat"
+
+
     
     local meDir=
     
