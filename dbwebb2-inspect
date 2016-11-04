@@ -1572,6 +1572,7 @@ function designRepo()
 {
     local repo="$1"
     local target="me/$repo"
+    local where="$EXEC_DIR/$repo"
     
     headerForTest "-- Repo $repo" "-- ${DBW_WWW}$DBW_COURSE/$target" 
     openFilesInEditor "$target"
@@ -1581,7 +1582,10 @@ function designRepo()
     if [ ! -z "$4" ]; then
         hasGitTagBetween "$EXEC_DIR/$repo" "$4" "$5"
     fi
-    
+
+    #assert 0 "make test" "Make test did not pass."
+    inspectCommand "make test" "$where" "make test" ""
+
     #inspectCommand "" "$EXEC_DIR/$repo" "git tag"
     #cd "$EXEC_DIR/$repo" && git status
     #validateKmom "$repo"
