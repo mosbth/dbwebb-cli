@@ -44,6 +44,8 @@ function designRepo()
 
     pushd "$EXEC_DIR/$repo" && git tag && popd
     
+    inspectCommand "" "$EXEC_DIR/$repo" "git tag" ""
+
     # All repos does not include make test
     # Make test need test environment
     #inspectCommand "Makefile" "$EXEC_DIR/$repo" "make test" ""
