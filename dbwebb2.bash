@@ -514,7 +514,7 @@ function dbwebb-inspect()
         kmom="$2"
         who="$3"
         forWho=" for user '$who'"
-        if [ "$who" != "$DBW_USER" ]; then
+        if [ "$who" != "$DBW_USER" -o -z "$OPTION_NOARCHIVE" ]; then
             archive="--archive $DBW_ARCHIVE"
         fi
     elif [[ $2 ]]; then
@@ -815,6 +815,11 @@ do
 
         --silent | -s)
             SILENT="yes"
+            shift
+        ;;
+
+        --no-archive)
+            OPTION_NOARCHIVE="yes"
             shift
         ;;
 
