@@ -395,7 +395,7 @@ inspectCommand()
 
             pushd "$move" > /dev/null
             echo ">>>"
-            $cmd
+            eval $cmd
             status=$?
             echo "<<<"
             popd > /dev/null
