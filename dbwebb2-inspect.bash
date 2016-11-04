@@ -577,7 +577,7 @@ elif [ -z "$KMOM" ]; then
 fi
 
 THEDIR=$( readlink -f "$REPO" )
-if [ ! -d "$THEDIR/.." ]; then
+if [ ! -d "$THEDIR" ]; then
     dbwebbInspectTargetNotReadable
     #badUsage "The path '$REPO' is not a valid directory."
     exit 2
