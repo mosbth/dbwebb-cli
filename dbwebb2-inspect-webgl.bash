@@ -8,8 +8,7 @@ function webglme()
     openFilesInEditor "me/redovisa/"
     checkKmomDir "me/redovisa"
 
-    printUrl "me.html" "me/redovisa"  
-    printUrl "report.html" "me/redovisa"  
+    printUrl "" "me/redovisa"  
 
     pressEnterToContinue
 }
