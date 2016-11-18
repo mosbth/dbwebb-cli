@@ -53,6 +53,7 @@ function designRepo()
     inspectCommand "" "$EXEC_DIR/$repo" "git tag" ""
     inspectCommand "" "$EXEC_DIR/$repo" "git status" ""
     inspectCommand "" "$EXEC_DIR/$repo" "git log -n 20 --pretty=format:\"%h_%ad_:_%s%d_[%an]\" --graph --date=short" ""
+    inspectCommand "" "$EXEC_DIR/$repo" "git stash" ""
     inspectCommand "" "$EXEC_DIR/$repo" "git checkout -b inspect $tag" ""
 
     # All repos does not include make test
