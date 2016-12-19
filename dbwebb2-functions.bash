@@ -82,7 +82,7 @@ function join()
 # Get the url to GitHub for a repo
 #
 function createGithubUrl(){
-    echo "https://github.com/mosbth/$1$2"
+    echo "https://github.com/dbwebb-se/$1$2"
 }
 
 

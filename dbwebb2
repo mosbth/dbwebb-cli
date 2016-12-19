@@ -30,7 +30,7 @@
 #
 # Current version
 #
-DBW_VERSION="v1.9.61 (2016-12-19)"
+DBW_VERSION="v1.9.62 (2016-12-19)"
 # --------------- DBWEBB FUNCTIONS PHASE START ---------------
 
 #
@@ -115,7 +115,7 @@ function join()
 # Get the url to GitHub for a repo
 #
 function createGithubUrl(){
-    echo "https://github.com/mosbth/$1$2"
+    echo "https://github.com/dbwebb-se/$1$2"
 }
 
 
