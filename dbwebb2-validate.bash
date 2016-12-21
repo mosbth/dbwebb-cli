@@ -127,6 +127,8 @@ function checkInstalledValidateTools
     printf "Check for other tools.\n"
     printf " node:          %s\n" "$( checkCommandWithVersion "node" "--version" )"
     printf " npm:           %s\n" "$( checkCommandWithVersion "npm" "--version" )"
+    printf " babel:         %s\n" "$( checkCommandWithVersion "babel" "--version" )"
+    printf " babel-node:    %s\n" "$( checkCommandWithVersion "babel-node" "--version" )"
     printf " python3:       %s\n" "$( checkCommandWithVersion "python3" "--version" " | cut -d ' ' -f 2" )"
     printf " pip3:          %s\n" "$( checkCommandWithVersion "pip3" "--version" " | cut -d ' ' -f 2" )"
 }
