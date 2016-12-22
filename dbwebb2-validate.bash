@@ -50,10 +50,10 @@ PHPMINIFY="php"
 PHPMINIFY_OPTIONS="--strip"
 
 CHECKBASH="shellcheck"
-CHECKBASH_OPTIONS="--shell=bash --exclude=SC2002"
+CHECKBASH_OPTIONS="--shell=bash --exclude=SC2002,SC1091"
 
 CHECKSH="shellcheck"
-CHECKSH_OPTIONS="--shell=sh --exclude=SC2002"
+CHECKSH_OPTIONS="--shell=sh --exclude=SC2002,SC1091"
 
 #YAML="dbwebb-js-yaml"
 #YAML_OPTIONS="--silent"
