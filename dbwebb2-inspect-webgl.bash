@@ -1,6 +1,6 @@
 #---------------------------- INSPECT webgl START --------------------------
 #
-#
+# REPLACE with inspectMe
 #
 function webglme()
 {
@@ -16,7 +16,32 @@ function webglme()
 
 
 #
+# Test general
+# USE inspectIntro
 #
+function webgl()
+{
+    headerForTest "-- $DBW_COURSE $KMOM" "-- ${DBW_WWW}$DBW_COURSE/$KMOM"
+    checkKmomDir
+    publishKmom
+    validateKmom "$KMOM"
+    webglme
+}
+
+
+
+#
+# Test general, last in sequence
+#
+function webgllast()
+{
+    :
+}
+
+
+
+#
+# REPLACE with inspectLab
 #
 function webgllab()
 {
@@ -31,20 +56,6 @@ function webgllab()
     # Need support for lab to execute in nodejs environment
     #inspectCommand "answer.js" "$EXEC_DIR/$KMOM/$lab" "php answer.php"
     pressEnterToContinue
-}
-
-
-
-#
-# Test general
-#
-function webgl()
-{
-    headerForTest "-- $DBW_COURSE $KMOM" "-- ${DBW_WWW}$DBW_COURSE/$KMOM"
-    checkKmomDir
-    publishKmom
-    validateKmom "$KMOM"
-    webglme
 }
 
 

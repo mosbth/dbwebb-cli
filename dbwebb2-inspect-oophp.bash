@@ -12,6 +12,16 @@ function oophp()
 
 
 #
+# Test general, last in sequence
+#
+function oophplast()
+{
+    :
+}
+
+
+
+#
 # Test kmom
 #
 function oophpkmom01()

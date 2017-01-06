@@ -16,7 +16,17 @@ function htmlphp()
 
 
 #
+# Test general, last in sequence
 #
+function htmlphplast()
+{
+    :
+}
+
+
+
+#
+# REPLACE with inspectLab
 #
 function htmlphplab()
 {
@@ -33,7 +43,7 @@ function htmlphplab()
 
 
 #
-#
+# REPLACE with inspectLab
 #
 function htmlphpsqllab()
 {

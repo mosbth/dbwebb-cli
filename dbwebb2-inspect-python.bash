@@ -21,6 +21,15 @@ pythonme()
 python()
 {
     inspectIntro
+}
+
+
+
+#
+# Test general, last in sequence
+#
+function pythonlast()
+{
     pythonme
     #inspectMe "me" "me.cgi" "redovisning.cgi"
 }

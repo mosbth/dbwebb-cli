@@ -12,6 +12,16 @@ function phpmvc()
 
 
 #
+# Test general, last in sequence
+#
+function phpmvclast()
+{
+    :
+}
+
+
+
+#
 # Test kmom
 #
 function phpmvckmom01()

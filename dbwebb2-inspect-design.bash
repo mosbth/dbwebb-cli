@@ -26,6 +26,16 @@ function design()
 
 
 #
+# Test general, last in sequence
+#
+function designlast()
+{
+    :
+}
+
+
+
+#
 #
 #
 function designRepo()

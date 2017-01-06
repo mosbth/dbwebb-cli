@@ -5,7 +5,16 @@
 function linux()
 {
     inspectIntro
-    inspectMe "me/redovisa" "me.html" "report.html"
+}
+
+
+
+#
+# Test general, last in sequence
+#
+function linuxlast()
+{
+    inspectMe "me/redovisa" "me.html" "report.html" "" "redovisa"
 }
 
 
@@ -49,7 +58,7 @@ linuxExerciseScript()
 
 #
 # View files in irc exercise
-#
+# OBSOLETE v1
 linuxExerciseIrc()
 {
     local target="me/$KMOM/$1"

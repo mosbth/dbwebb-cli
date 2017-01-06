@@ -20,6 +20,15 @@ javascript1me()
 javascript1()
 {
     inspectIntro
+}
+
+
+
+#
+# Test general, last in sequence
+#
+function javascript1last()
+{
     javascript1me
     #inspectMe "me" "me.html" "redovisning.html"
 }
@@ -28,6 +37,7 @@ javascript1()
 
 #
 # Test javascript1 sandbox
+# REPLACE with inspectLab
 #
 javascript1exercise()
 {

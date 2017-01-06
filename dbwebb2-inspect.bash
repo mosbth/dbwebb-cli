@@ -232,7 +232,9 @@ function inspectMe()
     local mepage="$2"
     local reportpage="$3"
     local assignment="$4"
+    local validate="$5"
 
+    # Anybody using this argument?
     if [ ! -z "$assignment" ]; then
         assignment="\n-- ${DBW_WWW}$assignment"
     fi
@@ -243,7 +245,32 @@ function inspectMe()
     openFilesInEditor "$target"
 
     printUrl "$mepage" "$target"  
-    [[ $reportpage ]] && printUrl "$reportpage" "$target"  
+    [[ $reportpage ]] && printUrl "$reportpage" "$target"
+    [[ $validate ]] && validateKmom "$validate"
+}
+
+
+
+#
+# Test a lab, or general assignment
+# answer.php  - php answer.php
+# answer.bash - ./answer.bash
+#
+function inspectLab()
+{
+    local url="$1"
+    local lab="$2"
+    local main="$3"
+    local execute="$4"
+    local target="me/$KMOM/$lab"
+
+    headerForTest "-- $lab" "-- ${DBW_WWW}$url"
+    viewFileTree "$target"
+    openFilesInEditor "$target"
+    printUrl "" "$target"  
+    checkKmomDir "$target"
+    fileIsReadable "$target/$main"
+    [[ $execute ]] && inspectCommand "$main" "$EXEC_DIR/$KMOM/$lab" "$execute"
 }
 
 
@@ -673,13 +700,13 @@ dbwebbInspectCheckEnvironment
 # Execute command
 #
 case "$KMOM" in
-    kmom01)     ${DBW_COURSE}; "${DBW_COURSE}${KMOM}" ;;
-    kmom02)     ${DBW_COURSE}; "${DBW_COURSE}${KMOM}" ;;
-    kmom03)     ${DBW_COURSE}; "${DBW_COURSE}${KMOM}" ;;
-    kmom04)     ${DBW_COURSE}; "${DBW_COURSE}${KMOM}" ;;
-    kmom05)     ${DBW_COURSE}; "${DBW_COURSE}${KMOM}" ;;
-    kmom06)     ${DBW_COURSE}; "${DBW_COURSE}${KMOM}" ;;
-    kmom10)     ${DBW_COURSE}; "${DBW_COURSE}${KMOM}" ;;
+    kmom01)     ${DBW_COURSE}; "${DBW_COURSE}${KMOM}"; "${DBW_COURSE}last";;
+    kmom02)     ${DBW_COURSE}; "${DBW_COURSE}${KMOM}"; "${DBW_COURSE}last";;
+    kmom03)     ${DBW_COURSE}; "${DBW_COURSE}${KMOM}"; "${DBW_COURSE}last";;
+    kmom04)     ${DBW_COURSE}; "${DBW_COURSE}${KMOM}"; "${DBW_COURSE}last";;
+    kmom05)     ${DBW_COURSE}; "${DBW_COURSE}${KMOM}"; "${DBW_COURSE}last";;
+    kmom06)     ${DBW_COURSE}; "${DBW_COURSE}${KMOM}"; "${DBW_COURSE}last";;
+    kmom10)     ${DBW_COURSE}; "${DBW_COURSE}${KMOM}"; "${DBW_COURSE}last";;
     *)          
         badUsage "\n$MSG_FAILED Invalid combination of course '$DBW_COURSE' and kmom: '$KMOM'"
         exit 1 

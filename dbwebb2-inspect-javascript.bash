@@ -12,6 +12,16 @@ function javascript()
 
 
 #
+# Test general, last in sequence
+#
+function javascriptlast()
+{
+    :
+}
+
+
+
+#
 # Test kmom
 #
 function javascriptkmom01()

@@ -30,7 +30,7 @@
 #
 # Current version
 #
-DBW_VERSION="v1.9.64 (2016-12-22)"
+DBW_VERSION="v1.9.65 (2017-01-06)"
 # --------------- DBWEBB FUNCTIONS PHASE START ---------------
 
 #
@@ -1014,6 +1014,15 @@ pythonme()
 python()
 {
     inspectIntro
+}
+
+
+
+#
+# Test general, last in sequence
+#
+function pythonlast()
+{
     pythonme
     #inspectMe "me" "me.cgi" "redovisning.cgi"
 }
@@ -1277,6 +1286,15 @@ javascript1me()
 javascript1()
 {
     inspectIntro
+}
+
+
+
+#
+# Test general, last in sequence
+#
+function javascript1last()
+{
     javascript1me
     #inspectMe "me" "me.html" "redovisning.html"
 }
@@ -1285,6 +1303,7 @@ javascript1()
 
 #
 # Test javascript1 sandbox
+# REPLACE with inspectLab
 #
 javascript1exercise()
 {
@@ -1399,7 +1418,17 @@ function htmlphp()
 
 
 #
+# Test general, last in sequence
 #
+function htmlphplast()
+{
+    :
+}
+
+
+
+#
+# REPLACE with inspectLab
 #
 function htmlphplab()
 {
@@ -1416,7 +1445,7 @@ function htmlphplab()
 
 
 #
-#
+# REPLACE with inspectLab
 #
 function htmlphpsqllab()
 {
@@ -1566,6 +1595,16 @@ function design()
 
 
 #
+# Test general, last in sequence
+#
+function designlast()
+{
+    :
+}
+
+
+
+#
 #
 #
 function designRepo()
@@ -1680,6 +1719,194 @@ function designkmom10()
 
 
 #---------------------------- INSPECT DESIGN END ----------------------------
+#---------------------------- INSPECT dbjs START --------------------------
+#
+# Test general
+#
+function dbjs()
+{
+    inspectIntro
+}
+
+
+
+#
+# Test general, last in sequence
+#
+function dbjslast()
+{
+    inspectMe "me/redovisa" "me.html" "redovisning.html" "" "redovisa"
+}
+
+
+
+#
+# Test kmom
+#
+function dbjskmom01()
+{
+    inspectLab "uppgift/skapa-din-egen-sandbox-for-javascript-testprogram" "sandbox" "index.html" ""
+
+    inspectLab "uppgift/gor-svenska-flaggan-i-html-och-css-dbjs" "flag1" "index.html" ""
+
+    inspectLab "uppgift/javascript-med-variabler-loopar-och-inbyggda-funktioner-1" "javascript1" "answer.js" ""
+}
+
+
+
+#
+# Test kmom
+#
+function dbjskmom02()
+{
+    :
+}
+
+
+
+#
+# Test kmom
+#
+function dbjskmom03()
+{
+    :
+}
+
+
+
+#
+# Test kmom
+#
+function dbjskmom04()
+{
+    :
+}
+
+
+
+#
+# Test kmom
+#
+function dbjskmom05()
+{
+    :
+}
+
+
+
+#
+# Test kmom
+#
+function dbjskmom06()
+{
+    :
+}
+
+
+
+#
+# Test kmom
+#
+function dbjskmom10()
+{
+    :
+}
+
+
+
+#---------------------------- INSPECT DESIGN END ----------------------------
+#---------------------------- INSPECT DBJS START --------------------------
+#
+# Test general
+#
+function oopython()
+{
+    inspectIntro
+}
+
+
+
+#
+# Test general, last in sequence
+#
+function oopythonlast()
+{
+    inspectMe "me/flask" "app.cgi" "" "" "flask"
+}
+
+
+
+#
+# Test kmom
+#
+function oopythonkmom01()
+{
+    inspectLab "uppgift/python-med-objekt-och-klasser" "lab1" "answer.py" "python3 answer.py"
+}
+
+
+
+#
+# Test kmom
+#
+function oopythonkmom02()
+{
+    :
+}
+
+
+
+#
+# Test kmom
+#
+function oopythonkmom03()
+{
+    :
+}
+
+
+
+#
+# Test kmom
+#
+function oopythonkmom04()
+{
+    :
+}
+
+
+
+#
+# Test kmom
+#
+function oopythonkmom05()
+{
+    :
+}
+
+
+
+#
+# Test kmom
+#
+function oopythonkmom06()
+{
+    :
+}
+
+
+
+#
+# Test kmom
+#
+function oopythonkmom10()
+{
+    :
+}
+
+
+
+#---------------------------- INSPECT DESIGN END ----------------------------
 #---------------------------- INSPECT oophp START --------------------------
 #
 # Test general
@@ -1689,6 +1916,16 @@ function oophp()
     inspectIntro
     
     METARGET="me/$KMOM"
+}
+
+
+
+#
+# Test general, last in sequence
+#
+function oophplast()
+{
+    :
 }
 
 
@@ -1778,6 +2015,16 @@ function phpmvc()
 
 
 #
+# Test general, last in sequence
+#
+function phpmvclast()
+{
+    :
+}
+
+
+
+#
 # Test kmom
 #
 function phpmvckmom01()
@@ -1862,6 +2109,16 @@ function javascript()
 
 
 #
+# Test general, last in sequence
+#
+function javascriptlast()
+{
+    :
+}
+
+
+
+#
 # Test kmom
 #
 function javascriptkmom01()
@@ -1939,7 +2196,16 @@ function javascriptkmom10()
 function linux()
 {
     inspectIntro
-    inspectMe "me/redovisa" "me.html" "report.html"
+}
+
+
+
+#
+# Test general, last in sequence
+#
+function linuxlast()
+{
+    inspectMe "me/redovisa" "me.html" "report.html" "" "redovisa"
 }
 
 
@@ -1983,7 +2249,7 @@ linuxExerciseScript()
 
 #
 # View files in irc exercise
-#
+# OBSOLETE v1
 linuxExerciseIrc()
 {
     local target="me/$KMOM/$1"
@@ -2112,6 +2378,18 @@ function webapp()
     METARGET="me/$KMOM/$meDir"
 }
 
+
+
+#
+# Test general, last in sequence
+#
+function webapplast()
+{
+    :
+}
+
+
+
 #
 #
 #
@@ -2203,7 +2481,7 @@ function webappkmom10()
 #---------------------------- INSPECT webapp END ----------------------------
 #---------------------------- INSPECT webgl START --------------------------
 #
-#
+# REPLACE with inspectMe
 #
 function webglme()
 {
@@ -2219,7 +2497,32 @@ function webglme()
 
 
 #
+# Test general
+# USE inspectIntro
 #
+function webgl()
+{
+    headerForTest "-- $DBW_COURSE $KMOM" "-- ${DBW_WWW}$DBW_COURSE/$KMOM"
+    checkKmomDir
+    publishKmom
+    validateKmom "$KMOM"
+    webglme
+}
+
+
+
+#
+# Test general, last in sequence
+#
+function webgllast()
+{
+    :
+}
+
+
+
+#
+# REPLACE with inspectLab
 #
 function webgllab()
 {
@@ -2234,20 +2537,6 @@ function webgllab()
     # Need support for lab to execute in nodejs environment
     #inspectCommand "answer.js" "$EXEC_DIR/$KMOM/$lab" "php answer.php"
     pressEnterToContinue
-}
-
-
-
-#
-# Test general
-#
-function webgl()
-{
-    headerForTest "-- $DBW_COURSE $KMOM" "-- ${DBW_WWW}$DBW_COURSE/$KMOM"
-    checkKmomDir
-    publishKmom
-    validateKmom "$KMOM"
-    webglme
 }
 
 
@@ -2557,7 +2846,9 @@ function inspectMe()
     local mepage="$2"
     local reportpage="$3"
     local assignment="$4"
+    local validate="$5"
 
+    # Anybody using this argument?
     if [ ! -z "$assignment" ]; then
         assignment="\n-- ${DBW_WWW}$assignment"
     fi
@@ -2568,7 +2859,32 @@ function inspectMe()
     openFilesInEditor "$target"
 
     printUrl "$mepage" "$target"  
-    [[ $reportpage ]] && printUrl "$reportpage" "$target"  
+    [[ $reportpage ]] && printUrl "$reportpage" "$target"
+    [[ $validate ]] && validateKmom "$validate"
+}
+
+
+
+#
+# Test a lab, or general assignment
+# answer.php  - php answer.php
+# answer.bash - ./answer.bash
+#
+function inspectLab()
+{
+    local url="$1"
+    local lab="$2"
+    local main="$3"
+    local execute="$4"
+    local target="me/$KMOM/$lab"
+
+    headerForTest "-- $lab" "-- ${DBW_WWW}$url"
+    viewFileTree "$target"
+    openFilesInEditor "$target"
+    printUrl "" "$target"  
+    checkKmomDir "$target"
+    fileIsReadable "$target/$main"
+    [[ $execute ]] && inspectCommand "$main" "$EXEC_DIR/$KMOM/$lab" "$execute"
 }
 
 
@@ -2998,13 +3314,13 @@ dbwebbInspectCheckEnvironment
 # Execute command
 #
 case "$KMOM" in
-    kmom01)     ${DBW_COURSE}; "${DBW_COURSE}${KMOM}" ;;
-    kmom02)     ${DBW_COURSE}; "${DBW_COURSE}${KMOM}" ;;
-    kmom03)     ${DBW_COURSE}; "${DBW_COURSE}${KMOM}" ;;
-    kmom04)     ${DBW_COURSE}; "${DBW_COURSE}${KMOM}" ;;
-    kmom05)     ${DBW_COURSE}; "${DBW_COURSE}${KMOM}" ;;
-    kmom06)     ${DBW_COURSE}; "${DBW_COURSE}${KMOM}" ;;
-    kmom10)     ${DBW_COURSE}; "${DBW_COURSE}${KMOM}" ;;
+    kmom01)     ${DBW_COURSE}; "${DBW_COURSE}${KMOM}"; "${DBW_COURSE}last";;
+    kmom02)     ${DBW_COURSE}; "${DBW_COURSE}${KMOM}"; "${DBW_COURSE}last";;
+    kmom03)     ${DBW_COURSE}; "${DBW_COURSE}${KMOM}"; "${DBW_COURSE}last";;
+    kmom04)     ${DBW_COURSE}; "${DBW_COURSE}${KMOM}"; "${DBW_COURSE}last";;
+    kmom05)     ${DBW_COURSE}; "${DBW_COURSE}${KMOM}"; "${DBW_COURSE}last";;
+    kmom06)     ${DBW_COURSE}; "${DBW_COURSE}${KMOM}"; "${DBW_COURSE}last";;
+    kmom10)     ${DBW_COURSE}; "${DBW_COURSE}${KMOM}"; "${DBW_COURSE}last";;
     *)          
         badUsage "\n$MSG_FAILED Invalid combination of course '$DBW_COURSE' and kmom: '$KMOM'"
         exit 1 
