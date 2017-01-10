@@ -30,7 +30,7 @@
 #
 # Current version
 #
-DBW_VERSION="v1.9.65 (2017-01-06)"
+DBW_VERSION="v1.9.66 (2017-01-10)"
 # --------------- DBWEBB FUNCTIONS PHASE START ---------------
 
 #
@@ -64,6 +64,9 @@ publishChmod()
                 find "$dir" -type f -name 'mazerunner' -exec chmod go-r {} \;
                 find "$dir" -type f -name '*.txt' -exec chmod go-r {} \;
                 find "$dir" -type f -name '*.json' -exec chmod go-r {} \;
+            ;;
+            oopython)
+                find "$dir" -type f -name '*.py' -path '*/flask/*' -exec chmod go+r {} \;
             ;;
         esac
     fi
