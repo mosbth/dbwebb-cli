@@ -34,6 +34,7 @@ publishChmod()
             ;;
             oopython)
                 find "$dir" -type f -name '*.py' -path '*/flask/*' -exec chmod go+r {} \;
+                find "$dir" -type f -name '*.py' -path '*/my_app/*' -exec chmod go+r {} \;
             ;;
         esac
     fi
