@@ -1905,16 +1905,6 @@ function oopythonkmom02()
 
 
 #
-# test http://dbwebb.se/
-#
-#cp -ri me/kmom02/deck/*.py me/kmom02/test/
-#touch me/kmom02/test/test_deck.py
-#test -d me/kmom02/test
-#dbwebb validate test
-
-
-
-#
 # Test kmom
 #
 function oopythonkmom03()
