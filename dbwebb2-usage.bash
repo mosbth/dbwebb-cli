@@ -163,6 +163,10 @@ function inspectUsage ()
 "Change owner to mosstud of all files in the archive"
 " sudo /usr/local/sbin/setowner-on-dbwebb-archive.bash"
 ""
+"Add --yes to answer yes/default answer to all questions."
+""
+"Add --useVersion 1 to use a specific version of the course. Useful when courses has several versions and same repo must be used for all versions."
+""
 "Execute command as the user dbwebb."
 " sudo -u dbwebb script"
     )

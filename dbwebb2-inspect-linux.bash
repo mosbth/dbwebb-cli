@@ -87,9 +87,17 @@ function linuxkmom01()
 #
 function linuxkmom02()
 {
-    inspectExercise "vhost" "uppgift/skapa-en-webbplats-pa-en-apache-virtual-host" "log.txt" "me.linux.se.conf" "dump.png"
+    if [ "$USE_VERSION" = "1" ]; then
+        inspectExercise "mysite" "uppgift/strukturera-filer-kataloger-och-rattigheter-i-en-webbplats" "log.txt" "mysite.linux.se.conf" "dump.png"
 
-    inspectExercise "mysite" "uppgift/strukturera-filer-kataloger-och-rattigheter-i-en-webbplats" "log.txt" "mysite.linux.se.conf" "dump.png"
+        inspectExercise "vhost" "uppgift/skapa-en-webbplats-pa-en-apache-virtual-host" "log.txt" "me.linux.se.conf" "dump.png"
+
+        return
+    fi
+
+    inspectLab "https://dbwebb.se/uppgift/linux-lab-1-introduktion-till-bash" "bash1" "answer.bash" "./answer.bash"
+
+    inspectExercise "vhost" "uppgift/skapa-en-webbplats-pa-en-apache-virtual-host" "log.txt" "me.linux.se.conf" "dump.png"
 }
 
 

@@ -38,8 +38,18 @@ function dbjskmom01()
 #
 function dbjskmom02()
 {
-    # jetty kunskap/kom-igang-med-databasen-sqlite, boats.sqlite, boats.sql
-    :
+    # jetty , boats.sqlite, boats.sql
+
+    inspectExerciseHeader "Kom igång med SQLite" "https://dbwebb.se/kunskap/kom-igang-med-databasen-sqlite" "kmom02/jetty"
+
+    inspectLab "https://dbwebb.se/uppgift/sql-lab-introduktion-till-sql-dbjs" "sql1" "answer.bash" "./answer.bash"
+
+    inspectExerciseHeader "ER Jetty" "https://dbwebb.se/uppgift/skapa-er-modell-av-databasen-jetty" "redovisa"
+    printUrl "jetty.html" "me/redovisa"
+
+    inspectLab "https://dbwebb.se/uppgift/javascript-med-funktioner-dbjs" "javascript2" "answer.js" ""
+
+    inspectLab "uppgift/gor-svenska-flaggan-med-javascript-html-och-css-dbjs" "flag2" "index.html" ""
 }
 
 

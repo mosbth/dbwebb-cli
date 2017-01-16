@@ -30,7 +30,7 @@
 #
 # Current version
 #
-DBW_VERSION="v1.9.67 (2017-01-13)"
+DBW_VERSION="v1.9.68 (2017-01-16)"
 # --------------- DBWEBB FUNCTIONS PHASE START ---------------
 
 #
@@ -183,8 +183,28 @@ function checkCommandWithVersion
 #
 pressEnterToContinue()
 {
-    printf "\nPress enter to continue..."
-    read void
+    if [[ ! $YES ]]; then
+        printf "\nPress enter to continue..."
+        read void
+    fi
+}
+
+
+
+#
+# Answer yes or no to proceed
+#
+answerYesOrNo()
+{
+    local answer="y"
+    local default="$1"
+
+    if [[ ! $YES ]]; then
+        read answer
+        answer=${answer:-$default}
+    fi
+
+    echo "$answer"
 }
 
 

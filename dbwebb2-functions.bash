@@ -150,8 +150,28 @@ function checkCommandWithVersion
 #
 pressEnterToContinue()
 {
-    printf "\nPress enter to continue..."
-    read void
+    if [[ ! $YES ]]; then
+        printf "\nPress enter to continue..."
+        read void
+    fi
+}
+
+
+
+#
+# Answer yes or no to proceed
+#
+answerYesOrNo()
+{
+    local answer="y"
+    local default="$1"
+
+    if [[ ! $YES ]]; then
+        read answer
+        answer=${answer:-$default}
+    fi
+
+    echo "$answer"
 }
 
 

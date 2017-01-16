@@ -49,7 +49,7 @@ viewFileTree()
     TREE_OPTIONS=
 
     printf "\nView content of directory:\n"
-    tree -ph $options "$dirname"
+    tree -ph -L 2 $options "$dirname"
 }
 
 
@@ -112,10 +112,7 @@ viewFileContent()
     if [ $? -eq 0 ]; then
         printf "\nView file '%s' [Yn]? " "$file"
 
-        read answer
-        default="y"
-        answer=${answer:-$default}
-
+        local answer=$( answerYesOrNo "y" )
         if [ "$answer" = "y" -o "$answer" = "Y" ]
         then
             echo ">>>"
@@ -314,6 +311,22 @@ inspectExercise()
 
 
 #
+# Test a exercise
+#
+inspectExerciseHeader()
+{
+    local exercise="$1"
+    local url="$2"
+    local target="me/$3"
+
+    headerForTest "-- $exercise$info" "-- ${DBW_WWW}$url"
+    checkKmomDir "$target"
+    viewFileTree "$target"
+}
+
+
+
+#
 # Check the environment
 #
 dbwebbInspectTargetNotReadable()
@@ -389,13 +402,10 @@ publishKmom()
 validateKmom()
 {
     local kmom=${1-$KMOM}
-    
+
     printf "\nValidate %s [Yn]? " "$kmom"
 
-    read answer
-    default="y"
-    answer=${answer:-$default}
-
+    local answer=$( answerYesOrNo "y" )
     if [ "$answer" = "y" -o "$answer" = "Y" ]
     then
         dbwebb-validate --course-repo "$DBW_COURSE_DIR" "$kmom"
@@ -423,10 +433,8 @@ inspectCommand()
     
     if [ $? == 0 ]; then
         printf "\nExecute '%s' [Yn]? " "$cmd"
-        read answer
-        default="y"
-        answer=${answer:-$default}
 
+        local answer=$( answerYesOrNo "y" )
         if [ "$answer" = "y" -o "$answer" = "Y" ]; then
 
             pushd "$move" > /dev/null
@@ -470,10 +478,8 @@ runServer()
     
     if [ $? == 0 ]; then
         printf "\nExecute '%s' as server and log its output to '$logfile' [Yn]? " "$cmd"
-        read answer
-        default="y"
-        answer=${answer:-$default}
 
+        local answer=$( answerYesOrNo "y" )
         if [ "$answer" = "y" -o "$answer" = "Y" ]; then
 
             pushd "$move" > /dev/null
@@ -526,22 +532,33 @@ killServer()
 while (( $# ))
 do
     case "$1" in
-        
+
         --help | -h)
             usage
             exit 0
         ;;
-        
+
         --version | -v)
             version
             exit 0
         ;;
-                
+
         --selfupdate)
             selfupdate dbwebb-inspect
             exit 0
         ;;
-        
+
+        --yes | -y)
+            YES="yes"
+            shift
+        ;;
+
+        --useVersion | -u)
+            USE_VERSION="$2"
+            shift
+            shift
+        ;;
+
         --archive)
             if [ ! -d "$2" ]; then
                 badUsage "Path to --archive '$2' is not a directory."
@@ -551,7 +568,7 @@ do
             shift
             shift
         ;;
-        
+
         --config)
             if [ ! -f "$2" ]; then
                 badUsage "Path to --config '$2' is not a file."
@@ -561,7 +578,7 @@ do
             shift
             shift
         ;;
-        
+
         --publish-to)
             if [ ! -d "$2" ]; then
                 badUsage "Path to --publish-to '$2' is not a directory."

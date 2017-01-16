@@ -505,6 +505,8 @@ function dbwebb-inspect()
     local forCourse=
     local willUpload=
     local archive=
+    local yes=
+    local useVersion=
 
     checkIfValidConfigOrExit
 
@@ -529,14 +531,16 @@ function dbwebb-inspect()
     else
         usageInspect
         exit 0
-    fi    
+    fi
 
     inspecUser=${who:=$DBW_USER}
+    [[ $YES ]] && yes="--yes"
+    [[ $USE_VERSION ]] && useVersion="--useVersion $USE_VERSION"
 
     local intro="I will now inspect '$kmom'${forCourse}${forWho}.$willUpload"
     local log="$HOME/.dbwebb-inspect.log"
     local command1=
-    local command2="$SSH_CMD_INTERACTIVE \"dbwebb-inspect $archive --publish-url $DBW_BASEURL --publish-to ~$DBW_USER/$DBW_REMOTE_WWWDIR --base-url $DBW_WWW_HOST~$inspecUser/$DBW_REMOTE_BASEDIR ~$inspecUser/$DBW_REMOTE_BASEDIR/$course $kmom\" 2>&1 | tee '$log'; test \${PIPESTATUS[0]} -eq 0"
+    local command2="$SSH_CMD_INTERACTIVE \"dbwebb-inspect $yes $useVersion $archive --publish-url $DBW_BASEURL --publish-to ~$DBW_USER/$DBW_REMOTE_WWWDIR --base-url $DBW_WWW_HOST~$inspecUser/$DBW_REMOTE_BASEDIR ~$inspecUser/$DBW_REMOTE_BASEDIR/$course $kmom\" 2>&1 | tee '$log'; test \${PIPESTATUS[0]} -eq 0"
     local message="to inspect the course results.\nSaved a log of the output, review it as:\nless -R '$log'"
 
     # Upload only if
@@ -815,6 +819,17 @@ do
 
         --silent | -s)
             SILENT="yes"
+            shift
+        ;;
+
+        --yes | -y)
+            YES="yes"
+            shift
+        ;;
+
+        --useVersion | -u)
+            USE_VERSION="$2"
+            shift
             shift
         ;;
 
