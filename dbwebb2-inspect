@@ -30,7 +30,7 @@
 #
 # Current version
 #
-DBW_VERSION="v1.9.68 (2017-01-16)"
+DBW_VERSION="v1.9.68* (2017-01-16)"
 # --------------- DBWEBB FUNCTIONS PHASE START ---------------
 
 #
@@ -1787,14 +1787,14 @@ function dbjskmom02()
 {
     # jetty , boats.sqlite, boats.sql
 
-    inspectExerciseHeader "Kom igång med SQLite" "https://dbwebb.se/kunskap/kom-igang-med-databasen-sqlite" "kmom02/jetty"
+    inspectExerciseHeader "Kom igång med SQLite" "kunskap/kom-igang-med-databasen-sqlite" "kmom02/jetty"
 
-    inspectLab "https://dbwebb.se/uppgift/sql-lab-introduktion-till-sql-dbjs" "sql1" "answer.bash" "./answer.bash"
+    inspectLab "uppgift/sql-lab-introduktion-till-sql-dbjs" "sql1" "answer.bash" "./answer.bash"
 
-    inspectExerciseHeader "ER Jetty" "https://dbwebb.se/uppgift/skapa-er-modell-av-databasen-jetty" "redovisa"
+    inspectExerciseHeader "ER Jetty" "uppgift/skapa-er-modell-av-databasen-jetty" "redovisa"
     printUrl "jetty.html" "me/redovisa"
 
-    inspectLab "https://dbwebb.se/uppgift/javascript-med-funktioner-dbjs" "javascript2" "answer.js" ""
+    inspectLab "uppgift/javascript-med-funktioner-dbjs" "javascript2" "answer.js" ""
 
     inspectLab "uppgift/gor-svenska-flaggan-med-javascript-html-och-css-dbjs" "flag2" "index.html" ""
 }
@@ -1868,7 +1868,7 @@ function oopython()
 #
 function oopythonlast()
 {
-    inspectMe "me/flask" "app.cgi" "" "" "flask"
+    inspectMe "me/flask" "app.cgi/" "" "" "flask"
 }
 
 
@@ -1888,8 +1888,29 @@ function oopythonkmom01()
 #
 function oopythonkmom02()
 {
-    :
+    inspectLab "uppgift/python-med-mer-objekt-och-klasser" "lab2" "answer.py" "python3 answer.py"
+
+    inspectExerciseHeader "Skapa objekt efter UML-diagram" "uppgift/skapa-objekt-efter-uml" "$KMOM/deck"
+    fileIsReadable "me/$KMOM/deck/deck.py"
+    fileIsReadable "me/$KMOM/deck/hand.py"
+    fileIsReadable "me/$KMOM/deck/card.py"
+    inspectCommand "main.py" "$THEDIR/me/$KMOM/deck" "python3 main.py"
+
+    inspectExerciseHeader "Testfall för din kortlek" "uppgift/skriv-testfall-for-ett-objekt" "$KMOM/test"
+    inspectCommand "test_deck.py" "$THEDIR/me/$KMOM/test" "python3 test_deck.py"
+
+    inspectExerciseHeader "Sequence diagram" "uppgift/skapa-sequence-diagram" "$KMOM/uml"
+    printUrl "sequenceDiagram.png" "me/$KMOM/uml"
 }
+
+
+#
+# test http://dbwebb.se/
+#
+#cp -ri me/kmom02/deck/*.py me/kmom02/test/
+#touch me/kmom02/test/test_deck.py
+#test -d me/kmom02/test
+#dbwebb validate test
 
 
 
@@ -2323,7 +2344,7 @@ function linuxkmom02()
         return
     fi
 
-    inspectLab "https://dbwebb.se/uppgift/linux-lab-1-introduktion-till-bash" "bash1" "answer.bash" "./answer.bash"
+    inspectLab "uppgift/linux-lab-1-introduktion-till-bash" "bash1" "answer.bash" "./answer.bash"
 
     inspectExercise "vhost" "uppgift/skapa-en-webbplats-pa-en-apache-virtual-host" "log.txt" "me.linux.se.conf" "dump.png"
 }

@@ -95,7 +95,7 @@ function linuxkmom02()
         return
     fi
 
-    inspectLab "https://dbwebb.se/uppgift/linux-lab-1-introduktion-till-bash" "bash1" "answer.bash" "./answer.bash"
+    inspectLab "uppgift/linux-lab-1-introduktion-till-bash" "bash1" "answer.bash" "./answer.bash"
 
     inspectExercise "vhost" "uppgift/skapa-en-webbplats-pa-en-apache-virtual-host" "log.txt" "me.linux.se.conf" "dump.png"
 }
