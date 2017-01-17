@@ -2,9 +2,10 @@ Revision History
 ============================================================
 
 
-v1.9.68* (2017-01-16)
+v1.9.69 (2017-01-17)
 -------------------
 
+* Change all .py-files to go+r in oopython.
 * Inspect for oopython kmom02.
 
 
