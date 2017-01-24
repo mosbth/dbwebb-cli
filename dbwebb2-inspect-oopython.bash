@@ -55,7 +55,15 @@ function oopythonkmom02()
 #
 function oopythonkmom03()
 {
-    :
+    inspectExerciseHeader "Skapa ett person-objekt till me-sidan" "uppgift/skapa-personobjekt-till-me-sida" "flask"
+    fileIsReadable "me/flask/person.py"
+    printUrl "person.png" "me/flask"
+    printUrl "person.html" "me/flask"
+
+    inspectExerciseHeader "Skapa ett dataobjekt till me-sidan" "uppgift/skapa-dataobjekt-till-me-sida" "flask"
+    fileIsReadable "me/flask/my_data.py"
+    printUrl "data.png" "me/flask"
+    printUrl "data.html" "me/flask"
 }
 
 
