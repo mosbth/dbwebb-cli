@@ -2297,6 +2297,36 @@ linuxExerciseScript()
 
 
 #
+# Create and run bash-script
+#
+linuxExerciseCommands()
+{
+    local target="me/$KMOM/$1"
+    local where="$EXEC_DIR/$KMOM/$1"
+    local main="commands"
+
+    # Options
+    opts="--help"
+    args=""
+    inspectCommand "$main" "$where" "./$main $opts $args" "$opts $args"
+
+    opts="--version"
+    args=""
+    inspectCommand "$main" "$where" "./$main $opts $args" "$opts $args"
+
+    # Run it
+    opts=""
+    args="reverse Obi-Wan Kenobi"
+    inspectCommand "$main" "$where" "./$main $opts $args" "$opts $args"
+
+    opts=""
+    args="factors 5 6 16"
+    inspectCommand "$main" "$where" "./$main $opts $args" "$opts $args"
+}
+
+
+
+#
 # View files in irc exercise
 # OBSOLETE v1
 linuxExerciseIrc()
@@ -2347,12 +2377,24 @@ function linuxkmom02()
 #
 function linuxkmom03()
 {
-    inspectExercise "irc" "uppgift/hitta-saker-i-en-loggfil-med-unix-kommandon" "log.txt" "solutions.bash" "" "" "solutions.bash" "bash solutions.bash"
+    if [ "$USE_VERSION" = "1" ]; then
+        inspectExercise "irc" "uppgift/hitta-saker-i-en-loggfil-med-unix-kommandon" "log.txt" "solutions.bash" "" "" "solutions.bash" "bash solutions.bash"
 
-    linuxExerciseIrc "irc"
-    
+        linuxExerciseIrc "irc"
+        
+        inspectExercise "script" "uppgift/mina-forsta-bash-script"
+        linuxExerciseScript "script"
+
+        return
+    fi
+
+    inspectLab "uppgift/linux-lab-2-sok-i-en-logg-fil" "bash2" "answer.bash" "./answer.bash"
+
     inspectExercise "script" "uppgift/mina-forsta-bash-script"
     linuxExerciseScript "script"
+
+    inspectExercise "commands" "uppgift/ett-bash-script-med-options-command-arguments"
+    linuxExerciseCommands "commands"
 }
 
 
