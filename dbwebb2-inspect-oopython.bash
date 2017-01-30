@@ -61,7 +61,7 @@ function oopythonkmom03()
     printUrl "person.html" "me/flask"
 
     inspectExerciseHeader "Skapa ett dataobjekt till me-sidan" "uppgift/skapa-dataobjekt-till-me-sida" "flask"
-    fileIsReadable "me/flask/my_data.py"
+    fileIsReadable "me/flask/data.py"
     printUrl "data.png" "me/flask"
     printUrl "data.html" "me/flask"
 }
