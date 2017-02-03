@@ -98,7 +98,7 @@ printUrl()
 executeSQLite()
 {
     local file="$1"
-    localdir="$THEDIR"
+    local dir="$THEDIR"
     local sql="$2"
 
     assert 0 "test -f \"$THEDIR/$file\"" "The file '$file' is missing or not readable."

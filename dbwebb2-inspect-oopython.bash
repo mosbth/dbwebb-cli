@@ -79,7 +79,7 @@ function oopythonkmom04()
     executeSQLite "me/flask/db/farms.sqlite" ".schema"
 
     inspectExerciseHeader "Visa bondgården på me-sidan" "uppgift/visa-bondgarden-pa-me-sida" "flask"
-    printUrl "" "me/flask"
+    printUrl "app.cgi" "me/flask"
 }
 
 

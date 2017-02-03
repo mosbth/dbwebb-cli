@@ -1935,7 +1935,7 @@ function oopythonkmom04()
     executeSQLite "me/flask/db/farms.sqlite" ".schema"
 
     inspectExerciseHeader "Visa bondgården på me-sidan" "uppgift/visa-bondgarden-pa-me-sida" "flask"
-    printUrl "" "me/flask"
+    printUrl "app.cgi" "me/flask"
 }
 
 
@@ -2838,7 +2838,7 @@ printUrl()
 executeSQLite()
 {
     local file="$1"
-    localdir="$THEDIR"
+    local dir="$THEDIR"
     local sql="$2"
 
     assert 0 "test -f \"$THEDIR/$file\"" "The file '$file' is missing or not readable."
