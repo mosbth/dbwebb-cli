@@ -164,19 +164,29 @@ function linuxkmom03()
 #
 function linuxkmom04()
 {
-    inspectExercise "javascripting" "uppgift/utfor-nodeschool-workshopen-javascripting" "" "" "" "" "" ""
+    if [ "$USE_VERSION" = "1" ]; then
+        inspectExercise "javascripting" "uppgift/utfor-nodeschool-workshopen-javascripting" "" "" "" "" "" ""
 
-    inspectExercise "server" "uppgift/skapa-en-restful-http-server-med-node-js-och-klient-i-bash" "index.js" "server.js" "" "" "" "" "" "" " (del 1 servern)"
+        inspectExercise "server" "uppgift/skapa-en-restful-http-server-med-node-js-och-klient-i-bash" "index.js" "server.js" "" "" "" "" "" "" " (del 1 servern)"
 
-    inspectExercise "server" "uppgift/skapa-en-restful-http-server-med-node-js-och-klient-i-bash" "client.bash" "" "" "" "" "" "" "" " (del 2 klienten)"
+        inspectExercise "server" "uppgift/skapa-en-restful-http-server-med-node-js-och-klient-i-bash" "client.bash" "" "" "" "" "" "" "" " (del 2 klienten)"
 
-    export LINUX_SERVER="127.0.0.1"
-    if [[ ! ${LINUX_PORT+x} ]]; then 
-        export LINUX_PORT="1337"
+        return
     fi
-    
+
+    inspectLab "uppgift/linux-lab3-introduktion-till-nodejs" "node1" "answer.js" "babel-node answer.js"
+
+    # Prepare
+    inspectExerciseHeader "Server i node och klient i bash" "uppgift/skapa-en-restful-http-server-med-node-js-och-klient-i-bash" "$KMOM/server"
+
+    # Start the server
     local target="me/$KMOM/server"
+    fileIsReadable "me/$KMOM/server/index.js"
+    fileIsReadable "me/$KMOM/server/server.js"
     runServer "index.js" "$THEDIR/$target" "babel-node index.js"
+
+    # Execute the client
+    fileIsReadable "me/$KMOM/server/client.bash"
     inspectCommand "client.bash" "$THEDIR/$target" "bash client.bash hello"
     inspectCommand "client.bash" "$THEDIR/$target" "bash client.bash html"
     inspectCommand "client.bash" "$THEDIR/$target" "bash client.bash status"
@@ -184,6 +194,8 @@ function linuxkmom04()
     inspectCommand "client.bash" "$THEDIR/$target" "bash client.bash filter 2 3 42 99"
     inspectCommand "client.bash" "$THEDIR/$target" "bash client.bash 404"
     inspectCommand "client.bash" "$THEDIR/$target" "bash client.bash all"
+
+    # Close it up
     killServer
 }
 

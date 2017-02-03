@@ -535,12 +535,13 @@ function dbwebb-inspect()
 
     inspecUser=${who:=$DBW_USER}
     [[ $YES ]] && yes="--yes"
+    [[ $PORT ]] && port="--port $PORT"
     [[ $USE_VERSION ]] && useVersion="--useVersion $USE_VERSION"
 
     local intro="I will now inspect '$kmom'${forCourse}${forWho}.$willUpload"
     local log="$HOME/.dbwebb-inspect.log"
     local command1=
-    local command2="$SSH_CMD_INTERACTIVE \"dbwebb-inspect $yes $useVersion $archive --publish-url $DBW_BASEURL --publish-to ~$DBW_USER/$DBW_REMOTE_WWWDIR --base-url $DBW_WWW_HOST~$inspecUser/$DBW_REMOTE_BASEDIR ~$inspecUser/$DBW_REMOTE_BASEDIR/$course $kmom\" 2>&1 | tee '$log'; test \${PIPESTATUS[0]} -eq 0"
+    local command2="$SSH_CMD_INTERACTIVE \"dbwebb-inspect $yes $port $useVersion $archive --publish-url $DBW_BASEURL --publish-to ~$DBW_USER/$DBW_REMOTE_WWWDIR --base-url $DBW_WWW_HOST~$inspecUser/$DBW_REMOTE_BASEDIR ~$inspecUser/$DBW_REMOTE_BASEDIR/$course $kmom\" 2>&1 | tee '$log'; test \${PIPESTATUS[0]} -eq 0"
     local message="to inspect the course results.\nSaved a log of the output, review it as:\nless -R '$log'"
 
     # Upload only if
@@ -824,6 +825,12 @@ do
 
         --yes | -y)
             YES="yes"
+            shift
+        ;;
+
+        --port | -p)
+            PORT="$2"
+            shift
             shift
         ;;
 

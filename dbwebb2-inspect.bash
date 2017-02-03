@@ -95,6 +95,33 @@ printUrl()
 #
 # Check if file exists and display it 
 #
+executeSQLite()
+{
+    local file="$1"
+    localdir="$THEDIR"
+    local sql="$2"
+
+    assert 0 "test -f \"$THEDIR/$file\"" "The file '$file' is missing or not readable."
+
+    if [ $? -eq 0 ]; then
+        printf "\nSQLite '%s':\nView '%s' [Yn]? " "$file" "$sql"
+
+        local answer=$( answerYesOrNo "y" )
+        if [ "$answer" = "y" -o "$answer" = "Y" ]
+        then
+            echo ">>>"
+            sqlite3 --header --column "$dir/$file" "$sql"
+            echo "<<<"
+            pressEnterToContinue
+        fi
+    fi
+}
+
+
+
+#
+# Check if file exists and display it 
+#
 viewFileContent()
 {
     local file="$1"
@@ -458,6 +485,18 @@ inspectCommand()
 
 
 #
+# Set default settings for running server
+#
+serverSettings()
+{
+    LINUX_PORT=${LINUX_PORT:-1342}
+    export LINUX_PORT=${PORT:-$LINUX_PORT}
+    export LINUX_SERVER=${LINUX_SERVER:-127.0.0.1}
+}
+
+
+
+#
 # Execute a command as a server in the background logging output to a file.
 #
 runServer()
@@ -470,29 +509,34 @@ runServer()
     local filename="$move/$what"
     
     local logfile=".serverlog.txt"
-    SERVER_LOG="$move/$logfile"
+    export SERVER_LOG="$move/$logfile"
 
     if [ ! -z "$what" ]; then
         assert 0 "test -f \"$filename\" -o -r \"$filename\"" "The file '$what' is missing or not readable."
     fi
     
     if [ $? == 0 ]; then
-        printf "\nExecute '%s' as server and log its output to '$logfile' [Yn]? " "$cmd"
+        serverSettings
+
+        printf "\nExecute '%s' as server on $LINUX_SERVER:$LINUX_PORT and log its output to '$logfile' [Yn]? " "$cmd"
 
         local answer=$( answerYesOrNo "y" )
         if [ "$answer" = "y" -o "$answer" = "Y" ]; then
 
+            [[ -f pid ]] && rm pid
             pushd "$move" > /dev/null
             echo ">>>"
-            $cmd > "$SERVER_LOG" &
+            $cmd &> $SERVER_LOG &
             status=$?
             SERVER_PID=$!
-            echo "$cmd started with pid $SERVER_PID."
-            echo "Will kill server automatically within 60 seconds."
-            sleep 60 && kill $SERVER_PID &
-            echo "Sleeping 3 before continuing."
+            echo "$cmd started with pid '$SERVER_PID' and status $status (sleeping 3 before continue)..."
             sleep 3
+            echo "(Will kill server automatically within 60 seconds.)"
+            [[ -f pid ]] || printf "$MSG_WARNING Missing pid file!\n"
+            local pid=$( [[ -f pid ]] && cat pid )
+            echo "File pid contains: '$pid'"
             echo "<<<"
+            sleep 60 && kill $SERVER_PID $id &> /dev/null &
             popd > /dev/null
 
             if [ $status -eq 0 ]; then
@@ -513,14 +557,18 @@ runServer()
 #
 killServer()
 {
-    echo "Killing server."
+    local PID=$( cat pid )
+
+    echo
     echo ">>>"
-    kill $SERVER_PID
-    echo "Sent kill signal to server."
-    echo "Sleeping 3 before continuing."
+    echo "Killing server with PID $PID (sleeping 3 before continue)..."
+    kill $PID &> /dev/null
     sleep 3
+    kill $SERVER_PID &> /dev/null # To be sure then file pid is missing
     echo "Printing logfile from server:"
+    echo "--------- Logfile start  ---------"
     cat "$SERVER_LOG"
+    echo "--------- Logfile end    ---------"
     echo "<<<"
 }
 
@@ -550,6 +598,12 @@ do
 
         --yes | -y)
             YES="yes"
+            shift
+        ;;
+
+        --port | -p)
+            PORT="$2"
+            shift
             shift
         ;;
 

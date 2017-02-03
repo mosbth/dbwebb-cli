@@ -14,6 +14,7 @@ function usage ()
 "  --help, -h             Print help."
 "  --version, -v          Print version."
 "  --yes, -y              Answer yes/default to all answers."
+"  --port port, -p port   Execute external servers on this port."
 "  --useVersion id, -u id Use specific version of course."
 "  --archive path         Path where the archive is."
 "  --config path          Path to config file to source."

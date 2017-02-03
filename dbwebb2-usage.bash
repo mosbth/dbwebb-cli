@@ -165,6 +165,8 @@ function inspectUsage ()
 ""
 "Add --yes to answer yes/default answer to all questions."
 ""
+" Add --port port, -p port to execute external servers on this port."
+""
 "Add --useVersion 1 to use a specific version of the course. Useful when courses has several versions and same repo must be used for all versions."
 ""
 "Execute command as the user dbwebb."

@@ -2,6 +2,19 @@ Revision History
 ============================================================
 
 
+v1.9.73 (2017-02-03)
+-------------------
+
+* Inspect for oopython kmom04.
+* Inspect for linux kmom04.
+
+
+v1.9.72 (2017-01-30)
+-------------------
+
+* Changed my_data.py to data.py in inspect oopython kmom03.
+
+
 v1.9.70 (2017-01-24)
 -------------------
 
@@ -438,7 +451,7 @@ v1.9.6 (2015-08-05)
 
 * Always upload config and rc-files when validate and publish, fix #47.
 * Adding progressbar for validating since jscs and jshint was really slow.
-* Replaced own htmlhint with actual htmlhint, took care of exit values. 
+* Replaced own htmlhint with actual htmlhint, took care of exit values.
 * Changed init-phase to rsync directory structure, fix #51.
 * Adding install script, fix #52.
 * Corrected curl to work when wget is not available.

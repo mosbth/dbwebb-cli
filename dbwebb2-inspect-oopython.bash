@@ -73,7 +73,13 @@ function oopythonkmom03()
 #
 function oopythonkmom04()
 {
-    :
+    inspectLab "uppgift/python-med-regex" "lab3" "answer.py" "python3 answer.py"
+
+    inspectExerciseHeader "Skapa en bondgårdssdatabas" "uppgift/skapa-en-bondgards-databas" "flask"
+    executeSQLite "me/flask/db/farms.sqlite" ".schema"
+
+    inspectExerciseHeader "Visa bondgården på me-sidan" "uppgift/visa-bondgarden-pa-me-sida" "flask"
+    printUrl "" "me/flask"
 }
 
 
