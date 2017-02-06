@@ -30,7 +30,7 @@
 #
 # Current version
 #
-DBW_VERSION="v1.9.75 (2017-02-06)"
+DBW_VERSION="v1.9.76 (2017-02-06)"
 # --------------- DBWEBB FUNCTIONS PHASE START ---------------
 
 #
@@ -1899,6 +1899,7 @@ function oopythonkmom02()
     inspectCommand "main.py" "$THEDIR/me/$KMOM/deck" "python3 main.py"
 
     inspectExerciseHeader "Testfall för din kortlek" "uppgift/skriv-testfall-for-ett-objekt" "$KMOM/test"
+    viewFileContent "test_deck.py" "me/$KMOM/test"
     inspectCommand "test_deck.py" "$THEDIR/me/$KMOM/test" "python3 test_deck.py"
 
     inspectExerciseHeader "Sequence diagram" "uppgift/skapa-sequence-diagram" "$KMOM/uml"
