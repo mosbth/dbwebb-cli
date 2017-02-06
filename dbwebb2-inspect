@@ -30,7 +30,7 @@
 #
 # Current version
 #
-DBW_VERSION="v1.9.73 (2017-02-03)"
+DBW_VERSION="v1.9.74 (2017-02-06)"
 # --------------- DBWEBB FUNCTIONS PHASE START ---------------
 
 #
@@ -1920,6 +1920,9 @@ function oopythonkmom03()
     fileIsReadable "me/flask/data.py"
     printUrl "data.png" "me/flask"
     printUrl "data.html" "me/flask"
+
+    inspectExerciseHeader "Skapa ett Black Jack spel" "uppgift/skapa_blackjack" "$KMOM/blackjack"
+    inspectCommand "main.py" "$THEDIR/me/$KMOM/blackjack" "python3 main.py"
 }
 
 

@@ -64,6 +64,9 @@ function oopythonkmom03()
     fileIsReadable "me/flask/data.py"
     printUrl "data.png" "me/flask"
     printUrl "data.html" "me/flask"
+
+    inspectExerciseHeader "Skapa ett Black Jack spel" "uppgift/skapa_blackjack" "$KMOM/blackjack"
+    inspectCommand "main.py" "$THEDIR/me/$KMOM/blackjack" "python3 main.py"
 }
 
 
