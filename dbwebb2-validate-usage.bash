@@ -14,7 +14,7 @@ function usage ()
 "Options:"
 "  --check, -c         Check installed tools."
 "  --selfupdate        Update to latest version."
-"  --install-npm       Install compatible npm modules."
+#"  --install-npm       Install compatible npm modules."
 "  --dry, -d           Dry run, only display."
 "  --only extension    Only test for extension."
 "  --course-repo path  Use this path as course repo."

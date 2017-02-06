@@ -215,7 +215,7 @@ function validate()
 {
     local dir="$1"
 
-    [[ $ENABLE_ALL || ! $DISABLE_HTMLHINT ]]  && validateCommand "$dir" "$HTMLHINT" "html" "$HTMLHINT_OPTIONS $HTMLHINT_CONFIG" '| grep -v "No problem." | grep -v "Config loaded." | grep -v "Scan "; test ${PIPESTATUS[0]} -eq 0'
+    [[ $ENABLE_ALL || ! $DISABLE_HTMLHINT ]]  && validateCommand "$dir" "$HTMLHINT" "html" "$HTMLHINT_OPTIONS $HTMLHINT_CONFIG" '| grep -v "No problem." | grep -v "Config loaded." | grep -v "Scan " | grep -v "Scanned "; test ${PIPESTATUS[0]} -eq 0'
     [[ $ENABLE_ALL || ! $DISABLE_CSSLINT ]]   && validateCommand "$dir" "$CSSLINT" "css" "$CSSLINT_OPTIONS $( cat "$CSSLINT_CONFIG" )"
     [[ $ENABLE_ALL || ! $DISABLE_JSHINT ]]    && validateCommand "$dir" "$JSHINT" "js"
     [[ $ENABLE_ALL || ! $DISABLE_JSCS ]]      && validateCommand "$dir" "$JSCS" "js"  "$JSCS_OPTIONS $JSCS_CONFIG" "" "onlyExitStatus"
@@ -369,10 +369,10 @@ do
             shift
             ;;
 
-        --install-npm)
-            npm install -g htmlhint@0.9.12 csslint jshint jscs@2.11.0 jsonlint js-yaml html-minifier@0.8.0 clean-css uglify-js
-            exit
-            ;;
+        #--install-npm)
+        #    npm install -g htmlhint@0.9.12 csslint jshint jscs@2.11.0 jsonlint js-yaml html-minifier@0.8.0 clean-css uglify-js
+        #    exit
+        #    ;;
 
         --dry | -d)
             optDryRun="yes"
