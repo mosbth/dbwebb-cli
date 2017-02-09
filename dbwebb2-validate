@@ -743,8 +743,8 @@ function assert()
     if [ \( ! $status -eq $EXPECTED \) -o \( ! -z "$error" \) ]; then
         FAULTS=$(( $FAULTS + 1 ))
 
-        printf "\n\n$MSG_WARNING $MESSAGE\n"
-        [ -z "$error" ] || printf "$error\n\n"
+        printf "\n\n$MSG_WARNING %s\n" "$MESSAGE"
+        [ -z "$error" ] || printf "%s\n\n" "$error"
     fi
 
     return $status
