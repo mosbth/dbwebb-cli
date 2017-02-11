@@ -2,9 +2,10 @@ Revision History
 ============================================================
 
 
-v1.9.76* (2017-02-09)
+v1.9.77 (2017-02-11)
 -------------------
 
+* Inspect oopython kmom04 spelling of sqlite file.
 * Fix printf codestyle in assert().
 
 
