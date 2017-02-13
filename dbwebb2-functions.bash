@@ -578,6 +578,7 @@ function getPathToDirectoryFor
 #
 createUploadDownloadPaths()
 {
+    local ignoreSubdir="$1"
     SUBDIR="$( mapCmdToDir $ITEM )"
 
     if [ -z "$WHAT" -o -z "$WHERE" ]; then
@@ -595,13 +596,19 @@ createUploadDownloadPaths()
         exit 1
     fi
 
-    if [ ! -z "$SUBDIR" ]; then
+    if [ ! -z "$ignoreSubdir" ]; then
+        WHAT="$WHAT/"
+        WHERE="$WHERE/"
+    elif [ ! -z "$SUBDIR" ]; then
         WHAT="$WHAT/$SUBDIR/"
         WHERE="$WHERE/$SUBDIR/"
     else
         WHAT="$WHAT/"
         WHERE="$WHERE/"
     fi
+
+    echo "WHAT=$WHAT"
+    echo "WHERE=$WHERE"
 
     if [ ! -d "$WHAT" ]; then
         printf "\n$MSG_FAILED Target directory is not a valid directory: '$WHAT'"

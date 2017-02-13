@@ -5,6 +5,8 @@ Revision History
 v1.9.77* (2017-02-13)
 -------------------
 
+* Always publish whole repo, to be able to include/exclude files.
+* Validate and publish did two rsync, removed the second one.
 * Inspect oopython kmom04 checking for allocated port.
 
 
