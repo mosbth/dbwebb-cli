@@ -497,6 +497,23 @@ serverSettings()
 
 
 #
+# Check if port is free
+#
+checkPortIsFree()
+{
+    local program=$( netstat -lnt --program 2> /dev/null | grep $LINUX_PORT | awk '{print $7}' )
+
+    assert 0 "test -z $program" "The port $LINUX_PORT is allocated, trying to kill it."
+    [ -z $program ] || kill -9 $( echo $program | cut -d '/' -f 1 )
+
+    program=$( netstat -lnt --program 2> /dev/null | grep $LINUX_PORT | awk '{print $7}' )
+
+    assert 0 "test -z $program" "The port $LINUX_PORT is still allocated, you should use another port."
+}
+
+
+
+#
 # Execute a command as a server in the background logging output to a file.
 #
 runServer()
@@ -517,6 +534,7 @@ runServer()
     
     if [ $? == 0 ]; then
         serverSettings
+        checkPortIsFree
 
         printf "\nExecute '%s' as server on $LINUX_SERVER:$LINUX_PORT and log its output to '$logfile' [Yn]? " "$cmd"
 
