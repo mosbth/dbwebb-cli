@@ -2439,20 +2439,21 @@ function linuxkmom04()
     inspectExerciseHeader "Server i node och klient i bash" "uppgift/skapa-en-restful-http-server-med-node-js-och-klient-i-bash" "$KMOM/server"
 
     # Start the server
-    local target="me/$KMOM/server"
+    #local target="me/$KMOM/server"
+    local target="$KMOM/server"
     fileIsReadable "me/$KMOM/server/index.js"
     fileIsReadable "me/$KMOM/server/server.js"
-    runServer "index.js" "$THEDIR/$target" "babel-node index.js"
+    runServer "index.js" "$EXEC_DIR/$target" "babel-node index.js"
 
     # Execute the client
     fileIsReadable "me/$KMOM/server/client.bash"
-    inspectCommand "client.bash" "$THEDIR/$target" "bash client.bash hello"
-    inspectCommand "client.bash" "$THEDIR/$target" "bash client.bash html"
-    inspectCommand "client.bash" "$THEDIR/$target" "bash client.bash status"
-    inspectCommand "client.bash" "$THEDIR/$target" "bash client.bash sum 2 3 4"
-    inspectCommand "client.bash" "$THEDIR/$target" "bash client.bash filter 2 3 42 99"
-    inspectCommand "client.bash" "$THEDIR/$target" "bash client.bash 404"
-    inspectCommand "client.bash" "$THEDIR/$target" "bash client.bash all"
+    inspectCommand "client.bash" "$EXEC_DIR/$target" "bash client.bash hello"
+    inspectCommand "client.bash" "$EXEC_DIR/$target" "bash client.bash html"
+    inspectCommand "client.bash" "$EXEC_DIR/$target" "bash client.bash status"
+    inspectCommand "client.bash" "$EXEC_DIR/$target" "bash client.bash sum 2 3 4"
+    inspectCommand "client.bash" "$EXEC_DIR/$target" "bash client.bash filter 2 3 42 99"
+    inspectCommand "client.bash" "$EXEC_DIR/$target" "bash client.bash 404"
+    inspectCommand "client.bash" "$EXEC_DIR/$target" "bash client.bash all"
 
     # Close it up
     killServer
