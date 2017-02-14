@@ -7,7 +7,7 @@ function linux()
     inspectIntro
 
     # Tmp fix to make babel-node work
-    [ -f node_modules ] || ln -s /home/saxon/students/node/node_modules
+    #[ -f node_modules ] || ln -s /home/saxon/students/node/node_modules
 }
 
 
