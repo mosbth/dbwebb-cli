@@ -21,7 +21,7 @@ JSONLINT_OPTIONS="--quiet"
 HTML_MINIFIER="html-minifier"
 
 CLEANCSS="cleancss"
-CLEANCSS_OPTIONS="--s1 --skip-import"
+CLEANCSS_OPTIONS="--skip-import"
 
 UGLIFYJS="uglifyjs"
 UGLIFYJS_OPTIONS="--mangle --compress --screw-ie8 --comments"
