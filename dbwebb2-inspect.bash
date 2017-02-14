@@ -550,7 +550,7 @@ runServer()
             echo "$cmd started with pid '$SERVER_PID' and status $status (sleeping 3 before continue)..."
             sleep 3
             echo "(Will kill server automatically within 60 seconds.)"
-            [[ -f pid ]] || printf "$MSG_WARNING Missing pid file!\n"
+            assert 0 "test -f pid" "The pid-file is missing."
             local pid=$( [[ -f pid ]] && cat pid )
             echo "File pid contains: '$pid'"
             echo "<<<"
@@ -580,6 +580,7 @@ killServer()
     pushd "$move" > /dev/null
 
     local PID=$( cat pid )
+    assert 0 "test -f pid" "The pid-file is missing."
 
     echo
     echo ">>>"
