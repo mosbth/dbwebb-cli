@@ -30,7 +30,7 @@
 #
 # Current version
 #
-DBW_VERSION="v1.9.78* (2017-02-14)"
+DBW_VERSION="v1.9.79 (2017-02-14)"
 # --------------- DBWEBB FUNCTIONS PHASE START ---------------
 
 #
@@ -640,8 +640,8 @@ createUploadDownloadPaths()
         WHERE="$WHERE/"
     fi
 
-    echo "WHAT=$WHAT"
-    echo "WHERE=$WHERE"
+    #echo "WHAT=$WHAT"
+    #echo "WHERE=$WHERE"
 
     if [ ! -d "$WHAT" ]; then
         printf "\n$MSG_FAILED Target directory is not a valid directory: '$WHAT'"

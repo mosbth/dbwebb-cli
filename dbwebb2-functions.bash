@@ -607,8 +607,8 @@ createUploadDownloadPaths()
         WHERE="$WHERE/"
     fi
 
-    echo "WHAT=$WHAT"
-    echo "WHERE=$WHERE"
+    #echo "WHAT=$WHAT"
+    #echo "WHERE=$WHERE"
 
     if [ ! -d "$WHAT" ]; then
         printf "\n$MSG_FAILED Target directory is not a valid directory: '$WHAT'"

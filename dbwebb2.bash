@@ -136,7 +136,7 @@ function dbwebb-init-structure-dbwebb-kurser()
 
     createUploadDownloadPaths
 
-    command="rsync -av $RSYNC_CHMOD --exclude .git --exclude .gitignore --exclude literature --exclude tutorial --exclude .default --exclude example --include='*/' --include='.??*' --exclude='*' -e \"ssh $DBW_SSH_KEY_OPTION\" '$WHAT' '$WHERE'"
+    command="rsync -av $RSYNC_CHMOD $RSYNC_EXCLUDE --exclude example --include='*/' --include='.??*' --exclude='*' -e \"ssh $DBW_SSH_KEY_OPTION\" '$WHAT' '$WHERE'"
     executeCommand "$intro" "$command" "$message"
 }
 
@@ -161,7 +161,7 @@ function dbwebb-init-structure-www-dbwebb-kurser()
 
     createUploadDownloadPaths
 
-    command="rsync -av $RSYNC_CHMOD --exclude .git --exclude .gitignore --exclude literature --exclude tutorial --exclude .default --exclude example --include='*/' --exclude='*' -e \"ssh $DBW_SSH_KEY_OPTION\" '$WHAT' '$WHERE'"
+    command="rsync -av $RSYNC_CHMOD $RSYNC_EXCLUDE --exclude example --include='*/' --exclude='*' -e \"ssh $DBW_SSH_KEY_OPTION\" '$WHAT' '$WHERE'"
     executeCommand "$intro" "$command" "$message"
 }
 
