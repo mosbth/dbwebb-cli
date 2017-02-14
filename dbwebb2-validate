@@ -30,7 +30,7 @@
 #
 # Current version
 #
-DBW_VERSION="v1.9.79 (2017-02-14)"
+DBW_VERSION="v1.9.80 (2017-02-14)"
 # --------------- DBWEBB FUNCTIONS PHASE START ---------------
 
 #
@@ -1052,7 +1052,7 @@ JSONLINT_OPTIONS="--quiet"
 HTML_MINIFIER="html-minifier"
 
 CLEANCSS="cleancss"
-CLEANCSS_OPTIONS="--skip-import"
+CLEANCSS_OPTIONS=""
 
 UGLIFYJS="uglifyjs"
 UGLIFYJS_OPTIONS="--mangle --compress --screw-ie8 --comments"
