@@ -3309,7 +3309,7 @@ runServer()
             local pid=$( [[ -f pid ]] && cat pid )
             echo "File pid contains: '$pid'"
             echo "<<<"
-            sleep 60 && kill $SERVER_PID $id &> /dev/null &
+            (sleep 60 && kill $SERVER_PID $id &> /dev/null) &
             popd > /dev/null
 
             if [ $status -eq 0 ]; then
