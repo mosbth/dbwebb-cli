@@ -541,8 +541,8 @@ runServer()
         local answer=$( answerYesOrNo "y" )
         if [ "$answer" = "y" -o "$answer" = "Y" ]; then
 
-            [[ -f pid ]] && rm pid
             pushd "$move" > /dev/null
+            [[ -f pid ]] && rm pid
             echo ">>>"
             $cmd &> $SERVER_LOG &
             status=$?
@@ -575,11 +575,15 @@ runServer()
 #
 killServer()
 {
+    local move="$1"
+
+    pushd "$move" > /dev/null
+
     local PID=$( cat pid )
 
     echo
     echo ">>>"
-    echo "Killing server with PID $PID (sleeping 3 before continue)..."
+    echo "Killing server with PID $PID ($SERVER_PID) (sleeping 3 before continue)..."
     kill $PID &> /dev/null
     sleep 3
     kill $SERVER_PID &> /dev/null # To be sure then file pid is missing
@@ -588,6 +592,7 @@ killServer()
     cat "$SERVER_LOG"
     echo "--------- Logfile end    ---------"
     echo "<<<"
+    popd > /dev/null
 }
 
 

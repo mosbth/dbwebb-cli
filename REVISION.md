@@ -2,12 +2,13 @@ Revision History
 ============================================================
 
 
-v1.9.77* (2017-02-13)
+v1.9.78 (2017-02-14)
 -------------------
 
 * Always publish whole repo, to be able to include/exclude files.
 * Validate and publish did two rsync, removed the second one.
 * Inspect oopython kmom04 checking for allocated port.
+* Find correct pid-file when killing server.
 
 
 v1.9.77 (2017-02-11)

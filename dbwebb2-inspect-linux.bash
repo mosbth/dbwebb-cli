@@ -182,8 +182,8 @@ function linuxkmom04()
     # Start the server
     #local target="me/$KMOM/server"
     local target="$KMOM/server"
-    fileIsReadable "me/$KMOM/server/index.js"
-    fileIsReadable "me/$KMOM/server/server.js"
+    fileIsReadable "me/$target/index.js"
+    fileIsReadable "me/$target/server.js"
     runServer "index.js" "$EXEC_DIR/$target" "babel-node index.js"
 
     # Execute the client
@@ -197,7 +197,7 @@ function linuxkmom04()
     inspectCommand "client.bash" "$EXEC_DIR/$target" "bash client.bash all"
 
     # Close it up
-    killServer
+    killServer "$EXEC_DIR/$target"
 }
 
 
