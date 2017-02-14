@@ -5,7 +5,7 @@ Revision History
 v1.9.80 (2017-02-14)
 -------------------
 
-* Remove option --s1 and--skip-import from upgraded clean-css.
+* Remove option --s1 and--skip-import (--inline none) from upgraded clean-css.
 
 
 v1.9.79 (2017-02-14)
