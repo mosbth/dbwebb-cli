@@ -30,7 +30,7 @@
 #
 # Current version
 #
-DBW_VERSION="v1.9.80 (2017-02-14)"
+DBW_VERSION="v1.9.81 (2017-02-16)"
 # --------------- DBWEBB FUNCTIONS PHASE START ---------------
 
 #
@@ -1199,6 +1199,8 @@ function createConfig()
         printf "\nWhat is your student acronym? [$DBW_USER] "
         read acronym
         unset DBW_BASEURL
+    else
+        DBW_USER=${DBW_USER:-noname}
     fi
 
     acronym=${acronym:-$DBW_USER}
