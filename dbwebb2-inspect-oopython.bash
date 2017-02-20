@@ -67,7 +67,7 @@ function oopythonkmom03()
     printUrl "data.html" "me/flask"
 
     inspectExerciseHeader "Skapa ett Black Jack spel" "uppgift/skapa_blackjack" "$KMOM/blackjack"
-    inspectCommand "main.py" "$THEDIR/me/$KMOM/blackjack" "python3 main.py"
+    inspectCommand "main.py" "$EXEC_DIR/$KMOM/blackjack" "python3 main.py"
 }
 
 
@@ -93,7 +93,10 @@ function oopythonkmom04()
 #
 function oopythonkmom05()
 {
-    :
+    inspectLab "uppgift/python-med-rekursiva-funktioner" "lab4" "answer.py" "python3 answer.py"
+
+    inspectExerciseHeader "unorderedlist" "uppgift/terminalprogram-med-sortering-av-lista" "$KMOM/unorderedlist"
+    inspectCommand "test_list.py" "$EXEC_DIR/$KMOM/unorderedlist" "python3 test_list.py"
 }
 
 
@@ -103,7 +106,8 @@ function oopythonkmom05()
 #
 function oopythonkmom06()
 {
-    :
+    inspectExerciseHeader "booking" "uppgift/bokningssystem" "$KMOM/booking"
+    inspectCommand "main.py" "$EXEC_DIR/$KMOM/booking" "python3 main.py"
 }
 
 
