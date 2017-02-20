@@ -167,6 +167,8 @@ function linuxkmom03()
 #
 function linuxkmom04()
 {
+    local target=
+
     if [ "$USE_VERSION" = "1" ]; then
         inspectExercise "javascripting" "uppgift/utfor-nodeschool-workshopen-javascripting" "" "" "" "" "" ""
 
@@ -179,14 +181,13 @@ function linuxkmom04()
 
     inspectLab "uppgift/linux-lab3-introduktion-till-nodejs" "node1" "answer.js" "babel-node answer.js"
 
+
+
     # Prepare
-    inspectExerciseHeader "Server i node och klient i bash" "uppgift/skapa-en-restful-http-server-med-node-js-och-klient-i-bash" "$KMOM/server"
+    inspectExerciseHeader "server" "uppgift/skapa-en-restful-http-server-med-node-js-och-klient-i-bash" "$KMOM/server"
 
     # Start the server
-    #local target="me/$KMOM/server"
-    local target="$KMOM/server"
-    fileIsReadable "me/$target/index.js"
-    fileIsReadable "me/$target/server.js"
+    target="$KMOM/server"
     runServer "index.js" "$EXEC_DIR/$target" "babel-node index.js"
 
     # Execute the client

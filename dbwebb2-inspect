@@ -1794,8 +1794,6 @@ function dbjskmom01()
 #
 function dbjskmom02()
 {
-    # jetty , boats.sqlite, boats.sql
-
     inspectExerciseHeader "Kom igång med SQLite" "kunskap/kom-igang-med-databasen-sqlite" "kmom02/jetty"
 
     inspectLab "uppgift/sql-lab-introduktion-till-sql-dbjs" "sql1" "answer.bash" "./answer.bash"
@@ -1815,7 +1813,34 @@ function dbjskmom02()
 #
 function dbjskmom03()
 {
-    :
+    local target=
+    local curlit=
+
+    inspectLab "uppgift/introduktion-till-nodejs" "node1" "answer.js" "node answer.js"
+
+
+
+    inspectExerciseHeader "server" "uppgift/skapa-en-restful-http-server-med-node-js" "$KMOM/server"
+
+    target="$EXEC_DIR/$KMOM/server"
+    runServer "index.js" "$target" "node index.js"
+
+    curlit="curl http://localhost:$LINUX_PORT"
+    inspectCommand "" "$EXEC_DIR/$KMOM/invoice" "$curlit/"
+    inspectCommand "" "$EXEC_DIR/$KMOM/invoice" "$curlit/index.html"
+    inspectCommand "" "$EXEC_DIR/$KMOM/invoice" "$curlit/status"
+    inspectCommand "" "$EXEC_DIR/$KMOM/invoice" "$curlit/sum?2&3&5&32"
+    inspectCommand "" "$EXEC_DIR/$KMOM/invoice" "$curlit/filter?1&2&4&42&43&99"
+    inspectCommand "" "$EXEC_DIR/$KMOM/invoice" "$curlit/route-does-not-exists"
+
+    killServer "$target"
+
+
+
+    inspectExerciseHeader "invoice" "uppgift/bygg-en-faktureringsmotor-for-batklubben" "$KMOM/invoice"
+    inspectCommand "index.js" "$EXEC_DIR/$KMOM/invoice" "node index.js"
+
+    inspectLab "uppgift/sql-lab-fortsattning-med-sql" "sql2" "answer.bash" "./answer.bash"
 }
 
 
@@ -2433,6 +2458,8 @@ function linuxkmom03()
 #
 function linuxkmom04()
 {
+    local target=
+
     if [ "$USE_VERSION" = "1" ]; then
         inspectExercise "javascripting" "uppgift/utfor-nodeschool-workshopen-javascripting" "" "" "" "" "" ""
 
@@ -2445,14 +2472,13 @@ function linuxkmom04()
 
     inspectLab "uppgift/linux-lab3-introduktion-till-nodejs" "node1" "answer.js" "babel-node answer.js"
 
+
+
     # Prepare
-    inspectExerciseHeader "Server i node och klient i bash" "uppgift/skapa-en-restful-http-server-med-node-js-och-klient-i-bash" "$KMOM/server"
+    inspectExerciseHeader "server" "uppgift/skapa-en-restful-http-server-med-node-js-och-klient-i-bash" "$KMOM/server"
 
     # Start the server
-    #local target="me/$KMOM/server"
-    local target="$KMOM/server"
-    fileIsReadable "me/$target/index.js"
-    fileIsReadable "me/$target/server.js"
+    target="$KMOM/server"
     runServer "index.js" "$EXEC_DIR/$target" "babel-node index.js"
 
     # Execute the client
