@@ -97,6 +97,8 @@ function oopythonkmom05()
 
     inspectExerciseHeader "unorderedlist" "uppgift/terminalprogram-med-sortering-av-lista" "$KMOM/unorderedlist"
     inspectCommand "test_list.py" "$EXEC_DIR/$KMOM/unorderedlist" "python3 test_list.py"
+    inspectCommand "main.py" "$EXEC_DIR/$KMOM/unorderedlist" "python3 main.py"
+    viewFileContent "unorderedlist.py" "me/$KMOM/unorderedlist"
 }
 
 
