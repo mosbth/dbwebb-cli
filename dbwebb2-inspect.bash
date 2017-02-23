@@ -522,11 +522,12 @@ runServer()
     local move="$2"
     local cmd="$3"
     local opts="$4"
+    local ignorePidFile="$5"
+    local pid=
 
     local filename="$move/$what"
     
-    local logfile=".serverlog.txt"
-    export SERVER_LOG="$move/$logfile"
+    export SERVER_LOG="/tmp/dbwebb-inspect-server-log.$DBW_USER"
 
     if [ ! -z "$what" ]; then
         assert 0 "test -f \"$filename\" -o -r \"$filename\"" "The file '$what' is missing or not readable."
@@ -536,25 +537,33 @@ runServer()
         serverSettings
         checkPortIsFree
 
-        printf "\nExecute '%s' as server on $LINUX_SERVER:$LINUX_PORT and log its output to '$logfile' [Yn]? " "$cmd"
+        printf "\nExecute '%s' as server on $LINUX_SERVER:$LINUX_PORT [Yn]? " "$cmd"
 
         local answer=$( answerYesOrNo "y" )
         if [ "$answer" = "y" -o "$answer" = "Y" ]; then
 
             pushd "$move" > /dev/null
-            [[ -f pid ]] && rm pid
+            
             echo ">>>"
+
+            [[ -f pid ]] && rm pid
             $cmd &> $SERVER_LOG &
             status=$?
             SERVER_PID=$!
             echo "$cmd started with pid '$SERVER_PID' and status $status (sleeping 3 before continue)..."
             sleep 3
             echo "(Will kill server automatically within 60 seconds.)"
-            assert 0 "test -f pid" "The pid-file is missing."
-            local pid=$( [[ -f pid ]] && cat pid )
-            echo "File pid contains: '$pid'"
-            echo "<<<"
+
+            echo "IGNORE = $ignorePidFile"
+            if [[ ! $ignorePidFile ]]; then
+                assert 0 "test -f pid" "The pid-file is missing."
+                pid=$( [[ -f pid ]] && cat pid )
+                echo "File pid contains: '$pid'"
+            fi
+
             sleep 60 && kill $SERVER_PID $id &> /dev/null &
+            echo "<<<"
+
             popd > /dev/null
 
             if [ $status -eq 0 ]; then
@@ -576,24 +585,33 @@ runServer()
 killServer()
 {
     local move="$1"
+    local ignorePidFile="$2"
+    local PID="$SERVER_PID"
 
     pushd "$move" > /dev/null
 
-    local PID=$( cat pid )
-    assert 0 "test -f pid" "The pid-file is missing."
-
     echo
     echo ">>>"
-    echo "Killing server with PID $PID ($SERVER_PID) (sleeping 3 before continue)..."
-    kill $PID &> /dev/null
+
+    if [[ ! $ignorePidFile ]]; then
+        PID=$( cat pid )
+        assert 0 "test -f pid" "The pid-file is missing."
+        echo "Killing server with PID $PID ($SERVER_PID) (sleeping 3 before continue)..."
+        kill $PID $SERVER_PID &> /dev/null
+    else
+        echo "Killing server with PID $PID (sleeping 3 before continue)..."
+        kill $SERVER_PID &> /dev/null # To be sure then file pid is missing
+    fi;
+
     sleep 3
-    kill $SERVER_PID &> /dev/null # To be sure then file pid is missing
+
     echo "Printing logfile from server:"
     echo "--------- Logfile start  ---------"
     cat "$SERVER_LOG"
+    rm -f "$SERVER_LOG"
     echo "--------- Logfile end    ---------"
     echo "<<<"
-    popd > /dev/null
+    popd > /dev/null    
 }
 
 

@@ -2,11 +2,12 @@ Revision History
 ============================================================
 
 
-v1.9.81* (2017-02-20)
+v1.9.82 (2017-02-23)
 -------------------
 
 * Inspect for dbjs kmom03.
 * Inspect for oopython kmom05, kmom06.
+* Enhanced inspect for linux kmom05 and 06.
 
 
 v1.9.81 (2017-02-16)

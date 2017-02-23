@@ -191,7 +191,6 @@ function linuxkmom04()
     runServer "index.js" "$EXEC_DIR/$target" "babel-node index.js"
 
     # Execute the client
-    fileIsReadable "me/$KMOM/server/client.bash"
     inspectCommand "client.bash" "$EXEC_DIR/$target" "bash client.bash hello"
     inspectCommand "client.bash" "$EXEC_DIR/$target" "bash client.bash html"
     inspectCommand "client.bash" "$EXEC_DIR/$target" "bash client.bash status"
@@ -211,9 +210,25 @@ function linuxkmom04()
 #
 function linuxkmom05()
 {
-    # http://dbwebb.se/uppgift/los-mazen-med-din-mazerunner-i-bash
-    # mazerunner.sh mazerunner.bash
-    test
+    inspectLab "uppgift/linux-lab4-asynkron-programmering" "node2" "answer.js" "babel-node answer.js"
+
+
+    inspectExerciseHeader "maze" "uppgift/los-mazen-med-din-mazerunner-i-bash" "$KMOM/maze"
+    target="example/nodejs/maze"
+    runServer "index.js" "$target" "node index.js" "" "ignorePidFile"
+    inspectCommand "mazerunner" "$EXEC_DIR/$KMOM/maze" "./mazerunner init"
+    inspectCommand "mazerunner" "$EXEC_DIR/$KMOM/maze" "./mazerunner maps"
+    inspectCommand "mazerunner" "$EXEC_DIR/$KMOM/maze" "./mazerunner select maze-of-doom"
+    inspectCommand "mazerunner" "$EXEC_DIR/$KMOM/maze" "./mazerunner enter"
+    inspectCommand "mazerunner" "$EXEC_DIR/$KMOM/maze" "./mazerunner go east"
+    inspectCommand "mazerunner" "$EXEC_DIR/$KMOM/maze" "./mazerunner go east"
+    inspectCommand "mazerunner" "$EXEC_DIR/$KMOM/maze" "./mazerunner go south"
+    inspectCommand "mazerunner" "$EXEC_DIR/$KMOM/maze" "./mazerunner go south"
+    inspectCommand "mazerunner" "$EXEC_DIR/$KMOM/maze" "./mazerunner go south"
+    inspectCommand "mazerunner" "$EXEC_DIR/$KMOM/maze" "./mazerunner go west"
+    inspectCommand "mazerunner" "$EXEC_DIR/$KMOM/maze" "./mazerunner go west"
+    inspectCommand "mazerunner" "$EXEC_DIR/$KMOM/maze" "./mazerunner loop"
+    killServer "$target" "ignorePidFile"
 }
 
 
@@ -223,8 +238,7 @@ function linuxkmom05()
 #
 function linuxkmom06()
 {
-    #http://dbwebb.se/uppgift/skapa-klienter-och-servrar-som-spelar-luffarschack-i-node-js
-    test
+    inspectExerciseHeader "gomoku" "uppgift/skapa-klienter-och-servrar-som-spelar-luffarschack-i-node-js" "$KMOM/gomoku"
 }
 
 
