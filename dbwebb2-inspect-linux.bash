@@ -212,7 +212,7 @@ function linuxkmom05()
 {
     inspectLab "uppgift/linux-lab4-asynkron-programmering" "node2" "answer.js" "babel-node answer.js"
 
-
+    # 2018 should start up local server
     inspectExerciseHeader "maze" "uppgift/los-mazen-med-din-mazerunner-i-bash" "$KMOM/maze"
     target="example/nodejs/maze"
     runServer "index.js" "$target" "node index.js" "" "ignorePidFile"
