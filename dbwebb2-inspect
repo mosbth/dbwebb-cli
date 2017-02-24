@@ -2507,7 +2507,7 @@ function linuxkmom04()
 #
 function linuxkmom05()
 {
-    inspectLab "uppgift/linux-lab4-asynkron-programmering" "node2" "answer.js" "babel-node answer.js"
+    inspectLab "uppgift/linux-lab4-asynkron-programmering" "node2" "answer.js" "node answer.js"
 
     # 2018 should start up 
     inspectExerciseHeader "maze" "uppgift/los-mazen-med-din-mazerunner-i-bash" "$KMOM/maze"
