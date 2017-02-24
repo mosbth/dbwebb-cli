@@ -30,7 +30,7 @@
 #
 # Current version
 #
-DBW_VERSION="v1.9.82 (2017-02-23)"
+DBW_VERSION="v1.9.83 (2017-02-24)"
 # --------------- DBWEBB FUNCTIONS PHASE START ---------------
 
 #
@@ -2509,9 +2509,10 @@ function linuxkmom05()
 {
     inspectLab "uppgift/linux-lab4-asynkron-programmering" "node2" "answer.js" "babel-node answer.js"
 
-    # 2018 should start up local server
+    # 2018 should start up 
     inspectExerciseHeader "maze" "uppgift/los-mazen-med-din-mazerunner-i-bash" "$KMOM/maze"
-    target="example/nodejs/maze"
+    #target="example/nodejs/maze"
+    target="$EXEC_DIR/$KMOM/maze"
     runServer "index.js" "$target" "node index.js" "" "ignorePidFile"
     inspectCommand "mazerunner" "$EXEC_DIR/$KMOM/maze" "./mazerunner init"
     inspectCommand "mazerunner" "$EXEC_DIR/$KMOM/maze" "./mazerunner maps"
@@ -3355,7 +3356,6 @@ runServer()
             sleep 3
             echo "(Will kill server automatically within 60 seconds.)"
 
-            echo "IGNORE = $ignorePidFile"
             if [[ ! $ignorePidFile ]]; then
                 assert 0 "test -f pid" "The pid-file is missing."
                 pid=$( [[ -f pid ]] && cat pid )

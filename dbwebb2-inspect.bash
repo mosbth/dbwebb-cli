@@ -554,7 +554,6 @@ runServer()
             sleep 3
             echo "(Will kill server automatically within 60 seconds.)"
 
-            echo "IGNORE = $ignorePidFile"
             if [[ ! $ignorePidFile ]]; then
                 assert 0 "test -f pid" "The pid-file is missing."
                 pid=$( [[ -f pid ]] && cat pid )
