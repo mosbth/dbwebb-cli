@@ -38,7 +38,7 @@ function createConfig()
     elif [ $first = "create" ]
     then
 
-        printf "I will now re-create the configuration file '$DBW_CONFIG_FILE_NAME' in your home directory: '$HOME'."
+        printf "I will now re-create the configuration file '$DBW_CONFIG_FILE_NAME' in your home directory: '$HOME'.\n"
 
     fi
 
