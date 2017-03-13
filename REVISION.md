@@ -2,6 +2,13 @@ Revision History
 ============================================================
 
 
+v1.9.85 (2017-03-13)
+-------------------
+
+* Formatted output for dbwebb-validate --check.
+* Removed unuused phpuglify.
+
+
 v1.9.84 (2017-03-13)
 -------------------
 

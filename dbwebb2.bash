@@ -773,7 +773,7 @@ dbwebb-testrepo()
         fi
 
         if [[ $OPTION_LOCAL ]]; then
-            line=$( echo "$line" | sed 's/dbwebb validate /make dbwebb-validate arg1=/' )
+            line=$( echo "$line" | sed 's/dbwebb validate /make dbwebb-validate what=/' )
         fi
 
         if [[ $SILENT ]]; then

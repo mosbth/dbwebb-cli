@@ -30,7 +30,7 @@
 #
 # Current version
 #
-DBW_VERSION="v1.9.84 (2017-03-13)"
+DBW_VERSION="v1.9.85 (2017-03-13)"
 # --------------- DBWEBB FUNCTIONS PHASE START ---------------
 
 #
@@ -1924,7 +1924,7 @@ dbwebb-testrepo()
         fi
 
         if [[ $OPTION_LOCAL ]]; then
-            line=$( echo "$line" | sed 's/dbwebb validate /make dbwebb-validate arg1=/' )
+            line=$( echo "$line" | sed 's/dbwebb validate /make dbwebb-validate what=/' )
         fi
 
         if [[ $SILENT ]]; then
