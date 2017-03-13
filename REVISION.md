@@ -2,6 +2,12 @@ Revision History
 ============================================================
 
 
+v1.9.84 (2017-03-13)
+-------------------
+
+* Added version for dbwebb, dbwebb-validate and dbwebb-inspect in dbwebb-validate --check.
+
+
 v1.9.83 (2017-02-24)
 -------------------
 
