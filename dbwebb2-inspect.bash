@@ -358,7 +358,8 @@ inspectExerciseHeader()
 #
 dbwebbInspectTargetNotReadable()
 {
-    local thedir="$( readlink -f "$REPO" )"
+    #local thedir="$( readlink -f "$REPO" )"
+    local thedir="$( get_realpath "$REPO" )"
     
     if [ ! -d "$thedir" ]; then 
         
@@ -724,7 +725,8 @@ elif [ -z "$KMOM" ]; then
     exit 2    
 fi
 
-THEDIR=$( readlink -f "$REPO" )
+#THEDIR=$( readlink -f "$REPO" )
+THEDIR=$( get_realpath "$REPO" )
 if [ ! -d "$THEDIR" ]; then
     dbwebbInspectTargetNotReadable
     #badUsage "The path '$REPO' is not a valid directory."

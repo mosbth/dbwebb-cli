@@ -30,7 +30,7 @@
 #
 # Current version
 #
-DBW_VERSION="v1.9.85 (2017-03-13)"
+DBW_VERSION="v1.9.86 (2017-03-14)"
 # --------------- DBWEBB FUNCTIONS PHASE START ---------------
 
 #
@@ -72,6 +72,19 @@ publishChmod()
             ;;
         esac
     fi
+}
+
+
+
+#
+# realpath -f dows not work on Mac OS
+#
+function get_realpath()
+{
+    [[ ! -f "$1" ]] && return 1 # failure : file does not exist.
+    [[ -n "$no_symlinks" ]] && local pwdp='pwd -P' || local pwdp='pwd' # do symlinks.
+    echo "$( cd "$( echo "${1%/*}" )" 2>/dev/null; $pwdp )"/"${1##*/}" # echo result.
+    return 0 # success
 }
 
 
@@ -3160,7 +3173,8 @@ inspectExerciseHeader()
 #
 dbwebbInspectTargetNotReadable()
 {
-    local thedir="$( readlink -f "$REPO" )"
+    #local thedir="$( readlink -f "$REPO" )"
+    local thedir="$( get_realpath "$REPO" )"
     
     if [ ! -d "$thedir" ]; then 
         
@@ -3526,7 +3540,8 @@ elif [ -z "$KMOM" ]; then
     exit 2    
 fi
 
-THEDIR=$( readlink -f "$REPO" )
+#THEDIR=$( readlink -f "$REPO" )
+THEDIR=$( get_realpath "$REPO" )
 if [ ! -d "$THEDIR" ]; then
     dbwebbInspectTargetNotReadable
     #badUsage "The path '$REPO' is not a valid directory."
