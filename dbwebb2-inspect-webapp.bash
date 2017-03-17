@@ -5,11 +5,6 @@
 function webapp()
 {
     inspectIntro
-    
-    local meDir=
-    
-    meDir="$( echo "$KMOM" | sed 's/kmom0/me/g' | sed 's/kmom/me/g' )"
-    METARGET="me/$KMOM/$meDir"
 }
 
 
@@ -19,24 +14,7 @@ function webapp()
 #
 function webapplast()
 {
-    :
-}
-
-
-
-#
-#
-#
-function webappme()
-{
-    headerForTest "-- me-page" "-- ${DBW_WWW}$DBW_COURSE/$KMOM#resultat_redovisning" 
-    openFilesInEditor "me/redovisa/"
-    checkKmomDir "me/redovisa"
-
-    printUrl "me.html" "me/redovisa"  
-    printUrl "report.html" "me/redovisa"  
-
-    pressEnterToContinue
+    inspectMe "me/redovisa" "" "" "" "redovisa"
 }
 
 
@@ -47,7 +25,7 @@ function webappme()
 #
 function webappkmom01()
 {
-    inspectMe "$METARGET" "index.html" "" "uppgift/skapa-en-me-app-till-webapp-kursen"
+    :
 }
 
 
@@ -57,7 +35,8 @@ function webappkmom01()
 #
 function webappkmom02()
 {
-    inspectMe "$METARGET" "index.html" "" "uppgift/bygg-ut-me-appen-med-ett-potpurri-av-tester"
+    inspectExerciseHeader "jq" "uppgift/sokverktyg-for-json-filer" "kmom02/jq"
+    inspectCommand "solution.bash" "$THEDIR/me/$KMOM/jq" "./solution.bash"
 }
 
 
@@ -67,7 +46,7 @@ function webappkmom02()
 #
 function webappkmom03()
 {
-    test
+    :
 }
 
 
@@ -77,7 +56,7 @@ function webappkmom03()
 #
 function webappkmom04()
 {
-    test
+    :
 }
 
 
@@ -87,7 +66,7 @@ function webappkmom04()
 #
 function webappkmom05()
 {
-    test
+    :
 }
 
 
@@ -97,7 +76,7 @@ function webappkmom05()
 #
 function webappkmom06()
 {
-    test
+    :
 }
 
 
@@ -107,7 +86,7 @@ function webappkmom06()
 #
 function webappkmom10()
 {
-    test
+    :
 }
 
 
