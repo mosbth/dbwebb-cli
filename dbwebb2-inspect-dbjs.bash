@@ -94,7 +94,13 @@ function dbjskmom03()
 #
 function dbjskmom04()
 {
-    :
+    inspectExerciseHeader "skolan" "uppgift/kom-igang-med-sql" "$KMOM/skolan"
+    viewFileContent "skolan.sql" "me/$KMOM/skolan"
+    # should execute the sql-file skolan/skolan.sql
+
+    inspectLab "uppgift/uppgift/nodejs-inbyggda-moduler" "node2" "answer.js" "node answer.js"
+
+    inspectExerciseHeader "terminal" "uppgift/nodejs-terminalprogram-mot-mysql" "$KMOM/terminal"
 }
 
 

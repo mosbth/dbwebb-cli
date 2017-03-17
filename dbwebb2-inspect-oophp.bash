@@ -5,8 +5,6 @@
 function oophp()
 {
     inspectIntro
-    
-    METARGET="me/$KMOM"
 }
 
 
@@ -16,7 +14,7 @@ function oophp()
 #
 function oophplast()
 {
-    :
+    inspectMe "me/anax-lite" "" "" "" "anax-lite"
 }
 
 
@@ -26,7 +24,12 @@ function oophplast()
 #
 function oophpkmom01()
 {
-    inspectMe "$METARGET" "" "" "oophp/kmom01#uppgifter"
+    inspectExerciseHeader "guess" "uppgift/gissa-numret" "$KMOM/guess"
+    printUrl "index.php" "me/$KMOM/guess"
+
+    inspectExerciseHeader "skolan" "uppgift/kom-igang-med-sql" "kmom01/skolan"
+    viewFileContent "skolan.sql" "me/kmom01/skolan"
+    # should execute the sql-file skolan/skolan.sql
 }
 
 
@@ -36,7 +39,9 @@ function oophpkmom01()
 #
 function oophpkmom02()
 {
-    inspectMe "$METARGET" "" "" "oophp/kmom02#uppgifter"
+    inspectExerciseHeader "skolan" "uppgift/kom-igang-med-sql" "kmom01/skolan"
+    viewFileContent "skolan.sql" "me/kmom01/skolan"
+    # should execute the sql-file skolan/skolan.sql
 }
 
 
@@ -46,7 +51,9 @@ function oophpkmom02()
 #
 function oophpkmom03()
 {
-    inspectMe "$METARGET" "" "" "oophp/kmom03#uppgifter"
+    inspectExerciseHeader "skolan" "uppgift/kom-igang-med-sql" "kmom01/skolan"
+    viewFileContent "skolan.sql" "me/kmom01/skolan"
+    # should execute the sql-file skolan/skolan.sql
 }
 
 
@@ -56,7 +63,7 @@ function oophpkmom03()
 #
 function oophpkmom04()
 {
-    inspectMe "$METARGET" "" "" "oophp/kmom04#uppgifter"
+    :
 }
 
 
@@ -66,7 +73,7 @@ function oophpkmom04()
 #
 function oophpkmom05()
 {
-    inspectMe "$METARGET" "" "" "oophp/kmom05#uppgifter"
+    :
 }
 
 
@@ -76,7 +83,7 @@ function oophpkmom05()
 #
 function oophpkmom06()
 {
-    inspectMe "$METARGET" "" "" "oophp/kmom06#uppgifter"
+    :
 }
 
 
@@ -86,7 +93,7 @@ function oophpkmom06()
 #
 function oophpkmom10()
 {
-    inspectMe "$METARGET" "" "" "oophp/kmom10#redovisning"
+    :
 }
 
 

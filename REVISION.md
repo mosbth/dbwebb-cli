@@ -2,10 +2,12 @@ Revision History
 ============================================================
 
 
-v1.9.88* (2017-03-17)
+v1.9.89 (2017-03-17)
+v1.9.88 (2017-03-17)
 -------------------
 
 * Included .dbwebb.include and .dbwebb.exclude2.
+* Inspect updates to dbjs, webapp and oophp.
 
 
 v1.9.87 (2017-03-14)

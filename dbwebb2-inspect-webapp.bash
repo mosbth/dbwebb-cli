@@ -35,7 +35,7 @@ function webappkmom01()
 #
 function webappkmom02()
 {
-    inspectExerciseHeader "jq" "uppgift/sokverktyg-for-json-filer" "kmom02/jq"
+    inspectExerciseHeader "jq" "uppgift/sokverktyg-for-json-filer" "$KMOM/jq"
     inspectCommand "solution.bash" "$THEDIR/me/$KMOM/jq" "./solution.bash"
 }
 

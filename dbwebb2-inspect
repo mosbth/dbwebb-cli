@@ -30,7 +30,7 @@
 #
 # Current version
 #
-DBW_VERSION="v1.9.88* (2017-03-17)"
+DBW_VERSION="v1.9.89 (2017-03-17)"
 # --------------- DBWEBB FUNCTIONS PHASE START ---------------
 
 #
@@ -1861,7 +1861,13 @@ function dbjskmom03()
 #
 function dbjskmom04()
 {
-    :
+    inspectExerciseHeader "skolan" "uppgift/kom-igang-med-sql" "$KMOM/skolan"
+    viewFileContent "skolan.sql" "me/$KMOM/skolan"
+    # should execute the sql-file skolan/skolan.sql
+
+    inspectLab "uppgift/uppgift/nodejs-inbyggda-moduler" "node2" "answer.js" "node answer.js"
+
+    inspectExerciseHeader "terminal" "uppgift/nodejs-terminalprogram-mot-mysql" "$KMOM/terminal"
 }
 
 
@@ -2031,8 +2037,6 @@ function oopythonkmom10()
 function oophp()
 {
     inspectIntro
-    
-    METARGET="me/$KMOM"
 }
 
 
@@ -2042,7 +2046,7 @@ function oophp()
 #
 function oophplast()
 {
-    :
+    inspectMe "me/anax-lite" "" "" "" "anax-lite"
 }
 
 
@@ -2052,7 +2056,12 @@ function oophplast()
 #
 function oophpkmom01()
 {
-    inspectMe "$METARGET" "" "" "oophp/kmom01#uppgifter"
+    inspectExerciseHeader "guess" "uppgift/gissa-numret" "$KMOM/guess"
+    printUrl "index.php" "me/$KMOM/guess"
+
+    inspectExerciseHeader "skolan" "uppgift/kom-igang-med-sql" "kmom01/skolan"
+    viewFileContent "skolan.sql" "me/kmom01/skolan"
+    # should execute the sql-file skolan/skolan.sql
 }
 
 
@@ -2062,7 +2071,9 @@ function oophpkmom01()
 #
 function oophpkmom02()
 {
-    inspectMe "$METARGET" "" "" "oophp/kmom02#uppgifter"
+    inspectExerciseHeader "skolan" "uppgift/kom-igang-med-sql" "kmom01/skolan"
+    viewFileContent "skolan.sql" "me/kmom01/skolan"
+    # should execute the sql-file skolan/skolan.sql
 }
 
 
@@ -2072,7 +2083,9 @@ function oophpkmom02()
 #
 function oophpkmom03()
 {
-    inspectMe "$METARGET" "" "" "oophp/kmom03#uppgifter"
+    inspectExerciseHeader "skolan" "uppgift/kom-igang-med-sql" "kmom01/skolan"
+    viewFileContent "skolan.sql" "me/kmom01/skolan"
+    # should execute the sql-file skolan/skolan.sql
 }
 
 
@@ -2082,7 +2095,7 @@ function oophpkmom03()
 #
 function oophpkmom04()
 {
-    inspectMe "$METARGET" "" "" "oophp/kmom04#uppgifter"
+    :
 }
 
 
@@ -2092,7 +2105,7 @@ function oophpkmom04()
 #
 function oophpkmom05()
 {
-    inspectMe "$METARGET" "" "" "oophp/kmom05#uppgifter"
+    :
 }
 
 
@@ -2102,7 +2115,7 @@ function oophpkmom05()
 #
 function oophpkmom06()
 {
-    inspectMe "$METARGET" "" "" "oophp/kmom06#uppgifter"
+    :
 }
 
 
@@ -2112,7 +2125,7 @@ function oophpkmom06()
 #
 function oophpkmom10()
 {
-    inspectMe "$METARGET" "" "" "oophp/kmom10#redovisning"
+    :
 }
 
 
@@ -2600,7 +2613,7 @@ function webappkmom01()
 #
 function webappkmom02()
 {
-    inspectExerciseHeader "jq" "uppgift/sokverktyg-for-json-filer" "kmom02/jq"
+    inspectExerciseHeader "jq" "uppgift/sokverktyg-for-json-filer" "$KMOM/jq"
     inspectCommand "solution.bash" "$THEDIR/me/$KMOM/jq" "./solution.bash"
 }
 
