@@ -30,7 +30,7 @@
 #
 # Current version
 #
-DBW_VERSION="v1.9.90 (2017-03-22)"
+DBW_VERSION="v1.9.91 (2017-03-23)"
 # --------------- DBWEBB FUNCTIONS PHASE START ---------------
 
 #
@@ -1868,6 +1868,9 @@ function dbjskmom04()
     inspectLab "uppgift/uppgift/nodejs-inbyggda-moduler" "node2" "answer.js" "node answer.js"
 
     inspectExerciseHeader "terminal" "uppgift/nodejs-terminalprogram-mot-mysql" "$KMOM/terminal"
+    viewFileContent "allan" "me/$KMOM/terminal"
+    inspectCommand "" "$EXEC_DIR/$KMOM/terminal" "./allan --version"
+    inspectCommand "" "$EXEC_DIR/$KMOM/terminal" "./allan --help"
 }
 
 

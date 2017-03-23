@@ -101,6 +101,9 @@ function dbjskmom04()
     inspectLab "uppgift/uppgift/nodejs-inbyggda-moduler" "node2" "answer.js" "node answer.js"
 
     inspectExerciseHeader "terminal" "uppgift/nodejs-terminalprogram-mot-mysql" "$KMOM/terminal"
+    viewFileContent "allan" "me/$KMOM/terminal"
+    inspectCommand "" "$EXEC_DIR/$KMOM/terminal" "./allan --version"
+    inspectCommand "" "$EXEC_DIR/$KMOM/terminal" "./allan --help"
 }
 
 
