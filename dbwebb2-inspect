@@ -2356,7 +2356,7 @@ linuxExerciseScript()
     inspectCommand "hello.bash" "$THEDIR/$target" "bash hello.bash"
     viewFileContent "hello.bash" "$target"
 
-    inspectCommand "argument.bash" "$THEDIR/$target" "bash argument.bash make-me-proud"
+    inspectCommand "argument.bash" "$THEDIR/$target" "bash argument.bash make me proud"
     viewFileContent "argument.bash" "$target"
 
     inspectCommand "if_1.bash" "$THEDIR/$target" "bash if_1.bash 7"
