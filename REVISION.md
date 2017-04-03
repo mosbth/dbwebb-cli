@@ -2,6 +2,12 @@ Revision History
 ============================================================
 
 
+v1.9.93* (2017-04-03)
+-------------------
+
+* Adding --dry to enable dry option to validate/publish from using dbwebb --dry.
+
+
 v1.9.92 (2017-04-03)
 -------------------
 

@@ -198,7 +198,7 @@ function validateCommand()
 
         findExpression="$( getFindExpression "$dir" "$extension" )"
 
-        [[ $optDryRun ]] && echo "$findExpression"
+        [[ $optDryRun ]] && printf "\n%s" "$findExpression"
 
         OIFS="$IFS"
         IFS=$'\n'
@@ -277,7 +277,7 @@ function publishCommand()
 
         findExpression="$( getFindExpression "$dir" "$extension" )"
 
-        [[ $optDryRun ]] && echo "$findExpression"
+        [[ $optDryRun ]] && printf "\n%s" "$findExpression"
 
         for filename in $( eval $findExpression ); do
             if [[ $optDryRun ]]; then
