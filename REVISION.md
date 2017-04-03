@@ -2,7 +2,7 @@ Revision History
 ============================================================
 
 
-v1.9.93* (2017-04-03)
+v1.9.93 (2017-04-03)
 -------------------
 
 * dbwebb validate/publish --courserepo must use absolut path.
