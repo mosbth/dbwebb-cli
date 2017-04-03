@@ -5,6 +5,8 @@ Revision History
 v1.9.92* (2017-04-03)
 -------------------
 
+* Corrected get_realpath to work with both dirs and files.
+* Rewrote basis for find expression in dbwebb validate.
 * Download does not use dbwebb.include or dbwebb.exclude.
 
 

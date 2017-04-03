@@ -62,6 +62,9 @@ YAML_OPTIONS=""
 #EXCLUDE_PATHS='\*/webgl/\* \*/libs/\* \*/lib/\* \*/node_modules/\*'
 EXCLUDE_PATHS='\*/example/webgl/\* \*/libs/\* \*/lib/\* \*/node_modules/\* \*/platforms/\* \*/plugins/\* \*/docs/api/\* \*/vendor/\* \*/3pp/\* \*/example/lekplats/\* \*/css/anax-grid/\* \*/me/anax-flat/\* \*/cache/\* \*/build/\* \*/.git/\* \*/slide/\*'
 EXCLUDE_FILES='phpliteadmin\* \*.min.\* \*.tpl.php font-awesome.css lessc.inc.php'
+INCLUDE_PATHS='' #'\*/platforms/browser/www/\*'
+#EXCLUDE_PATHS="*/example/webgl/* */libs/* */lib/* */node_modules/* */platforms/* */plugins/* */docs/api/* */vendor/* */3pp/* */example/lekplats/* */css/anax-grid/* */me/anax-flat/* */cache/* */build/* */.git/* */slide/*"
+#EXCLUDE_FILES="phpliteadmin* *.min.* *.tpl.php font-awesome.css lessc.inc.php"
 
 
 
@@ -142,21 +145,20 @@ function checkInstalledValidateTools
 #
 function getFindExpression
 {
-    local ignorePaths
-    local ignoreFiles
-    local findExpression
-    local ignoreExtension="$1"
+    local dir="$1"
+    local extension="$2"
+    local includeExclude
+    local findExtension=
 
-    ignorePaths=$( printf " -not -path %s " $( echo $EXCLUDE_PATHS ) )
-    ignoreFiles=$( printf " -not -name %s " $( echo $EXCLUDE_FILES ) )
+    includeExclude="$( printf " -not -path %s " $( echo $EXCLUDE_PATHS ) )"
+    includeExclude="$includeExclude $( printf " -not -name %s " $( echo $EXCLUDE_FILES ) )"
+    #includePaths=$( printf " -path %s " $( echo $INCLUDE_PATHS ) )
 
-    if [ -z "$ignoreExtension" ]; then
-        findExpression=$( echo "find \"$dir/\" -type f -name \*.$extension $ignorePaths $ignoreFiles" )
-    else
-        findExpression=$( echo "find \"$dir/\" $ignorePaths $ignoreFiles" )
+    if [ ! -z "$extension" ]; then
+        findExtension="-type f -name \"*.$extension\""
     fi
-    
-    echo $findExpression
+
+    echo "find \"$dir/\" $findExtension $includeExclude"
 }
 
 
@@ -174,12 +176,11 @@ function validateCommand()
     local onlyExitStatus="$6"
     local counter=0
     local findExpression=
-    local ignoreExtension="$7"
 
     if hash "$cmd" 2>/dev/null; then
         printf "\n *.$extension using $cmd"
 
-        findExpression=$( getFindExpression $ignoreExtension )
+        findExpression="$( getFindExpression "$dir" "$extension" )"
 
         [[ $optDryRun ]] && echo "$findExpression"
 
@@ -231,8 +232,8 @@ function validate()
     [[ $ENABLE_ALL || ! $DISABLE_CHECKBASH ]] && validateCommand "$dir" "$CHECKBASH" "bash" "$CHECKBASH_OPTIONS"
     [[ $ENABLE_ALL || ! $DISABLE_CHECKSH ]]   && validateCommand "$dir" "$CHECKSH" "sh" "$CHECKSH_OPTIONS"
     [[ $ENABLE_ALL || ! $DISABLE_YAML ]]      && validateCommand "$dir" "$YAML" "yml" "$YAML_OPTIONS" "> /dev/null"
-    [[ $ENABLE_ALL || ! $DISABLE_FILE_CRLF ]] && validateCommand "$dir" "$FILE_CRLF" "" "$FILE_CRLF_OPTIONS" '| grep CRLF; test $? -eq 1' "" "allExtensions"
-    [[ $ENABLE_ALL || ! $DISABLE_FILE_BOM ]]  && validateCommand "$dir" "$FILE_BOM" "" "$FILE_BOM_OPTIONS" '| grep BOM; test $? -eq 1' "" "allExtensions"
+    [[ $ENABLE_ALL || ! $DISABLE_FILE_CRLF ]] && validateCommand "$dir" "$FILE_CRLF" "" "$FILE_CRLF_OPTIONS" '| grep CRLF; test $? -eq 1' ""
+    [[ $ENABLE_ALL || ! $DISABLE_FILE_BOM ]]  && validateCommand "$dir" "$FILE_BOM" "" "$FILE_BOM_OPTIONS" '| grep BOM; test $? -eq 1' ""
 }
 
 
@@ -415,10 +416,15 @@ done
 # Validate (and publish) the path choosen
 #
 dir="$( getPathToDirectoryFor "$command" )"
+echo "$dir"
+dir1="$( get_realpath "$dir" )"
+echo $dir1
+
 if [ ! -d "$dir" ]; then
     badUsage "$MSG_FAILED Directory '$command' is not a valid directory."
     exit 2
 fi
+#exit
 
 
 

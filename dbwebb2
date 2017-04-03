@@ -81,10 +81,23 @@ publishChmod()
 #
 function get_realpath()
 {
-    [[ ! -e "$1" ]] && return 1 # failure : file does not exist.
-    [[ -n "$no_symlinks" ]] && local pwdp='pwd -P' || local pwdp='pwd' # do symlinks.
-    echo "$( cd "$( echo "${1%/*}" )" 2>/dev/null; $pwdp )"/"${1##*/}" # echo result.
-    return 0 # success
+    # failure : file does not exist.
+    [[ ! -e "$1" ]] && return 1
+
+    # do symlinks.
+    [[ -n "$no_symlinks" ]] && local pwdp='pwd -P' || local pwdp='pwd'
+
+    # Path to dir, without eventual filename
+    local path="$( cd "$( echo "${1%/*}" )" 2>/dev/null; $pwdp )"
+
+    if [ -d "$1" ]; then
+        path="$( cd "$( echo "$1" )" 2>/dev/null; $pwdp )"
+    elif [ -f "$1" ]; then
+        path="$path/${1##*/}"
+    fi
+
+    echo "$path"
+    return 0
 }
 
 
@@ -608,7 +621,7 @@ function getPathToDirectoryFor
         echo "$command"
     elif [ -z "$dir" -a -d "$DBW_CURRENT_DIR/$command" ]; then
         echo "$DBW_CURRENT_DIR/$command"
-    elif [ -d "$DBW_COURSE_DIR" -a -d "$DBW_COURSE_DIR/$dir" ]; then
+    elif [ ! -z "$dir" -a -d "$DBW_COURSE_DIR" -a -d "$DBW_COURSE_DIR/$dir" ]; then
         echo "$DBW_COURSE_DIR/$dir"
     else
         printf "\n$MSG_FAILED The item '$command' was mapped to directory '$dir' which is not a valid directory."
