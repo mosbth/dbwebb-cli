@@ -1431,7 +1431,7 @@ do
             ;;
 
         --course-repo)
-            DBW_COURSE_DIR="$2"
+            DBW_COURSE_DIR="$( get_realpath "$2" )"
             if [ ! -d "$DBW_COURSE_DIR" ]; then
                 badUsage "$MSG_FAILED --course-repo '$DBW_COURSE_DIR' is not a valid directory."
                 exit 2
@@ -1449,11 +1449,6 @@ do
             shift
             shift
             ;;
-
-        #--install-npm)
-        #    npm install -g htmlhint@0.9.12 csslint jshint jscs@2.11.0 jsonlint js-yaml html-minifier@0.8.0 clean-css uglify-js
-        #    exit
-        #    ;;
 
         --dry | -d)
             optDryRun="yes"
