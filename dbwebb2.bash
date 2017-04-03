@@ -359,7 +359,7 @@ function dbwebb-download()
     local overwrite=
     
     if [[ $OVERWRITE ]]; then
-        command="$RSYNC_CMD $OVERWRITE '$WHERE' '$WHAT'"
+        command="$RSYNC_DOWNLOAD_DELETE_CMD $OVERWRITE '$WHERE' '$WHAT'"
         overwrite="WILL BE"
     else
         command="$RSYNC_DOWNLOAD_CMD '$WHERE' '$WHAT'"
