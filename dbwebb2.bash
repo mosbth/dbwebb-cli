@@ -395,7 +395,7 @@ function dbwebb-validate()
     local intro="Uploading the directory '$WHAT' to '$WHERE' for validation."
     local command1="$RSYNC_CMD $OVERWRITE '$WHAT' '$WHERE'"
 #    local command2="rsync -av $RSYNC_CHMOD $OVERWRITE --exclude .git --exclude .gitignore --exclude .default --exclude .solution --exclude .old --include='.??*' --exclude='*' -e \"ssh $DBW_SSH_KEY_OPTION\" '$DBW_COURSE_DIR/' '$DBW_REMOTE_DESTINATION/'"
-    local command3="$SSH_CMD '/home/saxon/students/node/dbwebb-cli1/dbwebb2-validate $dry --course-repo \"$DBW_REMOTE_BASEDIR/$DBW_COURSE\" \"$DBW_REMOTE_BASEDIR/$DBW_COURSE/$SUBDIR\"' 2>&1 | tee '$log'; test \${PIPESTATUS[0]} -eq 0"
+    local command3="$SSH_CMD 'dbwebb2-validate $dry --course-repo \"$DBW_REMOTE_BASEDIR/$DBW_COURSE\" \"$DBW_REMOTE_BASEDIR/$DBW_COURSE/$SUBDIR\"' 2>&1 | tee '$log'; test \${PIPESTATUS[0]} -eq 0"
     local message="to validate course results.\nSaved a log of the output: less -R '$log'"
     #executeCommand "$intro" "$command1; $command2; $command3" "$message"
     executeCommand "$intro" "$command1; $command3" "$message"
