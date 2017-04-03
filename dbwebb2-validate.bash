@@ -192,7 +192,7 @@ function validateCommand()
 
         # If within course repo, use relative links in find
         if [[ $DBW_COURSE_DIR ]]; then
-            cd "$DBW_COURSE_DIR"
+            pushd "$DBW_COURSE_DIR" > /dev/null
             dir=".${dir#$DBW_COURSE_DIR}"
         fi
 
@@ -218,6 +218,7 @@ function validateCommand()
         done
         
         IFS="$OIFS"
+        [[ $DBW_COURSE_DIR ]] && popd > /dev/null
 
         printf " ($counter)"
     else
@@ -268,14 +269,9 @@ function publishCommand()
 
     if hash "$cmd" 2>/dev/null; then
         printf "\n *.$extension using $cmd"
-        
-        # If within course repo, use relative links in find
-        if [[ $DBW_COURSE_DIR ]]; then
-            cd "$DBW_COURSE_DIR"
-            dir=".${dir#$DBW_COURSE_DIR}"
-        fi
+        pushd "$dir" > /dev/null
 
-        findExpression="$( getFindExpression "$dir" "$extension" )"
+        findExpression="$( getFindExpression "." "$extension" )"
 
         [[ $optDryRun ]] && printf "\n%s" "$findExpression"
 
@@ -288,6 +284,8 @@ function publishCommand()
             counter=$(( counter + 1 ))
             printf "."
         done
+
+        popd > /dev/null
         printf " ($counter)"
     else
         printf "\n *.$extension (skipping - $cmd not installed)"
