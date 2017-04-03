@@ -2,9 +2,10 @@ Revision History
 ============================================================
 
 
-v1.9.92* (2017-04-03)
+v1.9.92 (2017-04-03)
 -------------------
 
+* Added .dbwebb/validate.exclude for improving how validate/publish excludes/includes files and move configuration from dbwebb-cli to courserepo.
 * Corrected get_realpath to work with both dirs and files.
 * Rewrote basis for find expression in dbwebb validate.
 * Download does not use dbwebb.include or dbwebb.exclude.

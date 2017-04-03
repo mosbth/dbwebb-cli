@@ -150,15 +150,25 @@ function getFindExpression
     local includeExclude
     local findExtension=
 
-    includeExclude="$( printf " -not -path %s " $( echo $EXCLUDE_PATHS ) )"
-    includeExclude="$includeExclude $( printf " -not -name %s " $( echo $EXCLUDE_FILES ) )"
-    #includePaths=$( printf " -path %s " $( echo $INCLUDE_PATHS ) )
-
-    if [ ! -z "$extension" ]; then
-        findExtension="-type f -name \"*.$extension\""
+    if [ -f "$DBW_COURSE_DIR/.dbwebb/validate.exclude" ]; then
+        #includeExclude="$( grep -v "^#" "$DBW_COURSE_DIR/.dbwebb-validate.exclude" | sed "s/^-\(.*\)/-o -not -path \"\1\"/g" | sed "s/^+\(.*\)/-o -path \"\1\"/g" | tr "\n" " " )"
+        includeExclude="$( grep -v "^#" "$DBW_COURSE_DIR/.dbwebb/validate.exclude" | sed "s/^-\(.*\)/-not -path \"\1\"/g" | sed "s/^+\(.*\)/-o -path \"\1\"/g" | tr "\n" " " )"
+        includeExclude="$( sed -e 's/[[:space:]]*$//' <<<${includeExclude} )"
+        if [ ! -z "$includeExclude" ]; then
+            includeExclude="\( $includeExclude \)"
+        fi
+    else
+        # Hardcoded include exclude expressions
+        includeExclude="$( printf " -not -path %s " $( echo $EXCLUDE_PATHS ) )"
+        includeExclude="$includeExclude $( printf " -not -name %s " $( echo $EXCLUDE_FILES ) )"
+        #includePaths=$( printf " -path %s " $( echo $INCLUDE_PATHS ) )
     fi
 
-    echo "find \"$dir/\" $findExtension $includeExclude"
+    if [ ! -z "$extension" ]; then
+        findExtension="-name \"*.$extension\""
+    fi
+
+    echo "find \"$dir/\" $includeExclude -type f $findExtension"
 }
 
 
@@ -179,6 +189,12 @@ function validateCommand()
 
     if hash "$cmd" 2>/dev/null; then
         printf "\n *.$extension using $cmd"
+
+        # If within course repo, use relative links in find
+        if [[ $DBW_COURSE_DIR ]]; then
+            cd "$DBW_COURSE_DIR"
+            dir=".${dir#$DBW_COURSE_DIR}"
+        fi
 
         findExpression="$( getFindExpression "$dir" "$extension" )"
 
@@ -253,7 +269,13 @@ function publishCommand()
     if hash "$cmd" 2>/dev/null; then
         printf "\n *.$extension using $cmd"
         
-        findExpression=$( getFindExpression )
+        # If within course repo, use relative links in find
+        if [[ $DBW_COURSE_DIR ]]; then
+            cd "$DBW_COURSE_DIR"
+            dir=".${dir#$DBW_COURSE_DIR}"
+        fi
+
+        findExpression="$( getFindExpression "$dir" "$extension" )"
 
         [[ $optDryRun ]] && echo "$findExpression"
 
@@ -416,15 +438,12 @@ done
 # Validate (and publish) the path choosen
 #
 dir="$( getPathToDirectoryFor "$command" )"
-echo "$dir"
-dir1="$( get_realpath "$dir" )"
-echo $dir1
+dir="$( get_realpath "$dir" )"
 
 if [ ! -d "$dir" ]; then
     badUsage "$MSG_FAILED Directory '$command' is not a valid directory."
     exit 2
 fi
-#exit
 
 
 
