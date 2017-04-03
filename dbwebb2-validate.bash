@@ -364,7 +364,7 @@ do
             ;;
 
         --publish-to)
-            DBW_PUBLISH_TO="$2"
+            DBW_PUBLISH_TO="$( get_realpath "$2" )"
             if [ ! -d $( dirname "$DBW_PUBLISH_TO" ) ]; then
                 badUsage "$MSG_FAILED --publish-to '$DBW_PUBLISH_TO' is not a valid directory."
                 exit 2
