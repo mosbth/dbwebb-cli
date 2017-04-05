@@ -6,6 +6,7 @@ v1.9.98 (2017-04-05)
 -------------------
 
 * Fix init dbwebb-include support space in filename.
+* Fix clashing kmom03/jq versus kmom02/jq in webapp.
 
 
 v1.9.97 (2017-04-04)
