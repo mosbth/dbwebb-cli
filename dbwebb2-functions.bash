@@ -415,16 +415,6 @@ mapCmdToDir()
             esac
             ;;
 
-        oophp)
-            case "$CMD" in
-                lab1)       RES="me/kmom02/lab1" ;;
-                #lab2)       RES="me/kmom03/lab2" ;;
-                #lab3)       RES="me/kmom04/lab3" ;;
-                #lab4)       RES="me/kmom05/lab4" ;;
-                #lab5)       RES="me/kmom06/lab5" ;;
-            esac
-            ;;
-
         python)
             case "$CMD" in
                 hello)      RES="me/kmom01/hello" ;;
@@ -492,25 +482,6 @@ mapCmdToDir()
 
                 lab1)       RES="me/kmom02/lab1" ;; # for testing
                 lab2)       RES="me/kmom04/lab2" ;; # for testing
-            esac
-            ;;
-
-        webapp)
-            case "$CMD" in
-                me1)        RES="me/kmom01/me1" ;;
-                me2)        RES="me/kmom02/me2" ;;
-                me3)        RES="me/kmom03/me3" ;;
-                me4)        RES="me/kmom04/me4" ;;
-                me5)        RES="me/kmom05/me5" ;;
-                me6)        RES="me/kmom06/me6" ;;
-
-                meapp)      RES="me/kmom01/meapp" ;;
-                ajax)       RES="me/kmom03/ajax" ;;
-                jq)         RES="me/kmom03/jq" ;;
-                mithril)    RES="me/kmom04/mithril" ;;
-                pizza)      RES="me/kmom05/pizza" ;;
-                cordova)    RES="me/kmom06/cordova" ;;
-                proj)       RES="me/kmom10/proj" ;;
             esac
             ;;
 
@@ -591,8 +562,7 @@ function getPathToDirectoryFor
     elif [ ! -z "$dir" -a -d "$DBW_COURSE_DIR" -a -d "$DBW_COURSE_DIR/$dir" ]; then
         echo "$DBW_COURSE_DIR/$dir"
     else
-        printf "\n$MSG_FAILED The item '$command' was mapped to directory '$dir' which is not a valid directory."
-        printf "\n"
+        printf "\n$MSG_FAILED The item '$command' was mapped to directory '$dir' which is not a valid directory.\n"
         exit 1
     fi
 }
