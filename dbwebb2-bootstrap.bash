@@ -127,7 +127,7 @@ fi
 # Use filt to include from, if available
 RSYNC_INCLUDE="$DBW_COURSE_DIR/.dbwebb.include"
 if [ -f "$RSYNC_INCLUDE" ]; then
-    RSYNC_INCLUDE="--include-from=$RSYNC_INCLUDE"
+    RSYNC_INCLUDE="--include-from='$RSYNC_INCLUDE'"
 else
     RSYNC_INCLUDE=
 fi
