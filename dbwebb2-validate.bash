@@ -269,9 +269,18 @@ function publishCommand()
 
     if hash "$cmd" 2>/dev/null; then
         printf "\n *.$extension using $cmd"
-        pushd "$dir" > /dev/null
 
-        findExpression="$( getFindExpression "." "$extension" )"
+        # If within course repo, use relative links in find
+        if [[ $DBW_COURSE_DIR ]]; then
+            pushd "$DBW_COURSE_DIR" > /dev/null
+            dir=".${dir#$DBW_COURSE_DIR}"
+        fi
+
+        findExpression="$( getFindExpression "$dir" "$extension" )"
+
+        #pushd "$dir" > /dev/null
+        #pushd "$DBW_COURSE_DIR" > /dev/null
+        #findExpression="$( getFindExpression "$dir" "$extension" )"
 
         [[ $optDryRun ]] && printf "\n%s" "$findExpression"
 
@@ -285,7 +294,7 @@ function publishCommand()
             printf "."
         done
 
-        popd > /dev/null
+        [[ $DBW_COURSE_DIR ]] && popd > /dev/null
         printf " ($counter)"
     else
         printf "\n *.$extension (skipping - $cmd not installed)"

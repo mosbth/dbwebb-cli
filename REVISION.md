@@ -2,6 +2,12 @@ Revision History
 ============================================================
 
 
+v1.9.99 (2017-04-13)
+-------------------
+
+* Fix path for dbwebb publish to exclude files from .dbwebb/validate.exclude.
+
+
 v1.9.98 (2017-04-05)
 -------------------
 
