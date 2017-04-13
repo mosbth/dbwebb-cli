@@ -270,25 +270,26 @@ function publishCommand()
     if hash "$cmd" 2>/dev/null; then
         printf "\n *.$extension using $cmd"
 
+        # Find real path to cmd
+        set $cmd
+        local cmdPath="$( get_realpath "$( which $1 )" )"
+
         # If within course repo, use relative links in find
-        if [[ $DBW_COURSE_DIR ]]; then
-            pushd "$DBW_COURSE_DIR" > /dev/null
-            dir=".${dir#$DBW_COURSE_DIR}"
+        if [[ $DBW_COURSE_DIR && $DBW_PUBLISH_ROOT ]]; then
+            pushd "$DBW_PUBLISH_ROOT" > /dev/null
+            [[ $optDryRun ]] && printf "\nCurrent dir: %s" "$(pwd)"
+            dir=".${dir#$DBW_PUBLISH_ROOT}"
         fi
 
         findExpression="$( getFindExpression "$dir" "$extension" )"
-
-        #pushd "$dir" > /dev/null
-        #pushd "$DBW_COURSE_DIR" > /dev/null
-        #findExpression="$( getFindExpression "$dir" "$extension" )"
 
         [[ $optDryRun ]] && printf "\n%s" "$findExpression"
 
         for filename in $( eval $findExpression ); do
             if [[ $optDryRun ]]; then
-                printf "\n%s" "$cmd $options $filename $output $filename"
+                printf "\n%s" "$cmdPath $options $filename $output $filename"
             else
-                assert 0 "$cmd $options $filename $output $filename" "$cmd failed: $filename"
+                assert 0 "$cmdPath $options $filename $output $filename" "$cmd failed: $filename"
             fi
             counter=$(( counter + 1 ))
             printf "."
@@ -346,6 +347,7 @@ publish()
 #
 # Process options
 #
+DBW_PUBLISH_ROOT=
 while (( $# ))
 do
     case "$1" in
@@ -367,6 +369,17 @@ do
 
         --no-minification)
             noMinification="yes"
+            shift
+            ;;
+
+        --publish-root)
+            DBW_PUBLISH_ROOT="$( get_realpath "$2" )"
+            if [ ! -d $( dirname "$DBW_PUBLISH_ROOT" ) ]; then
+                badUsage "$MSG_FAILED --publish-root '$DBW_PUBLISH_ROOT' is not a valid directory."
+                exit 2
+            fi
+
+            shift
             shift
             ;;
 
@@ -479,7 +492,7 @@ if [[ $optPublish ]]; then
         exit 2
     fi
 
-    printf "\nPublishing to '%s'." "$DBW_PUBLISH_TO"
+    printf "\nPublishing to '%s' using root '%s'." "$DBW_PUBLISH_TO" "$DBW_PUBLISH_ROOT"
     publish "$dir" "$DBW_PUBLISH_TO"
 fi
 

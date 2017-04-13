@@ -424,7 +424,7 @@ function dbwebb-publish()
     local intro="Uploading the directory '$WHAT' to '$WHERE' to validate and publish."
     local command1="$RSYNC_CMD $OVERWRITE '$WHAT' '$WHERE'"
 #    local command2="rsync -av $RSYNC_CHMOD $OVERWRITE --exclude .git --exclude .gitignore --exclude .default --exclude .solution --exclude .old --include='.??*' --exclude='*' -e \"ssh $DBW_SSH_KEY_OPTION\" '$DBW_COURSE_DIR/' '$DBW_REMOTE_DESTINATION/'"
-    local command3="$SSH_CMD 'dbwebb-validate $dry $PUBLISH_OPTIONS --publish --course-repo \"$DBW_REMOTE_BASEDIR/$DBW_COURSE\" --publish-to \"$DBW_REMOTE_WWWDIR/$DBW_COURSE/$SUBDIR\" \"$DBW_REMOTE_BASEDIR/$DBW_COURSE/$SUBDIR\"' 2>&1 | tee '$log'; test \${PIPESTATUS[0]} -eq 0"
+    local command3="$SSH_CMD 'dbwebb-validate1 $dry $PUBLISH_OPTIONS --publish --course-repo \"$DBW_REMOTE_BASEDIR/$DBW_COURSE\" --publish-to \"$DBW_REMOTE_WWWDIR/$DBW_COURSE/$SUBDIR\" --publish-root \"$DBW_REMOTE_WWWDIR/$DBW_COURSE\" \"$DBW_REMOTE_BASEDIR/$DBW_COURSE/$SUBDIR\"' 2>&1 | tee '$log'; test \${PIPESTATUS[0]} -eq 0"
     local message="to validate and publish course results.\nSaved a log of the output: less -R '$log'"
     #executeCommand "$intro" "$command1; $command2; $command3" "$message"
     executeCommand "$intro" "$command1; $command3" "$message"
