@@ -148,14 +148,21 @@ function getFindExpression
     local dir="$1"
     local extension="$2"
     local includeExclude
+    local exclude
     local findExtension=
 
     if [ -f "$DBW_COURSE_DIR/.dbwebb/validate.exclude" ]; then
         #includeExclude="$( grep -v "^#" "$DBW_COURSE_DIR/.dbwebb-validate.exclude" | sed "s/^-\(.*\)/-o -not -path \"\1\"/g" | sed "s/^+\(.*\)/-o -path \"\1\"/g" | tr "\n" " " )"
-        includeExclude="$( grep -v "^#" "$DBW_COURSE_DIR/.dbwebb/validate.exclude" | sed "s/^-\(.*\)/-not -path \"\1\"/g" | sed "s/^+\(.*\)/-o -path \"\1\"/g" | tr "\n" " " )"
+        includeExclude="$( grep -v "^#" "$DBW_COURSE_DIR/.dbwebb/validate.exclude" | grep -v "^--" | sed "s/^-\(.*\)/-not -path \"\1\"/g" | sed "s/^+\(.*\)/-o -path \"\1\"/g" | tr "\n" " " )"
         includeExclude="$( sed -e 's/[[:space:]]*$//' <<<${includeExclude} )"
         if [ ! -z "$includeExclude" ]; then
             includeExclude="\( $includeExclude \)"
+        fi
+
+        exclude="$( grep "^--" "$DBW_COURSE_DIR/.dbwebb/validate.exclude" | sed "s/^--\(.*\)/-not -path \"\1\"/g" | tr "\n" " " )"
+        exclude="$( sed -e 's/[[:space:]]*$//' <<<${exclude} )"
+        if [ ! -z "$exclude" ]; then
+            exclude="\( $exclude \)"
         fi
     else
         # Hardcoded include exclude expressions
@@ -168,7 +175,7 @@ function getFindExpression
         findExtension="-name \"*.$extension\""
     fi
 
-    echo "find \"$dir/\" $includeExclude -type f $findExtension"
+    echo "find \"$dir/\" $includeExclude -type f $findExtension" "$exclude"
 }
 
 
