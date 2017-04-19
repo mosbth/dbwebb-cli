@@ -2,6 +2,12 @@ Revision History
 ============================================================
 
 
+v1.9.100 (2017-04-19)
+-------------------
+
+* Fix path dbwebb validate to really exclude file from included subdir using -- in .dbwebb/validate.exclude.
+
+
 v1.9.99 (2017-04-13)
 -------------------
 
