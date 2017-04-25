@@ -944,7 +944,7 @@ fi
 
 # Create the basis for the upload command
 RSYNC_CMD="rsync -av $RSYNC_CHMOD $RSYNC_INCLUDE $RSYNC_EXCLUDE --delete --delete-excluded -e \"ssh $DBW_SSH_KEY_OPTION\""
-RSYNC_DOWNLOAD_DELETE_CMD="rsync -avuc $RSYNC_CHMOD --delete --delete-excluded -e \"ssh $DBW_SSH_KEY_OPTION\""
+RSYNC_DOWNLOAD_DELETE_CMD="rsync -avc $RSYNC_CHMOD --delete --delete-excluded -e \"ssh $DBW_SSH_KEY_OPTION\""
 RSYNC_DOWNLOAD_CMD="rsync -avuc $RSYNC_CHMOD -e \"ssh $DBW_SSH_KEY_OPTION\""
 
 DBW_REMOTE_DESTINATION="${DBW_USER}@${DBW_HOST}:$DBW_REMOTE_BASEDIR/$DBW_COURSE"
