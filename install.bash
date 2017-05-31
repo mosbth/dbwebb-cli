@@ -44,6 +44,7 @@ $ECHO "$MSG_DOING Checking precondition..."
 checkTool "wget"   "using your packet manager."
 checkTool "ssh"    "using your packet manager."
 checkTool "rsync"  "using your packet manager."
+checkTool "git"    "https://dbwebb.se/labbmiljo/git"
 
 $ECHO "\n$MSG_DONE"
 
