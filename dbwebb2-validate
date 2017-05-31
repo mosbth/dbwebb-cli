@@ -30,7 +30,7 @@
 #
 # Current version
 #
-DBW_VERSION="v1.9.103 (2017-05-31)"
+DBW_VERSION="v1.9.104 (2017-05-31)"
 # --------------- DBWEBB FUNCTIONS PHASE START ---------------
 
 #
@@ -1053,7 +1053,7 @@ UGLIFYJS="uglifyjs"
 UGLIFYJS_OPTIONS="--mangle --compress --screw-ie8 --comments"
 
 PYLINT="pylint"
-PYLINT_OPTIONS="-r n"
+PYLINT_OPTIONS="-r n -s n"
 
 PHP="php"
 PHP_OPTIONS="--syntax-check"

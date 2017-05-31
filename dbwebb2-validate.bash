@@ -27,7 +27,7 @@ UGLIFYJS="uglifyjs"
 UGLIFYJS_OPTIONS="--mangle --compress --screw-ie8 --comments"
 
 PYLINT="pylint"
-PYLINT_OPTIONS="-r n"
+PYLINT_OPTIONS="-r n -s n"
 
 PHP="php"
 PHP_OPTIONS="--syntax-check"
