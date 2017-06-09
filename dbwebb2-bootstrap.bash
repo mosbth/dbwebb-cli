@@ -76,7 +76,7 @@ function sourceDbwebbVersionFile
 }
 
 # Get the proposed minimum version for dbwebb-cli in current course repo
-DBW_VERSION_FILE_NAME=".dbwebb.version"
+DBW_VERSION_FILE_NAME=".dbwebb/cli.version"
 sourceDbwebbVersionFile
 
 

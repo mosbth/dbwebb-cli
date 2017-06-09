@@ -571,7 +571,7 @@ function dbwebb-inspect()
 #
 dbwebb-recreate()
 {
-    dbwebb-create "$1" "save-answers"
+    dbwebb-create "$1" "$2" "save-answers"
 }
 
 
@@ -605,7 +605,8 @@ dbwebb-create()
 {
     local myWget=
     local lab="$1"
-    local save="$2"
+    local version="$2"
+    local save="$3"
     local subdir="$( mapCmdToDir $lab )"
     local where="$DBW_COURSE_DIR/$subdir"
     
@@ -617,7 +618,10 @@ dbwebb-create()
     checkIfValidConfigOrExit
     checkIfValidCourseRepoOrExit
 
-    printf "Creating $DBW_COURSE $lab in '$where'.\n"
+    local lab_version=
+    [[ $version ]] && lab_version=" ($DBW_LAB_VERSION)"
+
+    printf "Creating $DBW_COURSE $lab{$lab_version} in '$where'.\n"
 
     # Check if init was run?
     if [ ! -d "$where" ]; then
@@ -642,7 +646,7 @@ dbwebb-create()
     # Get the lab bundle
     #http://localhost/git/lab/?action=bundle&key=a07e843ca67d647900e8259729119ddf
     #http://localhost/git/lab/?action=bundle&course=linux&lab=lab1&acronym=mos&doGenerate
-    local bundleQuery="?action=bundle&acronym=$DBW_USER&course=$DBW_COURSE&lab=$lab&doGenerate=Submit"
+    local bundleQuery="?action=bundle&acronym=$DBW_USER&course=$DBW_COURSE&lab=$lab&version=$version&doGenerate=Submit"
 
     printf "Downloading and extracting lab bundle\n"
     [[ $VERY_VERBOSE ]] && echo " ($DBW_LABURL/$bundleQuery)"
@@ -665,7 +669,8 @@ dbwebb-create()
 #
 dbwebb-selfupdate()
 {
-    selfupdate dbwebb
+    local version="$1"
+    selfupdate dbwebb "$version"
     dbwebb updateconfig
 }
 

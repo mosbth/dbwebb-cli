@@ -2,6 +2,16 @@ Revision History
 ============================================================
 
 
+v2.0.0 (2017-06-09)
+-------------------
+
+* Enable to create different versions of the labs.
+* Move course repo .dbwebb.version to .dbwebb/cli.version.
+* Cleanup mapCmdToDir and remove hardcoded python paths.
+* Add extra option to selfupdate [version] to downgrade to specified release.
+* Add releases to upgrade/downgrade to.
+
+
 v1.9.104 (2017-05-31)
 -------------------
 

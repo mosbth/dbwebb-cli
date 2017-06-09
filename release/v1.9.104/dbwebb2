@@ -30,7 +30,7 @@
 #
 # Current version
 #
-DBW_VERSION="v2.0.0 (2017-06-09)"
+DBW_VERSION="v1.9.104 (2017-05-31)"
 # --------------- DBWEBB FUNCTIONS PHASE START ---------------
 
 #
@@ -405,9 +405,12 @@ mapCmdToDir()
 
     case "$CMD" in
         example)    RES="example" ;;
+        lib)        RES="me/lib" ;;  # OBSOLETE?
+        solution)   RES=".solution" ;;
+        solution/me)   RES=".solution/me" ;;
         tutorial)   RES="tutorial" ;;
         me)         RES="me" ;;
-        redovisa)   RES="me/redovisa" ;;
+        redovisa)   RES="me/redovisa" ;; #OBSOLETE?
         kmom01)     RES="me/kmom01" ;;
         kmom02)     RES="me/kmom02" ;;
         kmom03)     RES="me/kmom03" ;;
@@ -442,6 +445,32 @@ mapCmdToDir()
                 lab3)       RES="me/kmom04/lab3" ;;
                 lab4)       RES="me/kmom05/lab4" ;;
                 lab5)       RES="me/kmom06/lab5" ;;
+            esac
+            ;;
+
+        python)
+            case "$CMD" in
+                hello)      RES="me/kmom01/hello" ;;
+                plane)      RES="me/kmom01/plane" ;;
+
+                lab1)       RES="me/kmom02/lab1" ;;
+                lab2)       RES="me/kmom03/lab2" ;;
+                lab3)       RES="me/kmom04/lab3" ;;
+                lab4)       RES="me/kmom05/lab4" ;;
+                lab5)       RES="me/kmom06/lab5" ;;
+                lab6)       RES="me/kmom06/lab6" ;;
+
+                marvin1)    RES="me/kmom02/marvin1" ;;
+                marvin2)    RES="me/kmom03/marvin2" ;;
+                marvin3)    RES="me/kmom04/marvin3" ;;
+                marvin4)    RES="me/kmom05/marvin4" ;;
+                marvin5)    RES="me/kmom06/marvin5" ;;
+
+                game1)      RES="me/kmom04/game1" ;;
+                game2)      RES="me/kmom05/game2" ;;
+                game3)      RES="me/kmom06/game3" ;;
+
+                adventure)  RES="me/kmom10/adventure" ;;
             esac
             ;;
 
@@ -625,29 +654,26 @@ createUploadDownloadPaths()
 selfupdate()
 {
     local what="$1"
-    local version="$2"
     local target="$DBW_EXECUTABLE_PATH"
     local remote=
     local silent="--quiet"
-    local repo="https://raw.githubusercontent.com/mosbth/dbwebb-cli/master"
+    local repo="https://raw.githubusercontent.com/mosbth/dbwebb-cli"
 
     if [[ $VERY_VERBOSE ]]; then
         silent=""
     fi
 
-    [[ $version ]] && repo="$repo/release/$version/"
-
     case $what in
         dbwebb)
-            remote="$repo/dbwebb2"
+            remote="$repo/master/dbwebb2"
         ;;
 
         dbwebb-validate)
-            remote="$repo/dbwebb2-validate"
+            remote="$repo/master/dbwebb2-validate"
         ;;
 
         dbwebb-inspect)
-            remote="$repo/dbwebb2-inspect"
+            remote="$repo/master/dbwebb2-inspect"
         ;;
     esac
 
@@ -661,13 +687,15 @@ selfupdate()
     if hash wget 2> /dev/null; then
         local dli="Downloading using wget... "
         local dlc="wget $silent $remote -O /tmp/$$"
+    elif hash curl 2> /dev/null; then
+        local dli="Downloading using curl... "
+        local dlc="curl -so /tmp/$$ $remote"
     else
-        echo "Failed. Did not find wget. Please install wget."
+        echo "Failed. Did not find wget nor curl. Please install either wget or curl."
         exit 1
     fi
     local dlm="to download."
     executeCommand "$dli" "$dlc" "$dlm"
-    [[ $STATUS > 0 ]] && echo "Could not download the remote file, check the download link if its correct." && exit 1
 
     # Installing
     # printf '\nInstalling... '; install /tmp/$$ $target;
@@ -858,7 +886,7 @@ function sourceDbwebbVersionFile
 }
 
 # Get the proposed minimum version for dbwebb-cli in current course repo
-DBW_VERSION_FILE_NAME=".dbwebb/cli.version"
+DBW_VERSION_FILE_NAME=".dbwebb.version"
 sourceDbwebbVersionFile
 
 
@@ -943,30 +971,30 @@ DBW_REPO="dbwebb-cli"
 function usage ()
 {
     local txt=(
-"Utility dbwebb for working with course repos: https://dbwebb.se/dbwebb-cli"
+"Utility dbwebb for working with course repos: http://dbwebb.se/dbwebb-cli"
 "Usage: dbwebb [options] <command> [arguments]"
 ""
 "Command:"
-"  check                Check the environment."
-"  config               (Re-)Create config file."
-"  selfupdate [version] Update to latest (or selected) version."
-"  sshkey               Create and install ssh-keys."
-"  login                Login to the remote server."
-"  clone [repo]         Clone a course repo."
-"  init                 Init course repo and remote server."
-"  github [repo]        Get urls to repo on GitHub."
-"  update               Update course repo."
-"  upload [part]        Upload to server."
-"  download [part]      Download from server."
-"  create <lab> [version] Create a lab using optional version."
-"  recreate <lab>       Re-create lab with optional version."
-"  validate [part]      Validate it."
-"  publish [part]       Publish it."
-"  publishfast [part]   Publish without validation."
-"  publishpure [part]   Publish without minification."
+"  check              Check the environment."
+"  config             (Re-)Create config file."
+"  selfupdate         Update to latest version."
+"  sshkey             Create and install ssh-keys."
+"  login              Login to the remote server."
+"  clone [repo]       Clone a course repo."
+"  init               Init course repo and remote server."
+"  github [repo]      Get urls to repo on GitHub."
+"  update             Update course repo."
+"  upload [part]      Upload to server."
+"  download [part]    Download from server."
+"  create labid       Create a lab."
+"  recreate labid     Re-create environment for a lab."
+"  validate [part]    Validate it."
+"  publish [part]     Publish it."
+"  publishfast [part] Publish without validation."
+"  publishpure [part] Publish without minification."
 "  inspect [course] [kmom] [user]  Inspect a kmom."
-"  run <command>        Run a command on remote host."
-"  testrepo             Automated tests of a course repo."
+"  run <command>      Run a command on remote host."
+"  testrepo           Automated tests of a course repo."
 ""
 "Options:"
 "  --inspect, -i  Help for inspect."
@@ -1690,7 +1718,7 @@ function dbwebb-inspect()
 #
 dbwebb-recreate()
 {
-    dbwebb-create "$1" "$2" "save-answers"
+    dbwebb-create "$1" "save-answers"
 }
 
 
@@ -1724,8 +1752,7 @@ dbwebb-create()
 {
     local myWget=
     local lab="$1"
-    local version="$2"
-    local save="$3"
+    local save="$2"
     local subdir="$( mapCmdToDir $lab )"
     local where="$DBW_COURSE_DIR/$subdir"
     
@@ -1737,10 +1764,7 @@ dbwebb-create()
     checkIfValidConfigOrExit
     checkIfValidCourseRepoOrExit
 
-    local lab_version=
-    [[ $version ]] && lab_version=" ($DBW_LAB_VERSION)"
-
-    printf "Creating $DBW_COURSE $lab{$lab_version} in '$where'.\n"
+    printf "Creating $DBW_COURSE $lab in '$where'.\n"
 
     # Check if init was run?
     if [ ! -d "$where" ]; then
@@ -1765,7 +1789,7 @@ dbwebb-create()
     # Get the lab bundle
     #http://localhost/git/lab/?action=bundle&key=a07e843ca67d647900e8259729119ddf
     #http://localhost/git/lab/?action=bundle&course=linux&lab=lab1&acronym=mos&doGenerate
-    local bundleQuery="?action=bundle&acronym=$DBW_USER&course=$DBW_COURSE&lab=$lab&version=$version&doGenerate=Submit"
+    local bundleQuery="?action=bundle&acronym=$DBW_USER&course=$DBW_COURSE&lab=$lab&doGenerate=Submit"
 
     printf "Downloading and extracting lab bundle\n"
     [[ $VERY_VERBOSE ]] && echo " ($DBW_LABURL/$bundleQuery)"
@@ -1788,8 +1812,7 @@ dbwebb-create()
 #
 dbwebb-selfupdate()
 {
-    local version="$1"
-    selfupdate dbwebb "$version"
+    selfupdate dbwebb
     dbwebb updateconfig
 }
 

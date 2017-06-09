@@ -372,12 +372,9 @@ mapCmdToDir()
 
     case "$CMD" in
         example)    RES="example" ;;
-        lib)        RES="me/lib" ;;  # OBSOLETE?
-        solution)   RES=".solution" ;;
-        solution/me)   RES=".solution/me" ;;
         tutorial)   RES="tutorial" ;;
         me)         RES="me" ;;
-        redovisa)   RES="me/redovisa" ;; #OBSOLETE?
+        redovisa)   RES="me/redovisa" ;;
         kmom01)     RES="me/kmom01" ;;
         kmom02)     RES="me/kmom02" ;;
         kmom03)     RES="me/kmom03" ;;
@@ -412,32 +409,6 @@ mapCmdToDir()
                 lab3)       RES="me/kmom04/lab3" ;;
                 lab4)       RES="me/kmom05/lab4" ;;
                 lab5)       RES="me/kmom06/lab5" ;;
-            esac
-            ;;
-
-        python)
-            case "$CMD" in
-                hello)      RES="me/kmom01/hello" ;;
-                plane)      RES="me/kmom01/plane" ;;
-
-                lab1)       RES="me/kmom02/lab1" ;;
-                lab2)       RES="me/kmom03/lab2" ;;
-                lab3)       RES="me/kmom04/lab3" ;;
-                lab4)       RES="me/kmom05/lab4" ;;
-                lab5)       RES="me/kmom06/lab5" ;;
-                lab6)       RES="me/kmom06/lab6" ;;
-
-                marvin1)    RES="me/kmom02/marvin1" ;;
-                marvin2)    RES="me/kmom03/marvin2" ;;
-                marvin3)    RES="me/kmom04/marvin3" ;;
-                marvin4)    RES="me/kmom05/marvin4" ;;
-                marvin5)    RES="me/kmom06/marvin5" ;;
-
-                game1)      RES="me/kmom04/game1" ;;
-                game2)      RES="me/kmom05/game2" ;;
-                game3)      RES="me/kmom06/game3" ;;
-
-                adventure)  RES="me/kmom10/adventure" ;;
             esac
             ;;
 
@@ -621,26 +592,29 @@ createUploadDownloadPaths()
 selfupdate()
 {
     local what="$1"
+    local version="$2"
     local target="$DBW_EXECUTABLE_PATH"
     local remote=
     local silent="--quiet"
-    local repo="https://raw.githubusercontent.com/mosbth/dbwebb-cli"
+    local repo="https://raw.githubusercontent.com/mosbth/dbwebb-cli/master"
 
     if [[ $VERY_VERBOSE ]]; then
         silent=""
     fi
 
+    [[ $version ]] && repo="$repo/release/$version/"
+
     case $what in
         dbwebb)
-            remote="$repo/master/dbwebb2"
+            remote="$repo/dbwebb2"
         ;;
 
         dbwebb-validate)
-            remote="$repo/master/dbwebb2-validate"
+            remote="$repo/dbwebb2-validate"
         ;;
 
         dbwebb-inspect)
-            remote="$repo/master/dbwebb2-inspect"
+            remote="$repo/dbwebb2-inspect"
         ;;
     esac
 
@@ -654,15 +628,13 @@ selfupdate()
     if hash wget 2> /dev/null; then
         local dli="Downloading using wget... "
         local dlc="wget $silent $remote -O /tmp/$$"
-    elif hash curl 2> /dev/null; then
-        local dli="Downloading using curl... "
-        local dlc="curl -so /tmp/$$ $remote"
     else
-        echo "Failed. Did not find wget nor curl. Please install either wget or curl."
+        echo "Failed. Did not find wget. Please install wget."
         exit 1
     fi
     local dlm="to download."
     executeCommand "$dli" "$dlc" "$dlm"
+    [[ $STATUS > 0 ]] && echo "Could not download the remote file, check the download link if its correct." && exit 1
 
     # Installing
     # printf '\nInstalling... '; install /tmp/$$ $target;
