@@ -618,10 +618,15 @@ dbwebb-create()
     checkIfValidConfigOrExit
     checkIfValidCourseRepoOrExit
 
-    local lab_version=
-    [[ $version ]] && lab_version=" ($DBW_LAB_VERSION)"
+    # If no lab version supplied, read it from course repo if available
+    if [ -z "$version" -a -f "$DBW_COURSE_DIR/.dbwebb/lab.version" ]; then
+        version=$( cat $DBW_COURSE_DIR/.dbwebb/lab.version )
+    fi
 
-    printf "Creating $DBW_COURSE $lab{$lab_version} in '$where'.\n"
+    local lab_version=
+    [[ $version ]] && lab_version=" ($version)"
+
+    printf "Creating $DBW_COURSE $lab${lab_version} in '$where'.\n"
 
     # Check if init was run?
     if [ ! -d "$where" ]; then
@@ -651,8 +656,13 @@ dbwebb-create()
     printf "Downloading and extracting lab bundle\n"
     [[ $VERY_VERBOSE ]] && echo " ($DBW_LABURL/$bundleQuery)"
     [[ $VERY_VERBOSE ]] && echo " ($myWget $where/bundle.tar '$DBW_LABURL/$bundleQuery')"
+
     $myWget "$where/bundle.tar" "$DBW_LABURL/$bundleQuery"
+    [[ $? > 0 ]] && printf "$MSG_FAILED Failed to download lab bundle.\n" && exit 1
+
     tar -xmf "$where/bundle.tar" -C "$where"
+    [[ $? > 0 ]] && printf "$MSG_FAILED The downloaded lab bundle is not a tar archive. You may cat it to check for errors.\n" && exit 1
+
     rm -f "$where/bundle.tar"
     if [[ $save ]]; then
         moveLabAnswer "$where" "_$$" ""
