@@ -2,6 +2,12 @@ Revision History
 ============================================================
 
 
+v2.0.1 (2017-06-12)
+-------------------
+
+* Validate and publish specific course moment now backward compatible, checking existing dirs.
+
+
 v2.0.0 (2017-06-09)
 -------------------
 

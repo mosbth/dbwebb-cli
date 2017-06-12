@@ -30,7 +30,7 @@
 #
 # Current version
 #
-DBW_VERSION="v2.0.0 (2017-06-09)"
+DBW_VERSION="v2.0.1 (2017-06-12)"
 # --------------- DBWEBB FUNCTIONS PHASE START ---------------
 
 #
@@ -405,7 +405,6 @@ mapCmdToDir()
 
     case "$CMD" in
         example)    RES="example" ;;
-        tutorial)   RES="tutorial" ;;
         me)         RES="me" ;;
         redovisa)   RES="me/redovisa" ;;
         kmom01)     RES="me/kmom01" ;;
@@ -417,77 +416,7 @@ mapCmdToDir()
         kmom10)     RES="me/kmom10" ;;
     esac
 
-    if [ ! -z $RES ]; then
-        echo "$RES"
-        return
-    fi
-
-    case "$DBW_COURSE" in
-        javascript1)
-            case "$CMD" in
-                sandbox)      RES="me/kmom01/sandbox" ;;
-                hangman)      RES="me/kmom06/hangman" ;;
-                intelligence) RES="me/kmom10/intelligence" ;;
-
-                lab1)       RES="me/kmom02/lab1" ;;
-                lab2)       RES="me/kmom03/lab2" ;;
-                lab3)       RES="me/kmom04/lab3" ;;
-                lab4)       RES="me/kmom04/lab4" ;;
-                lab5)       RES="me/kmom05/lab5" ;;
-
-                flag1)      RES="me/kmom02/flag1" ;;
-                flag2)      RES="me/kmom03/flag2" ;;
-                flag3)      RES="me/kmom04/flag3" ;;
-                flag4)      RES="me/kmom05/flag4" ;;
-                flag5)      RES="me/kmom06/flag5" ;;
-
-                baddie1)    RES="me/kmom02/baddie1" ;;
-                baddie2)    RES="me/kmom03/baddie2" ;;
-                baddie3)    RES="me/kmom04/baddie3" ;;
-                baddie4)    RES="me/kmom05/baddie4" ;;
-                #baddie5)    RES="me/kmom06/baddie5" ;;
-            esac
-            ;;
-
-        linux)
-            case "$CMD" in
-                install)    RES="me/kmom01/install" ;;
-                vhost)      RES="me/kmom02/vhost" ;;
-                mysite)     RES="me/kmom02/mysite" ;;
-                irc)        RES="me/kmom03/irc" ;;
-                script)     RES="me/kmom03/script" ;;
-                javascripting) RES="me/kmom04/javascripting" ;;
-                server)     RES="me/kmom04/server" ;;
-                maze)       RES="me/kmom05/maze" ;;
-                gomoku)     RES="me/kmom06/gomoku" ;;
-                bthappen)   RES="me/kmom10/bthappen" ;;
-
-                lab1)       RES="me/kmom02/lab1" ;; # for testing
-                lab2)       RES="me/kmom04/lab2" ;; # for testing
-            esac
-            ;;
-
-        webgl)
-            case "$CMD" in
-                sandbox)    RES="me/kmom01/sandbox" ;;
-                sandbox2)   RES="me/kmom01/sandbox2" ;;
-                sandbox3)   RES="me/kmom02/sandbox3" ;;
-
-                lab1)       RES="me/kmom02/lab1" ;;
-                lab2)       RES="me/kmom03/lab2" ;;
-
-                point)      RES="me/kmom01/point" ;;
-                tri)        RES="me/kmom02/tri" ;;
-                world)      RES="me/kmom03/world" ;;
-                proj)       RES="me/kmom05/proj" ;;
-            esac
-            ;;
-    esac
-
-    if [ ! -z $RES ]; then 
-        echo "$RES"
-        return
-    fi 
+    [ ! -z $RES ] && echo "$RES" && return
 
     # Check for known pathes in course repo config file
     local mapFile="$DBW_COURSE_DIR/.dbwebb.map"
@@ -496,12 +425,18 @@ mapCmdToDir()
         while IFS= read -r path
         do
             item=$( basename "$path" )
-            if [ "$CMD" = "$item" ]; then
+            if [ "$CMD" = "$item" -a -d "$path" ]; then
                 echo "$path"
                 return
             fi
         done < <(grep "^[^#]" "$mapFile")
     fi
+
+    # Check for existing directories below me/
+    [ -d "$DBW_COURSE_DIR/me/$CMD" ] && echo "me/$CMD" && return 
+
+    # Check me/* for match
+    RES=$( find "$DBW_COURSE_DIR/me" -mindepth 2 -maxdepth 2 -name "$CMD" -type d | head -n 1 )
 
     echo "$RES"
     return
