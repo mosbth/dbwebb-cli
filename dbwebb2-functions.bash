@@ -403,7 +403,7 @@ mapCmdToDir()
     [ -d "$DBW_COURSE_DIR/me/$CMD" ] && echo "me/$CMD" && return 
 
     # Check me/* for match
-    RES=$( find "$DBW_COURSE_DIR/me" -mindepth 2 -maxdepth 2 -name "$CMD" -type d | head -n 1 )
+    RES=$( cd "$DBW_COURSE_DIR" && find me -mindepth 2 -maxdepth 2 -name "$CMD" -type d | head -n 1 )
 
     echo "$RES"
     return

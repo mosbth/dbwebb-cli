@@ -30,7 +30,7 @@
 #
 # Current version
 #
-DBW_VERSION="v2.0.1 (2017-06-12)"
+DBW_VERSION="v2.0.2 (2017-06-12)"
 # --------------- DBWEBB FUNCTIONS PHASE START ---------------
 
 #
@@ -436,7 +436,7 @@ mapCmdToDir()
     [ -d "$DBW_COURSE_DIR/me/$CMD" ] && echo "me/$CMD" && return 
 
     # Check me/* for match
-    RES=$( find "$DBW_COURSE_DIR/me" -mindepth 2 -maxdepth 2 -name "$CMD" -type d | head -n 1 )
+    RES=$( cd "$DBW_COURSE_DIR" && find me -mindepth 2 -maxdepth 2 -name "$CMD" -type d | head -n 1 )
 
     echo "$RES"
     return
