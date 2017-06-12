@@ -1422,7 +1422,6 @@ function dbwebb-validate()
     ITEM="$1"
     SUBDIR=""
     createUploadDownloadPaths ignoreSubdir
-    echo $SUBDIR
 
     local log="$HOME/.dbwebb-validate.log"
     local intro="Uploading the directory '$WHAT' to '$WHERE' for validation."
