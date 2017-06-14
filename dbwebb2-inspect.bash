@@ -436,7 +436,7 @@ validateKmom()
     local answer=$( answerYesOrNo "y" )
     if [ "$answer" = "y" -o "$answer" = "Y" ]
     then
-        dbwebb-validate --course-repo "$DBW_COURSE_DIR" "$kmom"
+        dbwebb-validate1 --course-repo "$DBW_COURSE_DIR" "$kmom"
     fi
 }
 
