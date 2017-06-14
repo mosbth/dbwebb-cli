@@ -117,7 +117,7 @@ SSH_CMD_INTERACTIVE="ssh ${DBW_USER}@${DBW_HOST} $DBW_SSH_KEY_OPTION"
 RSYNC_CHMOD="--chmod=Du+w,Dgo+rx,Fu+rw,Fgo+r"
 
 # Prefer using file to exclude from
-RSYNC_EXCLUDE="$DBW_COURSE_DIR/.dbwebb.exclude"
+RSYNC_EXCLUDE="$DBW_COURSE_DIR/.dbwebb/upload.exclude"
 if [ -f "$RSYNC_EXCLUDE" ]; then
     RSYNC_EXCLUDE="--exclude-from='$RSYNC_EXCLUDE'"
 else
@@ -125,7 +125,7 @@ else
 fi
 
 # Use filt to include from, if available
-RSYNC_INCLUDE="$DBW_COURSE_DIR/.dbwebb.include"
+RSYNC_INCLUDE="$DBW_COURSE_DIR/.dbwebb/upload.include"
 if [ -f "$RSYNC_INCLUDE" ]; then
     RSYNC_INCLUDE="--include-from='$RSYNC_INCLUDE'"
 else
