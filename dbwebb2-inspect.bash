@@ -797,7 +797,7 @@ fi
 # Use local inspect file if available
 # perhaps check its md5 to ensure its not modified?
 #
-local inspectVersion="Built-in"
+inspectVersion="Built-in"
 if [ -f "$DBW_COURSE_DIR/.dbwebb/inspect" ]; then
     . "$DBW_COURSE_DIR/.dbwebb/inspect"
     inspectVersion="Course repo"
