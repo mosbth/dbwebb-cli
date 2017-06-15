@@ -30,7 +30,7 @@
 #
 # Current version
 #
-DBW_VERSION="v2.0.4 (2017-06-14)"
+DBW_VERSION="v2.0.5 (2017-06-15)"
 # --------------- DBWEBB FUNCTIONS PHASE START ---------------
 
 #
@@ -918,7 +918,7 @@ pythonme()
     checkKmomDir "me"
 
     printUrl "me.cgi" "me"  
-    printUrl "redovisning.cgi" "me"  
+    printUrl "redovisning.cgi" "me"
 }
 
 
@@ -3513,6 +3513,19 @@ else
 fi
 
 
+
+#
+# Use local inspect file if available
+# perhaps check its md5 to ensure its not modified?
+#
+local inspectVersion="Built-in"
+if [ -f "$DBW_COURSE_DIR/.dbwebb/inspect" ]; then
+    . "$DBW_COURSE_DIR/.dbwebb/inspect"
+    inspectVersion="Course repo"
+fi
+
+
+
 #
 # Do inspect
 #
@@ -3525,6 +3538,7 @@ echo "# Course:   $DBW_COURSE"
 echo "# Kmom:     $KMOM"
 echo "# Student:  $THEUSER"
 echo "# By:       $USER"
+echo "# Source:   $inspectVersion"
 echo "# Archived: $( [[ $ARCHIVE ]] && echo "yes" || echo "no" )"
 echo "#"
 dbwebbInspectCheckEnvironment

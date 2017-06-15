@@ -10,7 +10,7 @@ pythonme()
     checkKmomDir "me"
 
     printUrl "me.cgi" "me"  
-    printUrl "redovisning.cgi" "me"  
+    printUrl "redovisning.cgi" "me"
 }
 
 

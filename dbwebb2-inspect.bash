@@ -792,6 +792,19 @@ else
 fi
 
 
+
+#
+# Use local inspect file if available
+# perhaps check its md5 to ensure its not modified?
+#
+local inspectVersion="Built-in"
+if [ -f "$DBW_COURSE_DIR/.dbwebb/inspect" ]; then
+    . "$DBW_COURSE_DIR/.dbwebb/inspect"
+    inspectVersion="Course repo"
+fi
+
+
+
 #
 # Do inspect
 #
@@ -804,6 +817,7 @@ echo "# Course:   $DBW_COURSE"
 echo "# Kmom:     $KMOM"
 echo "# Student:  $THEUSER"
 echo "# By:       $USER"
+echo "# Source:   $inspectVersion"
 echo "# Archived: $( [[ $ARCHIVE ]] && echo "yes" || echo "no" )"
 echo "#"
 dbwebbInspectCheckEnvironment
