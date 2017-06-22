@@ -225,7 +225,7 @@ function validateCommand()
         done
         
         IFS="$OIFS"
-        [[ $DBW_COURSE_DIR ]] && popd > /dev/null
+        [[ $DBW_COURSE_DIR ]] && popd &> /dev/null
 
         printf " ($counter)"
     else
@@ -302,7 +302,7 @@ function publishCommand()
             printf "."
         done
 
-        [[ $DBW_COURSE_DIR ]] && popd > /dev/null
+        [[ $DBW_COURSE_DIR ]] && popd &> /dev/null
         printf " ($counter)"
     else
         printf "\n *.$extension (skipping - $cmd not installed)"
