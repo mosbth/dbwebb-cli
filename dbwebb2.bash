@@ -620,7 +620,7 @@ dbwebb-create()
 
     # If no lab version supplied, read it from course repo if available
     if [ -z "$version" -a -f "$DBW_COURSE_DIR/.dbwebb/lab.version" ]; then
-        version=$( cat $DBW_COURSE_DIR/.dbwebb/lab.version )
+        version=$( cat "$DBW_COURSE_DIR/.dbwebb/lab.version" )
     fi
 
     local lab_version=
