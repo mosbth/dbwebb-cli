@@ -1003,7 +1003,13 @@ function setDefaultConfigFiles()
         fi
 
         JSCS_CONFIG="--config=$DBW_COURSE_DIR/.jscsrc"
+
+        if [ ! -f "$DBW_COURSE_DIR/.eslintrc.json" ]; then
+            DISABLE_ESLINT=true
+        fi
+
     else
+        DISABLE_ESLINT=true
         PHPMD_CONFIG="cleancode,codesize,controversial,design,naming,unusedcode"
     fi
 }
