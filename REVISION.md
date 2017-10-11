@@ -2,10 +2,17 @@ Revision History
 ============================================================
 
 
+v2.0.12 (2017-10-11)
+v2.0.11 (2017-10-05)
+-------------------
+
+* Add support for courses matmod and exjobbd.
+
+
 v2.0.10 (2017-09-18)
 -------------------
 
-* disallow eslint to run without config file
+* Disallow eslint to run without config file
 
 
 v2.0.9 (2017-08-28)
