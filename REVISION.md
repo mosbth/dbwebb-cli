@@ -6,6 +6,7 @@ v2.0.13 (2017-10-16)
 -------------------
 
 * Fix dbwebb check to look in course repo for .git, fix 90.
+* Make install procedure continue installing when needed programs is missing.
 
 
 v2.0.12 (2017-10-11)
