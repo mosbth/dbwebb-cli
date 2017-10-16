@@ -282,12 +282,12 @@ function dbwebb-check()
     if [ "$DBW_COURSE_REPO_VALID" = "yes" ]; then
         echo "Current course-repo:   '$DBW_COURSE'"
         echo "Course directory:      '$DBW_COURSE_DIR'"
-        echo "Course-repo version:   $( git describe --always )"
+        echo "Course-repo version:   $( cd $DBW_COURSE_DIR && git describe --always )"
         echo "Latest update to course repo was:"
         echo 
-        git log -1
+        (cd "$DBW_COURSE_DIR"; git log -1)
         echo
-    else 
+    else
         echo "This is not a valid course repo."
         echo
     fi

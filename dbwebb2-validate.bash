@@ -10,6 +10,9 @@ HTMLHINT_CONFIG=
 CSSLINT="csslint"
 CSSLINT_OPTIONS="--quiet"
 
+STYLELINT="stylelint"
+STYLELINT_OPTIONS=""
+
 JSHINT="jshint"
 
 ESLINT="eslint"
@@ -97,6 +100,10 @@ function setDefaultConfigFiles()
             DISABLE_ESLINT=true
         fi
 
+        if [ ! -f "$DBW_COURSE_DIR/.stylelintrc.json" ]; then
+            DISABLE_STYLELINT=true
+        fi
+
     else
         DISABLE_ESLINT=true
         PHPMD_CONFIG="cleancode,codesize,controversial,design,naming,unusedcode"
@@ -118,6 +125,7 @@ function checkInstalledValidateTools
     printf "Check for installed validation tools.\n"
     printf " htmlhint:        %s\n"  "$( checkCommandWithVersion $HTMLHINT "--version" )"
     printf " csslint:         %s\n"  "$( checkCommandWithVersion $CSSLINT "--version" )"
+    printf " stylelint:       %s\n"  "$( checkCommandWithVersion $STYLELINT "--version" )"
     printf " jshint:          %s\n"  "$( checkCommandWithVersion $JSHINT "--version" "2>&1 | cut -d ' ' -f 2" )"
     printf " eslint:          %s\n"  "$( checkCommandWithVersion $ESLINT "--version" )"
     printf " jscs:            %s\n"  "$( checkCommandWithVersion $JSCS "--version" )"
@@ -253,6 +261,7 @@ function validate()
 
     [[ $ENABLE_ALL || ! $DISABLE_HTMLHINT ]]  && validateCommand "$dir" "$HTMLHINT" "html" "$HTMLHINT_OPTIONS $HTMLHINT_CONFIG" '| grep -v "No problem." | grep -v "Config loaded." | grep -v "Scan " | grep -v "Scanned "; test ${PIPESTATUS[0]} -eq 0'
     [[ $ENABLE_ALL || ! $DISABLE_CSSLINT ]]   && validateCommand "$dir" "$CSSLINT" "css" "$CSSLINT_OPTIONS $( cat "$CSSLINT_CONFIG" )"
+    [[ $ENABLE_ALL || ! $DISABLE_STYLELINT ]]   && validateCommand "$dir" "$STYLELINT" "css" "$STYLELINT_OPTIONS" "" ""
     [[ $ENABLE_ALL || ! $DISABLE_JSHINT ]]    && validateCommand "$dir" "$JSHINT" "js"
     [[ $ENABLE_ALL || ! $DISABLE_ESLINT ]]    && validateCommand "$dir" "$ESLINT" "js"
     [[ $ENABLE_ALL || ! $DISABLE_JSCS ]]      && validateCommand "$dir" "$JSCS" "js"  "$JSCS_OPTIONS $JSCS_CONFIG < /dev/null" "" "onlyExitStatus"
