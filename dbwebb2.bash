@@ -517,6 +517,7 @@ function dbwebb-inspect()
     local archive=
     local yes=
     local useVersion=
+    local noValidate=
 
     checkIfValidConfigOrExit
 
@@ -547,11 +548,12 @@ function dbwebb-inspect()
     [[ $YES ]] && yes="--yes"
     [[ $PORT ]] && port="--port $PORT"
     [[ $USE_VERSION ]] && useVersion="--useVersion $USE_VERSION"
+    [[ $NO_VALIDATE ]] && noValidate="--no-validate"
 
     local intro="I will now inspect '$kmom'${forCourse}${forWho}.$willUpload"
     local log="$HOME/.dbwebb-inspect.log"
     local command1=
-    local command2="$SSH_CMD_INTERACTIVE \"dbwebb-inspect1 $yes $port $useVersion $archive --publish-url $DBW_BASEURL --publish-to ~$DBW_USER/$DBW_REMOTE_WWWDIR --base-url $DBW_WWW_HOST~$inspecUser/$DBW_REMOTE_BASEDIR ~$inspecUser/$DBW_REMOTE_BASEDIR/$course $kmom\" 2>&1 | tee '$log'; test \${PIPESTATUS[0]} -eq 0"
+    local command2="$SSH_CMD_INTERACTIVE \"dbwebb-inspect1 $yes $noValidate $port $useVersion $archive --publish-url $DBW_BASEURL --publish-to ~$DBW_USER/$DBW_REMOTE_WWWDIR --base-url $DBW_WWW_HOST~$inspecUser/$DBW_REMOTE_BASEDIR ~$inspecUser/$DBW_REMOTE_BASEDIR/$course $kmom\" 2>&1 | tee '$log'; test \${PIPESTATUS[0]} -eq 0"
     local message="to inspect the course results.\nSaved a log of the output, review it as:\nless -R '$log'"
 
     # Upload only if
@@ -794,7 +796,7 @@ dbwebb-testrepo()
         fi
 
         if [[ $OPTION_LOCAL ]]; then
-            line=$( echo "$line" | sed 's/dbwebb validate /make dbwebb-validate what=/' )
+            line=$( echo "$line" | sed 's/dbwebb validate /make dbwebb-validate what=/')
         fi
 
         if [[ $SILENT ]]; then
@@ -867,6 +869,11 @@ do
 
         --no-archive)
             OPTION_NOARCHIVE="yes"
+            shift
+        ;;
+
+        --no-validate)
+            NO_VALIDATE="yes"
             shift
         ;;
 

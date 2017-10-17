@@ -21,6 +21,7 @@ function usage ()
 "  --baseurl url          Base URL for published version."
 "  --publish-to path      Path where to publish."
 "  --publish-url url      URL to whats published."
+"  --no-validate          Ignore validate during inspect."
     )
     printf "%s\n" "${txt[@]}"
 }

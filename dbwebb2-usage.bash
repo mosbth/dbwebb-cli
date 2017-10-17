@@ -35,6 +35,7 @@ function usage ()
 "  --host         Host to connect to (supported by run)."
 "  --cwd          Working dir for command (supported by run)."
 "  --dry          Dry run (supported by validate/publish)."
+"  --no-validate  Skip validation when --yes in inspect."
 "  --help, -h     Print help."
 "  --version      Print version."
     )

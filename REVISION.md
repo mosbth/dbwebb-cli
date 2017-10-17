@@ -2,6 +2,14 @@ Revision History
 ============================================================
 
 
+v2.0.14 (2017-10-17)
+-------------------
+
+* Inspect not show open files in editor.
+* Inspect ignore validation when --yeas through --no-validate.
+* Improve error handling in options to dbwebb-inspect.
+
+
 v2.0.13 (2017-10-16)
 -------------------
 

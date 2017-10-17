@@ -266,7 +266,7 @@ function inspectMe()
     headerForTest "-- me-page" "-- ${DBW_WWW}$DBW_COURSE/$KMOM#resultat_redovisning$assignment" 
     checkKmomDir "$target"
     viewFileTree "$target"
-    openFilesInEditor "$target"
+    #openFilesInEditor "$target"
 
     printUrl "$mepage" "$target"  
     [[ $reportpage ]] && printUrl "$reportpage" "$target"
@@ -286,12 +286,13 @@ function inspectLab()
     local lab="$2"
     local main="$3"
     local execute="$4"
+    local urlfile="$5"
     local target="me/$KMOM/$lab"
 
     headerForTest "-- $lab" "-- ${DBW_WWW}$url"
     viewFileTree "$target"
-    openFilesInEditor "$target"
-    printUrl "" "$target"  
+    #openFilesInEditor "$target"
+    printUrl "$urlfile" "$target" 
     checkKmomDir "$target"
     fileIsReadable "$target/$main"
     [[ $execute ]] && inspectCommand "$main" "$EXEC_DIR/$KMOM/$lab" "$execute"
@@ -320,7 +321,7 @@ inspectExercise()
     headerForTest "-- $exercise$info" "-- ${DBW_WWW}$url"
     checkKmomDir "$target"
     viewFileTree "$target"
-    openFilesInEditor "$target"
+    #openFilesInEditor "$target"
     
     # As files
     [ -z "$file1" ] || viewFileContent "$file1" "$target"
@@ -413,9 +414,9 @@ publishKmom()
     printf "\nURL: %s" "$COPY_URL"
     printf "\n"
 
-    printf "\nOpen files in an editor:"
-    printf "\n$EDITOR \"%s\"" "$COPY_DIR"
-    printf "\n"
+    #printf "\nOpen files in an editor:"
+    #printf "\n$EDITOR \"%s\"" "$COPY_DIR"
+    #printf "\n"
 
     printf "\nChange to directory:"
     printf "\ncd \"%s\"" "$COPY_DIR"
@@ -431,11 +432,12 @@ validateKmom()
 {
     local kmom=${1-$KMOM}
 
+    [[ $NO_VALIDATE ]] && return
+
     printf "\nValidate %s [Yn]? " "$kmom"
 
     local answer=$( answerYesOrNo "y" )
-    if [ "$answer" = "y" -o "$answer" = "Y" ]
-    then
+    if [ "$answer" = "y" -o "$answer" = "Y" ]; then
         dbwebb-validate1 --course-repo "$DBW_COURSE_DIR" "$kmom"
     fi
 }
@@ -697,6 +699,17 @@ do
             shift
         ;;
 
+        --no-validate)
+            # Useful together with -y to avoid validation
+            NO_VALIDATE="yes"
+            shift
+        ;;
+
+        -*) 
+            badUsage "$MSG_FAILED Option/command '$1' not recognized."
+            exit 2
+        ;;
+        
         *) 
             break
         ;;
