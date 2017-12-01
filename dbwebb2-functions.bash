@@ -32,7 +32,8 @@ publishChmod()
                 find "$dir" -type f -name '*.txt' -exec chmod go-r {} \;
                 find "$dir" -type f -name '*.json' -exec chmod go-r {} \;
             ;;
-            oopython)
+            oopython \
+            | matmod)
                 find "$dir" -type f -name '*.py' -exec chmod go+r {} \;
                 #find "$dir" -type f -name '*.py' -path '*/flask/*' -exec chmod go+r {} \;
                 #find "$dir" -type f -name '*.py' -path '*/my_app/*' -exec chmod go+r {} \;
