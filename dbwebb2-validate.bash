@@ -267,8 +267,8 @@ function validate()
     [[ $ENABLE_ALL || ! $DISABLE_JSCS ]]      && validateCommand "$dir" "$JSCS" "js"  "$JSCS_OPTIONS $JSCS_CONFIG < /dev/null" "" "onlyExitStatus"
     [[ $ENABLE_ALL || ! $DISABLE_JSONLINT ]]  && validateCommand "$dir" "$JSONLINT" "json" "$JSONLINT_OPTIONS" "" ""
     #validateCommand "$dir" "$JSCS" "js" "$JSCS_OPTIONS $JSCS_CONFIG" ""
-    [[ $ENABLE_ALL || ! $DISABLE_PYLINT ]]    && validateCommand "$dir" "$PYLINT" "py" "$PYLINT_OPTIONS $PYLINT_CONFIG"
-    [[ $ENABLE_ALL || ! $DISABLE_PYLINT ]]    && validateCommand "$dir" "$PYLINT" "cgi" "$PYLINT_OPTIONS $PYLINT_CONFIG"
+    [[ $ENABLE_ALL || ! $DISABLE_PYLINT ]]    && validateCommand "$dir" "$PYLINT" "py" "$PYLINT_OPTIONS $PYLINT_CONFIG" '|& grep -v "Using config file"; test ${PIPESTATUS[0]} -eq 0'
+    [[ $ENABLE_ALL || ! $DISABLE_PYLINT ]]    && validateCommand "$dir" "$PYLINT" "cgi" "$PYLINT_OPTIONS $PYLINT_CONFIG"  '|& grep -v "Using config file"; test ${PIPESTATUS[0]} -eq 0'
     [[ $ENABLE_ALL || ! $DISABLE_PHP ]]       && validateCommand "$dir" "$PHP" "php" "$PHP_OPTIONS" "> /dev/null"
     [[ $ENABLE_ALL || ! $DISABLE_PHPMD ]]     && validateCommand "$dir" "$PHPMD" "php" "" "$PHPMD_OPTIONS $PHPMD_CONFIG"
     [[ $ENABLE_ALL || ! $DISABLE_PHPCS ]]     && validateCommand "$dir" "$PHPCS" "php" "$PHPCS_OPTIONS $PHPCS_CONFIG"
