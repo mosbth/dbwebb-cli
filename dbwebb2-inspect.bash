@@ -389,8 +389,8 @@ dbwebbInspectCheckEnvironment()
 {
     headerForTest "-- dbwebb inspect"
     printUrl "" "me"
-    openFilesInEditor "me"
-    changeToDirectory "me"
+    #openFilesInEditor "me"
+    #changeToDirectory "me"
 }
 
 

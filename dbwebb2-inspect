@@ -30,7 +30,7 @@
 #
 # Current version
 #
-DBW_VERSION="v2.0.17 (2017-12-27)"
+DBW_VERSION="v2.0.18 (2018-01-15)"
 # --------------- DBWEBB FUNCTIONS PHASE START ---------------
 
 #
@@ -3112,8 +3112,8 @@ dbwebbInspectCheckEnvironment()
 {
     headerForTest "-- dbwebb inspect"
     printUrl "" "me"
-    openFilesInEditor "me"
-    changeToDirectory "me"
+    #openFilesInEditor "me"
+    #changeToDirectory "me"
 }
 
 
