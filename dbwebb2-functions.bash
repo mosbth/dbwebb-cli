@@ -21,6 +21,9 @@ publishChmod()
         find "$dir" -type f -name '*.sql' -exec chmod go+r {} \;
 
         case "$DBW_COURSE" in
+            databas)
+                find "$dir" -type d -path '*/me/kmom*' -exec chmod go-r {} \;
+            ;;
             phpmvc)
                 find "$dir" -type d -path '*/css/anax-grid' -exec chmod o+w {} \;
                 find "$dir" -type f -path '*/css/anax-grid/style.css' -exec chmod o+w {} \;
