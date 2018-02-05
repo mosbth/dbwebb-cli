@@ -2,10 +2,16 @@ Revision History
 ============================================================
 
 
+v2.0.20 (2018-02-05)
+-------------------
+
+* Enable to download using option --yes.
+
+
 v2.0.19 (2018-01-19)
 -------------------
 
-* Make all kmoms readonly when publish in database.
+* Make all kmoms readonly when publish in databas.
 
 
 v2.0.18 (2018-01-15)

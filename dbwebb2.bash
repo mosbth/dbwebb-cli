@@ -346,6 +346,7 @@ function dbwebb-download()
     ITEM="$1"
     SUBDIR=""
     local who="$2"
+    local really="really?"
 
     if [ "$who" != "$DBW_USER" ]; then
         WHERE="${DBW_USER}@${DBW_HOST}:~$who/$DBW_REMOTE_BASEDIR/$DBW_COURSE"
@@ -365,10 +366,12 @@ function dbwebb-download()
         command="$RSYNC_DOWNLOAD_CMD '$WHERE' '$WHAT'"
         overwrite="WILL NOT BE"
     fi
-    
+
+    [[ $YES ]] && really=
+
     local intro="Downloading the directory '$WHERE' to '$WHAT'. Existing local files that are newer $overwrite overwritten."
     local message="to download data."
-    executeCommand "$intro" "$command" "$message" "really?"
+    executeCommand "$intro" "$command" "$message" "$really"
 }
 
 
