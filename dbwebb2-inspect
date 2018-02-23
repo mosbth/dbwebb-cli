@@ -30,7 +30,7 @@
 #
 # Current version
 #
-DBW_VERSION="v2.0.20 (2018-02-05)"
+DBW_VERSION="v2.0.21 (2018-02-23)"
 # --------------- DBWEBB FUNCTIONS PHASE START ---------------
 
 #
@@ -70,6 +70,7 @@ publishChmod()
             ;;
             oopython \
             | matmod)
+                find "$dir" -type f -path '*/db/*.json' -exec chmod go+w {} \;
                 find "$dir" -type f -name '*.py' -exec chmod go+r {} \;
                 #find "$dir" -type f -name '*.py' -path '*/flask/*' -exec chmod go+r {} \;
                 #find "$dir" -type f -name '*.py' -path '*/my_app/*' -exec chmod go+r {} \;

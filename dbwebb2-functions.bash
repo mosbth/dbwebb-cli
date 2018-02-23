@@ -37,6 +37,7 @@ publishChmod()
             ;;
             oopython \
             | matmod)
+                find "$dir" -type f -path '*/db/*.json' -exec chmod go+w {} \;
                 find "$dir" -type f -name '*.py' -exec chmod go+r {} \;
                 #find "$dir" -type f -name '*.py' -path '*/flask/*' -exec chmod go+r {} \;
                 #find "$dir" -type f -name '*.py' -path '*/my_app/*' -exec chmod go+r {} \;
