@@ -22,7 +22,7 @@ publishChmod()
 
         case "$DBW_COURSE" in
             databas)
-                find "$dir" -type d -path '*/me/kmom*' -exec chmod go-r {} \;
+                find "$dir" -type d -path '*/me/kmom*' -exec chmod -R go-r {} \;
             ;;
             phpmvc)
                 find "$dir" -type d -path '*/css/anax-grid' -exec chmod o+w {} \;

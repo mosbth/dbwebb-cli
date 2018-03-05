@@ -30,7 +30,7 @@
 #
 # Current version
 #
-DBW_VERSION="v2.0.21 (2018-02-23)"
+DBW_VERSION="v2.0.22 (2018-03-02)"
 # --------------- DBWEBB FUNCTIONS PHASE START ---------------
 
 #
@@ -55,7 +55,7 @@ publishChmod()
 
         case "$DBW_COURSE" in
             databas)
-                find "$dir" -type d -path '*/me/kmom*' -exec chmod go-r {} \;
+                find "$dir" -type d -path '*/me/kmom*' -exec chmod -R go-r {} \;
             ;;
             phpmvc)
                 find "$dir" -type d -path '*/css/anax-grid' -exec chmod o+w {} \;
