@@ -153,6 +153,8 @@ function checkInstalledValidateTools
     printf " babel-node:      %s\n"  "$( checkCommandWithVersion "babel-node" "--version" )"
     printf " python3:         %s\n"  "$( checkCommandWithVersion "python3" "--version" " | cut -d ' ' -f 2" )"
     printf " pip3:            %s\n"  "$( checkCommandWithVersion "pip3" "--version" " | cut -d ' ' -f 2" )"
+    printf " docker:          %s\n"  "$( checkCommandWithVersion "docker" "--version" " | cut -d ' ' -f 3" )"
+    printf " docker-compose:  %s\n"  "$( checkCommandWithVersion "docker-compose" "--version" " | cut -d ' ' -f 3" )"
 }
 
 
