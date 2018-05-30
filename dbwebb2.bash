@@ -681,6 +681,230 @@ dbwebb-create()
 
 
 #
+# Deal with exams
+#
+dbwebb-exam()
+{
+    local action="$1"
+    local what="$2"
+    local version="$3"
+
+    case "$action" in
+        help)
+            usageExam
+            exit 0
+        ;;
+
+        list)
+            dbwebb-exam-list
+            exit 0
+        ;;
+
+        receipt)
+            dbwebb-exam-receipt "$what"
+            exit 0
+        ;;
+
+        start  \
+        | checkout)
+            dbwebb-exam-start "$what" "$version"
+            exit 0
+        ;;
+
+        stop  \
+        | seal)
+            dbwebb-exam-stop "$what"
+            exit 0
+        ;;
+
+        *)
+            badUsageExam "$MSG_FAILED exam subcommand not recognized."
+            exit 2
+         ;;
+     esac
+}
+
+
+
+#
+# Show list of active, planned and passed exams.
+#
+dbwebb-exam-list()
+{
+    local url=
+
+    checkIfValidConfigOrExit
+    checkIfValidCourseRepoOrExit
+
+    url="${OPTION_BASE_URL:-$DBW_LABURL}"
+    url="${url%/}"
+    url="$url/?action=exam-list&course=$DBW_COURSE"
+
+    verbose "Prepare to list exams..."
+    getUrlToStdout "$url" \
+        || die "Failed to download information on exams."
+}
+
+
+
+#
+# Generate file of all files.
+#
+dbwebb-exam-helper-generate-file-list()
+{
+    cd "$1/.dbwebb_exam" && ls -alR -Inode_modules -Ivendor -Ibuild > "FILES.txt"
+}
+
+
+
+#
+# Generate file of all files.
+#
+dbwebb-exam-helper-get-exam-id()
+{
+    local receipt="$1/.dbwebb_exam/RECEIPT.md"
+
+    [[ -f $receipt ]] \
+        || die "There is no RECEIPT.md in '$1'."
+    awk '/Id:/{print $NF}' $receipt
+}
+
+
+
+#
+# Checkout and start an exam.
+#
+dbwebb-exam-start()
+{
+    local what="$1"
+    local version="${2:-$( readLabVersionFromConfig )}"
+    local url="${OPTION_BASE_URL:-$DBW_LABURL}"
+    local subdir=
+    local where=
+    local tarfile="dbwebb_exam_bundle.tar"
+    local active=
+    local signature=
+
+    checkIfValidConfigOrExit
+    checkIfValidCourseRepoOrExit
+
+    subdir="$( mapCmdToDir $what )"
+    where="$DBW_COURSE_DIR/$subdir"
+
+    checkIfValidCombination "$subdir" "$what"
+    checkIfSubdirExistsOrProposeInit "$where"
+
+    url="${url%/}"
+    url="$url/?action=exam-checkout&course=$DBW_COURSE&version=$version&acronym=$DBW_USER&target=$what"
+
+    verbose "Prepare to checkout and start the exam $DBW_COURSE:$what into '${where#$DBW_COURSE_DIR/}'..."
+    veryVerbose "Using version $version."
+
+    active=$( getUrlToStdout "$url&checkIfActive" )
+    veryVerbose "$active"
+    [[ $active == ACTIVE:* ]] \
+        || die "Failed to verify that an active exam exists."
+
+    verbose "There is an active exam:\n $active"
+    signature=$( input "Write your real name to proceed" "firstname lastname" | sed 's/[ &]/\+/g' )
+
+    getUrlToFile "$url&signature=$signature" "$where/$tarfile" \
+        || die "Failed to checkout the exam tar bundle."
+
+    tar -xmf "$where/$tarfile" -C "$where" \
+        || die "The downloaded file seems not to be a tar archive. You may cat it to check for errors."
+
+    rm -f "$where/$tarfile"
+    dbwebb-exam-helper-generate-file-list "$where"
+    verboseDone "You can find the exam and all files here:"
+    verbose "'$where'"
+    [[ $SILENT ]] || ls -lF "$where"
+}
+
+
+
+#
+# Seal and stop an exam.
+#
+dbwebb-exam-stop()
+{
+    local what="$1"
+    local url="${OPTION_BASE_URL:-$DBW_LABURL}"
+    local subdir=
+    local where=
+    local tarfile="dbwebb_exam_bundle.tar"
+    local examId=
+    local signature=
+
+    checkIfValidConfigOrExit
+    checkIfValidCourseRepoOrExit
+
+    subdir="$( mapCmdToDir $what )"
+    where="$DBW_COURSE_DIR/$subdir"
+
+    checkIfValidCombination "$subdir" "$what"
+    checkIfSubdirExistsOrProposeInit "$where"
+
+    examId=$( dbwebb-exam-helper-get-exam-id "$where" )
+
+    url="${url%/}"
+    url="$url/?action=exam-seal&acronym=$DBW_USER&examId=$examId"
+
+    verbose "Prepare to seal the exam $DBW_COURSE:$what into '${where#$DBW_COURSE_DIR/}'..."
+
+    signature=$( input "Write your real name to proceed" "firstname lastname" | sed 's/[ &]/\+/g' )
+
+    getUrlToFile "$url&signature=$signature" "$where/$tarfile" \
+        || die "Failed to seal and checkout the exam tar bundle."
+
+    tar -xmf "$where/$tarfile" -C "$where" \
+        || die "The downloaded file seems not to be a tar archive. You may cat it to check for errors."
+
+    rm -f "$where/$tarfile"
+    dbwebb-exam-helper-generate-file-list "$where"
+    verboseDone "The exam is sealed."
+
+    dbwebb-upload "$what"
+}
+
+
+
+#
+# Get the reciept for an exam.
+#
+dbwebb-exam-receipt()
+{
+    local what="$1"
+    local url="${OPTION_BASE_URL:-$DBW_LABURL}"
+    local subdir=
+    local where=
+    local examId=
+
+    checkIfValidConfigOrExit
+    checkIfValidCourseRepoOrExit
+
+    subdir="$( mapCmdToDir $what )"
+    where="$DBW_COURSE_DIR/$subdir"
+
+    checkIfValidCombination "$subdir" "$what"
+    checkIfSubdirExistsOrProposeInit "$where"
+
+    examId=$( dbwebb-exam-helper-get-exam-id "$where" )
+
+    url="${url%/}"
+    url="$url/?action=exam-receipt&acronym=$DBW_USER&examId=$examId"
+
+    verbose "Getting the receipt from the exam $DBW_COURSE:$what..."
+
+    getUrlToStdout "$url" \
+        || die "Failed to get receipt."
+
+    verboseDone "Review your receipt."
+}
+
+
+
+#
 # Selfupdate
 #
 dbwebb-selfupdate()
@@ -838,7 +1062,13 @@ dbwebb-testrepo()
 while (( $# ))
 do
     case "$1" in
-        
+
+        --baseurl)
+            OPTION_BASE_URL="$2"
+            shift
+            shift
+        ;;
+
         --inspect | -i)
             inspectUsage
             exit 0
@@ -912,21 +1142,22 @@ do
             usage
             exit 0
         ;;
-        
+
         --version)
             version
             exit 0
         ;;
-                
+
         #--course)
         #    DBW_COURSE=$2
         #    shift
         #    shift
         #;;
-                
+
         update         \
         | check        \
         | clone        \
+        | exam         \
         | github       \
         | config       \
         | updateconfig \

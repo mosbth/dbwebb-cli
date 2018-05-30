@@ -7,7 +7,7 @@
 #
 # The MIT License (MIT)
 #
-# Copyright (c) 2014-2015 Mikael Roos (mos@dbwebb.se)
+# Copyright (c) 2014-2018 Mikael Roos (mos@dbwebb.se)
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -196,17 +196,55 @@ function checkCommandWithVersion
 
 
 #
-# Execute a command in a controlled manner
+# Use command (wget, curl, lynx) to download url and output to stdout.
 #
-#function wget {
-#  if command wget -h &>/dev/null
-#  then
-#    command wget "$@"
-#  else
-#    set "${*: -1}"
-#    lynx -source "$1" > "${1##*/}"
-#  fi
-#}
+function getUrlToStdout
+{
+    local cmd=
+    local url="$1"
+    local filename="/tmp/dbwebb.curl.$$"
+    local exitCode=
+
+    veryVerbose "Saving url in '$filename'."
+    getUrlToFile "$url" "$filename"
+    exitCode=$?
+
+    cat "$filename" \
+        || die "Failed to echo content from downloaded file."
+    rm -f "$filename"
+
+    ( exit $exitCode )
+}
+
+
+
+#
+# Use command (wget, curl, lynx) to download url and output to file.
+#
+function getUrlToFile
+{
+    local cmd=
+    local verbose=
+    local url="$1"
+    local filename="$2"
+
+    if hash curl 2>/dev/null; then
+        [[ $VERY_VERBOSE ]] && verbose="--verbose"
+        cmd="curl --fail --silent $verbose \"$url\" -o \"$filename\""
+    elif hash wget 2>/dev/null; then
+        verbose="--quiet"
+        [[ $VERY_VERBOSE ]] && verbose="--verbose" 
+        cmd="wget $verbose -O \"$filename\" \"$url\""
+    elif hash lynx 2>/dev/null; then
+        cmd="lynx -source \"$url\" > \"$filename\""
+    fi
+
+    veryVerbose "Command: $cmd"
+    if [ -f "$filename" ]; then
+        die "The file '$filename' already exists, please remove it before you download a new."
+    fi
+    [[ $OPTION_DRY ]] || bash -c "$cmd"
+}
 
 
 
@@ -237,6 +275,43 @@ answerYesOrNo()
     fi
 
     echo "$answer"
+}
+
+
+
+##
+# Print confirmation message with default values.
+#
+# @param string $1 the message to display or use default.
+# @param string $2 the default value for the response.
+#
+confirm()
+{
+    [[ $YES ]] && return 0
+
+    read -r -p "${1:-Are you sure? [yN]} "
+    case "${REPLY:-$2}" in
+        [yY][eE][sS]|[yY]) 
+            true
+            ;;
+        *)
+            false
+            ;;
+    esac
+}
+
+
+
+##
+# Read input from user supporting a default value for reponse.
+#
+# @param string $1 the message to display.
+# @param string $1 the default value.
+#
+input()
+{
+    read -r -p "$1 [$2]: "
+    echo "${REPLY:-$2}"
 }
 
 
@@ -376,6 +451,92 @@ function checkIfValidConfigOrExit()
         printf "\n"
         exit 1
     fi
+}
+
+
+
+#
+# Check if valid combination of course and target.
+#
+function checkIfValidCombination()
+{
+    local res="$1"
+    local target="$2"
+
+    if [ -z "$res" ]; then
+        printf "$MSG_FAILED Not a valid combination of '$DBW_COURSE' and target '$target'.\n"
+        exit 2
+    fi
+}
+
+
+
+#
+# Check if subdir to me/ exists or propose to run init.
+#
+checkIfSubdirExistsOrProposeInit()
+{
+    local dir="$1"
+
+    if [ ! -d "$dir" ]; then
+        printf "$MSG_FAILED The target directory '$dir' is missing.\nPerhaps, did you run the command 'dbwebb init' or misspelled the command?\n"
+        exit 2
+    fi
+}
+
+
+
+#
+# Fail, die and present error message.
+#
+die()
+{
+    local message="$1"
+    local status="${2:-1}"
+
+    printf "$MSG_FAILED $message\n" >&2
+    exit $status
+}
+
+
+
+#
+# Print out information details in standard verbose mode.
+#
+verboseDone()
+{
+    [[ $SILENT ]] || printf "$MSG_DONE $1\\n" 
+}
+
+
+
+#
+# Print out information details in standard verbose mode.
+#
+verbose()
+{
+    [[ $SILENT ]] || printf "$1\\n" 
+}
+
+
+
+#
+# Print out details in very verbose mode.
+#
+veryVerbose()
+{
+    [[ $VERY_VERBOSE ]] && printf "$1\\n" >&2
+}
+
+
+
+#
+# Read the version of the labs used, from configuration file.
+#
+readLabVersionFromConfig()
+{
+    [ -f "$DBW_COURSE_DIR/.dbwebb/lab.version" ] \
+        && cat "$DBW_COURSE_DIR/.dbwebb/lab.version"
 }
 
 

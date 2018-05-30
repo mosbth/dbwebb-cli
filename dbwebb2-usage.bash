@@ -24,6 +24,7 @@ function usage ()
 "  publishpure [part]   Publish without minification."
 "  inspect [course] [kmom] [user]  Inspect a kmom."
 "  run <command>        Run a command on remote host."
+"  exam help|<command>  Work (checkout and hand in) with exams."
 "  testrepo             Automated tests of a course repo."
 ""
 "Options:"
@@ -86,6 +87,7 @@ function badUsageGithub ()
     
     usageGithub
 }
+
 
 
 function usageClone ()
@@ -174,5 +176,46 @@ function inspectUsage ()
 "Execute command as the user dbwebb."
 " sudo -u dbwebb script"
     )
+    printf "%s\n" "${txt[@]}"
+}
+
+
+
+function usageExam ()
+{
+    local txt=(
+"Work with exams."
+"Usage: dbwebb [options] exam <command> [arguments]"
+""
+"Command:"
+"  help                    Print this help and usage message."
+"  list                    View Active, Planned and Passed exams."
+"  receipt <target>        Get a receipt for a previous exam."
+"  start|checkout <target> Checkout an exam and start working with it."
+"  stop|seal <target>      Seal and hand in the exam once you are done."
+""
+"Options:"
+"  --baseurl <url>  Use baseurl for request, instead of configuration."
+"  --dry            Dry run."
+"  --silent, -s     Less verbose output."
+"  --verbose, -v    More verbose."
+    )
+    printf "%s\n" "${txt[@]}"
+}
+
+
+
+function badUsageExam ()
+{
+    local message="$1"
+    local txt=(
+"For an overview of the command, execute:"
+"dbwebb exam help"
+    )
+    
+    if [[ "$message" ]]; then
+        printf "$message\n"
+    fi
+    
     printf "%s\n" "${txt[@]}"
 }

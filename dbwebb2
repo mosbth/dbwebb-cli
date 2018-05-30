@@ -7,7 +7,7 @@
 #
 # The MIT License (MIT)
 #
-# Copyright (c) 2014-2015 Mikael Roos (mos@dbwebb.se)
+# Copyright (c) 2014-2018 Mikael Roos (mos@dbwebb.se)
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -196,17 +196,55 @@ function checkCommandWithVersion
 
 
 #
-# Execute a command in a controlled manner
+# Use command (wget, curl, lynx) to download url and output to stdout.
 #
-#function wget {
-#  if command wget -h &>/dev/null
-#  then
-#    command wget "$@"
-#  else
-#    set "${*: -1}"
-#    lynx -source "$1" > "${1##*/}"
-#  fi
-#}
+function getUrlToStdout
+{
+    local cmd=
+    local url="$1"
+    local filename="/tmp/dbwebb.curl.$$"
+    local exitCode=
+
+    veryVerbose "Saving url in '$filename'."
+    getUrlToFile "$url" "$filename"
+    exitCode=$?
+
+    cat "$filename" \
+        || die "Failed to echo content from downloaded file."
+    rm -f "$filename"
+
+    ( exit $exitCode )
+}
+
+
+
+#
+# Use command (wget, curl, lynx) to download url and output to file.
+#
+function getUrlToFile
+{
+    local cmd=
+    local verbose=
+    local url="$1"
+    local filename="$2"
+
+    if hash curl 2>/dev/null; then
+        [[ $VERY_VERBOSE ]] && verbose="--verbose"
+        cmd="curl --fail --silent $verbose \"$url\" -o \"$filename\""
+    elif hash wget 2>/dev/null; then
+        verbose="--quiet"
+        [[ $VERY_VERBOSE ]] && verbose="--verbose" 
+        cmd="wget $verbose -O \"$filename\" \"$url\""
+    elif hash lynx 2>/dev/null; then
+        cmd="lynx -source \"$url\" > \"$filename\""
+    fi
+
+    veryVerbose "Command: $cmd"
+    if [ -f "$filename" ]; then
+        die "The file '$filename' already exists, please remove it before you download a new."
+    fi
+    [[ $OPTION_DRY ]] || bash -c "$cmd"
+}
 
 
 
@@ -237,6 +275,43 @@ answerYesOrNo()
     fi
 
     echo "$answer"
+}
+
+
+
+##
+# Print confirmation message with default values.
+#
+# @param string $1 the message to display or use default.
+# @param string $2 the default value for the response.
+#
+confirm()
+{
+    [[ $YES ]] && return 0
+
+    read -r -p "${1:-Are you sure? [yN]} "
+    case "${REPLY:-$2}" in
+        [yY][eE][sS]|[yY]) 
+            true
+            ;;
+        *)
+            false
+            ;;
+    esac
+}
+
+
+
+##
+# Read input from user supporting a default value for reponse.
+#
+# @param string $1 the message to display.
+# @param string $1 the default value.
+#
+input()
+{
+    read -r -p "$1 [$2]: "
+    echo "${REPLY:-$2}"
 }
 
 
@@ -376,6 +451,92 @@ function checkIfValidConfigOrExit()
         printf "\n"
         exit 1
     fi
+}
+
+
+
+#
+# Check if valid combination of course and target.
+#
+function checkIfValidCombination()
+{
+    local res="$1"
+    local target="$2"
+
+    if [ -z "$res" ]; then
+        printf "$MSG_FAILED Not a valid combination of '$DBW_COURSE' and target '$target'.\n"
+        exit 2
+    fi
+}
+
+
+
+#
+# Check if subdir to me/ exists or propose to run init.
+#
+checkIfSubdirExistsOrProposeInit()
+{
+    local dir="$1"
+
+    if [ ! -d "$dir" ]; then
+        printf "$MSG_FAILED The target directory '$dir' is missing.\nPerhaps, did you run the command 'dbwebb init' or misspelled the command?\n"
+        exit 2
+    fi
+}
+
+
+
+#
+# Fail, die and present error message.
+#
+die()
+{
+    local message="$1"
+    local status="${2:-1}"
+
+    printf "$MSG_FAILED $message\n" >&2
+    exit $status
+}
+
+
+
+#
+# Print out information details in standard verbose mode.
+#
+verboseDone()
+{
+    [[ $SILENT ]] || printf "$MSG_DONE $1\\n" 
+}
+
+
+
+#
+# Print out information details in standard verbose mode.
+#
+verbose()
+{
+    [[ $SILENT ]] || printf "$1\\n" 
+}
+
+
+
+#
+# Print out details in very verbose mode.
+#
+veryVerbose()
+{
+    [[ $VERY_VERBOSE ]] && printf "$1\\n" >&2
+}
+
+
+
+#
+# Read the version of the labs used, from configuration file.
+#
+readLabVersionFromConfig()
+{
+    [ -f "$DBW_COURSE_DIR/.dbwebb/lab.version" ] \
+        && cat "$DBW_COURSE_DIR/.dbwebb/lab.version"
 }
 
 
@@ -884,6 +1045,7 @@ function usage ()
 "  publishpure [part]   Publish without minification."
 "  inspect [course] [kmom] [user]  Inspect a kmom."
 "  run <command>        Run a command on remote host."
+"  exam help|<command>  Work (checkout and hand in) with exams."
 "  testrepo             Automated tests of a course repo."
 ""
 "Options:"
@@ -946,6 +1108,7 @@ function badUsageGithub ()
     
     usageGithub
 }
+
 
 
 function usageClone ()
@@ -1034,6 +1197,47 @@ function inspectUsage ()
 "Execute command as the user dbwebb."
 " sudo -u dbwebb script"
     )
+    printf "%s\n" "${txt[@]}"
+}
+
+
+
+function usageExam ()
+{
+    local txt=(
+"Work with exams."
+"Usage: dbwebb [options] exam <command> [arguments]"
+""
+"Command:"
+"  help                    Print this help and usage message."
+"  list                    View Active, Planned and Passed exams."
+"  receipt <target>        Get a receipt for a previous exam."
+"  start|checkout <target> Checkout an exam and start working with it."
+"  stop|seal <target>      Seal and hand in the exam once you are done."
+""
+"Options:"
+"  --baseurl <url>  Use baseurl for request, instead of configuration."
+"  --dry            Dry run."
+"  --silent, -s     Less verbose output."
+"  --verbose, -v    More verbose."
+    )
+    printf "%s\n" "${txt[@]}"
+}
+
+
+
+function badUsageExam ()
+{
+    local message="$1"
+    local txt=(
+"For an overview of the command, execute:"
+"dbwebb exam help"
+    )
+    
+    if [[ "$message" ]]; then
+        printf "$message\n"
+    fi
+    
     printf "%s\n" "${txt[@]}"
 }
 #------------------------- HERE ARE THE MAIN COMMANDS -----------------------
@@ -1719,6 +1923,230 @@ dbwebb-create()
 
 
 #
+# Deal with exams
+#
+dbwebb-exam()
+{
+    local action="$1"
+    local what="$2"
+    local version="$3"
+
+    case "$action" in
+        help)
+            usageExam
+            exit 0
+        ;;
+
+        list)
+            dbwebb-exam-list
+            exit 0
+        ;;
+
+        receipt)
+            dbwebb-exam-receipt "$what"
+            exit 0
+        ;;
+
+        start  \
+        | checkout)
+            dbwebb-exam-start "$what" "$version"
+            exit 0
+        ;;
+
+        stop  \
+        | seal)
+            dbwebb-exam-stop "$what"
+            exit 0
+        ;;
+
+        *)
+            badUsageExam "$MSG_FAILED exam subcommand not recognized."
+            exit 2
+         ;;
+     esac
+}
+
+
+
+#
+# Show list of active, planned and passed exams.
+#
+dbwebb-exam-list()
+{
+    local url=
+
+    checkIfValidConfigOrExit
+    checkIfValidCourseRepoOrExit
+
+    url="${OPTION_BASE_URL:-$DBW_LABURL}"
+    url="${url%/}"
+    url="$url/?action=exam-list&course=$DBW_COURSE"
+
+    verbose "Prepare to list exams..."
+    getUrlToStdout "$url" \
+        || die "Failed to download information on exams."
+}
+
+
+
+#
+# Generate file of all files.
+#
+dbwebb-exam-helper-generate-file-list()
+{
+    cd "$1/.dbwebb_exam" && ls -alR -Inode_modules -Ivendor -Ibuild > "FILES.txt"
+}
+
+
+
+#
+# Generate file of all files.
+#
+dbwebb-exam-helper-get-exam-id()
+{
+    local receipt="$1/.dbwebb_exam/RECEIPT.md"
+
+    [[ -f $receipt ]] \
+        || die "There is no RECEIPT.md in '$1'."
+    awk '/Id:/{print $NF}' $receipt
+}
+
+
+
+#
+# Checkout and start an exam.
+#
+dbwebb-exam-start()
+{
+    local what="$1"
+    local version="${2:-$( readLabVersionFromConfig )}"
+    local url="${OPTION_BASE_URL:-$DBW_LABURL}"
+    local subdir=
+    local where=
+    local tarfile="dbwebb_exam_bundle.tar"
+    local active=
+    local signature=
+
+    checkIfValidConfigOrExit
+    checkIfValidCourseRepoOrExit
+
+    subdir="$( mapCmdToDir $what )"
+    where="$DBW_COURSE_DIR/$subdir"
+
+    checkIfValidCombination "$subdir" "$what"
+    checkIfSubdirExistsOrProposeInit "$where"
+
+    url="${url%/}"
+    url="$url/?action=exam-checkout&course=$DBW_COURSE&version=$version&acronym=$DBW_USER&target=$what"
+
+    verbose "Prepare to checkout and start the exam $DBW_COURSE:$what into '${where#$DBW_COURSE_DIR/}'..."
+    veryVerbose "Using version $version."
+
+    active=$( getUrlToStdout "$url&checkIfActive" )
+    veryVerbose "$active"
+    [[ $active == ACTIVE:* ]] \
+        || die "Failed to verify that an active exam exists."
+
+    verbose "There is an active exam:\n $active"
+    signature=$( input "Write your real name to proceed" "firstname lastname" | sed 's/[ &]/\+/g' )
+
+    getUrlToFile "$url&signature=$signature" "$where/$tarfile" \
+        || die "Failed to checkout the exam tar bundle."
+
+    tar -xmf "$where/$tarfile" -C "$where" \
+        || die "The downloaded file seems not to be a tar archive. You may cat it to check for errors."
+
+    rm -f "$where/$tarfile"
+    dbwebb-exam-helper-generate-file-list "$where"
+    verboseDone "You can find the exam and all files here:"
+    verbose "'$where'"
+    [[ $SILENT ]] || ls -lF "$where"
+}
+
+
+
+#
+# Seal and stop an exam.
+#
+dbwebb-exam-stop()
+{
+    local what="$1"
+    local url="${OPTION_BASE_URL:-$DBW_LABURL}"
+    local subdir=
+    local where=
+    local tarfile="dbwebb_exam_bundle.tar"
+    local examId=
+    local signature=
+
+    checkIfValidConfigOrExit
+    checkIfValidCourseRepoOrExit
+
+    subdir="$( mapCmdToDir $what )"
+    where="$DBW_COURSE_DIR/$subdir"
+
+    checkIfValidCombination "$subdir" "$what"
+    checkIfSubdirExistsOrProposeInit "$where"
+
+    examId=$( dbwebb-exam-helper-get-exam-id "$where" )
+
+    url="${url%/}"
+    url="$url/?action=exam-seal&acronym=$DBW_USER&examId=$examId"
+
+    verbose "Prepare to seal the exam $DBW_COURSE:$what into '${where#$DBW_COURSE_DIR/}'..."
+
+    signature=$( input "Write your real name to proceed" "firstname lastname" | sed 's/[ &]/\+/g' )
+
+    getUrlToFile "$url&signature=$signature" "$where/$tarfile" \
+        || die "Failed to seal and checkout the exam tar bundle."
+
+    tar -xmf "$where/$tarfile" -C "$where" \
+        || die "The downloaded file seems not to be a tar archive. You may cat it to check for errors."
+
+    rm -f "$where/$tarfile"
+    dbwebb-exam-helper-generate-file-list "$where"
+    verboseDone "The exam is sealed."
+
+    dbwebb-upload "$what"
+}
+
+
+
+#
+# Get the reciept for an exam.
+#
+dbwebb-exam-receipt()
+{
+    local what="$1"
+    local url="${OPTION_BASE_URL:-$DBW_LABURL}"
+    local subdir=
+    local where=
+    local examId=
+
+    checkIfValidConfigOrExit
+    checkIfValidCourseRepoOrExit
+
+    subdir="$( mapCmdToDir $what )"
+    where="$DBW_COURSE_DIR/$subdir"
+
+    checkIfValidCombination "$subdir" "$what"
+    checkIfSubdirExistsOrProposeInit "$where"
+
+    examId=$( dbwebb-exam-helper-get-exam-id "$where" )
+
+    url="${url%/}"
+    url="$url/?action=exam-receipt&acronym=$DBW_USER&examId=$examId"
+
+    verbose "Getting the receipt from the exam $DBW_COURSE:$what..."
+
+    getUrlToStdout "$url" \
+        || die "Failed to get receipt."
+
+    verboseDone "Review your receipt."
+}
+
+
+
+#
 # Selfupdate
 #
 dbwebb-selfupdate()
@@ -1876,7 +2304,13 @@ dbwebb-testrepo()
 while (( $# ))
 do
     case "$1" in
-        
+
+        --baseurl)
+            OPTION_BASE_URL="$2"
+            shift
+            shift
+        ;;
+
         --inspect | -i)
             inspectUsage
             exit 0
@@ -1950,21 +2384,22 @@ do
             usage
             exit 0
         ;;
-        
+
         --version)
             version
             exit 0
         ;;
-                
+
         #--course)
         #    DBW_COURSE=$2
         #    shift
         #    shift
         #;;
-                
+
         update         \
         | check        \
         | clone        \
+        | exam         \
         | github       \
         | config       \
         | updateconfig \
