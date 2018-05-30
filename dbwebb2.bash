@@ -695,7 +695,8 @@ dbwebb-exam()
             exit 0
         ;;
 
-        list)
+        list \
+        | ls)
             dbwebb-exam-list
             exit 0
         ;;
