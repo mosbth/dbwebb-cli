@@ -753,7 +753,7 @@ dbwebb-exam-list()
 #
 dbwebb-exam-helper-generate-file-list()
 {
-    cd "$1" && find . -type d -not -path "./vendor" -not -path "./node_modules" -not -path "./build" -exec echo {} \; -exec ls -l {} \; > ".dbwebb_exam/FILES.txt"
+    cd "$1" && find . -type d -not -path "./vendor" -not -path "./node_modules" -not -path "./build" -exec echo {} \; -exec ls -Al {} \; > ".dbwebb_exam/FILES.txt"
 }
 
 
