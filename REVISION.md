@@ -6,6 +6,7 @@ v2.1.x (2018-05-30)
 -------------------
 
 * Added support for dbwebb exam ls as an alias.
+* Fix: ls -I did not work on Mac OS (dbwebb exam).
 
 
 v2.1.1 (2018-05-30)
