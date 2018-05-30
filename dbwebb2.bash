@@ -767,7 +767,7 @@ dbwebb-exam-helper-get-exam-id()
 
     [[ -f $receipt ]] \
         || die "There is no RECEIPT.md in '$1'."
-    awk '/Id:/{print $NF}' $receipt
+    awk '/Id:/{print $NF}' "$receipt"
 }
 
 
