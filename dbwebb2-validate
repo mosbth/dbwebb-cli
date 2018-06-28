@@ -30,7 +30,7 @@
 #
 # Current version
 #
-DBW_VERSION="v2.1.3 (2018-05-30)"
+DBW_VERSION="v2.1.4 (2018-06-28)"
 # --------------- DBWEBB FUNCTIONS PHASE START ---------------
 
 #
@@ -506,6 +506,26 @@ die()
 verboseDone()
 {
     [[ $SILENT ]] || printf "$MSG_DONE $1\\n" 
+}
+
+
+
+#
+# Print out information details that command partly failed.
+#
+verboseWarning()
+{
+    [[ $SILENT ]] || printf "$MSG_WARNING $1\\n"
+}
+
+
+
+#
+# Print out information details that command has failed.
+#
+verboseFail()
+{
+    [[ $SILENT ]] || printf "$MSG_FAILED $1\\n"
 }
 
 

@@ -718,6 +718,11 @@ dbwebb-exam()
             exit 0
         ;;
 
+        correct)
+            dbwebb-exam-correct "$what"
+            exit 0
+        ;;
+
         *)
             badUsageExam "$MSG_FAILED exam subcommand not recognized."
             exit 2
@@ -901,6 +906,43 @@ dbwebb-exam-receipt()
         || die "Failed to get receipt."
 
     verboseDone "Review your receipt."
+}
+
+
+
+#
+# Get the reciept for an exam.
+#
+dbwebb-exam-correct()
+{
+    local what="$1"
+    local subdir=
+    local where=
+    local correct=
+
+    checkIfValidConfigOrExit
+    checkIfValidCourseRepoOrExit
+
+    subdir="$( mapCmdToDir $what )"
+    where="$DBW_COURSE_DIR/$subdir"
+
+    checkIfValidCombination "$subdir" "$what"
+    checkIfSubdirExistsOrProposeInit "$where"
+
+    verbose "Correcting the exam $DBW_COURSE:$what..."
+
+    correct="$where/.dbwebb/correct.bash"
+    if [ -f $correct ]; then
+        if $correct; then
+            verboseDone "The exam is corrected and graded as passed :-)"
+        else
+            verboseWarning "The exam is corrected, but was graded as NOT passed :-|"
+            exit 1
+        fi
+    else
+        verboseFail "There is no auto correcting program installed."
+        exit 1
+    fi 
 }
 
 

@@ -2,6 +2,12 @@ Revision History
 ============================================================
 
 
+v2.1.4 (2018-06-28)
+-------------------
+
+* Enable dbwebb exam correct to autocorrect an exam though .dbwebb/correct.bash.
+
+
 v2.1.3 (2018-05-30)
 -------------------
 

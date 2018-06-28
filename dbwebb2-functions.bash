@@ -478,6 +478,26 @@ verboseDone()
 
 
 #
+# Print out information details that command partly failed.
+#
+verboseWarning()
+{
+    [[ $SILENT ]] || printf "$MSG_WARNING $1\\n"
+}
+
+
+
+#
+# Print out information details that command has failed.
+#
+verboseFail()
+{
+    [[ $SILENT ]] || printf "$MSG_FAILED $1\\n"
+}
+
+
+
+#
 # Print out information details in standard verbose mode.
 #
 verbose()

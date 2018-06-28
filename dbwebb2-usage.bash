@@ -188,6 +188,7 @@ function usageExam ()
 "Usage: dbwebb [options] exam <command> [arguments]"
 ""
 "Command:"
+"  correct                 Correct the exam (if supported)."
 "  help                    Print this help and usage message."
 "  list|ls                 View Active, Planned and Passed exams."
 "  receipt <target>        Get the receipt for an exam."
