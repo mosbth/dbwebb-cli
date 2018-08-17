@@ -59,7 +59,7 @@ function createConfig()
     remoteWwwHost=${DBW_WWW_HOST:-http://www.student.bth.se/}
     remoteWww=${DBW_REMOTE_WWWDIR:-www/dbwebb-kurser}
     baseurl=${DBW_BASEURL:-http://www.student.bth.se/~$acronym/$remoteDir}
-    laburl=${DBW_LABURL:-http://www.student.bth.se/~mosstud/kod-exempel/lab}
+    laburl=${DBW_LABURL:-http://lab.dbwebb.se}
 
     echo "DBW_USER='$acronym'"               > "$DBW_CONFIG_FILE"
     echo "DBW_HOST='$remoteHost'"           >> "$DBW_CONFIG_FILE"
