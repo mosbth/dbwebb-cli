@@ -2,6 +2,12 @@ Revision History
 ============================================================
 
 
+v2.2.1 (2018-08-20)
+-------------------
+
+* Change lab url to https://lab.dbwebb.se and rewrite configuration on selfupdate.
+
+
 v2.2.0 (2018-08-17)
 -------------------
 

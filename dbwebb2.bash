@@ -26,14 +26,18 @@ function createConfig()
 
         printf "Your config file will be automatically updated."
 
-        # Temporary to solve upgrades from v1.9.29 to v1.9.32
-        unset DBW_SSH_KEY
+        # # Temporary to solve upgrades from v1.9.29 to v1.9.32
+        # unset DBW_SSH_KEY
+        # To change lab url when upgrading to v2.2.1
+        unset DBW_LABURL
 
     elif [ $first = "selfupdate" ]
     then
 
-        # Temporary to solve upgrades from v1.9.29 to v1.9.32
-        unset DBW_SSH_KEY
+        # # Temporary to solve upgrades from v1.9.29 to v1.9.32
+        # unset DBW_SSH_KEY
+        # To change lab url when upgrading to v2.2.1
+        unset DBW_LABURL
 
     elif [ $first = "create" ]
     then
@@ -59,7 +63,7 @@ function createConfig()
     remoteWwwHost=${DBW_WWW_HOST:-http://www.student.bth.se/}
     remoteWww=${DBW_REMOTE_WWWDIR:-www/dbwebb-kurser}
     baseurl=${DBW_BASEURL:-http://www.student.bth.se/~$acronym/$remoteDir}
-    laburl=${DBW_LABURL:-http://lab.dbwebb.se}
+    laburl=${DBW_LABURL:-https://lab.dbwebb.se}
 
     echo "DBW_USER='$acronym'"               > "$DBW_CONFIG_FILE"
     echo "DBW_HOST='$remoteHost'"           >> "$DBW_CONFIG_FILE"
