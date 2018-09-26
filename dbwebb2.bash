@@ -111,9 +111,9 @@ function dbwebb-init-me()
 # Init directory structure at the server.
 #
 function dbwebb-init-server()
-{    
+{
     local intro="Intiating the remote server '$DBW_HOST' by connecting as '$DBW_USER' and creating directories (if needed) where all uploaded files will reside."
-    # TODO Should use DBW_BASEDIR 
+    # TODO Should use DBW_BASEDIR
     local command="$SSH_CMD 'sh -c \"if [ ! -d \"$DBW_REMOTE_BASEDIR\" ]; then mkdir \"$DBW_REMOTE_BASEDIR\"; fi; chmod 700 \"$DBW_REMOTE_BASEDIR\"; echo; echo \"$DBW_REMOTE_BASEDIR:\"; ls -lF \"$DBW_REMOTE_BASEDIR\"; if [ ! -d \"$DBW_REMOTE_WWWDIR\" ]; then mkdir \"$DBW_REMOTE_WWWDIR\"; fi; chmod 755 \"$DBW_REMOTE_WWWDIR\"; echo; echo \"$DBW_REMOTE_WWWDIR:\"; ls -lF \"$DBW_REMOTE_WWWDIR\"\"'"
     local message="to init the base dirs on the server."
 
@@ -177,7 +177,7 @@ function dbwebb-init-structure-www-dbwebb-kurser()
 # Init course repo and directory structure at the server.
 #
 function dbwebb-init()
-{    
+{
     dbwebb-init-me
     dbwebb-init-server
     dbwebb-init-structure-dbwebb-kurser
@@ -202,9 +202,9 @@ function dbwebb-sshkey()
     printf "\nPress enter/return to continue..."
     read void
     ssh-keygen -f "$sshkey" -N ''
-    
+
     # Bug (?) om Cygwin & win 8
-    # TODO refactor 
+    # TODO refactor
     #if [ $IS_CYGWIN = "yes" ]; then
     #    chgrp -vR "$CYGWIN_DEFAULT_GROUP" "$HOME/.ssh"
     #fi
@@ -214,7 +214,7 @@ function dbwebb-sshkey()
 
     intro="I will now install the ssh-key at the remote server."
     command="cat '$sshkey.pub' | ssh $DBW_USER@$DBW_HOST 'sh -c \"if [ ! -d .ssh ]; then mkdir .ssh; fi; chmod 700 .ssh; touch .ssh/authorized_keys; cat >> .ssh/authorized_keys\"'"
-    message="to install the ssh-keys."    
+    message="to install the ssh-keys."
     executeCommand "$intro" "$command" "$message"
 }
 
@@ -228,7 +228,7 @@ function dbwebb-login()
     local intro="I will now login to the server '$DBW_HOST' as '$DBW_USER' using ssh-keys if available."
     local command="$SSH_CMD"
     local message="to establish the connection."
-    
+
     checkIfValidConfigOrExit
     executeCommand "$intro" "$command" "$message"
 }
@@ -243,7 +243,7 @@ function dbwebb-update()
     local intro="Update course-repo with latest changes from its master at GitHub."
     local command="git pull"
     local message="to update course repo."
-    
+
     checkIfValidCourseRepoOrExit
     executeCommand "$intro" "$command" "$message"
 }
@@ -289,7 +289,7 @@ function dbwebb-check()
         echo "Remote origin:         $( cd $DBW_COURSE_DIR && git config --get remote.origin.url )"
         echo "Course-repo version:   $( cd $DBW_COURSE_DIR && git describe --always )"
         echo "Latest update to course repo was:"
-        echo 
+        echo
         (cd "$DBW_COURSE_DIR" && git log -1)
         echo
     else
@@ -302,7 +302,7 @@ function dbwebb-check()
         echo "------------------------------------"
         echo "python3:            $( checkCommand python3 )"
         echo "pip3:               $( checkCommand pip3 )"
-        echo 
+        echo
     fi
 }
 
@@ -356,14 +356,14 @@ function dbwebb-download()
     if [ "$who" != "$DBW_USER" ]; then
         WHERE="${DBW_USER}@${DBW_HOST}:~$who/$DBW_REMOTE_BASEDIR/$DBW_COURSE"
     fi
-    
+
     checkIfValidConfigOrExit
     checkIfValidCourseRepoOrExit
     createUploadDownloadPaths
 
     local command=
     local overwrite=
-    
+
     if [[ $OVERWRITE ]]; then
         command="$RSYNC_DOWNLOAD_DELETE_CMD $OVERWRITE '$WHERE' '$WHAT'"
         overwrite="WILL BE"
@@ -486,7 +486,7 @@ function dbwebb-run()
 {
     local cmd="$*"
     local cwd=
-    
+
     # Prepare options
     if [[ ! $VERY_VERBOSE ]]; then
         SILENT="yes"
@@ -497,15 +497,15 @@ function dbwebb-run()
     fi
 
     checkIfValidConfigOrExit
-    
+
     # Create ssh-command for host
     local server=${OPTION_HOSTNAME:-$DBW_HOST}
     local ssh_cmd="ssh ${DBW_USER}@${server} $DBW_SSH_KEY_OPTION"
-    
+
     local intro="I will now login to the server '$server' as '$DBW_USER' and execute the command '$cwd$cmd'."
     local command="$SSH_CMD -t \"$cwd$cmd\""
     local message="to run the command."
-    
+
     executeCommand "$intro" "$command" "$message"
 }
 
@@ -619,7 +619,7 @@ dbwebb-create()
     local save="$3"
     local subdir="$( mapCmdToDir $lab )"
     local where="$DBW_COURSE_DIR/$subdir"
-    
+
     if [ -z "$subdir" ]; then
         printf "$MSG_FAILED Not a valid combination of '$DBW_COURSE' and '$lab'.\n"
         exit 2
@@ -937,7 +937,7 @@ dbwebb-exam-correct()
 
     correct="$where/.dbwebb/correct.bash"
     if [ -f $correct ]; then
-        if $correct; then
+        if $correct $where; then
             verboseDone "The exam is corrected and graded as passed :-)"
         else
             verboseWarning "The exam is corrected, but was graded as NOT passed :-|"
@@ -946,7 +946,7 @@ dbwebb-exam-correct()
     else
         verboseFail "There is no auto correcting program installed."
         exit 1
-    fi 
+    fi
 }
 
 
@@ -970,17 +970,17 @@ dbwebb-clone()
 {
     local repo="$1"
     local saveas="$2"
-    
+
     if [[ ! $repo ]]; then
         usageClone
         exit 0
     fi
-    
+
     if ! contains "$repo" "${DBW_COURSE_REPOS[@]}"; then
         badUsageClone "$MSG_FAILED Not a valid course repo: '$repo'"
         exit 1
     fi
-    
+
     local intro="Cloning course-repo for '$repo' from '$( createGithubUrl "$repo" )'."
     local cmd="git clone \"$( createGithubUrl "$repo" ).git\" $saveas"
     local message="to clone course repo."
@@ -995,17 +995,17 @@ dbwebb-clone()
 dbwebb-github()
 {
     local repo="$1"
-    
+
     if [[ ! $repo ]]; then
         usageGithub
         exit 0
     fi
-    
+
     if ! contains "$repo" "${DBW_COURSE_REPOS[@]}"; then
         badUsageGithub "$MSG_FAILED Not a valid course repo: '$repo'"
         exit 1
     fi
-    
+
     echo "The course repo '$repo' exists on GitHub:"
     echo "Repo:   $( createGithubUrl "$repo" )"
     echo "Issues: $( createGithubUrl "$repo" "/issues" )"
@@ -1060,7 +1060,7 @@ dbwebb-testrepo()
     local lineNum=0
     local assertions=0
     local fail=0
-    
+
     while IFS= read -r line <&3
     do
         ((lineNum++))
@@ -1094,7 +1094,7 @@ dbwebb-testrepo()
     echo "$prompt Done with $assertions assertions and $fail failure(s)."
     if [[ $fail = 0 ]]; then
         printf "$prompt $MSG_OK All tests passed.\n"
-    else 
+    else
         printf "$prompt $MSG_FAILED $fail assertion(s) failed.\n"
         exit 1
     fi
@@ -1234,12 +1234,12 @@ do
             dbwebb-$command $*
             exit
         ;;
-        
+
         *)
             badUsage "$MSG_FAILED Option/command not recognized."
             exit 2
         ;;
-        
+
     esac
 done
 
