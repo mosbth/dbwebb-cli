@@ -30,7 +30,7 @@
 #
 # Current version
 #
-DBW_VERSION="v2.2.1 (2018-08-20)"
+DBW_VERSION="v2.2.2 (2018-09-28)"
 # --------------- DBWEBB FUNCTIONS PHASE START ---------------
 
 #
@@ -220,6 +220,8 @@ function getUrlToStdout
 
 #
 # Use command (wget, curl, lynx) to download url and output to file.
+# The variable OPTION_WITH_WGET_ALT can be used to specify the tool
+# to use, wget is default and options are curl and lynx.
 #
 function getUrlToFile
 {
@@ -228,14 +230,13 @@ function getUrlToFile
     local url="$1"
     local filename="$2"
 
-    if hash curl 2>/dev/null; then
-        [[ $VERY_VERBOSE ]] && verbose="--verbose"
-        cmd="curl --fail --silent $verbose \"$url\" -o \"$filename\""
-    elif hash wget 2>/dev/null; then
+    if [ -z "$OPTION_WITH_WGET_ALT" ] && hash wget 2>/dev/null; then
         verbose="--quiet"
         [[ $VERY_VERBOSE ]] && verbose="--verbose" 
         cmd="wget $verbose -O \"$filename\" \"$url\""
-    elif hash lynx 2>/dev/null; then
+    elif ([ -z "$OPTION_WITH_WGET_ALT" ] || [ "$OPTION_WITH_WGET_ALT" = "curl" ]) && hash curl 2>/dev/null; then
+        cmd="curl --fail --silent $verbose \"$url\" -o \"$filename\""
+    elif ([ -z "$OPTION_WITH_WGET_ALT" ] || [ "$OPTION_WITH_WGET_ALT" = "lynx" ]) && hash lynx 2>/dev/null; then
         cmd="lynx -source \"$url\" > \"$filename\""
     fi
 
@@ -1067,6 +1068,8 @@ function usage ()
 "  run <command>        Run a command on remote host."
 "  exam help|<command>  Work (checkout and hand in) with exams."
 "  testrepo             Automated tests of a course repo."
+"  version              Alternative to --version."
+"  help                 Alternative to --help."
 ""
 "Options:"
 "  --inspect, -i  Help for inspect."
@@ -1076,6 +1079,8 @@ function usage ()
 "  --local, -l    Only local tests in command testrepo."
 "  --host         Host to connect to (supported by run)."
 "  --cwd          Working dir for command (supported by run)."
+"  --with-curl    Prefer to use curl (where supported)."
+"  --with-lynx    Prefer to use lynx (where supported)."
 "  --dry          Dry run (supported by validate/publish)."
 "  --no-validate  Skip validation when --yes in inspect."
 "  --help, -h     Print help."
@@ -2287,6 +2292,28 @@ dbwebb-updateconfig()
 
 
 #
+# Display the current version od this script
+#
+dbwebb-version()
+{
+    version
+    exit 0
+}
+
+
+
+#
+# Show the usage text and exit
+#
+dbwebb-help()
+{
+    usage
+    exit 0
+}
+
+
+
+#
 # Support testing procedure of course repo
 #
 dbwebb-testrepo()
@@ -2442,6 +2469,24 @@ do
             shift
         ;;
 
+        --with-curl)
+            if ! hash curl 2>/dev/null; then
+                badUsage "$MSG_FAILED Trying to use 'curl' which is not installed."
+                exit 2
+            fi
+            OPTION_WITH_WGET_ALT="curl"
+            shift
+        ;;
+
+        --with-lynx)
+            if ! hash lynx 2>/dev/null; then
+                badUsage "$MSG_FAILED Trying to use 'lynx' which is not installed."
+                exit 2
+            fi
+            OPTION_WITH_WGET_ALT="lynx"
+            shift
+        ;;
+
         --cwd)
             OPTION_CWD="$2"
             shift
@@ -2487,6 +2532,8 @@ do
         | create       \
         | recreate     \
         | testrepo     \
+        | version      \
+        | help         \
         | init         \
         | init-server  \
         | init-structure-dbwebb-kurser \

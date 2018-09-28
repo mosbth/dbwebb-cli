@@ -1024,6 +1024,28 @@ dbwebb-updateconfig()
 
 
 #
+# Display the current version od this script
+#
+dbwebb-version()
+{
+    version
+    exit 0
+}
+
+
+
+#
+# Show the usage text and exit
+#
+dbwebb-help()
+{
+    usage
+    exit 0
+}
+
+
+
+#
 # Support testing procedure of course repo
 #
 dbwebb-testrepo()
@@ -1179,6 +1201,24 @@ do
             shift
         ;;
 
+        --with-curl)
+            if ! hash curl 2>/dev/null; then
+                badUsage "$MSG_FAILED Trying to use 'curl' which is not installed."
+                exit 2
+            fi
+            OPTION_WITH_WGET_ALT="curl"
+            shift
+        ;;
+
+        --with-lynx)
+            if ! hash lynx 2>/dev/null; then
+                badUsage "$MSG_FAILED Trying to use 'lynx' which is not installed."
+                exit 2
+            fi
+            OPTION_WITH_WGET_ALT="lynx"
+            shift
+        ;;
+
         --cwd)
             OPTION_CWD="$2"
             shift
@@ -1224,6 +1264,8 @@ do
         | create       \
         | recreate     \
         | testrepo     \
+        | version      \
+        | help         \
         | init         \
         | init-server  \
         | init-structure-dbwebb-kurser \

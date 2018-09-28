@@ -2,6 +2,16 @@ Revision History
 ============================================================
 
 
+v2.2.2 (2018-09-28)
+-------------------
+
+* Make wget default when checking out an exam.
+* Add option --prefer-curl to use curl as alternative to wget, where supported.
+* Add option --prefer-lynx to use lynx as alternative to wget, where supported.
+* Add argument for version, as alternative to --version.
+* Add argument for help, as alternative to --help.
+
+
 v2.2.1 (2018-08-20)
 -------------------
 
