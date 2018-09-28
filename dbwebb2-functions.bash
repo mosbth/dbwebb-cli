@@ -787,6 +787,10 @@ function assert()
 
         printf "\n\n$MSG_WARNING %s\n" "$MESSAGE"
         [ -z "$error" ] || printf "%s\n\n" "$error"
+
+        ASSERTS_SUMMARY="$ASSERTS_SUMMARY\n $MSG_WARNING $MESSAGE\n"
+    else
+        ASSERTS_SUMMARY="$ASSERTS_SUMMARY."
     fi
 
     return $status
@@ -795,45 +799,66 @@ function assert()
 
 
 #
-# Perform an assert on exit value returned
-# TODO Check if this is really needed by python inspect
+# Add details to the assert summary, for example when a new section is
+# started, to visualise and greoup the asserts into sections.
 #
-assertExit()
+function assertSummaryAdd()
 {
-    EXPECTED=$1
-    TEST=$2
-    MESSAGE=$3
-    ASSERTS=$(( $ASSERTS + 1 ))
+    local message="$1"
+    local space="            "
+    # ten="          " 
+    # forty="$ten$ten$ten$ten" 
+    # y="very short text"
+    # y="${y:0:40}${forty:0:$((40 - ${#y}))}"
+    # echo "'${y}'"
 
-    bash -c "$TEST" &> "$TMPFILE"
-    STATUS=$?
-    ERROR=$( cat "$TMPFILE" )
-    rm -f "$TMPFILE"
-
-    if [ $STATUS -ne $EXPECTED ]; then
-        FAULTS=$(( $FAULTS + 1 ))
-
-        printf "\n$TEST"
-        printf "\n\n$MSG_FAILED $MESSAGE\n"
-        [ -z "$ERROR" ] || printf "$ERROR\n\n"
-
-        return 1
-    fi
-
-    return 0
-
+    message="${message:0:12}${space:0:$((12 - ${#message}))}"
+    ASSERTS_SUMMARY="$ASSERTS_SUMMARY\n# $message"
 }
+
+
+
+# #
+# # Perform an assert on exit value returned
+# # TODO Check if this is really needed by python inspect
+# # OBSOLETE Not used
+# #
+# assertExit()
+# {
+#     EXPECTED=$1
+#     TEST=$2
+#     MESSAGE=$3
+#     ASSERTS=$(( $ASSERTS + 1 ))
+# 
+#     bash -c "$TEST" &> "$TMPFILE"
+#     STATUS=$?
+#     ERROR=$( cat "$TMPFILE" )
+#     rm -f "$TMPFILE"
+# 
+#     if [ $STATUS -ne $EXPECTED ]; then
+#         FAULTS=$(( $FAULTS + 1 ))
+# 
+#         printf "\n$TEST"
+#         printf "\n\n$MSG_FAILED $MESSAGE\n"
+#         [ -z "$ERROR" ] || printf "$ERROR\n\n"
+# 
+#         return 1
+#     fi
+# 
+#     return 0
+# 
+# }
 
 
 
 
 #
 # Clean up and output results from asserts
+# TODO Seems to be used by validate
 #
 function assertResults()
 {
-    if [ $FAULTS -gt 0 ]
-        then
+    if [ $FAULTS -gt 0 ]; then
         printf "\n\n$MSG_FAILED"
         printf " Asserts: $ASSERTS Faults: $FAULTS\n\n"
         exit 1

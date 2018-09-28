@@ -238,6 +238,7 @@ function inspectIntro()
 {
     local target="me/$KMOM"
 
+    #assertSummaryAdd "intro"
     headerForTest "-- $DBW_COURSE $KMOM" "-- ${DBW_WWW}$DBW_COURSE/$KMOM"
     checkKmomDir "$target"
     publishKmom
@@ -263,6 +264,7 @@ function inspectMe()
         assignment="\n-- ${DBW_WWW}$assignment"
     fi
 
+    assertSummaryAdd "me-page"
     headerForTest "-- me-page" "-- ${DBW_WWW}$DBW_COURSE/$KMOM#resultat_redovisning$assignment" 
     checkKmomDir "$target"
     viewFileTree "$target"
@@ -289,6 +291,7 @@ function inspectLab()
     local urlfile="$5"
     local target="me/$KMOM/$lab"
 
+    assertSummaryAdd "$lab"
     headerForTest "-- $lab" "-- ${DBW_WWW}$url"
     viewFileTree "$target"
     #openFilesInEditor "$target"
@@ -387,6 +390,7 @@ dbwebbInspectTargetNotReadable()
 #
 dbwebbInspectCheckEnvironment()
 {
+    assertSummaryAdd "general"
     headerForTest "-- dbwebb inspect"
     printUrl "" "me"
     #openFilesInEditor "me"
@@ -859,16 +863,28 @@ esac
 # Clean up and output results
 #
 headerForTest "-- dbwebb inspect summary"
+# assertResults # Use this, but align with validate
 
 if [ $FAULTS -gt 0 ]; then
-        printf "\n\n$MSG_FAILED"
-        STATUS=1
+    printf "\n\n$MSG_FAILED"
+    STATUS=1
 else 
-        printf "\n\n$MSG_OK"
-        STATUS=0
+    printf "\n\n$MSG_OK"
+    STATUS=0
 fi
 
-printf " Asserts: $ASSERTS Faults: $FAULTS\n"
+printf " Asserts: $ASSERTS Faults: $FAULTS"
+
+#printf "\n### Assert details\n\n"
+printf "$ASSERTS_SUMMARY\n"
+
+if [ $STATUS -eq 0 ]; then
+    printf "$MSG_OK Inspect PASSED all tests :-)\n\n"
+else 
+    printf "$MSG_FAILED Inspect FAILED to pass all tests :-|\n\n"
+fi
+
 #pressEnterToContinue
 #[[ $COPY_DIR ]] && rm -rf "$COPY_DIR"
+
 exit $STATUS
