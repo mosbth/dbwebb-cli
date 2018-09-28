@@ -30,7 +30,7 @@
 #
 # Current version
 #
-DBW_VERSION="v2.2.2 (2018-09-28)"
+DBW_VERSION="v2.2.3 (2018-09-28)"
 # --------------- DBWEBB FUNCTIONS PHASE START ---------------
 
 #
@@ -3758,7 +3758,7 @@ case "$KMOM" in
     kmom06)     ${DBW_COURSE}; "${DBW_COURSE}${KMOM}"; "${DBW_COURSE}last";;
     kmom10)     ${DBW_COURSE}; "${DBW_COURSE}${KMOM}"; "${DBW_COURSE}last";;
     *)          
-        badUsage "\n$MSG_FAILED Invalid combination of course '$DBW_COURSE' and kmom: '$KMOM'"
+        badUsage "\n$MSG_FAILED Invalid combination of course '$DBW_COURSE' and kmom: '$KMOM'.\nYou can only inspect a complete kmom."
         exit 1 
         ;;
 esac

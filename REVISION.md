@@ -2,6 +2,13 @@ Revision History
 ============================================================
 
 
+v2.2.3 (2018-09-28)
+-------------------
+
+* Enhance error message for dbwebb inspect when not correct kmom.
+
+
+
 v2.2.2 (2018-09-28)
 -------------------
 
