@@ -810,6 +810,12 @@ dbwebb-exam-start()
     verbose "Prepare to checkout and start the exam $DBW_COURSE:$what into '${where#$DBW_COURSE_DIR/}'..."
     veryVerbose "Using version $version."
 
+    # Check if exam is already there
+    if [ -f "$where/exam.py" ]; then
+        printf "$MSG_WARNING An 'exam.py' already exists, I will keep that file and not update it.\n"
+        mv "$where/exam.py" "$where/exam.py_$$" || exit 2
+    fi
+
     active=$( getUrlToStdout "$url&checkIfActive" )
     veryVerbose "$active"
     [[ $active == ACTIVE:* ]] \
@@ -825,6 +831,7 @@ dbwebb-exam-start()
         || die "The downloaded file seems not to be a tar archive. You may cat it to check for errors."
 
     rm -f "$where/$tarfile"
+    [[ -f "$where/exam.py_$$" ]] && mv "$where/exam.py_$$" "$where/exam.py"
     dbwebb-exam-helper-generate-file-list "$where"
     verboseDone "You can find the exam and all files here:"
     verbose "'$where'"

@@ -3,6 +3,13 @@ Revision History
 
 
 
+v2.2.6 (2018-10-26)
+-------------------
+
+* Fix exam chakout does not overwrite exam.py.
+
+
+
 v2.2.5 (2018-10-26)
 -------------------
 
