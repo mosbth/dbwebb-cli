@@ -30,7 +30,7 @@
 #
 # Current version
 #
-DBW_VERSION="v2.2.3 (2018-09-28)"
+DBW_VERSION="v2.2.5 (2018-10-26)"
 # --------------- DBWEBB FUNCTIONS PHASE START ---------------
 
 #
@@ -2229,8 +2229,8 @@ dbwebb-exam-correct()
     verbose "Correcting the exam $DBW_COURSE:$what..."
 
     correct="$where/.dbwebb/correct.bash"
-    if [ -f $correct ]; then
-        if $correct; then
+    if [ -f "$correct" ]; then
+        if "$correct"; then
             verboseDone "The exam is corrected and graded as passed :-)"
         else
             verboseWarning "The exam is corrected, but was graded as NOT passed :-|"

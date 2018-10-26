@@ -3,6 +3,13 @@ Revision History
 
 
 
+v2.2.5 (2018-10-26)
+-------------------
+
+* Fix exam correct for path with space in.
+
+
+
 v2.2.4 (2018-09-28)
 -------------------
 

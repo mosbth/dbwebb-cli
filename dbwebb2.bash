@@ -936,8 +936,8 @@ dbwebb-exam-correct()
     verbose "Correcting the exam $DBW_COURSE:$what..."
 
     correct="$where/.dbwebb/correct.bash"
-    if [ -f $correct ]; then
-        if $correct; then
+    if [ -f "$correct" ]; then
+        if "$correct"; then
             verboseDone "The exam is corrected and graded as passed :-)"
         else
             verboseWarning "The exam is corrected, but was graded as NOT passed :-|"
