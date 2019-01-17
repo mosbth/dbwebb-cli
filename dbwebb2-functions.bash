@@ -692,17 +692,15 @@ createUploadDownloadPaths()
 selfupdate()
 {
     local what="$1"
-    local version="$2"
+    local version=${2:-master}
     local target="$DBW_EXECUTABLE_PATH"
     local remote=
     local silent="--quiet"
-    local repo="https://raw.githubusercontent.com/mosbth/dbwebb-cli/master"
+    local repo="https://raw.githubusercontent.com/mosbth/dbwebb-cli/$version"
 
     if [[ $VERY_VERBOSE ]]; then
         silent=""
     fi
-
-    [[ $version ]] && repo="$repo/release/$version/"
 
     case $what in
         dbwebb)

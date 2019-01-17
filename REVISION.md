@@ -3,10 +3,17 @@ Revision History
 
 
 
+v2.3.1 (2019-01-17)
+-------------------
+
+* Enhance selfupdate [version] to work with any tagged version.
+
+
+
 v2.3.0 (2019-01-17)
 -------------------
 
-* Fix sudo dbwebb selfupdate to avoid writing wrong value of ssh file to .dbwebb.config.
+* Fix sudo dbwebb selfupdate to avoid writing wrong value of ssh file to .dbwebb.config. This error was first introduced with v2.2.1.
 
 
 
