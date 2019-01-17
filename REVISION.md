@@ -3,10 +3,17 @@ Revision History
 
 
 
+v2.3.0 (2019-01-17)
+-------------------
+
+* Fix sudo dbwebb selfupdate to avoid writing wrong value of ssh file to .dbwebb.config.
+
+
+
 v2.2.6 (2018-10-26)
 -------------------
 
-* Fix exam chakout does not overwrite exam.py.
+* Fix exam checkout does not overwrite exam.py.
 
 
 

@@ -1,4 +1,4 @@
 #
 # Current version
 #
-DBW_VERSION="v2.2.6 (2018-10-26)"
+DBW_VERSION="v2.3.0 (2019-01-17)"

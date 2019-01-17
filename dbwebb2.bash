@@ -11,10 +11,17 @@ function createConfig()
     local acronym
     local remoteHost
 
+    # Check if run as sudo, use SUDO_USER as HOME
+    # (useful for selfupdate through sudo)
+    local home="$HOME"
+    if [[ $SUDO_USER ]]; then
+        home=$( eval echo "~$SUDO_USER" )
+    fi
+
     if [ -z $first ]
     then
 
-        printf "The config-file '$DBW_CONFIG_FILE_NAME' will now be created in your home directory: '$HOME'"
+        printf "The config-file '$DBW_CONFIG_FILE_NAME' will now be created in your home directory: '$home'"
 
     elif [ $first = "update" ]
     then
@@ -38,11 +45,13 @@ function createConfig()
         # unset DBW_SSH_KEY
         # To change lab url when upgrading to v2.2.1
         unset DBW_LABURL
+        # To fix upgrade with wrong DBW_SSH_KEY, fix in v2.3.0
+        unset DBW_SSH_KEY
 
     elif [ $first = "create" ]
     then
 
-        printf "I will now re-create the configuration file '$DBW_CONFIG_FILE_NAME' in your home directory: '$HOME'.\n"
+        printf "I will now re-create the configuration file '$DBW_CONFIG_FILE_NAME' in your home directory: '$home'.\n"
 
     fi
 
@@ -57,8 +66,8 @@ function createConfig()
     fi
 
     acronym=${acronym:-$DBW_USER}
+    sshKey=${DBW_SSH_KEY:-$home/.ssh/dbwebb}
     remoteHost=${DBW_HOST:-ssh.student.bth.se}
-    sshKey=${DBW_SSH_KEY:-\$HOME/.ssh/dbwebb}
     remoteDir=${DBW_REMOTE_BASEDIR:-dbwebb-kurser}
     remoteWwwHost=${DBW_WWW_HOST:-http://www.student.bth.se/}
     remoteWww=${DBW_REMOTE_WWWDIR:-www/dbwebb-kurser}
