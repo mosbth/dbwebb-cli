@@ -23,12 +23,13 @@ publishChmod()
         case "$DBW_COURSE" in
             databas)
                 find "$dir" -type d -path '*/me/kmom*' -exec chmod -R go-r {} \;
+                find "$dir" -type d -path '*/me/skolan' -exec chmod -R go-r {} \;
             ;;
-            phpmvc)
-                find "$dir" -type d -path '*/css/anax-grid' -exec chmod o+w {} \;
-                find "$dir" -type f -path '*/css/anax-grid/style.css' -exec chmod o+w {} \;
-                find "$dir" -type f -path '*/css/anax-grid/style.less.cache' -exec chmod o+w {} \;
-            ;;
+            # phpmvc)
+            #     find "$dir" -type d -path '*/css/anax-grid' -exec chmod o+w {} \;
+            #     find "$dir" -type f -path '*/css/anax-grid/style.css' -exec chmod o+w {} \;
+            #     find "$dir" -type f -path '*/css/anax-grid/style.less.cache' -exec chmod o+w {} \;
+            # ;;
             linux)
                 find "$dir" -type f -not -path '*/me/redovisa/*' -not -path '*/mysite/*' -name '*.js' -exec chmod go-r {} \;
                 find "$dir" -type f -name 'mazerunner' -exec chmod go-r {} \;

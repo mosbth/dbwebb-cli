@@ -3,6 +3,13 @@ Revision History
 
 
 
+v2.3.2 (2019-01-22)
+-------------------
+
+* Fix readonly of database/me/skolan when publish.
+
+
+
 v2.3.1 (2019-01-17)
 -------------------
 
