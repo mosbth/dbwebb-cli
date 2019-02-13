@@ -6,7 +6,7 @@ function linux()
 {
     inspectIntro
 
-    # Tmp fix to make babel-node work
+    # Tmp fix to make node work
     #[ -f node_modules ] || ln -s /home/saxon/students/node/node_modules
 }
 
@@ -28,7 +28,7 @@ function linuxlast()
 linuxExerciseScript()
 {
     local target="me/$KMOM/$1"
-    
+
     inspectCommand "hello.bash" "$THEDIR/$target" "bash hello.bash"
     viewFileContent "hello.bash" "$target"
 
@@ -95,7 +95,7 @@ linuxExerciseCommands()
 linuxExerciseIrc()
 {
     local target="me/$KMOM/$1"
-    
+
     pushd "$THEDIR/$target"
     for file in ?.txt; do
         viewFileContent "$file" "$target"
@@ -144,7 +144,7 @@ function linuxkmom03()
         inspectExercise "irc" "uppgift/hitta-saker-i-en-loggfil-med-unix-kommandon" "log.txt" "solutions.bash" "" "" "solutions.bash" "bash solutions.bash"
 
         linuxExerciseIrc "irc"
-        
+
         inspectExercise "script" "uppgift/mina-forsta-bash-script"
         linuxExerciseScript "script"
 
@@ -179,7 +179,7 @@ function linuxkmom04()
         return
     fi
 
-    inspectLab "uppgift/linux-lab3-introduktion-till-nodejs" "node1" "answer.js" "babel-node answer.js"
+    inspectLab "uppgift/linux-lab3-introduktion-till-nodejs" "node1" "answer.js" "node answer.js"
 
 
 
@@ -188,7 +188,7 @@ function linuxkmom04()
 
     # Start the server
     target="$KMOM/server"
-    runServer "index.js" "$EXEC_DIR/$target" "babel-node index.js"
+    runServer "index.js" "$EXEC_DIR/$target" "node index.js"
 
     # Execute the client
     inspectCommand "client.bash" "$EXEC_DIR/$target" "bash client.bash hello"
@@ -212,7 +212,7 @@ function linuxkmom05()
 {
     inspectLab "uppgift/linux-lab4-asynkron-programmering" "node2" "answer.js" "node answer.js"
 
-    # 2018 should start up 
+    # 2018 should start up
     inspectExerciseHeader "maze" "uppgift/los-mazen-med-din-mazerunner-i-bash" "$KMOM/maze"
     #target="example/nodejs/maze"
     target="$EXEC_DIR/$KMOM/maze"
