@@ -3,6 +3,13 @@ Revision History
 
 
 
+v2.3.3 (2019-02-15)
+-------------------
+
+* Adding support for 'jsramverk', 'vlinux', 'devops', 'itsec'.
+
+
+
 v2.3.2 (2019-01-22)
 -------------------
 
