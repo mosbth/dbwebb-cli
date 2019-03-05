@@ -3,6 +3,14 @@ Revision History
 
 
 
+v2.4.0 (2019-03-05)
+-------------------
+
+* Added support for dbwebb-ping.
+* Rewrote parts of dbwebb exam, perhaps not backward compatible.
+
+
+
 v2.3.5 (2019-02-15)
 v2.3.4 (2019-02-15)
 v2.3.3 (2019-02-15)

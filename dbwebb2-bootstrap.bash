@@ -1,5 +1,8 @@
 # --------------- DBWEBB BOOTSTRAP PHASE START ---------------
 
+#START_TIMER=$( date +%s.%N )
+START_TIMER=$( date +%s )
+
 # Messages
 MSG_OK="\033[0;30;42mOK\033[0m"
 MSG_DONE="\033[1;37;40mDONE\033[0m"

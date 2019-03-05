@@ -30,8 +30,22 @@
 #
 # Current version
 #
-DBW_VERSION="v2.3.5 (2019-02-15)"
+DBW_VERSION="v2.4.0 (2019-03-05)"
 # --------------- DBWEBB FUNCTIONS PHASE START ---------------
+
+#
+# Get the time the script has executed since its start.
+#
+timeScript()
+{
+    local end=
+
+    #end=$( date +%s.%N )
+    end=$( date +%s )
+    echo $(( end-START_TIMER ))
+}
+
+
 
 #
 # Set correct mode on published file and dirs
@@ -905,6 +919,9 @@ function assertResults()
 
 # --------------- DBWEBB FUNCTIONS PHASE END ---------------
 # --------------- DBWEBB BOOTSTRAP PHASE START ---------------
+
+#START_TIMER=$( date +%s.%N )
+START_TIMER=$( date +%s )
 
 # Messages
 MSG_OK="\033[0;30;42mOK\033[0m"

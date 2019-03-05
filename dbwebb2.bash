@@ -351,6 +351,42 @@ function dbwebb-upload()
 
 
 #
+# Ping the server with a message
+#
+function dbwebb-ping()
+{
+    local what="$1"
+    local action="$2"
+    local extra="$3"
+    local url="http://www.student.bth.se/~mosstud/dbwebb-ping/"
+    local subdir=
+    local where=
+    local res=
+    local qs=
+    local timer=
+
+    checkIfValidConfigOrExit
+    checkIfValidCourseRepoOrExit
+
+    subdir="$( mapCmdToDir $what )"
+    where="$DBW_COURSE_DIR/$subdir"
+
+    checkIfValidCombination "$subdir" "$what"
+    checkIfSubdirExistsOrProposeInit "$where"
+
+    timer=$( timeScript )
+    qs="course=$DBW_COURSE&acronym=$DBW_USER&what=$what&subdir=$subdir&action=$action&extra=$extra&timer=$timer"
+    qs=${qs// /+}
+    url="${OPTION_BASE_URL:-$url}?$qs"
+
+    veryVerbose "dbwebb-ping to: $url"
+    res=$( getUrlToStdout "$url" )
+    veryVerbose "dbwebb-ping response: $res"
+}
+
+
+
+#
 # Pull/download from the server
 #
 function dbwebb-download()
@@ -714,19 +750,22 @@ dbwebb-exam()
             exit 0
         ;;
 
-        receipt)
+        receipt \
+        | r)
             dbwebb-exam-receipt "$what"
             exit 0
         ;;
 
         start  \
-        | checkout)
+        | checkout \
+        | c)
             dbwebb-exam-start "$what" "$version"
             exit 0
         ;;
 
         stop  \
-        | seal)
+        | seal \
+        | s)
             dbwebb-exam-stop "$what"
             exit 0
         ;;
@@ -767,25 +806,31 @@ dbwebb-exam-list()
 
 
 #
-# Generate file of all files.
+# Generate file containing all files.
 #
 dbwebb-exam-helper-generate-file-list()
 {
-    cd "$1" && find . -type d -not -path "./vendor" -not -path "./node_modules" -not -path "./build" -exec echo {} \; -exec ls -Al {} \; > ".dbwebb_exam/FILES.txt"
+    local ts
+    local target="$1/.dbwebb/exam/file/"
+
+    ts=$(date +"%Y%m%d%H%M%S")
+    install -d "$target"
+
+    cd "$1" && echo $ts > "$target/$ts.txt" && find . -type d -not -path "./vendor" -not -path "./node_modules" -not -path "./build" -exec echo {} \; -exec ls -Al {} \; >> "$target/$ts.txt"
 }
 
 
 
 #
-# Generate file of all files.
+# Get the exam id.
 #
 dbwebb-exam-helper-get-exam-id()
 {
-    local receipt="$1/.dbwebb_exam/RECEIPT.md"
+    local receipt="$1/.dbwebb/exam/id.md"
 
     [[ -f $receipt ]] \
-        || die "There is no RECEIPT.md in '$1'."
-    awk '/Id:/{print $NF}' "$receipt"
+        || die "There is no id file in '$1'."
+    awk '/ID:/{print $NF}' "$receipt"
 }
 
 
@@ -803,6 +848,7 @@ dbwebb-exam-start()
     local tarfile="dbwebb_exam_bundle.tar"
     local active=
     local signature=
+    local examId=
 
     checkIfValidConfigOrExit
     checkIfValidCourseRepoOrExit
@@ -831,9 +877,12 @@ dbwebb-exam-start()
         || die "Failed to verify that an active exam exists."
 
     verbose "There is an active exam:\n $active"
-    signature=$( input "Write your real name to proceed" "firstname lastname" | sed 's/[ &]/\+/g' )
+    printf "Before we can proceed, supply some personal details.\n"
+    signature=$( input " Your real name" "your name" )
+    email=$( input " Your email" "your@email.se" )
+    printf "Thank you, '$signature ($email)'.\n"
 
-    getUrlToFile "$url&signature=$signature" "$where/$tarfile" \
+    getUrlToFile "$url&signature=$signature+($email)" "$where/$tarfile" \
         || die "Failed to checkout the exam tar bundle."
 
     tar -xmf "$where/$tarfile" -C "$where" \
@@ -841,8 +890,12 @@ dbwebb-exam-start()
 
     rm -f "$where/$tarfile"
     [[ -f "$where/exam.py_$$" ]] && mv "$where/exam.py_$$" "$where/exam.py"
+
     dbwebb-exam-helper-generate-file-list "$where"
-    verboseDone "You can find the exam and all files here:"
+    examId=$( dbwebb-exam-helper-get-exam-id "$where" )
+    dbwebb-ping "$what" "exam-start" "$examId"
+
+    verboseDone "You can find the files here:"
     verbose "'$where'"
     [[ $SILENT ]] || ls -lF "$where"
 }
@@ -878,9 +931,12 @@ dbwebb-exam-stop()
 
     verbose "Prepare to seal the exam $DBW_COURSE:$what into '${where#$DBW_COURSE_DIR/}'..."
 
-    signature=$( input "Write your real name to proceed" "firstname lastname" | sed 's/[ &]/\+/g' )
+    printf "Before we can proceed, supply some personal details.\n"
+    signature=$( input " Your real name" "your name" )
+    email=$( input " Your email" "your@email.se" )
+    printf "Thank you, '$signature ($email)'.\n"
 
-    getUrlToFile "$url&signature=$signature" "$where/$tarfile" \
+    getUrlToFile "$url&signature=$signature+($email)" "$where/$tarfile" \
         || die "Failed to seal and checkout the exam tar bundle."
 
     tar -xmf "$where/$tarfile" -C "$where" \
@@ -891,6 +947,9 @@ dbwebb-exam-stop()
     verboseDone "The exam is sealed."
 
     dbwebb-upload "$what"
+    dbwebb-ping "$what" "exam-stop" "$examId"
+
+    verboseDone "The exam is sealed, uploaded and the teacher is notificated."
 }
 
 
@@ -905,6 +964,10 @@ dbwebb-exam-receipt()
     local subdir=
     local where=
     local examId=
+    local target=".dbwebb/exam/receipt/"
+    local ts
+
+    ts=$(date +"%Y%m%d%H%M%S")
 
     checkIfValidConfigOrExit
     checkIfValidCourseRepoOrExit
@@ -922,10 +985,14 @@ dbwebb-exam-receipt()
 
     verbose "Getting the receipt from the exam $DBW_COURSE:$what..."
 
-    getUrlToStdout "$url" \
+    #getUrlToStdout "$url" \
+    getUrlToFile "$url" "$where/$target/$ts.md" \
         || die "Failed to get receipt."
 
+    cat "$where/$target/$ts.md"
     verboseDone "Review your receipt."
+
+    dbwebb-exam-helper-generate-file-list "$where"
 }
 
 
@@ -960,9 +1027,11 @@ dbwebb-exam-correct()
             exit 1
         fi
     else
-        verboseFail "There is no auto correcting program installed."
+        verboseFail "There is no auto correcting facility for '$what'."
         exit 1
     fi 
+
+    dbwebb-exam-helper-generate-file-list "$where"
 }
 
 

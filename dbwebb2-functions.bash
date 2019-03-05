@@ -1,6 +1,20 @@
 # --------------- DBWEBB FUNCTIONS PHASE START ---------------
 
 #
+# Get the time the script has executed since its start.
+#
+timeScript()
+{
+    local end=
+
+    #end=$( date +%s.%N )
+    end=$( date +%s )
+    echo $(( end-START_TIMER ))
+}
+
+
+
+#
 # Set correct mode on published file and dirs
 #
 publishChmod()
