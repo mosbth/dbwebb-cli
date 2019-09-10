@@ -117,6 +117,113 @@ function dbwebb-init-me()
 
 
 #
+# Troubleshoot an installation and check part by part.
+#
+function dbwebb-trouble()
+{
+    printf "### Lets check the installed commands:\nbash git ssh rsync wget curl.\n"
+    pressEnterToContinue
+
+    cmd="bash"
+    printf "# %s " "$cmd"
+    printf "%s " "$( which $cmd )"
+    printf "%s \n" "$( $cmd --version | head -1 )"
+
+    cmd="git"
+    printf "# %s " "$cmd"
+    printf "%s " "$( which $cmd )"
+    printf "%s \n" "$( $cmd --version | head -1 )"
+
+    cmd="ssh"
+    printf "# %s " "$cmd"
+    printf "%s " "$( which $cmd )"
+    printf "%s \n" "$( $cmd -V | head -1 )"
+
+    cmd="rsync"
+    printf "# %s " "$cmd"
+    printf "%s " "$( which $cmd )"
+    printf "%s \n" "$( $cmd --version | head -1 )"
+
+    cmd="wget"
+    printf "# %s " "$cmd"
+    printf "%s " "$( which $cmd )"
+    printf "%s \n" "$( $cmd --version | head -1 )"
+
+    cmd="curl"
+    printf "# %s " "$cmd"
+    printf "%s " "$( which $cmd )"
+    printf "%s \n" "$( $cmd --version | head -1 )"
+
+    printf "\n### Lets check who you are.\n"
+    pressEnterToContinue
+
+    printf "whoami: '%s'\n" "$( whoami )"
+    printf "\$HOME: '%s'\n" "$HOME"
+    printf "\$HOMEPATH (win): '%s'\n" "$HOMEPATH"
+    printf "\$USERPROFILE (win): '%s'\n" "$USERPROFILE"
+
+    printf "\n### Lets check the dbwebb.config file.\n"
+    pressEnterToContinue
+
+    checkIfValidConfigOrExit
+    printf "\$DBW_CONFIG_FILE: '%s'\n" "$DBW_CONFIG_FILE"
+    printf "ls -l \$DBW_CONFIG_FILE: '%s'\n" "$( ls -l $DBW_CONFIG_FILE )"
+    printf "file \$DBW_CONFIG_FILE: '%s'\n" "$( file $DBW_CONFIG_FILE )"
+    printf "cat \$DBW_CONFIG_FILE: \n%s\n" "$( cat $DBW_CONFIG_FILE )"
+
+    printf "\n### Check if we can ping bth.se.\n"
+    pressEnterToContinue
+
+    printf "ping -c 1 bth.se: \n'%s'\n" "$( ping -c 1 bth.se )"
+
+    printf "\n### Try login to the student server and execute a command.\n"
+    pressEnterToContinue
+
+    printf "ssh ${DBW_USER}@${DBW_HOST} 'pwd && ls -ld dbwebb-kurser && ls -l dbwebb-kurser':\n"
+    ssh ${DBW_USER}@${DBW_HOST} 'pwd && ls -ld dbwebb-kurser && ls -l dbwebb-kurser'
+
+    printf "\n### Try login to the student server using ssh-keys.\n"
+    pressEnterToContinue
+
+    printf "\$DBW_SSH_KEY: '%s'\n" "$DBW_SSH_KEY"
+    printf "\$DBW_SSH_KEY_OPTION: '%s'\n" "$DBW_SSH_KEY_OPTION"
+    printf "ls -ld $HOME/.ssh: '%s'\n" "$( ls -ld $HOME/.ssh )"
+    printf "ls -l $HOME/.ssh:'%s'\n" "$( ls -l $HOME/.ssh)"
+    printf "\$SSH_CMD: '%s'\n" "$SSH_CMD"
+    eval $SSH_CMD pwd
+
+    printf "\n### Lets do some checks with your course repo. You must 'cd' into a valid course repo, for example python or htmlphp.\n"
+    pressEnterToContinue
+
+    checkIfValidCourseRepoOrExit
+    printf "\$DBW_COURSE_DIR: '%s'\n" "$DBW_COURSE_DIR"
+    printf "ls -ld $DBW_COURSE_DIR/..: \n%s\n" "$( ls -ld $DBW_COURSE_DIR/.. )"
+    printf "ls -l $DBW_COURSE_DIR/..: \n%s\n" "$( ls -l $DBW_COURSE_DIR/..)"
+
+    printf "\n### Lets init the course repo, step by step.\n"
+    pressEnterToContinue
+    VERY_VERBOSE="yes"
+
+    printf "dbwebb-init-me:\n"
+    pressEnterToContinue
+    dbwebb-init-me
+
+    printf "dbwebb-init-server:\n"
+    pressEnterToContinue
+    dbwebb-init-server
+
+    printf "dbwebb-init-structure-dbwebb-kurser:\n"
+    pressEnterToContinue
+    dbwebb-init-structure-dbwebb-kurser
+
+    printf "dbwebb-init-structure-www-dbwebb-kurser:\n"
+    pressEnterToContinue
+    dbwebb-init-structure-www-dbwebb-kurser
+}
+
+
+
+#
 # Init directory structure at the server.
 #
 function dbwebb-init-server()
@@ -1351,6 +1458,7 @@ do
         | testrepo     \
         | version      \
         | help         \
+        | trouble      \
         | init         \
         | init-server  \
         | init-structure-dbwebb-kurser \

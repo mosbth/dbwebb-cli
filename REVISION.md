@@ -3,6 +3,13 @@ Revision History
 
 
 
+v2.5.0 (2019-09-10)
+-------------------
+
+* Added support for dbwebb trouble to aid troubleshooting user environment.
+
+
+
 v2.4.1 (2019-08-19)
 -------------------
 
