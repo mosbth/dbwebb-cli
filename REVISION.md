@@ -3,6 +3,13 @@ Revision History
 
 
 
+v2.5.1 (2020-01-15)
+-------------------
+
+* Update the chmod set for the directories upon upload.
+
+
+
 v2.5.0 (2019-09-10)
 -------------------
 

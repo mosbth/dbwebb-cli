@@ -117,7 +117,7 @@ SSH_CMD="ssh ${DBW_USER}@${DBW_HOST} $DBW_SSH_KEY_OPTION"
 SSH_CMD_INTERACTIVE="ssh ${DBW_USER}@${DBW_HOST} $DBW_SSH_KEY_OPTION"
 
 # Default chmod for rsync-command 
-RSYNC_CHMOD="--chmod=Du+w,Dgo+rx,Fu+rw,Fgo+r"
+RSYNC_CHMOD="--chmod=Du+rwx,Dgo+rx,Fu+rw,Fgo+r"
 
 # Prefer using file to exclude from
 RSYNC_EXCLUDE="$DBW_COURSE_DIR/.dbwebb/upload.exclude"
