@@ -3,6 +3,13 @@ Revision History
 
 
 
+v2.6.0 (2020-02-11)
+-------------------
+
+* Add subcommand 'gui' for work with gui inspects. 
+
+
+
 v2.5.1 (2020-01-15)
 -------------------
 

@@ -30,7 +30,7 @@
 #
 # Current version
 #
-DBW_VERSION="v2.5.1 (2020-01-15)"
+DBW_VERSION="v2.6.0 (2020-02-11)"
 # --------------- DBWEBB FUNCTIONS PHASE START ---------------
 
 #
@@ -244,6 +244,7 @@ function getUrlToFile
     local verbose=
     local url="$1"
     local filename="$2"
+    local overwrite="$3"
 
     if [ -z "$OPTION_WITH_WGET_ALT" ] && hash wget 2>/dev/null; then
         verbose="--quiet"
@@ -256,7 +257,7 @@ function getUrlToFile
     fi
 
     veryVerbose "Command: $cmd"
-    if [ -f "$filename" ]; then
+    if [ -f "$filename" ] && [ -z "$overwrite" ]; then
         die "The file '$filename' already exists, please remove it before you download a new."
     fi
     [[ $OPTION_DRY ]] || bash -c "$cmd"
@@ -1108,6 +1109,7 @@ function usage ()
 "  inspect [course] [kmom] [user]  Inspect a kmom."
 "  run <command>        Run a command on remote host."
 "  trouble              Troubleshoot your installation."
+"  gui help|<command>   Gui to do inspect."
 "  exam help|<command>  Work (checkout and hand in) with exams."
 "  testrepo             Automated tests of a course repo."
 "  version              Alternative to --version."
@@ -1300,6 +1302,42 @@ function badUsageExam ()
     local txt=(
 "For an overview of the command, execute:"
 "dbwebb exam help"
+    )
+    
+    if [[ "$message" ]]; then
+        printf "$message\n"
+    fi
+    
+    printf "%s\n" "${txt[@]}"
+}
+
+
+
+function usageGui ()
+{
+    local txt=(
+"Work with gui inspect."
+"Usage: dbwebb [options] gui <command> [arguments]"
+""
+"Command:"
+"  install|selfupdate      Dowload and install."
+"  help                    Print this help and usage message."
+""
+"Options:"
+"  --silent, -s     Less verbose output."
+"  --verbose, -v    More verbose."
+    )
+    printf "%s\n" "${txt[@]}"
+}
+
+
+
+function badUsageGui ()
+{
+    local message="$1"
+    local txt=(
+"For an overview of the command, execute:"
+"dbwebb gui help"
     )
     
     if [[ "$message" ]]; then
@@ -2147,6 +2185,82 @@ dbwebb-create()
 
 
 #
+# Deal with gui inspect
+#
+dbwebb-gui()
+{
+    local action="${1:-run}"
+
+    case "$action" in
+        help)
+            usageGui
+            exit 0
+        ;;
+
+        install \
+        | selfupdate)
+            dbwebb-gui-install
+            exit 0
+        ;;
+
+        run)
+            dbwebb-gui-run
+            exit 0
+        ;;
+
+        *)
+            badUsageGui "$MSG_FAILED gui subcommand not recognized."
+            exit 2
+         ;;
+     esac
+}
+
+
+
+#
+# Run gui inspect
+#
+dbwebb-gui-run()
+{
+    local script=
+
+    script="$( which dbwebb-inspect-gui )"
+
+    checkIfValidConfigOrExit
+    checkIfValidCourseRepoOrExit
+
+    if [[ -x "$script" ]]; then
+        verbose "Execute command for gui bash '$script'..."
+        bash "$script"
+    else
+        die "dbwebb gui is not installed, check 'dbwebb gui help'."
+    fi
+}
+
+
+
+#
+# Install/update gui inspect
+#
+dbwebb-gui-install()
+{
+    local url="https://raw.githubusercontent.com/dbwebb-se/inspect-gui/master/gui.bash"
+    local target="/usr/local/bin"
+    local what="dbwebb-inspect-gui"
+
+    printf "Installing (selfupdating) '%s' to '%s' from\n %s\n" "$what" "$target" "$url"
+
+    getUrlToFile "$url" "$target/$what" "overwrite-if-exists" \
+        || die "Failed to download/install '$what' to '$target' (perhaps sudo?)."
+    chmod 755 "$target/$what"
+
+    printf "The updated version is now: "
+    $what --version
+}
+
+
+
+#
 # Deal with exams
 #
 dbwebb-exam()
@@ -2748,6 +2862,7 @@ do
         | clone        \
         | exam         \
         | github       \
+        | gui          \
         | config       \
         | updateconfig \
         | selfupdate   \

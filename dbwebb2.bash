@@ -837,6 +837,82 @@ dbwebb-create()
 
 
 #
+# Deal with gui inspect
+#
+dbwebb-gui()
+{
+    local action="${1:-run}"
+
+    case "$action" in
+        help)
+            usageGui
+            exit 0
+        ;;
+
+        install \
+        | selfupdate)
+            dbwebb-gui-install
+            exit 0
+        ;;
+
+        run)
+            dbwebb-gui-run
+            exit 0
+        ;;
+
+        *)
+            badUsageGui "$MSG_FAILED gui subcommand not recognized."
+            exit 2
+         ;;
+     esac
+}
+
+
+
+#
+# Run gui inspect
+#
+dbwebb-gui-run()
+{
+    local script=
+
+    script="$( which dbwebb-inspect-gui )"
+
+    checkIfValidConfigOrExit
+    checkIfValidCourseRepoOrExit
+
+    if [[ -x "$script" ]]; then
+        verbose "Execute command for gui bash '$script'..."
+        bash "$script"
+    else
+        die "dbwebb gui is not installed, check 'dbwebb gui help'."
+    fi
+}
+
+
+
+#
+# Install/update gui inspect
+#
+dbwebb-gui-install()
+{
+    local url="https://raw.githubusercontent.com/dbwebb-se/inspect-gui/master/gui.bash"
+    local target="/usr/local/bin"
+    local what="dbwebb-inspect-gui"
+
+    printf "Installing (selfupdating) '%s' to '%s' from\n %s\n" "$what" "$target" "$url"
+
+    getUrlToFile "$url" "$target/$what" "overwrite-if-exists" \
+        || die "Failed to download/install '$what' to '$target' (perhaps sudo?)."
+    chmod 755 "$target/$what"
+
+    printf "The updated version is now: "
+    $what --version
+}
+
+
+
+#
 # Deal with exams
 #
 dbwebb-exam()
@@ -1438,6 +1514,7 @@ do
         | clone        \
         | exam         \
         | github       \
+        | gui          \
         | config       \
         | updateconfig \
         | selfupdate   \

@@ -25,6 +25,7 @@ function usage ()
 "  inspect [course] [kmom] [user]  Inspect a kmom."
 "  run <command>        Run a command on remote host."
 "  trouble              Troubleshoot your installation."
+"  gui help|<command>   Gui to do inspect."
 "  exam help|<command>  Work (checkout and hand in) with exams."
 "  testrepo             Automated tests of a course repo."
 "  version              Alternative to --version."
@@ -217,6 +218,42 @@ function badUsageExam ()
     local txt=(
 "For an overview of the command, execute:"
 "dbwebb exam help"
+    )
+    
+    if [[ "$message" ]]; then
+        printf "$message\n"
+    fi
+    
+    printf "%s\n" "${txt[@]}"
+}
+
+
+
+function usageGui ()
+{
+    local txt=(
+"Work with gui inspect."
+"Usage: dbwebb [options] gui <command> [arguments]"
+""
+"Command:"
+"  install|selfupdate      Dowload and install."
+"  help                    Print this help and usage message."
+""
+"Options:"
+"  --silent, -s     Less verbose output."
+"  --verbose, -v    More verbose."
+    )
+    printf "%s\n" "${txt[@]}"
+}
+
+
+
+function badUsageGui ()
+{
+    local message="$1"
+    local txt=(
+"For an overview of the command, execute:"
+"dbwebb gui help"
     )
     
     if [[ "$message" ]]; then

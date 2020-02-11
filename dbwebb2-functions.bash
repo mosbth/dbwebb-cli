@@ -211,6 +211,7 @@ function getUrlToFile
     local verbose=
     local url="$1"
     local filename="$2"
+    local overwrite="$3"
 
     if [ -z "$OPTION_WITH_WGET_ALT" ] && hash wget 2>/dev/null; then
         verbose="--quiet"
@@ -223,7 +224,7 @@ function getUrlToFile
     fi
 
     veryVerbose "Command: $cmd"
-    if [ -f "$filename" ]; then
+    if [ -f "$filename" ] && [ -z "$overwrite" ]; then
         die "The file '$filename' already exists, please remove it before you download a new."
     fi
     [[ $OPTION_DRY ]] || bash -c "$cmd"
