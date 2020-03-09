@@ -865,6 +865,11 @@ dbwebb-gui()
             exit 0
         ;;
 
+        version)
+            dbwebb-gui-version
+            exit 0
+        ;;
+
         *)
             badUsageGui "$MSG_FAILED gui subcommand not recognized."
             exit 2
@@ -931,7 +936,26 @@ dbwebb-gui-install()
     chmod 755 "$target/$what"
 
     printf "The updated version is now: "
-    $what --version
+    dbwebb-gui-version
+}
+
+
+
+#
+# Check the version of gui inspect
+#
+dbwebb-gui-version()
+{
+    local script=
+
+    script="$( which dbwebb-inspect-gui )"
+
+    if [[ -x "$script" ]]; then
+        verbose "Execute command for gui bash '$script'..."
+        bash "$script" version
+    else
+        die "dbwebb gui is not installed, check 'dbwebb gui help'."
+    fi
 }
 
 

@@ -3,6 +3,14 @@ Revision History
 
 
 
+v2.6.2 (2020-03-09)
+-------------------
+
+* Change how to get the version from dbwebb-gui-inspect.
+* Add support for dbwebb gui version. 
+
+
+
 v2.6.1 (2020-03-09)
 -------------------
 

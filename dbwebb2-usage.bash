@@ -239,6 +239,7 @@ function usageGui ()
 "  config                  Maintain the user configuration file."
 "  install|selfupdate      Download and install."
 "  help                    Print this help and usage message."
+"  version                 Print the current version."
 ""
 "Options:"
 "  --silent, -s     Less verbose output."
