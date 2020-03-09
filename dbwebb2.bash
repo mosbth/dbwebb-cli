@@ -849,6 +849,11 @@ dbwebb-gui()
             exit 0
         ;;
 
+        config)
+            dbwebb-gui-config
+            exit 0
+        ;;
+
         install \
         | selfupdate)
             dbwebb-gui-install
@@ -865,6 +870,25 @@ dbwebb-gui()
             exit 2
          ;;
      esac
+}
+
+
+
+#
+# Maintain the user config file for dbwebb gui
+#
+dbwebb-gui-config()
+{
+    local script=
+
+    script="$( which dbwebb-inspect-gui )"
+
+    if [[ -x "$script" ]]; then
+        verbose "Execute command for gui bash '$script'..."
+        bash "$script" config
+    else
+        die "dbwebb gui is not installed, check 'dbwebb gui help'."
+    fi
 }
 
 

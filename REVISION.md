@@ -3,6 +3,13 @@ Revision History
 
 
 
+v2.6.1 (2020-03-09)
+-------------------
+
+* Add subcommand 'gui config' to maintain the config file for gui inspects. 
+
+
+
 v2.6.0 (2020-02-11)
 -------------------
 

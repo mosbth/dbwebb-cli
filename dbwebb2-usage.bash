@@ -236,6 +236,7 @@ function usageGui ()
 "Usage: dbwebb [options] gui <command> [arguments]"
 ""
 "Command:"
+"  config                  Maintain the user configuration file."
 "  install|selfupdate      Download and install."
 "  help                    Print this help and usage message."
 ""
