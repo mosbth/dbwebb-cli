@@ -40,7 +40,7 @@ dir="$DBW_CURRENT_DIR/."
 while [ "$dir" != "/" ]; do
     dir=$( dirname "$dir" )
     found="$( find "$dir" -maxdepth 1 -name $DBW_COURSE_FILE_NAME )"
-    if [ "$found" ]; then 
+    if [ "$found" ]; then
         DBW_COURSE_DIR="$( dirname "$found" )"
         break
     fi
@@ -58,7 +58,7 @@ function sourceCourseRepoFile
     if [ -f "$DBW_COURSE_FILE" ]; then
         DBW_COURSE_REPO_VALID="yes"
         source "$DBW_COURSE_FILE"
-    fi    
+    fi
 }
 
 # Get the name of the course as $DBW_COURSE
@@ -90,7 +90,7 @@ DBW_CONFIG_FILE_NAME=".dbwebb.config"
 # Check if run as sudo, use SUDO_USER as HOME (only for selfupdate)
 if [[ $SUDO_USER ]]; then
     DBW_CONFIG_FILE=$( eval echo "~$SUDO_USER/$DBW_CONFIG_FILE_NAME" )
-else    
+else
     DBW_CONFIG_FILE="$HOME/$DBW_CONFIG_FILE_NAME"
 fi
 
@@ -116,7 +116,7 @@ DBW_OS="$( uname -a )"
 SSH_CMD="ssh ${DBW_USER}@${DBW_HOST} $DBW_SSH_KEY_OPTION"
 SSH_CMD_INTERACTIVE="ssh ${DBW_USER}@${DBW_HOST} $DBW_SSH_KEY_OPTION"
 
-# Default chmod for rsync-command 
+# Default chmod for rsync-command
 RSYNC_CHMOD="--chmod=Du+rwx,Dgo+rx,Fu+rw,Fgo+r"
 
 # Prefer using file to exclude from
@@ -156,7 +156,7 @@ DBW_ARCHIVE="/home/saxon/students/dbwebb/archive/"
 #DBW_REPOS[linux]="https://github.com/mosbth/linux"
 #DBW_REPOS[webapp]="https://github.com/mosbth/webapp"
 #DBW_REPOS[htmlphp]="https://github.com/mosbth/htmlphp"
-DBW_COURSE_REPOS=( 'python' 'javascript1' 'linux' 'webapp' 'oopython' 'htmlphp' 'design' 'oophp' 'phpmvc' 'javascript' 'webgl' 'dbjs' 'ramverk1' 'ramverk2' 'databas' 'matmod' 'exjobbd' 'jsramverk' 'vlinux' 'devops' 'itsec' 'unix')
+DBW_COURSE_REPOS=( 'python' 'javascript1' 'linux' 'webapp' 'oopython' 'htmlphp' 'design' 'oophp' 'phpmvc' 'javascript' 'webgl' 'dbjs' 'ramverk1' 'ramverk2' 'databas' 'matmod' 'exjobbd' 'jsramverk' 'vlinux' 'devops' 'itsec' 'unix' 'js')
 DBW_REPO="dbwebb-cli"
 
 

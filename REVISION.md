@@ -3,25 +3,32 @@ Revision History
 
 
 
+v2.6.3 (2020-05-20)
+-------------------
+
+* Add dbwebb-se/js as course js.
+
+
+
 v2.6.2 (2020-03-09)
 -------------------
 
 * Change how to get the version from dbwebb-gui-inspect.
-* Add support for dbwebb gui version. 
+* Add support for dbwebb gui version.
 
 
 
 v2.6.1 (2020-03-09)
 -------------------
 
-* Add subcommand 'gui config' to maintain the config file for gui inspects. 
+* Add subcommand 'gui config' to maintain the config file for gui inspects.
 
 
 
 v2.6.0 (2020-02-11)
 -------------------
 
-* Add subcommand 'gui' for work with gui inspects. 
+* Add subcommand 'gui' for work with gui inspects.
 
 
 
