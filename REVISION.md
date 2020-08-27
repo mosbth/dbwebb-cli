@@ -3,6 +3,13 @@ Revision History
 
 
 
+v2.6.4 (2020-08-27)
+-------------------
+
+* Add git pull as rebase to be default.
+
+
+
 v2.6.3 (2020-05-20)
 -------------------
 

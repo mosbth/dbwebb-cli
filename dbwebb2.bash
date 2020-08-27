@@ -357,7 +357,7 @@ function dbwebb-login()
 function dbwebb-update()
 {
     local intro="Update course-repo with latest changes from its master at GitHub."
-    local command="git pull"
+    local command="git pull --rebase"
     local message="to update course repo."
     
     checkIfValidCourseRepoOrExit

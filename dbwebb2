@@ -30,7 +30,7 @@
 #
 # Current version
 #
-DBW_VERSION="v2.6.3 (2020-05-20)"
+DBW_VERSION="v2.6.4 (2020-08-27)"
 # --------------- DBWEBB FUNCTIONS PHASE START ---------------
 
 #
@@ -1707,7 +1707,7 @@ function dbwebb-login()
 function dbwebb-update()
 {
     local intro="Update course-repo with latest changes from its master at GitHub."
-    local command="git pull"
+    local command="git pull --rebase"
     local message="to update course repo."
     
     checkIfValidCourseRepoOrExit
