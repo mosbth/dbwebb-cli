@@ -3,6 +3,13 @@ Revision History
 
 
 
+v2.6.6 (2020-10-30)
+-------------------
+
+* Add that dbwebb clone always saves as course name, when ther is not stated.
+
+
+
 v2.6.5 (2020-10-30)
 -------------------
 
