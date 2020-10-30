@@ -13,6 +13,9 @@ CSSLINT_OPTIONS="--quiet"
 STYLELINT="stylelint"
 STYLELINT_OPTIONS=""
 
+SASSLINT="stylelint"
+SASSLINT_OPTIONS=""
+
 JSHINT="jshint"
 
 ESLINT="eslint"
@@ -102,6 +105,7 @@ function setDefaultConfigFiles()
 
         if [ ! -f "$DBW_COURSE_DIR/.stylelintrc.json" ]; then
             DISABLE_STYLELINT=true
+            DISABLE_SASSLINT=true
         fi
 
     else
@@ -126,6 +130,7 @@ function checkInstalledValidateTools
     printf " htmlhint:        %s\n"  "$( checkCommandWithVersion $HTMLHINT "--version" )"
     printf " csslint:         %s\n"  "$( checkCommandWithVersion $CSSLINT "--version" )"
     printf " stylelint:       %s\n"  "$( checkCommandWithVersion $STYLELINT "--version" )"
+    printf " sasslint:        %s\n"  "$( checkCommandWithVersion $SASSLINT "--version" )"
     printf " jshint:          %s\n"  "$( checkCommandWithVersion $JSHINT "--version" "2>&1 | cut -d ' ' -f 2" )"
     printf " eslint:          %s\n"  "$( checkCommandWithVersion $ESLINT "--version" )"
     printf " jscs:            %s\n"  "$( checkCommandWithVersion $JSCS "--version" )"
@@ -242,7 +247,7 @@ function validateCommand()
             counter=$(( counter + 1 ))
             printf "."
         done
-        
+
         IFS="$OIFS"
         [[ $DBW_COURSE_DIR ]] && popd &> /dev/null
 
@@ -264,6 +269,7 @@ function validate()
     [[ $ENABLE_ALL || ! $DISABLE_HTMLHINT ]]  && validateCommand "$dir" "$HTMLHINT" "html" "$HTMLHINT_OPTIONS $HTMLHINT_CONFIG" '| grep -v "No problem." | grep -v "Config loaded." | grep -v "Scan " | grep -v "Scanned "; test ${PIPESTATUS[0]} -eq 0'
     [[ $ENABLE_ALL || ! $DISABLE_CSSLINT ]]   && validateCommand "$dir" "$CSSLINT" "css" "$CSSLINT_OPTIONS $( cat "$CSSLINT_CONFIG" )"
     [[ $ENABLE_ALL || ! $DISABLE_STYLELINT ]]   && validateCommand "$dir" "$STYLELINT" "css" "$STYLELINT_OPTIONS" "" ""
+    [[ $ENABLE_ALL || ! $DISABLE_SASSLINT ]]   && validateCommand "$dir" "$STYLELINT" "sass" "$SASSLINT_OPTIONS" "" ""
     [[ $ENABLE_ALL || ! $DISABLE_JSHINT ]]    && validateCommand "$dir" "$JSHINT" "js"
     [[ $ENABLE_ALL || ! $DISABLE_ESLINT ]]    && validateCommand "$dir" "$ESLINT" "js"
     [[ $ENABLE_ALL || ! $DISABLE_JSCS ]]      && validateCommand "$dir" "$JSCS" "js"  "$JSCS_OPTIONS $JSCS_CONFIG < /dev/null" "" "onlyExitStatus"

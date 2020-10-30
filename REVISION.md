@@ -3,14 +3,21 @@ Revision History
 
 
 
-v2.6.6 (2020-10-30)
+v2.6.7 (2020-10-29)
+-------------------
+
+* Add SASSLINT as an option to lint sass files.
+
+
+
+v2.6.6 (2020-10-29)
 -------------------
 
 * Add that dbwebb clone always saves as course name, when ther is not stated.
 
 
 
-v2.6.5 (2020-10-30)
+v2.6.5 (2020-10-29)
 -------------------
 
 * Add a new url for design-v3.
