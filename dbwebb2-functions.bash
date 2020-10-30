@@ -132,8 +132,18 @@ function join()
 #
 # Get the url to GitHub for a repo
 #
-function createGithubUrl(){
-    echo "https://github.com/dbwebb-se/$1$2"
+function createGithubUrl()
+{
+    local course="$1"
+    local extra="$2"
+
+    case $course in
+        "design")
+            course="design-v3"
+            ;;
+    esac
+
+    echo "https://github.com/dbwebb-se/$course$extra"
 }
 
 
@@ -215,7 +225,7 @@ function getUrlToFile
 
     if [ -z "$OPTION_WITH_WGET_ALT" ] && hash wget 2>/dev/null; then
         verbose="--quiet"
-        [[ $VERY_VERBOSE ]] && verbose="--verbose" 
+        [[ $VERY_VERBOSE ]] && verbose="--verbose"
         cmd="wget $verbose -O \"$filename\" \"$url\""
     elif ([ -z "$OPTION_WITH_WGET_ALT" ] || [ "$OPTION_WITH_WGET_ALT" = "curl" ]) && hash curl 2>/dev/null; then
         cmd="curl --fail --silent $verbose \"$url\" -o \"$filename\""
@@ -275,7 +285,7 @@ confirm()
 
     read -r -p "${1:-Are you sure? [yN]} "
     case "${REPLY:-$2}" in
-        [yY][eE][sS]|[yY]) 
+        [yY][eE][sS]|[yY])
             true
             ;;
         *)
@@ -317,7 +327,7 @@ function executeCommand
 {
     local introText="$1"
     local subshell="$5"
-    
+
     # Introduction text for the command
     echo "$introText"
 
@@ -489,7 +499,7 @@ die()
 #
 verboseDone()
 {
-    [[ $SILENT ]] || printf "$MSG_DONE $1\\n" 
+    [[ $SILENT ]] || printf "$MSG_DONE $1\\n"
 }
 
 
@@ -519,7 +529,7 @@ verboseFail()
 #
 verbose()
 {
-    [[ $SILENT ]] || printf "$1\\n" 
+    [[ $SILENT ]] || printf "$1\\n"
 }
 
 
@@ -603,7 +613,7 @@ mapCmdToDir()
     fi
 
     # Check for existing directories below me/
-    [ -d "$DBW_COURSE_DIR/me/$CMD" ] && echo "me/$CMD" && return 
+    [ -d "$DBW_COURSE_DIR/me/$CMD" ] && echo "me/$CMD" && return
 
     # Check me/* for match
     RES=$( cd "$DBW_COURSE_DIR" && find me -mindepth 2 -maxdepth 2 -name "$CMD" -type d | head -n 1 )
@@ -820,8 +830,8 @@ function assertSummaryAdd()
 {
     local message="$1"
     local space="            "
-    # ten="          " 
-    # forty="$ten$ten$ten$ten" 
+    # ten="          "
+    # forty="$ten$ten$ten$ten"
     # y="very short text"
     # y="${y:0:40}${forty:0:$((40 - ${#y}))}"
     # echo "'${y}'"
@@ -843,24 +853,24 @@ function assertSummaryAdd()
 #     TEST=$2
 #     MESSAGE=$3
 #     ASSERTS=$(( $ASSERTS + 1 ))
-# 
+#
 #     bash -c "$TEST" &> "$TMPFILE"
 #     STATUS=$?
 #     ERROR=$( cat "$TMPFILE" )
 #     rm -f "$TMPFILE"
-# 
+#
 #     if [ $STATUS -ne $EXPECTED ]; then
 #         FAULTS=$(( $FAULTS + 1 ))
-# 
+#
 #         printf "\n$TEST"
 #         printf "\n\n$MSG_FAILED $MESSAGE\n"
 #         [ -z "$ERROR" ] || printf "$ERROR\n\n"
-# 
+#
 #         return 1
 #     fi
-# 
+#
 #     return 0
-# 
+#
 # }
 
 
