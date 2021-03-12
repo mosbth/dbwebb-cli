@@ -3,6 +3,13 @@ Revision History
 
 
 
+v2.7.0 (2021-03-12)
+-------------------
+
+* Enable to clone repo mvc, pattern and webtec.
+
+
+
 v2.6.8 (2020-10-29)
 -------------------
 
