@@ -1268,6 +1268,42 @@ dbwebb-exam-correct()
 
 
 #
+# Run the dbwebb test command.
+#
+dbwebb-test()
+{
+    local what="$1"
+    local subdir=
+    local where=
+    local correct=
+
+    checkIfValidConfigOrExit
+    checkIfValidCourseRepoOrExit
+
+    subdir="$( mapCmdToDir $what )"
+    where="$DBW_COURSE_DIR/$subdir"
+
+    [[ -z $subdir ]] \
+        && printf "Did you miss to specify a kmom or dirname?\n";
+    checkIfValidCombination "$subdir" "$what"
+
+    checkIfSubdirExistsOrProposeInit "$where"
+
+    [[ $VERY_VERBOSE ]] \
+        && verbose "Executing test command for $DBW_COURSE:$what..."
+
+    run="$DBW_COURSE_DIR/.dbwebb/test/run.bash"
+    if [ -f "$run" ]; then
+        bash $run "$ACRONYM" "$where" "$@"
+    else
+        verboseFail "There is no file '.dbwebb/test/run.bash'."
+        exit 1
+    fi
+}
+
+
+
+#
 # Selfupdate
 #
 dbwebb-selfupdate()
@@ -1580,6 +1616,7 @@ do
         | run          \
         | create       \
         | recreate     \
+        | test         \
         | testrepo     \
         | version      \
         | help         \

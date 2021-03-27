@@ -19,6 +19,7 @@ function usage ()
 "  create <lab> [version] Create a lab using optional version."
 "  recreate <lab>       Re-create lab with optional version."
 "  validate [part]      Validate it."
+"  test [part] [options] Run testsuite for the kmom or its part."
 "  publish [part]       Publish it."
 "  publishfast [part]   Publish without validation."
 "  publishpure [part]   Publish without minification."
@@ -58,11 +59,11 @@ function badUsage ()
 "For an overview of the command, execute:"
 "dbwebb --help"
     )
-    
+
     if [[ "$message" ]]; then
         printf "$message\n"
     fi
-    
+
     printf "%s\n" "${txt[@]}"
 }
 
@@ -90,7 +91,7 @@ function badUsageGithub ()
     if [[ "$message" ]]; then
         printf "$message\n"
     fi
-    
+
     usageGithub
 }
 
@@ -115,7 +116,7 @@ function badUsageClone ()
     if [[ "$message" ]]; then
         printf "$message\n"
     fi
-    
+
     usageClone
 }
 
@@ -219,11 +220,11 @@ function badUsageExam ()
 "For an overview of the command, execute:"
 "dbwebb exam help"
     )
-    
+
     if [[ "$message" ]]; then
         printf "$message\n"
     fi
-    
+
     printf "%s\n" "${txt[@]}"
 }
 
@@ -257,10 +258,10 @@ function badUsageGui ()
 "For an overview of the command, execute:"
 "dbwebb gui help"
     )
-    
+
     if [[ "$message" ]]; then
         printf "$message\n"
     fi
-    
+
     printf "%s\n" "${txt[@]}"
 }

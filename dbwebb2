@@ -30,7 +30,7 @@
 #
 # Current version
 #
-DBW_VERSION="v2.7.0 (2021-03-12)"
+DBW_VERSION="v2.8.1 (2021-03-27)"
 # --------------- DBWEBB FUNCTIONS PHASE START ---------------
 
 #
@@ -1113,6 +1113,7 @@ function usage ()
 "  create <lab> [version] Create a lab using optional version."
 "  recreate <lab>       Re-create lab with optional version."
 "  validate [part]      Validate it."
+"  test [part] [options] Run testsuite for the kmom or its part."
 "  publish [part]       Publish it."
 "  publishfast [part]   Publish without validation."
 "  publishpure [part]   Publish without minification."
@@ -1152,11 +1153,11 @@ function badUsage ()
 "For an overview of the command, execute:"
 "dbwebb --help"
     )
-    
+
     if [[ "$message" ]]; then
         printf "$message\n"
     fi
-    
+
     printf "%s\n" "${txt[@]}"
 }
 
@@ -1184,7 +1185,7 @@ function badUsageGithub ()
     if [[ "$message" ]]; then
         printf "$message\n"
     fi
-    
+
     usageGithub
 }
 
@@ -1209,7 +1210,7 @@ function badUsageClone ()
     if [[ "$message" ]]; then
         printf "$message\n"
     fi
-    
+
     usageClone
 }
 
@@ -1313,11 +1314,11 @@ function badUsageExam ()
 "For an overview of the command, execute:"
 "dbwebb exam help"
     )
-    
+
     if [[ "$message" ]]; then
         printf "$message\n"
     fi
-    
+
     printf "%s\n" "${txt[@]}"
 }
 
@@ -1351,11 +1352,11 @@ function badUsageGui ()
 "For an overview of the command, execute:"
 "dbwebb gui help"
     )
-    
+
     if [[ "$message" ]]; then
         printf "$message\n"
     fi
-    
+
     printf "%s\n" "${txt[@]}"
 }
 #------------------------- HERE ARE THE MAIN COMMANDS -----------------------
@@ -2628,6 +2629,42 @@ dbwebb-exam-correct()
 
 
 #
+# Run the dbwebb test command.
+#
+dbwebb-test()
+{
+    local what="$1"
+    local subdir=
+    local where=
+    local correct=
+
+    checkIfValidConfigOrExit
+    checkIfValidCourseRepoOrExit
+
+    subdir="$( mapCmdToDir $what )"
+    where="$DBW_COURSE_DIR/$subdir"
+
+    [[ -z $subdir ]] \
+        && printf "Did you miss to specify a kmom or dirname?\n";
+    checkIfValidCombination "$subdir" "$what"
+
+    checkIfSubdirExistsOrProposeInit "$where"
+
+    [[ $VERY_VERBOSE ]] \
+        && verbose "Executing test command for $DBW_COURSE:$what..."
+
+    run="$DBW_COURSE_DIR/.dbwebb/test/run.bash"
+    if [ -f "$run" ]; then
+        bash $run "$ACRONYM" "$where" "$@"
+    else
+        verboseFail "There is no file '.dbwebb/test/run.bash'."
+        exit 1
+    fi
+}
+
+
+
+#
 # Selfupdate
 #
 dbwebb-selfupdate()
@@ -2940,6 +2977,7 @@ do
         | run          \
         | create       \
         | recreate     \
+        | test         \
         | testrepo     \
         | version      \
         | help         \
