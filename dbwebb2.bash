@@ -1294,7 +1294,7 @@ dbwebb-test()
 
     run="$DBW_COURSE_DIR/.dbwebb/test/run.bash"
     if [ -f "$run" ]; then
-        bash $run "$DBW_USER" "$where" "$@"
+        bash $run "$DBW_COURSE_DIR" "$DBW_USER" "$where" "$@"
     else
         verboseFail "There is no file '.dbwebb/test/run.bash'."
         exit 1
