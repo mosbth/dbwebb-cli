@@ -30,7 +30,7 @@
 #
 # Current version
 #
-DBW_VERSION="v2.8.2 (2021-03-27)"
+DBW_VERSION="v2.8.4 (2021-03-27)"
 # --------------- DBWEBB FUNCTIONS PHASE START ---------------
 
 #
@@ -2655,7 +2655,7 @@ dbwebb-test()
 
     run="$DBW_COURSE_DIR/.dbwebb/test/run.bash"
     if [ -f "$run" ]; then
-        bash $run "$DBW_USER" "$where" "$@"
+        bash $run "$DBW_COURSE_DIR" "$DBW_USER" "$where" "$@"
     else
         verboseFail "There is no file '.dbwebb/test/run.bash'."
         exit 1

@@ -3,7 +3,7 @@ Revision History
 
 
 
-v2.8.3 (2021-03-27)
+v2.8.4 (2021-03-27)
 -------------------
 
 * Add course dir basepath to as argument to 'dbwebb test target'.
