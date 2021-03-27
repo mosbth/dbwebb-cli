@@ -3,7 +3,7 @@ Revision History
 
 
 
-v2.8.1 (2021-03-27)
+v2.8.2 (2021-03-27)
 -------------------
 
 * Add acronym to as argument to 'dbwebb test target'.
