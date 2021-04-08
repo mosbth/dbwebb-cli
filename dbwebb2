@@ -30,7 +30,7 @@
 #
 # Current version
 #
-DBW_VERSION="v2.9.0 (2021-04-08)"
+DBW_VERSION="v2.9.1 (2021-04-08)"
 # --------------- DBWEBB FUNCTIONS PHASE START ---------------
 
 #
@@ -2640,15 +2640,6 @@ dbwebb-test()
 
     checkIfValidConfigOrExit
     checkIfValidCourseRepoOrExit
-
-    # subdir="$( mapCmdToDir $what )"
-    # where="$DBW_COURSE_DIR/$subdir"
-    #
-    # [[ -z $subdir ]] \
-    #     && printf "Did you miss to specify a kmom or dirname?\n";
-    # checkIfValidCombination "$subdir" "$what"
-    #
-    # checkIfSubdirExistsOrProposeInit "$where"
 
     run="$DBW_COURSE_DIR/.dbwebb/test/run.bash"
     [[ $VERY_VERBOSE ]] \
