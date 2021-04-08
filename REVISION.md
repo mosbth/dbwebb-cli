@@ -3,7 +3,7 @@ Revision History
 
 
 
-v2.9.0 (2021-04-08)
+v2.9.1 (2021-04-08)
 -------------------
 
 * Update how arguments are sent to the 'dbwebb test' runner.
