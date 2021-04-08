@@ -1280,23 +1280,23 @@ dbwebb-test()
     checkIfValidConfigOrExit
     checkIfValidCourseRepoOrExit
 
-    subdir="$( mapCmdToDir $what )"
-    where="$DBW_COURSE_DIR/$subdir"
-
-    [[ -z $subdir ]] \
-        && printf "Did you miss to specify a kmom or dirname?\n";
-    checkIfValidCombination "$subdir" "$what"
-
-    checkIfSubdirExistsOrProposeInit "$where"
-
-    [[ $VERY_VERBOSE ]] \
-        && verbose "Executing test command for $DBW_COURSE:$what..."
+    # subdir="$( mapCmdToDir $what )"
+    # where="$DBW_COURSE_DIR/$subdir"
+    #
+    # [[ -z $subdir ]] \
+    #     && printf "Did you miss to specify a kmom or dirname?\n";
+    # checkIfValidCombination "$subdir" "$what"
+    #
+    # checkIfSubdirExistsOrProposeInit "$where"
 
     run="$DBW_COURSE_DIR/.dbwebb/test/run.bash"
+    [[ $VERY_VERBOSE ]] \
+        && verbose "Executing test command '$run' for '$DBW_COURSE'.\n Using arguments: '$@'"
+
     if [ -f "$run" ]; then
-        bash $run "$DBW_COURSE_DIR" "$DBW_USER" "$where" "$@"
+        bash "$run" "$DBW_COURSE_DIR" "$DBW_COURSE" "$DBW_USER" "$@"
     else
-        verboseFail "There is no file '.dbwebb/test/run.bash'."
+        verboseFail "There is no file '$run'."
         exit 1
     fi
 }
