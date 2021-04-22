@@ -3,6 +3,13 @@ Revision History
 
 
 
+v2.10.1 (2021-04-22)
+-------------------
+
+* Make cache and log directories for Symfony, Laravel and Yii writable when publish.
+
+
+
 v2.9.1 (2021-04-08)
 -------------------
 

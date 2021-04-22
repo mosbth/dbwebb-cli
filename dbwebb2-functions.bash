@@ -24,6 +24,9 @@ publishChmod()
     if [ -d "$dir" ]; then
         find "$dir" -type d -name 'cache' -exec chmod -R a+rw {} \;
         find "$dir" -type d -name 'db' -exec chmod a+rwx {} \;
+        find "$dir" -type d -name 'storage' -exec chmod -R a+rwx {} \;
+        find "$dir" -type d -name 'var' -exec chmod -R a+rwx {} \;
+        find "$dir" -type d -name 'web/assets' -exec chmod -R a+rwx {} \;
 
         find "$dir" -type f -name '*.conf' -exec chmod go-r {} \;
         find "$dir" -type f -name '*.py' -exec chmod go-r {} \;
