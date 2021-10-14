@@ -30,7 +30,7 @@
 #
 # Current version
 #
-DBW_VERSION="v2.10.1 (2021-04-22)"
+DBW_VERSION="v2.11.0 (2021-10-14)"
 # --------------- DBWEBB FUNCTIONS PHASE START ---------------
 
 #
@@ -177,6 +177,9 @@ function createGithubUrl()
         "design")
             course="design-v3"
             ;;
+        "js")
+           course="js-v2"
+           ;;
     esac
 
     echo "https://github.com/dbwebb-se/$course$extra"

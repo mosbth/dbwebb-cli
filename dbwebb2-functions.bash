@@ -144,9 +144,9 @@ function createGithubUrl()
         "design")
             course="design-v3"
             ;;
-        #"js")
-        #    course="js-v2"
-        #    ;;
+        "js")
+           course="js-v2"
+           ;;
     esac
 
     echo "https://github.com/dbwebb-se/$course$extra"
