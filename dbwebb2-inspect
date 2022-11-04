@@ -973,6 +973,15 @@ DBW_CURRENT_DIR="$( pwd )"
 
 
 
+#
+# Known public keys of SSH servers.
+#
+DBW_HOST_KEYS=(
+    "ssh.student.bth.se ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBER6Y1R4EmZZfJD9L//cHo/PEVgBOg/jEwgwdPmL9pBc4e6QtHT1Lgnp5sAi+OgA2P0uQU4UJ0qVAhNAUA8SCLE="
+)
+
+
+
 # What is the directory of the current course repo, find recursivly up the tree
 DBW_COURSE_FILE_NAME=".dbwebb.course"
 
