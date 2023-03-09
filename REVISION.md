@@ -4,6 +4,13 @@ Revision History
 
 
 
+v2.13.0 (2023-03-09)
+-------------------
+
+* Remove cloning from webapp-v4 repo.
+
+
+
 v2.12.0 (2022-03-01)
 -------------------
 

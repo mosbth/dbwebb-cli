@@ -147,9 +147,6 @@ function createGithubUrl()
         "js")
            course="js-v2"
            ;;
-       "webapp")
-          course="webapp-v4"
-          ;;
     esac
 
     echo "https://github.com/dbwebb-se/$course$extra"
