@@ -4,6 +4,13 @@ Revision History
 
 
 
+v2.14.0 (2024-01-26)
+-------------------
+
+* Make .txt +rw in oopython on publish.
+
+
+
 v2.13.0 (2023-03-09)
 -------------------
 
