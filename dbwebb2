@@ -971,6 +971,15 @@ DBW_CURRENT_DIR="$( pwd )"
 
 
 
+#
+# Known public keys of SSH servers.
+#
+DBW_HOST_KEYS=(
+    "ssh.student.bth.se ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBER6Y1R4EmZZfJD9L//cHo/PEVgBOg/jEwgwdPmL9pBc4e6QtHT1Lgnp5sAi+OgA2P0uQU4UJ0qVAhNAUA8SCLE="
+)
+
+
+
 # What is the directory of the current course repo, find recursivly up the tree
 DBW_COURSE_FILE_NAME=".dbwebb.course"
 
@@ -1676,6 +1685,7 @@ function dbwebb-init()
 function dbwebb-sshkey()
 {
     local sshkey="$HOME/.ssh/dbwebb"
+    local key hostname
 
     if [ ! -d "$HOME/.ssh" ]
     then
@@ -1695,6 +1705,15 @@ function dbwebb-sshkey()
 
     chmod 700 "$HOME/.ssh"
     chmod 600 "$sshkey" "$sshkey.pub"
+
+    # Add the public keys of SSH servers to known_hosts if needed.
+    for key in "${DBW_HOST_KEYS[@]}"; do
+        hostname="$(echo "$key"|awk '{print $1}')"
+        if ! ssh-keygen -F "$hostname" >/dev/null 2>&1; then
+            echo "Adding known public key for $hostname."
+            echo "$key" >>"$HOME/.ssh/known_hosts"
+        fi
+    done
 
     intro="I will now install the ssh-key at the remote server."
     command="cat '$sshkey.pub' | ssh $DBW_USER@$DBW_HOST 'sh -c \"if [ ! -d .ssh ]; then mkdir .ssh; fi; chmod 700 .ssh; touch .ssh/authorized_keys; cat >> .ssh/authorized_keys\"'"

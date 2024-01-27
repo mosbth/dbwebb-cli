@@ -308,6 +308,7 @@ function dbwebb-init()
 function dbwebb-sshkey()
 {
     local sshkey="$HOME/.ssh/dbwebb"
+    local key hostname
 
     if [ ! -d "$HOME/.ssh" ]
     then
@@ -327,6 +328,15 @@ function dbwebb-sshkey()
 
     chmod 700 "$HOME/.ssh"
     chmod 600 "$sshkey" "$sshkey.pub"
+
+    # Add the public keys of SSH servers to known_hosts if needed.
+    for key in "${DBW_HOST_KEYS[@]}"; do
+        hostname="$(echo "$key"|awk '{print $1}')"
+        if ! ssh-keygen -F "$hostname" >/dev/null 2>&1; then
+            echo "Adding known public key for $hostname."
+            echo "$key" >>"$HOME/.ssh/known_hosts"
+        fi
+    done
 
     intro="I will now install the ssh-key at the remote server."
     command="cat '$sshkey.pub' | ssh $DBW_USER@$DBW_HOST 'sh -c \"if [ ! -d .ssh ]; then mkdir .ssh; fi; chmod 700 .ssh; touch .ssh/authorized_keys; cat >> .ssh/authorized_keys\"'"
