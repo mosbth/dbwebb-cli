@@ -30,7 +30,7 @@
 #
 # Current version
 #
-DBW_VERSION="v2.12.0 (2022-03-01)"
+DBW_VERSION="v2.14.1 (2024-01-31)"
 # --------------- DBWEBB FUNCTIONS PHASE START ---------------
 
 #
@@ -90,6 +90,7 @@ publishChmod()
             | matmod)
                 find "$dir" -type f -path '*/db/*.json' -exec chmod go+w {} \;
                 find "$dir" -type f -name '*.py' -exec chmod go+r {} \;
+                find "$dir" -type f -path '*/me/kmom*/**/*.txt' -exec chmod go+rw {} \;
                 #find "$dir" -type f -name '*.py' -path '*/flask/*' -exec chmod go+r {} \;
                 #find "$dir" -type f -name '*.py' -path '*/my_app/*' -exec chmod go+r {} \;
             ;;
@@ -180,9 +181,6 @@ function createGithubUrl()
         "js")
            course="js-v2"
            ;;
-       "webapp")
-          course="webapp-v4"
-          ;;
     esac
 
     echo "https://github.com/dbwebb-se/$course$extra"
